@@ -1,0 +1,19 @@
+.component-wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.zooming-images-container {
+    position: relative;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.zooming-image{
+    position: fixed;
+}
