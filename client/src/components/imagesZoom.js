@@ -62,7 +62,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
             let value = window.scrollY
             let zoomingImages = document.querySelectorAll(".zooming-image");
 
-            zoomingImages.forEach((image, index) => {
+            zoomingImages.forEach((image) => {
                 image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(" "))} translateZ(${value}px)`;
             });
         });
