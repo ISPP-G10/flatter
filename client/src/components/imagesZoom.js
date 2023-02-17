@@ -6,7 +6,7 @@ const ZoomingImages = ({imageSet}) => {
 
     let [spiralPoints, setSpiralPoints] = useState([]);
 
-    const { height, width } = useWindowDimensions();
+    const height = useWindowDimensions().height;
 
     const THETAS = [
         7*Math.PI/4,
@@ -62,14 +62,7 @@ const ZoomingImages = ({imageSet}) => {
             let zoomingImages = document.querySelectorAll(".zooming-image");
 
             zoomingImages.forEach((image, index) => {
-
-                let splittedTransform = image.style.transform.split(" ");
-
-                let previousPerspective = splittedTransform[0];
-                let previousXTransform = splittedTransform[1];
-                let previousYTransform = splittedTransform[2];
-
-                image.style.transform = `${previousPerspective} ${previousXTransform} ${previousYTransform} translateZ(${value}px)`;
+                image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(" "))} translateZ(${value}px)`;
             });
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -84,7 +77,7 @@ const ZoomingImages = ({imageSet}) => {
                     let imageStyle = {
                         maxHeight: `${250/(index+1)+125}px`,
                         maxWidth: `${250/(index+1)+125}px`,
-                        transform: `perspective(${((index+1)*750)+1000}px) translateX(${spiralPoints[index].x}px) translateY(${spiralPoints[index].y}px)`,
+                        transform: `perspective(${((index+1)*750)+1000}px) translateX(${spiralPoints[index].x}px) translateY(${spiralPoints[index].y}px) translateZ(0px)`,
                         zIndex: `${10000-index}`
                     }
 
