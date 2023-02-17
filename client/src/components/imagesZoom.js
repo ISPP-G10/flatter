@@ -1,8 +1,9 @@
 import '../static/css/images-zoom.css';
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import useWindowDimensions from "../hooks/useWindowDimesions";
 
-const ZoomingImages = ({imageSet}) => {
+const ZoomingImages = ({imageSet, marginTop}) => {
 
     let [spiralPoints, setSpiralPoints] = useState([]);
 
@@ -70,7 +71,7 @@ const ZoomingImages = ({imageSet}) => {
 
     return(
         <div className="component-wrapper">
-            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+height*2}px`, marginTop: '300px'}}>
+            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+height*2}px`, marginTop: `${marginTop}px`}}>
             {
                 (spiralPoints.length > 0 && imageSet) && imageSet.map((image, index) => {
 
@@ -89,6 +90,16 @@ const ZoomingImages = ({imageSet}) => {
             </div>
         </div>
     );
+}
+
+ZoomingImages.propTypes = {
+    imageSet: PropTypes.array,
+    marginTop: PropTypes.number
+}
+
+ZoomingImages.defaultProps = {
+    imageSet: [],
+    marginTop: 300
 }
 
 export default ZoomingImages;

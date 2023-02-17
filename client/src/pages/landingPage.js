@@ -18,7 +18,7 @@ const LandingPage = () => {
 
     return(
         <> 
-        <ZoomingImages imageSet={imageSet}/>
+        <ZoomingImages imageSet={imageSet} marginTop={300}/>
         </>
     );
 }
