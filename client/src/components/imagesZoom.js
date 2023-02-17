@@ -1,9 +1,12 @@
 import '../static/css/images-zoom.css';
 import { useEffect, useState } from "react";
+import useWindowDimensions from "../hooks/useWindowDimesions";
 
 const ZoomingImages = ({imageSet}) => {
 
     let [spiralPoints, setSpiralPoints] = useState([]);
+
+    const { height, width } = useWindowDimensions();
 
     const THETAS = [
         7*Math.PI/4,
@@ -74,7 +77,7 @@ const ZoomingImages = ({imageSet}) => {
 
     return(
         <div className="component-wrapper">
-            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+1500}px`, marginTop: '300px'}}>
+            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+height*2}px`, marginTop: '300px'}}>
             {
                 (spiralPoints.length > 0 && imageSet) && imageSet.map((image, index) => {
 
