@@ -59,12 +59,17 @@ const ZoomingImages = ({imageSet, marginTop}) => {
         setSpiralPoints(generateSpritalPoints());
 
         document.addEventListener("scroll", (e) => {
+            
             let value = window.scrollY
-            let zoomingImages = document.querySelectorAll(".zooming-image");
 
-            zoomingImages.forEach((image) => {
-                image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(" "))} translateZ(${value}px)`;
-            });
+                let zoomingImages = document.querySelectorAll(".zooming-image");
+
+                zoomingImages.forEach((image) => {
+
+                    image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(","))}, ${value}px)`;
+                    
+                });
+            //}
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -78,7 +83,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
                     let imageStyle = {
                         maxHeight: `${250/(index+1)+125}px`,
                         maxWidth: `${250/(index+1)+125}px`,
-                        transform: `perspective(${((index+1)*750)+1000}px) translateX(${spiralPoints[index].x}px) translateY(${spiralPoints[index].y}px) translateZ(0px)`,
+                        transform: `perspective(${((index+1)*750)+1000}px) translate3d(${spiralPoints[index].x}px, ${spiralPoints[index].y}px, 0px)`,
                         zIndex: `${10000-index}`
                     }
 
