@@ -60,15 +60,15 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
         document.addEventListener("scroll", (e) => {
             
-            let value = window.scrollY
+            let value = e.target.scrollTop;
 
-                let zoomingImages = document.querySelectorAll(".zooming-image");
+            let zoomingImages = document.querySelectorAll(".zooming-image");
 
-                zoomingImages.forEach((image) => {
+            zoomingImages.forEach((image) => {
 
-                    image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(","))}, ${value}px)`;
-                    
-                });
+                image.style.transform = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(","))}, ${value}px)`;
+
+            });
             //}
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps

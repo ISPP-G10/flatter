@@ -32,15 +32,15 @@ SolidButton.defaultProps = {
 const SVGBorder = ({show}) => {
     
     return show === true ? (
-        <svg class="outline" viewBox="0 0 250 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+        <svg className="outline" viewBox="0 0 250 100" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
             <defs>
                 <linearGradient x1="0%" y1="100%" x2="100%" y2="0%" id="linearGradient-1">
-                    <stop stop-color="#08AEEA" offset="0%"></stop>
-                    <stop stop-color="#2AE88A" offset="100%"></stop>
+                    <stop stopColor="#08AEEA" offset="0%"></stop>
+                    <stop stopColor="#2AE88A" offset="100%"></stop>
                 </linearGradient>
             </defs>
             <path fill="none" d='M50,95 a45,45 0 0,1 0,-90 h150 a45,45 0 1,1 0,90 h-150' />
-            <path class="icon--plain" fill="url(#linearGradient-1)" d='M50,95 a45,45 0 0,1 0,-90 h150 a45,45 0 1,1 0,90 h-150' />
+            <path className="icon--plain" fill="url(#linearGradient-1)" d='M50,95 a45,45 0 0,1 0,-90 h150 a45,45 0 1,1 0,90 h-150' />
         </svg>
     ) : '';
 }

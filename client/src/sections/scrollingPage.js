@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 const ScrollingPage = (props) => {
 
-    let [scrollY, setScrollY] = useState([]);
+    let [scrollY, setScrollY] = useState(0);
 
     useEffect(() => {
         document.addEventListener("scroll", (e) => {

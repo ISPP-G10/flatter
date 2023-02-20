@@ -19,31 +19,36 @@ const ToggleFeatures = () => {
     }
 
     return (
-        <div class="toggle-features">
+        <div className="toggle-features">
         
             <div>
 
                 <div>
-                    { scheme.forEach((data, index) => {
-                        return (<img key={`image_toggle_${index}`} src={data.image} />)
-                    }) }
+                    { 
+                        scheme.forEach((data, index) => {
+                            return (<img key={`image_toggle_${index}`} src={data.image} />)
+                        }) 
+                    }
                 </div>
                 <div>
-                    { scheme.forEach((data) => {
-                        return (
-                        <>
-                            <h2>{data.title}</h2>
-                            <p>{data.subtitle}</p>
-                        </>);
-                    }) }
+                    { 
+                        scheme.forEach((data) => {
+                            return (
+                                <>
+                                    <h2>{data.title}</h2>
+                                    <p>{data.subtitle}</p>
+                                </>
+                            );
+                        }) 
+                    }
                         
                     <div className="toggle">
                         <div className="toggle-card">
-                            <div class="toggle-background"></div>
-                            <div onClick="toggle">
+                            <div className="toggle-background"></div>
+                            <div onClick={toggle}>
                                 Soy particular
                             </div>
-                            <div onClick="toggle">
+                            <div onClick={toggle}>
                                 Soy propietario
                             </div>
                         </div>
