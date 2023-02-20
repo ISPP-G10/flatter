@@ -1,0 +1,55 @@
+.site-header {
+    position: fixed;
+    width: 100%;
+    background: #2b2b2b85;
+    color: #fff;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.site-header:not(.scroll) {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.3) 59.9%, rgba(0, 0, 0, 0) 100%);
+    border-bottom: 1px solid #ffffff42;
+}
+
+.site-header.scroll {
+    background: #00A8FF;
+    color: #000;
+    transition: all 0.3s;
+}
+
+.site-header > div:first-child img {
+    height: 60px;
+    width: 60px;
+}
+
+.site-header > nav {
+    flex: 1;
+}
+
+.site-header > nav ul {
+    padding: 0 30px;
+    margin: 0;
+    list-style: none;
+    text-align: left;
+}
+
+.site-header > nav > ul > li {
+    display: inline-block;
+}
+
+.site-header > nav > ul > li > a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0 15px;
+}
+
+.site-header > div:last-child {
+    display: flex;
+    align-items: center;
+}

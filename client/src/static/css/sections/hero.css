@@ -1,0 +1,40 @@
+.hero {
+    background-size: cover;
+}
+
+.hero.home {
+    display: flex;
+    align-items: end;
+    padding: 40px 40px 80px;
+    color: #fff;
+    text-align: center;
+}
+
+.hero.home .hero-subtitle {
+    margin-bottom: 40px;
+}
+
+.hero.home .hero-content {
+    color: #fff;
+    padding: 40px 50px;
+    max-width: 800px;
+    font-weight: 600;
+}
+
+.hero.home .hero-content .hero-content-bottom {
+    margin-top: 30px;
+}
+
+.hero.home .hero-content .hero-content-bottom p {
+    margin-bottom: 8px;
+}
+
+.hero.home .hero-content .hero-content-bottom .button-group {
+    display: flex;
+}
+
+.hero.home .hero-content .hero-content-bottom .button-group .button {
+    width: 100%;
+    margin: 0 10px;
+    display: block;
+}

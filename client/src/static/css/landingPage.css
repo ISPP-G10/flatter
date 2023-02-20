@@ -36,3 +36,90 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* WHATSFLATTER SECTION */
+#whatsFlatter {
+  display: flex;
+  padding: 30px;
+}
+
+#whatsFlatter > div {
+  flex: 1;
+}
+
+#whatsFlatter img {
+  width: 100%;
+  height: auto;
+}
+
+#whatsFlatter > div:last-child {
+  padding: 10px 10px 10px 20px;
+}
+
+#whatsFlatter > div:last-child p {
+  margin-top: 10px;
+}
+
+/* FASTVIEW SECTION */
+#fastView {
+  display: flex;
+  padding: 90px 0 30px;
+}
+
+#fastView > .view {
+  flex: 1;
+  background: #fff;
+  box-shadow: 0px 4px 12px #00000045;
+  border-radius: 8px;
+  margin: 0 20px;
+}
+
+#fastView > .view > .view-header {
+  display: flex;
+  align-items: end;
+}
+
+#fastView > .view > .view-header > div {
+  position: relative;
+  flex: 1;
+  padding-left: 10px;
+}
+
+#fastView > .view:hover > .view-header > div > img {
+  bottom: 10px;
+}
+
+#fastView > .view > .view-header > div > img {
+  position: absolute;
+  bottom: 0px;
+  transition: all ease 0.5s;
+  max-width: 100%;
+  height: auto;
+}
+
+#fastView > .view > .view-header > h3 {
+  flex: 2;
+  padding: 14px 10px 2px 0px;
+}
+
+#fastView > .view > .view-content {
+  padding: 20px;
+}
+
+
+/* FEATURES */
+
+#features {
+  display: flex;
+  align-items: end;
+  padding: 0 35px;
+}
+
+#features > div {
+  flex: 1;
+}
+
+#features .toggle-features {
+  
+}
