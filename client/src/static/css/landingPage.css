@@ -109,17 +109,99 @@
 
 
 /* FEATURES */
-
 #features {
-  display: flex;
-  align-items: end;
-  padding: 0 35px;
+  padding: 30px 35px;
 }
 
-#features > div {
+#features > .toggle-features > div {
+  display: flex;
+  align-items: end;
+}
+
+#features > .toggle-features > div > div > h2 {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#features > .toggle-features > div > div > p {
+  margin: 10px 0 20px;
+  min-height: 58px;
+}
+
+#features > .toggle-features > div > div {
   flex: 1;
 }
 
-#features .toggle-features {
-  
+#features > .toggle-features > div > div:first-child img {
+  width: 100%;
+  height: auto;
+}
+
+#features .toggle-features .toggle {
+  position: relative;
+}
+
+#features .toggle-features .toggle-action.selected-left > div:first-child, #features .toggle-features .toggle-action.selected-right > div:last-child {
+  color: #fff;
+}
+
+#features .toggle-features .toggle-action:after {
+  position: absolute;
+  width: 50%;
+  left: 0;
+  top: 0;
+  height: calc(100% - 12px);
+  border-radius: 6px;
+  background: var(--flatter-blue-color);
+  margin: 6px;
+  box-sizing: border-box;
+  content: '';
+  transition: all 0.3s;
+}
+
+#features .toggle-features .toggle-action.selected-right:after {
+  left: calc(50% - 12px);
+  background: var(--flatter-orange-color)
+}
+
+#features .toggle-features .toggle .toggle-action {
+  display: flex;
+  position: relative;
+}
+
+#features .toggle-features .toggle .toggle-action > div {
+  flex: 1;
+  text-align: center;
+  padding: 20px 10px;
+  z-index: 1;
+}
+
+#features .toggle-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+#features .toggle-content img {
+  width: 72px;
+  height: 72px;
+}
+
+#features .toggle-content > div {
+  margin-top: 35px;
+  padding-right: 15px;
+  width: 100%;
+}
+
+#features .toggle-content > div > .toggle-content-img {
+  display: table;
+  margin: 0 auto 0 0;
+}
+
+#features .toggle-content > div > h3 {
+  margin-top: 20px;
+}
+
+#features .toggle-content > div > p {
+  text-align: justify;
+  min-height: 76px;
 }
