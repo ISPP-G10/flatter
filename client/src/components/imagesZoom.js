@@ -7,7 +7,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
     let [spiralPoints, setSpiralPoints] = useState([]);
 
-    const {height, width} = useWindowDimensions();
+    const height = useWindowDimensions().height;
 
     const THETAS = [
         7*Math.PI/4,
@@ -63,13 +63,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
         document.addEventListener("scroll", (e) => {
 
-            var value = null;
-
-            if(height>=width){
-                value = window.scrollY - container.current.offsetTop + height/2.5;
-            }else{
-                value = window.scrollY - container.current.offsetTop + height/6;
-            }
+            var value = window.scrollY - container.current.offsetTop + height/6;;
 
             containerImages.current.forEach((image) => {
 
