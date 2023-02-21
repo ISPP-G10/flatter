@@ -8,12 +8,11 @@
 
 .zooming-images-container {
     position: relative;
-    width: 50%;
+    width: 100%;
     display: flex;
     justify-content: center;
-    overflow: hidden;
 }
 
 .zooming-image{
-    position: fixed;
+    position: absolute;
 }

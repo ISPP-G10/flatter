@@ -53,3 +53,16 @@
     display: flex;
     align-items: center;
 }
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 1000px) {
+    .site-header > nav ul {
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        right: 100%;
+        transition: all 1s;
+        background-color: blue;
+    }
+}

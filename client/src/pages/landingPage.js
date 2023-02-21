@@ -1,4 +1,3 @@
-import "../static/css/landingPage.css";
 import ZoomingImages from "../components/imagesZoom";
 import HeroHome from "../components/heroHome";
 import ScrollingPage from "../sections/scrollingPage";
@@ -71,7 +70,7 @@ const LandingPage = () => {
                 <ToggleFeatures />
             </section>
 
-            <ZoomingImages imageSet={imageSet} marginTop={300} />
+    {/*<ZoomingImages imageSet={imageSet} marginTop={300} /> */}
         </ScrollingPage>
     );
 }

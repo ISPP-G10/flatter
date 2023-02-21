@@ -2,8 +2,13 @@
     background-size: cover;
 }
 
+.hero-home{
+    width: 100%;
+}
+
 .hero.home {
     display: flex;
+    justify-content: center;
     align-items: end;
     padding: 40px 40px 80px;
     color: #fff;
@@ -11,7 +16,7 @@
 }
 
 .hero.home .hero-subtitle {
-    margin-bottom: 40px;
+    margin: 40px 0;
 }
 
 .hero.home .hero-content {
@@ -31,10 +36,23 @@
 
 .hero.home .hero-content .hero-content-bottom .button-group {
     display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .hero.home .hero-content .hero-content-bottom .button-group .button {
-    width: 100%;
-    margin: 0 10px;
+    margin: 10px 10px;
     display: block;
 }
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 480px) {
+    .hero-glass-text{
+      display: none !important;
+    }
+
+    .hero.home .hero-content .hero-content-bottom {
+        margin-top: 0;
+    }
+  }
