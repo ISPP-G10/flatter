@@ -1,12 +1,13 @@
 .button {
+    position: relative;
     display: table;
     color: #fff;
     text-decoration: none;
+    text-align: center;
     font-weight: 600;
     padding: 12px 30px;
     background: #00A8FF;
     border-radius: 25px;
-    position: relative;
 }
 
 .button.featured {

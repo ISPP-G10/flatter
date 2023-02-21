@@ -9,7 +9,7 @@
 .hero.home {
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: flex-end;
     padding: 40px 40px 80px;
     color: #fff;
     text-align: center;

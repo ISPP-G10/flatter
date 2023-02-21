@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const ToggleFeatures = () => {
 
@@ -27,7 +27,7 @@ const ToggleFeatures = () => {
         }, {
             image: require("../static/files/images/flatter-features.png"),
             title: 'Título del segundo toggle',
-            subtitle: 'Subtítulo',
+            subtitle: 'Entra ya en nuestra comunidad, crea una cuenta y encuentra el piso perfecto a través de valoraciones y comentarios honestos de otros inquilinos.',
             children: [
                 {
                     image: require("../static/files/images/flatter-features.png"),
@@ -46,10 +46,6 @@ const ToggleFeatures = () => {
         }
     ]
 
-    const toggle = () => {
-        setIndexToggled((indexToggled+1)%2);
-    }
-
     const toggleToIndex = (index) => {
         setIndexToggled(index);
     }
@@ -62,7 +58,7 @@ const ToggleFeatures = () => {
         <div className="toggle-features">
             <div>
                 <div>
-                    <img key={`image_toggle_${indexToggled}`} src={chosenToggle.image} />
+                    <img key={`image_toggle_${indexToggled}`} src={chosenToggle.image} alt={`image_toggle_${indexToggled}`}/>
                 </div>
                 <div>
                     <>
@@ -83,14 +79,18 @@ const ToggleFeatures = () => {
                     </div>
 
                     <div className="toggle-content">
-                        { chosenToggle.children.map((child) => {
+                        { chosenToggle.children.map((child, index) => {
                             return (
-                                <div>
-                                    <div className="toggle-content-img card">
-                                        <img src={ child.image } />
+                                <div key={`toggle-children-${index}`}>
+                                    <div className="toggle-content-img-row">
+                                        <div className="toggle-content-img card">
+                                            <img src={ child.image } alt={`toggle-children-${index}`} />
+                                        </div>
                                     </div>
+                                    
                                     <h3>{ child.title }</h3>
                                     <p>{ child.description }</p>
+                                    
                                 </div>
                             );
                         }) }

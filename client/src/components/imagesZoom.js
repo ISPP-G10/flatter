@@ -63,10 +63,12 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
         document.addEventListener("scroll", (e) => {
 
+            var value = null;
+
             if(height>=width){
-                var value = window.scrollY - container.current.offsetTop + height/2.5;
+                value = window.scrollY - container.current.offsetTop + height/2.5;
             }else{
-                let value = window.scrollY - container.current.offsetTop + height/5.4;
+                value = window.scrollY - container.current.offsetTop + height/6;
             }
 
             containerImages.current.forEach((image) => {
@@ -100,7 +102,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
                         maxHeight: `${250/(index+1)+125}px`,
                         maxWidth: `${250/(index+1)+125}px`,
                         transform: `perspective(${((index+1)*750)+1000}px) translate3d(${spiralPoints[index].x}px, ${spiralPoints[index].y}px, 0px)`,
-                        zIndex: `${10000-index}`
+                        zIndex: `${100-index}`
                     }
 
                     return(

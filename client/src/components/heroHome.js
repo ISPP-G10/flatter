@@ -4,7 +4,7 @@ import SolidButton from '../sections/solidButton';
 const HeroHome = () => {
 
     return (
-        <Hero height={100} background="hero-home-background.jpg" class="home">
+        <Hero height={100} horizontalBackground="hero-home-background.jpg" verticalBackground="hero-home-vertical-bg.jpg" class="home">
             <div className="hero-home">
                 <h1 className="hero-title">¿List@ para conocer a los nuevos integrantes de tu piso?</h1>
                 
