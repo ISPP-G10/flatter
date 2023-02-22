@@ -18,8 +18,8 @@ const HeroHome = () => {
                         <p className='hero-glass-text' style={{marginBottom: '20px'}}>¿Quiéres más información?</p>
 
                         <div className="button-group">
-                            <SolidButton text="Únete como propietario" type="featured"/>
-                            <SolidButton text="Únete como inquilino" type="featured"/>
+                            <SolidButton text="Únete como propietario" type="featured" modalid="ejemplo"/>
+                            <SolidButton text="Únete como inquilino" type="featured" modalid="ejemplo"/>
                         </div>
                     </div>
                 </div>
