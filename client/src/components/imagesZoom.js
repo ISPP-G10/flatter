@@ -63,16 +63,19 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
         document.addEventListener("scroll", (e) => {
 
-            var value = window.scrollY - container.current.offsetTop + height/6;;
+            var value = parseInt(window.scrollY - container.current.offsetTop + height/6);
 
-            containerImages.current.forEach((image) => {
+            containerImages.current.forEach((image, i) => {
 
-                let newTransformValue = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(","))}, 0px)`;
+                let previousTransformData = image.style.transform.substring(0, image.style.transform.lastIndexOf(","));
+
+                let newTransformValue = `${previousTransformData}, 0px)`;
 
                 if(value > 0){
                     image.style.top = `50%`;
                     image.style.position = "fixed";
-                    newTransformValue = `${image.style.transform.substring(0, image.style.transform.lastIndexOf(","))}, ${value}px)`;
+                    newTransformValue = `${previousTransformData}, ${value}px)`;
+                    
                 }else{
                     image.style.top = `0%`;
                     image.style.position = "absolute";
