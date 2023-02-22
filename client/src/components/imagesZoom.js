@@ -88,7 +88,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
     return(
         <div className="component-wrapper" ref={container}>
-            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+height*2}px`, marginTop: `${marginTop}px`}}>
+            <div className="zooming-images-container" style={{height: `${(imageSet.length)*750+height*1.25}px`, marginTop: `${marginTop}px`}}>
             {
                 (spiralPoints.length > 0 && imageSet) && imageSet.map((image, index) => {
 

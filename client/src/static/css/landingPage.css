@@ -209,27 +209,103 @@
   text-transform: uppercase;
 }
 
+/* MAIL FORM */
+
+#mc_embed_signup{
+  clear: left; 
+  font: 14px Helvetica, Arial, sans-serif;
+  width: 100%;
+}
+
+.mail-form-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+.email-form-control-flags{
+  position: absolute;
+}
+
+.mail-form-input-column,
+.mail-form-text-column{
+  flex: 1;
+  padding: 0 20px;
+}
+
+.mail-form-text-column > p{
+  margin-top: 10px;
+  text-align: justify;
+}
+
+.mail-form-input-column{
+  position: relative;
+  display: flex;
+}
+
+.email-text{
+  display: block;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 20px !important;
+}
+
+.mc-field-group{
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 0 !important;
+}
+
+.email-input{
+  height: 100%;
+  max-height: 50px;
+  border-radius: 25px !important;
+  margin-bottom: 0 !important;
+}
+
+.submit-button{
+  position: absolute;
+  top: 50%;
+  right: 7.5%;
+  border-radius: 25px !important;
+  transform: translateY(-50%);
+}
+
 /* RESPONSIVE */
 
 @media screen and (max-width: 1319px) {
+
+  /* FASTVIEW */
+
   #fastView > .view:nth-child(3){
     margin-top: 100px;
   }
 }
 
 @media screen and (max-width: 1100px) {
+
+  /* FEATURES */
+
   #features > .toggle-features > div{
     flex-direction: column;
   }
 }
 
 @media screen and (max-width: 879px) {
+
+  /* FASTVIEW */
+
   #fastView > .view:nth-child(2){
     margin-top: 100px;
   }
 }
 
 @media screen and (max-width: 760px) {
+
+  /* WHATS FLATTER */
+
   #whatsFlatter {
     flex-direction: column;
   }
@@ -238,6 +314,7 @@
     margin-top: 20px;
   }
 
+  /* FEATURES */
 
   #features .toggle-content {
     grid-template-columns: 1fr;
@@ -249,6 +326,7 @@
     justify-content: center;
   }
 
+  #features .toggle-content > div > h3,
   #features .toggle-content > div > p{
     max-width: 400px;
     text-align: center;
@@ -258,9 +336,52 @@
     justify-content: center;
   }
 
+  /* MAIL FORM */
+
+  .mail-form-container{
+    flex-direction: column;
+  }
+  
+  .mail-form-text-column > p{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .mail-form-input-column{
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 0 !important;
+  }
+  
+  .email-text{
+    text-align: center;
+    margin-bottom: 20px !important;
+  }
+  
+  .mc-field-group{
+    width: 100%;
+  }
+  
+  .email-input{
+    width: 100%;
+    margin-bottom: 20px !important;
+  }
+  
+  .submit-button{
+    position: static;
+    margin: 0 !important;
+    margin-top: 20px!important;
+  }
+
+  .foot{
+    grid-template-columns: 1fr !important;
+  }
+
 }
 
 @media screen and (max-width: 440px) {
+
+  /* FASTVIEW */
 
   #fastView > .view > .view-header {
     display: block;

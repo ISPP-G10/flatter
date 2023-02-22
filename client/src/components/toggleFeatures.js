@@ -11,15 +11,15 @@ const ToggleFeatures = () => {
             subtitle: 'Entra ya en nuestra comunidad, crea una cuenta y encuentra el piso perfecto a través de valoraciones y comentarios honestos de otros inquilinos.',
             children: [
                 {
-                    image: require("../static/files/images/flatter-features.png"),
+                    image: require("../static/files/icons/upload.png"),
                     title: 'Sube una oferta',
                     description: 'Tu especificas los detalles. Simplemente da la información y dejanos darle visibilidad en nuestra comunidad'
                 }, {
-                    image: require("../static/files/images/flatter-features.png"),
+                    image: require("../static/files/icons/lista-de-verificacion.png"),
                     title: 'Recibe una oferta',
-                    description: 'Flatter te ayudará con tus valuaciones y localización de posibles inquilinos'
+                    description: 'Flatter te ayudará con tus evaluaciones y localización de posibles inquilinos'
                 }, {
-                    image: require("../static/files/images/flatter-features.png"),
+                    image: require("../static/files/icons/resenas.png"),
                     title: 'Evalúa a tus inquilinos',
                     description: 'Manten una comunicación clara y efectiva en la relación arrendador-inquilino'
                 }
