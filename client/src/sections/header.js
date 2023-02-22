@@ -43,8 +43,8 @@ const Header = ({scrollY}) => {
                         <li><a href="/">Encontrar compañeros de piso</a></li>
                     </div>
                     <div>
-                        <SolidButton text="Registrarme" href="/login" type="outlined" />
-                        <SolidButton text="Acceder" href="/login" type="featured" modalid="ejemplo" />
+                        <SolidButton text="Registrarme" href="/login" type="outlined" modalid="ejemplo" setIsMenuOpen={setIsMenuOpen}/>
+                        <SolidButton text="Acceder" href="/login" type="featured" modalid="ejemplo" setIsMenuOpen={setIsMenuOpen}/>
                     </div>
                 </ul>
             </nav>

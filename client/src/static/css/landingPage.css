@@ -21,6 +21,9 @@
 
 #whatsFlatter > div:last-child h2 {
   text-align: justify;
+  color: var(--flatter-blue-color);
+  text-shadow: 0px 2px 2px rgb(175, 175, 175);
+
 }
 
 #whatsFlatter > div:last-child p {
@@ -405,5 +408,22 @@
     transition: all ease 0.5s;
     height: 115px;
     width: 115px;
+  }
+}
+
+/* ANIMATIONS */
+
+@keyframes rounded-shake {
+  0% {
+      transform: rotate(0deg);
+  }
+  33%{
+    transform: rotate(15deg);
+  }
+  66%{
+    transform: rotate(-15deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 }

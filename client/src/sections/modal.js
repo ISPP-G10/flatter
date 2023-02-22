@@ -8,10 +8,6 @@ const Modal = (props) => {
 
     const [isOpened, setIsOpened] = useState(false);
 
-    const open = () => {
-        setIsOpened(true);
-    }
-
     const close = () => {
         setIsOpened(false);
     }

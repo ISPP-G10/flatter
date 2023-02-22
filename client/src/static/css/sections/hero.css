@@ -6,6 +6,10 @@
     width: 100%;
 }
 
+.hero-title{
+    text-shadow: 0px 4px 4px rgb(13, 13, 13);
+}
+
 .hero.home {
     display: flex;
     justify-content: center;
@@ -43,6 +47,11 @@
 .hero.home .hero-content .hero-content-bottom .button-group .button {
     margin: 10px 10px;
     display: block;
+}
+
+.hero-glass-text{
+    font-weight: bolder;
+
 }
 
 /* RESPONSIVE */

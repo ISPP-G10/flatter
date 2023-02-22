@@ -20,6 +20,7 @@
 .modal > div {
     max-width: 600px;
     min-width: 300px;
+    width: 90%;
     max-height: 80vh;
     min-height: 200px;
     display: flex;
@@ -28,6 +29,7 @@
 .modal > div > div {
     background: #fff;
     flex: 1;
+    width: 100%;
 }
 
 .modal > div > div * {
