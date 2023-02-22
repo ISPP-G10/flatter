@@ -2,6 +2,7 @@ import ZoomingImages from "../components/imagesZoom";
 import HeroHome from "../components/heroHome";
 import ScrollingPage from "../sections/scrollingPage";
 import ToggleFeatures from "../components/toggleFeatures";
+import Modal from "../sections/modal";
 
 const LandingPage = () => {
 
@@ -103,6 +104,44 @@ const LandingPage = () => {
                 </div>
                 
             </section>
+            <Modal id="ejemplo">
+            <link href="//cdn-images.mailchimp.com/embedcode/classic-071822.css" rel="stylesheet" type="text/css" />
+        <style type="text/css" dangerouslySetInnerHTML={{__html: "\n\t#mc_embed_signup{background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif;  width:600px;}\n\t/* Add your own Mailchimp form style overrides in your site stylesheet or in this style block.\n\t   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */\n" }} />
+        <div id="mc_embed_signup">
+          <form action="https://seafony.us18.list-manage.com/subscribe/post?u=a6fea00d426951e0520437e5d&id=67cc14792f&f_id=005328e7f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
+            <div id="mc_embed_signup_scroll">
+              <h2>Regístrate como usuario piloto</h2>
+              <div className="indicates-required"><span className="asterisk">*</span> indica requerido</div>
+              <div className="mc-field-group">
+                <label htmlFor="mce-EMAIL">Correo electrónico  <span className="asterisk">*</span>
+                </label>
+                <input type="email" name="EMAIL" defaultValue="" className="required email" id="mce-EMAIL" required />
+                <span id="mce-EMAIL-HELPERTEXT" className="helper_text" />
+              </div>
+              <div className="mc-field-group">
+                <label htmlFor="mce-FNAME">Nombre completo </label>
+                <input type="text" name="FNAME" defaultValue="" className id="mce-FNAME" />
+                <span id="mce-FNAME-HELPERTEXT" className="helper_text" />
+              </div>
+              <div className="mc-field-group size1of2">
+                <label htmlFor="mce-PHONE">Teléfono </label>
+                <input type="text" name="PHONE" className defaultValue="" id="mce-PHONE" />
+                <span id="mce-PHONE-HELPERTEXT" className="helper_text" />
+              </div>
+              <div id="mce-responses" className="clear foot">
+                <div className="response" id="mce-error-response" style={{display: 'none'}} />
+                <div className="response" id="mce-success-response" style={{display: 'none'}} />
+              </div>    {/* real people should not fill this in and expect good things - do not remove this or risk form bot signups*/}
+              <div style={{position: 'absolute', left: '-5000px'}} aria-hidden="true"><input type="text" name="b_a6fea00d426951e0520437e5d_67cc14792f" tabIndex={-1} defaultValue /></div>
+              <div className="optionalParent">
+                <div className="clear foot" style={{float: 'right'}}>
+                  <input type="submit" className="button featured" defaultValue="Registrarme" name="subscribe" id="mc-embedded-subscribe" value="Registrarme" />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+            </Modal>
         </ScrollingPage>
     );
 }

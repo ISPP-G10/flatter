@@ -44,7 +44,7 @@ const Header = ({scrollY}) => {
                     </div>
                     <div>
                         <SolidButton text="Registrarme" href="/login" type="outlined" />
-                        <SolidButton text="Acceder" href="/login" type="featured" />
+                        <SolidButton text="Acceder" href="/login" type="featured" modalid="ejemplo" />
                     </div>
                 </ul>
             </nav>

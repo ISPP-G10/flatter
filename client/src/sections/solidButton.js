@@ -2,17 +2,18 @@ import '../static/css/sections/button.css';
 
 import PropTypes from "prop-types";
 
-const SolidButton = ({text, href, type, isSubmit}) => {
+const SolidButton = ({text, href, type, isSubmit, className, modalid}) => {
 
     let classes = 'button';
-    classes += type.length>0 ? ' '+type : '';
+    classes += type.length>0 ? ` ${type}` : '';
+    classes += className.length>0 ? ` ${className}` : '';
 
     const isOutlined = type==="outlined";
 
     return isSubmit ? (
-        <button type="submit" className={classes}>{text} <SVGBorder show={isOutlined} /></button>
+        <button type="submit" className={classes} data-modalid={modalid}>{text} <SVGBorder show={isOutlined} /></button>
     ) : (
-        <a href={href} className={classes}>{text} <SVGBorder show={isOutlined} /></a>
+        <a href={href} className={classes} data-modalid={modalid}>{text} <SVGBorder show={isOutlined} /></a>
     );
 }
 
@@ -20,13 +21,17 @@ SolidButton.propTypes = {
     text: PropTypes.string,
     href: PropTypes.string,
     type: PropTypes.string,
-    isSubmit: PropTypes.bool
+    isSubmit: PropTypes.bool,
+    className: PropTypes.string,
+    modalid: PropTypes.string
 }
 
 SolidButton.defaultProps = {
     isSubmit: false,
     type: '',
-    href: ''
+    href: '',
+    className: '',
+    modalid: null
 }
 
 const SVGBorder = ({show}) => {
