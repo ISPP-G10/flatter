@@ -1,0 +1,36 @@
+engines:
+  eslint:
+    enabled: true
+    files:
+      - "**/*.js"
+  pylint:
+    enabled: true
+    files:
+      - "**/*.py"
+  csslint:
+    enabled: true
+    files:
+      - "**/*.css"
+  django:
+    enabled: true
+    files:
+      - "**/*.py"
+  react:
+    enabled: true
+    files:
+      - "**/*.js"
+
+codacy:
+  checkstyle:
+    enabled: true
+    pattern: "**/checkstyle-result.xml"
+  duplication:
+    enabled: true
+    duplication_threshold: 50
+
+after:
+  coverage:
+    enabled: true
+    language: python
+    command: coverage run --source='.' manage.py test && coverage xml
+    pattern: "**/coverage.xml"
