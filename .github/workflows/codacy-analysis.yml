@@ -20,5 +20,4 @@ jobs:
             --volume "$PWD:/src" \
             --env CODACY_PROJECT_TOKEN="$CODACY_PROJECT_TOKEN" \
             codacy/codacy-analysis-cli:latest analyze \
-            --commit-uuid "$GITHUB_SHA" \
-            --language "javascript,python"
+            --commit-uuid "$GITHUB_SHA"
