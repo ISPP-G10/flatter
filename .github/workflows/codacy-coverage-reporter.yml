@@ -1,6 +1,6 @@
 name: Codacy Coverage Reporter
 
-on: ["push"]
+on: ["pull_request"]
 
 jobs:
   codacy-coverage-reporter:
@@ -39,51 +39,3 @@ jobs:
           coverage-reports: backend/coverage.xml
           # or a comma-separated list for multiple reports
           # coverage-reports: <PATH_TO_REPORT>, <PATH_TO_REPORT>
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: backend/coverage.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '0 80'
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        if: github.event_name == 'pull_request'
-        with:
-          recreate: true
-          path: code-coverage-results.md
-      # Required for generating html artifact, can be skipped if not generating html artifact
-      - uses: hrishikesh-kadam/setup-lcov@v1 
-
-      - uses: kefasjw/lcov-pull-request-report@v1
-        with:
-          # Lcov file location. For example, coverage/lcov.info
-          lcov-file: coverage/lcov.info
-
-          # Github token required for getting list of changed files and posting comments
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          
-          # Working directory
-          # Default: empty (repository root)
-          working-directory:
-
-          # Report comment title
-          # Default: empty
-          comment-title:
-
-          # All files minimum coverage in percentage. For example, 0, 50, 100
-          # Default: 0
-          all-files-minimum-coverage:
-
-          # Changed files minimum coverage in percentage. For example, 0, 50, 100
-          # Default: 0
-          changed-files-minimum-coverage:
-
-          # Artifact name of the generated html. Requires LCOV to be installed
-          # Default: empty (skip uploading artifact)
-          artifact-name:
