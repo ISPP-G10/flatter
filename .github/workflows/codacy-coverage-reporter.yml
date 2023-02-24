@@ -34,7 +34,8 @@ jobs:
           pip install -r requirements.txt
           python manage.py makemigrations
           python manage.py migrate
-          python manage.py makemessages
+          python manage.py makemessages -l en
+          python manage.py makemessages -l es
           python manage.py compilemessages
       - name: Run Django tests and coverage
         run: |
