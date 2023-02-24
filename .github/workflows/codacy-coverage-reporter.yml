@@ -57,3 +57,33 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+      # Required for generating html artifact, can be skipped if not generating html artifact
+      - uses: hrishikesh-kadam/setup-lcov@v1 
+
+      - uses: kefasjw/lcov-pull-request-report@v1
+        with:
+          # Lcov file location. For example, coverage/lcov.info
+          lcov-file: coverage/lcov.info
+
+          # Github token required for getting list of changed files and posting comments
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # Working directory
+          # Default: empty (repository root)
+          working-directory:
+
+          # Report comment title
+          # Default: empty
+          comment-title:
+
+          # All files minimum coverage in percentage. For example, 0, 50, 100
+          # Default: 0
+          all-files-minimum-coverage:
+
+          # Changed files minimum coverage in percentage. For example, 0, 50, 100
+          # Default: 0
+          changed-files-minimum-coverage:
+
+          # Artifact name of the generated html. Requires LCOV to be installed
+          # Default: empty (skip uploading artifact)
+          artifact-name:
