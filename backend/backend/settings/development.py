@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from datetime import timedelta
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -124,8 +125,7 @@ LOCALE_PATHS = (
 LANGUAGES =[ 
             ('es', _('Spanish')),
             ('en', _('English')),
-            ('de', _('German')),
-            ('fr', _('French')),]
+            ]
 
 LANGUAGE_CODE = 'es'
 
