@@ -19,14 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-      uses: actions/setup-python@v3
-      with:
-        python-version: 3.8
-    - name: Prerequisites
-      run: |
-        sudo apt-get install libpq-dev
-        sudo apt-get install chromium-browser chromium-chromedriver
-        sudo apt-get install -y gettext
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+      - name: Prerequisites
+        run: |
+          sudo apt-get install libpq-dev
+          sudo apt-get install chromium-browser chromium-chromedriver
+          sudo apt-get install -y gettext
       - name: Run Django project
         run: |
           cd backend
