@@ -19,7 +19,12 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2
-      - name: Django Coverage
+      - name: Run migrations
+        run: |
+          cd backend
+          python manage.py makemigrations
+          python manage.py migrate
+      - name: Run tests and coverage
         run: |
           cd backend
           pip install -r requirements.txt
