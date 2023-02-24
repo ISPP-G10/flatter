@@ -10,9 +10,9 @@ jobs:
       postgres:
         image: postgres:14.5
         env:
-          POSTGRES_USER: decide
-          POSTGRES_PASSWORD: decide
-          POSTGRES_DB: decide
+          POSTGRES_USER: flatter_user
+          POSTGRES_PASSWORD: flatter_password
+          POSTGRES_DB: flatter_db
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
