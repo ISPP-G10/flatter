@@ -1,5 +1,4 @@
-import {useQuery, useMutation} from 'react-apollo';
-import {gql} from 'apollo-boost';
+import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
 import usersAPI from '../api/usersAPI';
 
 import { useEffect } from 'react';
@@ -7,20 +6,17 @@ import { useEffect } from 'react';
 const Ejemplo = () => {
 
     const GET_ROLES = gql`
-            query{
+            query GetRoles{
                 getRoles{
                     role
                 }
             }`;
 
-    let result = useQuery(GET_ROLES);
+    const {data, loading} = useQuery(GET_ROLES);
 
-    useEffect(() => {
-        console.log(result.data);
-    }, [result.data]);
+    if (loading) return <p>Loading...</p>
 
-    if (result.loading) return <p>Loading...</p>;
-    return result.data.getRoles.map(({role}) => (
+    return data && data.getRoles.map(({role}) => (
         <p>Role: {role}</p>
     ));
 
