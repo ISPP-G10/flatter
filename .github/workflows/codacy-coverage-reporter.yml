@@ -22,12 +22,12 @@ jobs:
       - name: Run migrations
         run: |
           cd backend
+          pip install -r requirements.txt
           python manage.py makemigrations
           python manage.py migrate
       - name: Run tests and coverage
         run: |
           cd backend
-          pip install -r requirements.txt
           coverage run manage.py test
           coverage xml
       - name: Run codacy-coverage-reporter
