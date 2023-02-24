@@ -1,23 +1,20 @@
-name: Codacy Analysis
+name: Codacy Analysis CLI
 
-on:
-  push:
-    branches:
-      - main
+on: ["push"]
 
 jobs:
-  codacy-analysis:
+  codacy-analysis-cli:
+    name: Codacy Analysis CLI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run Codacy Analysis
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: |
-          docker run \
-            --tty \
-            --volume "$PWD:/src" \
-            --env CODACY_PROJECT_TOKEN="$CODACY_PROJECT_TOKEN" \
-            codacy/codacy-analysis-cli:latest analyze \
-            --commit-uuid "$GITHUB_SHA"
+        uses: actions/checkout@main
+
+      - name: Run Codacy Analysis CLI
+        uses: codacy/codacy-analysis-cli-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          # or
+          # api-token: ${{ secrets.CODACY_API_TOKEN }}
+          upload: true
+          max-allowed-issues: 2147483647
