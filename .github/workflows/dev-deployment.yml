@@ -19,13 +19,11 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-
+      
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
-        project_id: "${{ env.PROJECT_ID }}"
-        workload_identity_provider: 'principal://iam.googleapis.com/projects/flatter-378818/locations/global/workloadIdentityPools/default/*'
-        service_account: '737052749385-compute@developer.gserviceaccount.com'
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
     
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
