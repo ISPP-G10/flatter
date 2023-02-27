@@ -1,0 +1,47 @@
+.switch {
+    display: inline-flex;
+    align-items: center;
+    width: 57px;
+    height: 30px;
+    border-radius: 20px;
+    background-color: #ccc;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .switch-label {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .switch-toggle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .switch-toggle--on {
+    transform: translateX(100%);
+  }
+
+  .switch-label--left {
+    margin-right: 10px;
+  }
+  
+  .switch-label--right {
+    margin-left: 10px;
+  }
+  
+  .switch-toggle--orange {
+    background-color: orange;
+  }
+  
+  .switch-toggle--blue {
+    background-color: blue;
+  }

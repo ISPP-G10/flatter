@@ -1,4 +1,3 @@
-import '../static/css/landingPage.css';
 import Header from "./header"
 import Footer from "./footer"
 
