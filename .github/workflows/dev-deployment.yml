@@ -5,6 +5,11 @@ on:
     branches:
       - develop
 
+env:
+  PROJECT_ID: "flatter-378818"
+  GKE_CLUSTER: flatter-cluster-dev
+  GKE_ZONE: europe-west9
+
 jobs:
   flatter-dev-deployment:
     runs-on: ubuntu-latest
@@ -12,19 +17,21 @@ jobs:
       contents: 'read'
       id-token: 'write'
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
-        project_id: "flatter-378818"
+        project_id: "${{ env.PROJECT_ID }}"
         workload_identity_provider: 'gcp-serviceaccount'
         service_account: '${{ secrets.SERVICE_ACCOUNT }}'
+    
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+    - run: |-
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
-    - id: 'get-credentials'
-      uses: 'google-github-actions/get-gke-credentials@v1'
-      with:
-        cluster_name: 'flatter-cluster-dev'
-        location: 'europe-west9'
-
-    # The KUBECONFIG env var is automatically exported and picked up by kubectl.
-    - id: 'get-nodes'
-      run: 'kubectl get nodes'
+    - name: Deploy
+      run: |-
+        kubectl get nodes
