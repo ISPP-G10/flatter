@@ -15,14 +15,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: django-cluster-ip-service
+                name: django-dev-cluster-ip-service
                 port:
                   number: 8000
           - path: /api
             pathType: Prefix
             backend:
               service:
-                name: django-cluster-ip-service
+                name: django-dev-cluster-ip-service
                 port:
                   number: 8000
           ##########################
@@ -32,21 +32,21 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: static-assets-cluster-ip-service
+                name: static-dev-assets-cluster-ip-service
                 port:
                   number: 8000
           - path: /static/
             pathType: Prefix
             backend:
               service:
-                name: react-cluster-ip-service
+                name: react-dev-cluster-ip-service
                 port:
                   number: 3000
           - path: /media/
             pathType: Prefix
             backend:
               service:
-                name: react-cluster-ip-service
+                name: react-dev-cluster-ip-service
                 port:
                   number: 3000
           ################
@@ -56,6 +56,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: react-cluster-ip-service
+                name: react-dev-cluster-ip-service
                 port:
                   number: 3000
