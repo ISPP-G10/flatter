@@ -28,14 +28,20 @@ spec:
           ##########################
           # STATIC FOLDER ROUTING #
           ##########################
-          # - path: /static/admin/
-          #   backend:
-          #     serviceName: static-assets-cluster-ip-service
-          #     servicePort: 8000
-          # - path: /static/rest_framework/
-          #   backend:
-          #     serviceName: static-assets-cluster-ip-service
-          #     servicePort: 8000
+          - path: /static/admin/
+            pathType: Prefix
+            backend:
+              service:
+                name: static-assets-cluster-ip-service
+                port:
+                  number: 8000
+          - path: /static/graphene_django/
+            pathType: Prefix
+            backend:
+              service:
+                name: static-assets-cluster-ip-service
+                port:
+                  number: 8000
           - path: /static/
             pathType: Prefix
             backend:

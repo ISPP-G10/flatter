@@ -11,6 +11,9 @@ COPY ./client .
 ENV PATH /usr/src/app/flatter-client/node_modules/.bin:$PATH
 
 RUN yarn install
-
 RUN yarn global add serve
+
+ARG API_SERVER
+ENV REACT_APP_API_SERVER=${API_SERVER}
+ENV NODE_ENV='production'
 RUN yarn build

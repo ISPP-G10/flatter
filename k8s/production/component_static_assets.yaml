@@ -21,12 +21,12 @@ spec:
             claimName: static-assets-volume-claim
       containers:
         - name: nginx-container
-          image: flatterus/nginx_dev_image:latest
+          image: flatterus/flatter-nginx:latest
           ports:
             - containerPort: 8000
           volumeMounts:
             - name: django-static-data
-              mountPath: /usr/src/app/django_files/static
+              mountPath: /usr/src/app/static
               subPath: django_files
 ---
 ###########################

@@ -20,7 +20,7 @@ spec:
           image: flatterus/flatter-backend:latest
           ports:
             - containerPort: 8000
-          command: ["bash", "-c", "gunicorn backend.wsgi:application --bind 0.0.0.0:8000"]
+          command: ["bash", "-c", "gunicorn backend.wsgi:application --bind 0.0.0.0:8000 -c gunicorn.conf.py"]
           env:
             - name: DJANGO_ENV
               valueFrom:

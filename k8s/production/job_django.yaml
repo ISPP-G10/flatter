@@ -48,8 +48,7 @@ spec:
           - name: django-static-data
             mountPath: /usr/src/app/static
             subPath: django_files
-        command: ["bash", "-c"]
-        args: ["ls /usr/src/app/flatter-backend; /usr/src/app/flatter-backend/entrypoint.sh"]
+        command: ["bash", "-c", "/usr/src/app/flatter-backend/entrypoint.sh"]
         env:
           - name: DJANGO_ENV
             valueFrom:
