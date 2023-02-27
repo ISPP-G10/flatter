@@ -61,6 +61,7 @@ jobs:
 
     - name: Deploy
       run: |-
+        kubectl delete all --all
         kubectl apply -f ./k8s/development/app_dev_secrets.yaml
         kubectl apply -f ./k8s/development/app_dev_variables.yaml
         kubectl apply -f ./k8s/development/component_postgres.yaml
