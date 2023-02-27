@@ -72,4 +72,4 @@ jobs:
         kubectl apply -f ./k8s/development/component_django.yaml
         kubectl apply -f ./k8s/development/component_react.yaml
         kubectl apply -f ./k8s/development/ingress_service.yaml
-        kubectl wait --for=condition=ready pod --all
+        kubectl wait --for=condition=ready pod --all --timeout=600s

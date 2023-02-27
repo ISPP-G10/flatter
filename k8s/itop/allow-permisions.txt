@@ -1,0 +1,2 @@
+kubectl exec -it {nombre_pod} -- bash
+chown www-data:www-data /var/www/html/conf && chmod -f 644 /var/www/html/conf/production/config-itop.php
