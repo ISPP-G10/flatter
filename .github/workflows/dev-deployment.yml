@@ -45,6 +45,8 @@ jobs:
       with:
         context: .
         file: ./docker/client/Dockerfile
+        build-args: |
+          API_SERVER=http://34.155.169.220/api/
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client-dev:latest
 
@@ -70,3 +72,4 @@ jobs:
         kubectl apply -f ./k8s/development/component_django.yaml
         kubectl apply -f ./k8s/development/component_react.yaml
         kubectl apply -f ./k8s/development/ingress_service.yaml
+        kubectl wait --for=condition=ready pod --all
