@@ -15,6 +15,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
+        project_id: "flatter-378818"
         workload_identity_provider: 'gcp-serviceaccount'
         service_account: '${{ secrets.SERVICE_ACCOUNT }}'
 
