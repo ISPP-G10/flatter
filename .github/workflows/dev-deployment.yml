@@ -19,7 +19,7 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
-      
+
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
@@ -28,6 +28,7 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
     - run: |-
+        gcloud components install gke-gcloud-auth-plugin
         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
     - name: Deploy
