@@ -25,7 +25,7 @@ jobs:
       with:
         project_id: "${{ env.PROJECT_ID }}"
         workload_identity_provider: 'gcp-serviceaccount'
-        service_account: '${{ secrets.SERVICE_ACCOUNT }}'
+        service_account: 'flatter.ispp@gmail.com'
     
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
