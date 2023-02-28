@@ -1,3 +1,3 @@
-project_id = "flatter-378818"
-cluster_name = "flatter-itop"
+project_id = ""
+cluster_name = ""
 region     = "europe-west9"
