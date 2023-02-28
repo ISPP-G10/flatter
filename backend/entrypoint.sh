@@ -11,6 +11,7 @@ then
 fi
 
 python manage.py collectstatic --noinput
+python manage.py makemigrations --noinput
 python manage.py migrate --noinput
 echo "from authentication.models import FlatterUser;
 FlatterUser.objects.filter(email='$DJANGO_ADMIN_EMAIL').delete();
