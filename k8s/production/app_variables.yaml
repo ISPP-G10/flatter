@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-variables
+data:
+  #env variables for the postgres component
+  POSTGRES_USER: flatter_user
+  POSTGRES_DB: flatter_db
+
+  #env variables for the backend component
+  DJANGO_ENV: "production"
+  DEBUG: "0"
+  SECRET_KEY: django-insecure-o@1w^-ak=l-!$&45sv#&z@psiyj*$u(r%ek9k+^r*ycxc6*4zq
+  DJANGO_ALLOWED_HOSTS: "34.163.118.43 34.163.148.56"
+  DJANGO_ADMIN_USER: flatter_admin_user
+  DJANGO_ADMIN_EMAIL: "flatter.ispp@gmail.com"
+
+  DATABASE: postgres
+  DB_ENGINE: "django.db.backends.postgresql"
+  DB_DATABASE: flatter_db
+  DB_USER: flatter_user
+  DB_HOST: postgres-cluster-ip-service
+  DB_PORT: "5432"
