@@ -10,6 +10,7 @@
     opacity: 0;
     display: flex;
     align-items: center;
+    transition: all 0.5s;
 }
 
 .modal.open {
@@ -34,4 +35,8 @@
 
 .modal > div > div * {
     margin: initial;
+}
+
+.toggle-container > span {
+    font-weight: 600;
 }

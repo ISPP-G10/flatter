@@ -1,4 +1,4 @@
-import '../static/css/images-zoom.css';
+import '../static/css/components/imagesZoom.css';
 import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import useWindowDimensions from "../hooks/useWindowDimesions";

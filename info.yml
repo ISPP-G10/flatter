@@ -1,0 +1,71 @@
+project:
+  name: ISPP 2023 - flatter
+  owner: ISPP-G10
+  teamId: L10
+  identities: {}
+  notifications: {}
+  members:
+    member1:
+      name: Francisco Javier
+      surname: Cavero López
+      githubUsername: javiercavlop
+    member2:
+      name: Alejandro
+      surname: García Fernández
+      githubUsername: Alex-GF
+    member3:
+      name: Alberto
+      surname: Salazar Caballero
+      githubUsername: albertsalazar
+    member4:
+      name: Alba
+      surname: Tinajero Herrera
+      githubUsername: albtinher
+    member5:
+      name: Carmen
+      surname: García Pastrana
+      githubUsername: cargarpas1
+    member6:
+      name: Daniel
+      surname: Díaz Nogales
+      githubUsername: danidinogo
+    member7:
+      name: Francisco Javier
+      surname: Borrego Caraballo
+      githubUsername: Fraborcar1
+    member8:
+      name: Javier
+      surname: Pacheco Márquez
+      githubUsername: javpacmar
+    member9:
+      name: José Luis
+      surname: Pérez Santacruz
+      githubUsername: joseluisps21
+    member10:
+      name: José Luis
+      surname: García Marín
+      githubUsername: josgarmar31
+    member11:
+      name: Juan
+      surname: García Oliva
+      githubUsername: juangarcia16
+    member12:
+      name: María del Carmen
+      surname: García García
+      githubUsername: margargar81
+    member13:
+      name: Patricia
+      surname: Aguilar Román
+      githubUsername: Patri17
+    member14:
+      name: Rafael
+      surname: Estrada Ornedo
+      githubUsername: rafestorn
+    member15:
+      name: Vicente
+      surname: Cambrón Tocados
+      githubUsername: vicato2000
+    member16:
+      name: Carlos
+      surname: Nuchera Bolaños
+      githubUsername: CarlosNuchera
