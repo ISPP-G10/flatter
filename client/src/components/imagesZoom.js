@@ -61,11 +61,11 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
         setSpiralPoints(generateSpritalPoints());
 
-        document.addEventListener("scroll", (e) => {
+        document.addEventListener("scroll", () => {
 
-            var value = parseInt(window.scrollY - container.current.offsetTop + height/6);
+            let value = parseInt(window.scrollY - container.current.offsetTop + height/6);
 
-            containerImages.current.forEach((image, i) => {
+            containerImages.current.forEach((image) => {
 
                 let previousTransformData = image.style.transform.substring(0, image.style.transform.lastIndexOf(","));
 

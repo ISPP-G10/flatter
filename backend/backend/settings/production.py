@@ -11,16 +11,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o@1w^-ak=l-!$&45sv#&z@psiyj*$u(r%ek9k+^r*ycxc6*4zq'
+try:
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+except Exception:
+    SECRET_KEY = 'localsecret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+try:
+    DEBUG = int(os.environ.get("DEBUG", default=0))
+except Exception:
+    DEBUG = False
 
-ALLOWED_HOSTS = ['localhost']
+try:
+    ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+except Exception:
+    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
@@ -76,12 +83,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'flatter_db',
-        'USER': 'flatter_user',
-        'PASSWORD': 'flatter_password',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
+        'NAME': os.environ.get("DB_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        'USER': os.environ.get("DB_USER", "user"),
+        'PASSWORD': os.environ.get("DB_PASSWORD", "password"),
+        'HOST': os.environ.get("DB_HOST", "localhost"),
+        'PORT': os.environ.get("DB_PORT", "5432"),
     }
 
 }

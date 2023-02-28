@@ -1,0 +1,45 @@
+###########################
+# Deployment
+###########################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-dev-assets-nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: static-dev-assets
+  template:
+    metadata:
+      labels:
+        component: static-dev-assets
+    spec:
+      volumes:
+        - name: django-dev-static-data
+          persistentVolumeClaim:
+            claimName: static-dev-assets-volume-claim
+      containers:
+        - name: nginx-container
+          image: flatterus/flatter-nginx:latest
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: django-dev-static-data
+              mountPath: /usr/src/app/static
+              subPath: django_files
+---
+###########################
+# Cluster IP Service
+###########################
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-dev-assets-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: static-dev-assets
+  ports:
+    - port: 8000
+      targetPort: 8000
