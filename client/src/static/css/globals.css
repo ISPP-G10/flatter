@@ -2,12 +2,14 @@
     --flatter-red-color: #ed3f79;
     --flatter-purple-color: #92278f;
     --flatter-yellow-color: #fecb35;
-    --flatter-blue-color: #3eaee3;
+    --flatter-blue-color: #00A8FF;
+    --flatter-orange-color: #FAB315;
 }
 
 *{
     margin: 0 auto;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body{
@@ -15,4 +17,23 @@ body{
     font-family: 'Franklin Gothic Medium', sans-serif;
     font-size: 16px;
     color: #333;
+}
+
+section{
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.glass {
+    background: rgba(0, 0, 0, 0.21);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5.3px);
+    -webkit-backdrop-filter: blur(5.3px);
+}
+
+.card {
+    background: #fff;
+    box-shadow: 0px 4px 12px #00000045;
+    border-radius: 8px;
 }

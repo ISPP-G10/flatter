@@ -1,0 +1,84 @@
+###########################
+# Storage Class
+###########################
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: itop-dev-storage-class
+provisioner: pd.csi.storage.gke.io
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+reclaimPolicy: Retain
+parameters:
+  type: pd-balanced
+---
+###########################
+# Persistent Volume Claim
+###########################
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: itop-dev-persistent-volume-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: standard-rwo
+  resources:
+    requests:
+      storage: 4Gi
+---
+###########################
+# Deployment
+###########################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: itop-dev-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: itop-dev
+  template:
+    metadata:
+      labels:
+        component: itop-dev
+    spec:
+      volumes:
+        - name: itop-dev-data
+          persistentVolumeClaim:
+            claimName: itop-dev-persistent-volume-claim
+      containers:
+        - name: itop-dev-container
+          image: vbkunin/itop
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: itop-dev-data
+              mountPath: /var/www/html/conf
+              subPath: itop-conf
+            - name: itop-dev-data
+              mountPath: /var/lib/mysql
+              subPath: itop-mysql
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+---
+###########################
+# Cluster IP Service
+###########################
+apiVersion: v1
+kind: Service
+metadata:
+  name: itop-dev-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: itop-dev
+  ports:
+    - port: 8000
+      targetPort: 80

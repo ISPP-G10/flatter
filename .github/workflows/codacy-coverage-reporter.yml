@@ -1,0 +1,49 @@
+name: Codacy Coverage Reporter
+
+on: ["pull_request"]
+
+jobs:
+  codacy-coverage-reporter:
+    runs-on: ubuntu-latest
+    name: Codacy Coverage Reporter
+    services:
+      postgres:
+        image: postgres:14.5
+        env:
+          POSTGRES_USER: flatter_user
+          POSTGRES_PASSWORD: flatter_password
+          POSTGRES_DB: flatter_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Prerequisites
+        run: |
+          sudo apt-get install libpq-dev
+          sudo apt-get install chromium-browser chromium-chromedriver
+          sudo apt-get install -y gettext
+      - name: Run Django project
+        run: |
+          cd backend
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python manage.py makemigrations
+          python manage.py migrate
+          python manage.py makemessages -l en
+          python manage.py makemessages -l es
+          python manage.py compilemessages
+      - name: Run Django tests and coverage
+        run: |
+          cd backend
+          coverage run manage.py test
+          coverage xml
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: backend/coverage.xml
