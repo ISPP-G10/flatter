@@ -48,7 +48,12 @@ const LandingPage = () => {
                         <h3>Busca donde necesites</h3>
                     </div>
                     <div className="view-content">
-                        Encuentra el hogar perfecto en la zona que más te guste. Si no conoces la ciudad, no te preocupes, ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
+                        Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
+                    </div>
+                    <div className="view-footer">
+                        <div>
+                            <a href="#" className="button featured">Más información</a>
+                        </div>
                     </div>
                 </div>
                 <div className="view">
@@ -62,6 +67,11 @@ const LandingPage = () => {
                     <div className="view-content">
                         Velamos por tu tranquilidad. Todos los trámites se realizan a través de nuestra plataforma para garantizar la máxima seguridad.
                     </div>
+                    <div className="view-footer">
+                        <div>
+                            <a href="#" className="button featured">Más información</a>
+                        </div>
+                    </div>
                 </div>
                 <div className="view">
                     <div className="view-header">
@@ -73,6 +83,11 @@ const LandingPage = () => {
                     </div>
                     <div className="view-content">
                         ¡No te olvides de valorar al propietario y a tus compañeros! Tu opinión es muy importante para nosotros y para otros inquilinos.
+                    </div>
+                    <div className="view-footer">
+                        <div>
+                            <a href="#" className="button featured">Más información</a>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -165,12 +180,12 @@ const LandingPage = () => {
                                     </div>
                                     <div className="mc-field-group">
                                         <label htmlFor="mce-FNAME-2">Nombre completo </label>
-                                        <input type="text" name="FNAME" className id="mce-FNAME-2" />
+                                        <input type="text" name="FNAME" id="mce-FNAME-2" />
                                         <span id="mce-FNAME-HELPERTEXT-2" className="helper_text" />
                                     </div>
                                     <div className="mc-field-group">
                                         <label htmlFor="mce-PHONE-2">Teléfono </label>
-                                        <input type="text" name="PHONE" className id="mce-PHONE-2" />
+                                        <input type="text" name="PHONE" id="mce-PHONE-2" />
                                         <span id="mce-PHONE-HELPERTEXT-2" className="helper_text" />
                                     </div>
                                     <div id="mce-responses-2" className="clear foot">

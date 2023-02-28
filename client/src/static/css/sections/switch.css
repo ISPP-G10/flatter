@@ -37,11 +37,11 @@
   .switch-label--right {
     margin-left: 10px;
   }
-  
+
   .switch-toggle--orange {
-    background-color: orange;
+    background-color: var(--flatter-orange-color);
   }
   
   .switch-toggle--blue {
-    background-color: blue;
+    background-color: var(--flatter-blue-color);
   }
