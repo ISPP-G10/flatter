@@ -50,11 +50,11 @@ const LandingPage = () => {
                     <div className="view-content">
                         Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
                     </div>
-                    <div className="view-footer">
+                    {/* <div className="view-footer">
                         <div>
                             <a href="#" className="button featured">Más información</a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="view">
                     <div className="view-header">
@@ -67,11 +67,11 @@ const LandingPage = () => {
                     <div className="view-content">
                         Velamos por tu tranquilidad. Todos los trámites se realizan a través de nuestra plataforma para garantizar la máxima seguridad.
                     </div>
-                    <div className="view-footer">
+                    {/* <div className="view-footer">
                         <div>
                             <a href="#" className="button featured">Más información</a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="view">
                     <div className="view-header">
@@ -84,11 +84,11 @@ const LandingPage = () => {
                     <div className="view-content">
                         ¡No te olvides de valorar al propietario y a tus compañeros! Tu opinión es muy importante para nosotros y para otros inquilinos.
                     </div>
-                    <div className="view-footer">
+                    {/* <div className="view-footer">
                         <div>
                             <a href="#" className="button featured">Más información</a>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </section>
 
