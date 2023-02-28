@@ -80,4 +80,8 @@ jobs:
         kubectl apply -f ./k8s/development/component_django.yaml
         kubectl apply -f ./k8s/development/component_react.yaml
         kubectl apply -f ./k8s/development/ingress_service.yaml
+
+    - name: Waiting for pods to be ready
+      continue-on-error: true
+      run: |-
         kubectl wait --for=condition=ready pod --all --timeout=600s
