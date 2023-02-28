@@ -1,13 +1,13 @@
-name: Development Flatter Deployment
+name: Production Flatter Deployment
 
 on:
   push:
     branches:
-      - develop
+      - main
 
 env:
-  PROJECT_ID: "flatter-378818"
-  GKE_CLUSTER: flatter-cluster-dev
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
   GKE_ZONE: europe-west9
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
         context: .
         file: ./docker/backend/Dockerfile
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-backend-dev:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-backend:latest
 
     - name: Build and push
       uses: docker/build-push-action@v4
@@ -46,9 +46,17 @@ jobs:
         context: .
         file: ./docker/client/Dockerfile
         build-args: |
-          API_SERVER=http://34.155.169.220/api/
+          API_SERVER=http://34.163.148.56/api/
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client-dev:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client:latest
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./nginx/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx:latest
 
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
@@ -64,12 +72,12 @@ jobs:
     - name: Deploy
       run: |-
         kubectl delete all --all
-        kubectl apply -f ./k8s/development/app_dev_secrets.yaml
-        kubectl apply -f ./k8s/development/app_dev_variables.yaml
-        kubectl apply -f ./k8s/development/component_postgres.yaml
-        kubectl apply -f ./k8s/development/job_django.yaml
-        kubectl apply -f ./k8s/development/component_static_assets.yaml
-        kubectl apply -f ./k8s/development/component_django.yaml
-        kubectl apply -f ./k8s/development/component_react.yaml
-        kubectl apply -f ./k8s/development/ingress_service.yaml
+        kubectl apply -f ./k8s/production/app_secrets.yaml
+        kubectl apply -f ./k8s/production/app_variables.yaml
+        kubectl apply -f ./k8s/production/component_postgres.yaml
+        kubectl apply -f ./k8s/production/job_django.yaml
+        kubectl apply -f ./k8s/production/component_static_assets.yaml
+        kubectl apply -f ./k8s/production/component_django.yaml
+        kubectl apply -f ./k8s/production/component_react.yaml
+        kubectl apply -f ./k8s/production/ingress_service.yaml
         kubectl wait --for=condition=ready pod --all --timeout=600s
