@@ -26,7 +26,7 @@ const ToggleLandingForm = (props) => {
       <>
         <div className="toggle-container">
             <span className="switch-label switch-label--left">Inquilino</span>
-            <Switch isOn={isToggled} handleToggle={(isOn) => toggle(isOn)} />;
+            <Switch isOn={isToggled} handleToggle={(isOn) => toggle(isOn)} />
 
             <span className="switch-label switch-label--right">Propietario</span>
         </div>

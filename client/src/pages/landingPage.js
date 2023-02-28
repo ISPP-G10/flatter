@@ -135,7 +135,7 @@ const LandingPage = () => {
                         <div id="mc_embed_signup">
                             <form action="https://seafony.us18.list-manage.com/subscribe/post?u=a6fea00d426951e0520437e5d&id=67cc14792f&f_id=005328e7f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
                                 <div id="mc_embed_signup_scroll">
-                                <h2>Regístrate como inquilino</h2>
+                                <h2>Regístrate como <b>Propietario</b></h2>
                                 <div className="indicates-required"><span className="asterisk">*</span> indica requerido</div>
                                 <div className="mc-field-group">
                                     <label htmlFor="mce-EMAIL">Correo electrónico  <span className="asterisk">*</span>
@@ -171,7 +171,7 @@ const LandingPage = () => {
                         <div id="mc_embed_signup">
                             <form action="https://seafony.us18.list-manage.com/subscribe/post?u=a6fea00d426951e0520437e5d&amp;id=67cc14792f&amp;f_id=005328e7f0" method="post" id="mc-embedded-subscribe-form-2" name="mc-embedded-subscribe-form-2" className="validate" target="_blank" noValidate>
                                 <div id="mc_embed_signup_scroll">
-                                    <h2>Regístrate como Propietario</h2>
+                                    <h2>Regístrate como <b>Inquilino</b></h2>
                                     <div className="indicates-required"><span className="asterisk">*</span> indica requerido</div>
                                     <div className="mc-field-group">
                                         <label htmlFor="mce-EMAIL-2">Correo electrónico  <span className="asterisk">*</span></label>
