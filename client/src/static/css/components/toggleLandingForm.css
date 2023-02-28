@@ -1,0 +1,5 @@
+.toggle-container {
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+}

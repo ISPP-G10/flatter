@@ -18,8 +18,24 @@ const HeroHome = () => {
                         <p className='hero-glass-text' style={{marginBottom: '20px'}}>¿Quiéres más información?</p>
 
                         <div className="button-group">
-                            <SolidButton text="Únete como propietario" type="featured" modalid="ejemplo"/>
-                            <SolidButton text="Únete como inquilino" type="featured" modalid="ejemplo"/>
+                            <SolidButton text="Únete como propietario" type="featured" modalid="ejemplo" onClick = {() => {
+                                const modal = document.querySelector('.modal[data-modalid="ejemplo"]'),
+                                    isInquilino = modal.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
+
+                                 if(isInquilino) {
+                                    modal.querySelector('.switch').click();
+                                 }
+                                
+                            }}/>
+                            <SolidButton text="Únete como inquilino" type="featured" modalid="ejemplo" onClick = {() => {
+                                const modal = document.querySelector('.modal[data-modalid="ejemplo"]'),
+                                    isInquilino = modal.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
+
+                                 if(!isInquilino) {
+                                    modal.querySelector('.switch').click();
+                                 }
+                                
+                            }}/>
                         </div>
                     </div>
                 </div>

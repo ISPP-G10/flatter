@@ -17,7 +17,7 @@
 }
 
 .site-header.scroll {
-    background: #00A8FF;
+    background: var(--flatter-blue-color);
     color: #000;
     transition: all 0.3s;
 }

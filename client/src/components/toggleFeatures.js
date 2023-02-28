@@ -96,10 +96,10 @@ const ToggleFeatures = () => {
                     <div className="toggle card">
                         <div className={ `toggle-action ${toggleActionClass}` }>
                             <div onClick={() => {toggleToIndex(0)}} style={{fontWeight: 'bolder'}}>
-                                PROPIETARIO
+                                Propietario
                             </div>
                             <div onClick={() => {toggleToIndex(1)}} style={{fontWeight: 'bolder'}}>
-                                INQUILINO
+                                Inquilino
                             </div>
                         </div>
 

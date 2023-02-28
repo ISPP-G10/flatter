@@ -1,8 +1,10 @@
 import '../static/css/sections/button.css';
 
+import { useEffect } from "react";
+
 import PropTypes from "prop-types";
 
-const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuOpen}) => {
+const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuOpen, onClick}) => {
 
     let classes = 'button';
     classes += type.length>0 ? ` ${type}` : '';
@@ -11,9 +13,10 @@ const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuO
     const isOutlined = type==="outlined";
 
     return isSubmit ? (
-        <button type="submit" className={classes} data-modalid={modalid}>{text} <SVGBorder show={isOutlined} /></button>
+        <button type="submit" className={classes} data-modalid={modalid} onClick={() => onClick()}>{text} <SVGBorder show={isOutlined} /></button>
     ) : (
-        <a href={href} className={classes} data-modalid={modalid} onClick={()=>{setIsMenuOpen(false)}}>{text} <SVGBorder show={isOutlined} /></a>
+        // TODO: pasar setIsMenuOpen a funcion callback
+        <a href={href} className={classes} data-modalid={modalid} onClick={()=>{onClick();}}>{text} <SVGBorder show={isOutlined} /></a>
     );
 }
 
@@ -23,7 +26,8 @@ SolidButton.propTypes = {
     type: PropTypes.string,
     isSubmit: PropTypes.bool,
     className: PropTypes.string,
-    modalid: PropTypes.string
+    modalid: PropTypes.string,
+    onClick: PropTypes.func
 }
 
 SolidButton.defaultProps = {
@@ -31,7 +35,8 @@ SolidButton.defaultProps = {
     type: '',
     href: '',
     className: '',
-    modalid: null
+    modalid: null,
+    onClick: () => {}
 }
 
 const SVGBorder = ({show}) => {
