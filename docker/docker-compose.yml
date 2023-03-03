@@ -1,0 +1,82 @@
+version: '3'
+
+name: flatter
+
+services:
+  db:
+    restart: always
+    container_name: flatter-db
+    image: postgres:alpine
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - flatter
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    restart: always
+    container_name: flatter-backend
+    image: flatter-backend:latest
+    build: 
+      context: ..
+      dockerfile: ./docker/backend/Dockerfile
+    command: bash -c "/usr/src/app/flatter-backend/entrypoint.sh && gunicorn -w 5 backend.wsgi:application --timeout=500 --bind 0.0.0.0:8080 -c gunicorn.conf.py"
+    environment:
+      - DJANGO_ADMIN_USER= flatter_admin_user
+      - DJANGO_ADMIN_EMAIL= "flatter.ispp@gmail.com"
+      - DJANGO_ADMIN_PASSWORD= flatter_admin_password
+      - SECRET_KEY= secretkey
+    expose:
+      - 8080
+    depends_on:
+      - db
+    networks:
+      - flatter
+
+  client:
+    restart: always
+    container_name: flatter-client
+    image: flatter-client:latest
+    build: 
+      context: ..
+      dockerfile: ./docker/client/Dockerfile
+      args:
+        API_SERVER: "http://localhost/api/"
+    command: sh -c "serve -s build -l 3000 --no-clipboard"
+    expose:
+      - 3000
+    networks:
+      - flatter
+
+  nginx:
+    restart: always
+    container_name: flatter-nginx
+    image: flatter-nginx:latest
+    build:
+        context: ../nginx/local
+        dockerfile: ./Dockerfile
+    volumes:
+      - static:/usr/src/app/static
+    ports:
+      - 80:8000
+    depends_on:
+      - backend
+      - client
+    networks:
+      - flatter
+
+volumes:
+  static:
+    name: flatter-static
+  db:
+    name: flatter-db
+
+
+networks:
+  flatter:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.5.0.0/16

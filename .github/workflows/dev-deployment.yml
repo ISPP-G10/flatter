@@ -53,8 +53,8 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
-        context: ./nginx
-        file: ./nginx/Dockerfile
+        context: ./nginx/remote
+        file: ./nginx/remote/Dockerfile
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx-dev:latest
 
