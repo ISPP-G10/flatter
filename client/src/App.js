@@ -11,7 +11,6 @@ function App() {
       <Routes>
         <Route exact path="/" element={<LandingPage/>}/>
         <Route path="/prueba" element={<Ejemplo/>}/>
-        <Route path="/prueba2" element={<Pruebas/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
