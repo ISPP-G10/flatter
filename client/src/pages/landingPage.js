@@ -1,6 +1,6 @@
 import ZoomingImages from "../components/imagesZoom";
 import HeroHome from "../components/heroHome";
-import ScrollingPage from "../sections/scrollingPage";
+import FlatterPage from "../sections/flatterPage";
 import ToggleFeatures from "../components/toggleFeatures";
 import Modal from "../sections/modal";
 
@@ -20,7 +20,7 @@ const LandingPage = () => {
     ];
 
     return(
-        <ScrollingPage>
+        <FlatterPage>
             <HeroHome />
 
             <section id="whatsFlatter">
@@ -207,7 +207,7 @@ const LandingPage = () => {
                     </>
                 </ToggleLandingForm>
             </Modal>
-        </ScrollingPage>
+        </FlatterPage>
     );
 }
 
