@@ -45,11 +45,11 @@ class FlatterUser(AbstractUser):
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', blank=True, null=True)
     roles = models.ManyToManyField(Role, related_name=_('roles'), blank=True)
     genre = models.CharField(choices=choices_genre, max_length=2)
-    flatterCoins = models.FloatField()
+    flatterCoins = models.FloatField(blank=True, null=True)
     role = models.ForeignKey(Role, on_delete=models.DO_NOTHING)
-    user_preferences = models.ForeignKey(UserPreferences, on_delete=models.DO_NOTHING)
-    tag = models.ManyToManyField(Tag)
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+    user_preferences = models.ForeignKey(UserPreferences, on_delete=models.DO_NOTHING, null=True, blank=True)
+    tag = models.ManyToManyField(Tag, null=True, blank=True)
+    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, null=True, blank=True)
     
     
     def __str__(self):
