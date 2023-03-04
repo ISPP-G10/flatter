@@ -1,5 +1,6 @@
 from django.db import models
 from authentication.models import FlatterUser, Tag
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 
@@ -20,7 +21,7 @@ class Property(models.Model):
     is_in_offer = models.BooleanField()
     is_full = models.BooleanField
     dimensions = models.IntegerField()
-    tag = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
     images = models.ManyToManyField(Image) 
 
 class Review(models.Model):
