@@ -46,7 +46,7 @@ class FlatterUser(AbstractUser):
     roles = models.ManyToManyField(Role, related_name=_('roles'), blank=True)
     genre = models.CharField(choices=choices_genre, max_length=2)
     flatterCoins = models.FloatField(blank=True, null=True)
-    role = models.ForeignKey(Role, on_delete=models.DO_NOTHING)
+    role = models.ForeignKey(Role, on_delete=models.DO_NOTHING,null=True, blank=True)
     user_preferences = models.ForeignKey(UserPreferences, on_delete=models.DO_NOTHING, null=True, blank=True)
     tag = models.ManyToManyField(Tag, null=True, blank=True)
     plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, null=True, blank=True)
