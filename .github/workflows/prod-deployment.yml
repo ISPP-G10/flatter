@@ -1,88 +1,87 @@
-# SE COMENTA EL DESPLIGUE POR FALTA DE PRESUPUESTO EN GCP
-# name: Production Flatter Deployment
+name: Production Flatter Deployment
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# env:
-#   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-#   GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-#   GKE_ZONE: europe-west9
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+  GKE_ZONE: europe-west9
 
-# jobs:
-#   flatter-dev-deployment:
-#     runs-on: ubuntu-latest
-#     permissions:
-#       contents: 'read'
-#       id-token: 'write'
-#     steps:
-#     - name: Checkout
-#       uses: actions/checkout@v3
+jobs:
+  flatter-dev-deployment:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
 
-#     - name: Set up QEMU
-#       uses: docker/setup-qemu-action@v2
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
 
-#     - name: Set up Docker Buildx
-#       uses: docker/setup-buildx-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-#     - name: Login to Docker Hub
-#       uses: docker/login-action@v2
-#       with:
-#         username: ${{ secrets.DOCKERHUB_USERNAME }}
-#         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-#     - name: Build and push
-#       uses: docker/build-push-action@v4
-#       with:
-#         context: .
-#         file: ./docker/backend/Dockerfile
-#         push: true
-#         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-backend:latest
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./docker/backend/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-backend:latest
 
-#     - name: Build and push
-#       uses: docker/build-push-action@v4
-#       with:
-#         context: .
-#         file: ./docker/client/Dockerfile
-#         build-args: |
-#           API_SERVER=http://34.163.148.56/api/
-#         push: true
-#         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client:latest
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./docker/client/Dockerfile
+        build-args: |
+          API_SERVER=http://34.163.148.56/api/
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client:latest
 
-#     - name: Build and push
-#       uses: docker/build-push-action@v4
-#       with:
-#         context: ./nginx/remote
-#         file: ./nginx/remote/Dockerfile
-#         push: true
-#         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx:latest
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        context: ./nginx/remote
+        file: ./nginx/remote/Dockerfile
+        push: true
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx:latest
 
-#     - id: 'auth'
-#       uses: 'google-github-actions/auth@v1'
-#       with:
-#         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
     
-#     - name: Set up Cloud SDK
-#       uses: google-github-actions/setup-gcloud@v1
-#     - run: |-
-#         gcloud components install gke-gcloud-auth-plugin
-#         gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+    - run: |-
+        gcloud components install gke-gcloud-auth-plugin
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --zone "$GKE_ZONE"
 
-#     - name: Deploy
-#       run: |-
-#         kubectl delete all --all
-#         kubectl apply -f ./k8s/production/app_secrets.yaml
-#         kubectl apply -f ./k8s/production/app_variables.yaml
-#         kubectl apply -f ./k8s/production/component_postgres.yaml
-#         kubectl apply -f ./k8s/production/job_django.yaml
-#         kubectl apply -f ./k8s/production/component_static_assets.yaml
-#         kubectl apply -f ./k8s/production/component_django.yaml
-#         kubectl apply -f ./k8s/production/component_react.yaml
-#         kubectl apply -f ./k8s/production/ingress_service.yaml
+    - name: Deploy
+      run: |-
+        kubectl delete all --all
+        kubectl apply -f ./k8s/production/app_secrets.yaml
+        kubectl apply -f ./k8s/production/app_variables.yaml
+        kubectl apply -f ./k8s/production/component_postgres.yaml
+        kubectl apply -f ./k8s/production/job_django.yaml
+        kubectl apply -f ./k8s/production/component_static_assets.yaml
+        kubectl apply -f ./k8s/production/component_django.yaml
+        kubectl apply -f ./k8s/production/component_react.yaml
+        kubectl apply -f ./k8s/production/ingress_service.yaml
 
-#     - name: Waiting for pods to be ready
-#       continue-on-error: true
-#       run: |-
-#         kubectl wait --for=condition=ready pod --all --timeout=600s
+    - name: Waiting for pods to be ready
+      continue-on-error: true
+      run: |-
+        kubectl wait --for=condition=ready pod --all --timeout=600s

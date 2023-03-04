@@ -1,5 +1,6 @@
 import graphene, graphql_jwt, json
-from authentication.models import FlatterUser
+from .models import FlatterUser, UserPreferences
+from .models import Tag
 from .types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
 
@@ -48,7 +49,16 @@ class CreateUserMutation(graphene.Mutation):
     if _exists_email(email):
       raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
 
-    obj = FlatterUser.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email, phone_number=phone, profile_picture="/assets/user-images/default.png")
+    obj = FlatterUser.objects.create_user(username=username, 
+                                          password=password, 
+                                          first_name=first_name, 
+                                          last_name=last_name, 
+                                          email=email, 
+                                          phone_number=phone, 
+                                          profile_picture="/assets/user-images/default.png",
+                                          flatter_coins=0,
+                                          genre='O',
+                                          )
         
     return CreateUserMutation(user=obj)
 
@@ -76,12 +86,33 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     def resolve(cls, root, info, **kwargs):
         return cls(user=info.context.user)
 
+class AddTagToUser(graphene.Mutation):
+  
+  class Input:
+    username = graphene.String(required=True)
+    tag = graphene.String(required=True)
+
+  user = graphene.Field(FlatterUserType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    tag = kwargs.get('tag', '').strip()
+    
+    selected_user = FlatterUser.objects.get(username=username)
+    tag = Tag.objects.get_or_create(name=tag, entity='U')
+    
+    selected_user.tags.add(tag[0])
+    
+    return AddTagToUser(user=selected_user)
+
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
   verify_token = graphql_jwt.Verify.Field()
   refresh_token = graphql_jwt.Refresh.Field()
   create_user = CreateUserMutation.Field()
   delete_user = DeleteUserMutation.Field()
+  add_tag_to_user = AddTagToUser.Field()
   
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
