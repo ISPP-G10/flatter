@@ -24,7 +24,6 @@ class UserPreferences(models.Model):
     online = models.BooleanField()
     bad_words = models.BooleanField()
 
-
 class Plan(models.Model):
     choices_type = (
         ('B', 'Básico'),
@@ -37,12 +36,10 @@ class Plan(models.Model):
     plan_type = models.CharField(max_length=1, choices=choices_type)
 
 class FlatterUser(AbstractUser):
-
     choices_genre = (('H','Hombre'),
                      ('M', 'Mujer'),
                      ('NB','No Binario'),
                      ('O', 'Otro'))
-
     email = models.EmailField(_("email_address"), unique=True)
     phone_number = models.CharField(_("phone_number"), max_length=20, null=True)
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', blank=True, null=True)

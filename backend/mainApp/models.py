@@ -5,6 +5,7 @@ from authentication.models import FlatterUser, Tag
 
 class Image(models.Model):
     image = models.ImageField( upload_to='property/images/', blank=True, null=True)
+    
 class Property(models.Model):
     is_outstanding = models.BooleanField()
     title = models.CharField(max_length=50)
@@ -29,6 +30,7 @@ class Review(models.Model):
     valued_user = models.ForeignKey(FlatterUser, blank=True, null=True,on_delete=models.CASCADE),
     evaluator_user = models.ForeignKey(FlatterUser, blank=True, null=True, on_delete=models.CASCADE)
     property = models.ForeignKey(Property, blank=True, null=True, on_delete=models.CASCADE)
+
 class Type(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField()
