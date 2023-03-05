@@ -46,9 +46,9 @@ const MainPageCarousel = ({items}) => {
         <div className="carousel">
             <div className="carousel-status-bar" ref={statusBar}>
                 {
-                    [...Array(5).keys()].map(() => {
+                    [...Array(5).keys()].map((_, index) => {
                         return(
-                            <div className="carousel-status-bar-item"></div>
+                            <div className="carousel-status-bar-item" key={`status-${index+1}`}></div>
                         );
                     })
                 }

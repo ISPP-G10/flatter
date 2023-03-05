@@ -4,6 +4,20 @@
     --flatter-yellow-color: #fecb35;
     --flatter-blue-color: #00A8FF;
     --flatter-orange-color: #FAB315;
+
+    /* Main Page Form */
+
+    --main-page-properties-form-bg-color: var(--flatter-blue-color);
+    --main-page-partners-form-bg-color: var(--flatter-orange-color);
+    --main-page-owners-form-bg-color: rgb(45, 45, 45);
+
+    /* Inputs */
+
+    --price-slider-color: var(--flatter-blue-color);
+    --price-slider-track-color: #ced4da;
+    --price-slider-text-color: black;
+    --checker-button-color: rgb(158, 158, 158);
+    --checker-track-color: rgb(217, 217, 217);
 }
 
 *{
