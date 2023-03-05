@@ -1,6 +1,7 @@
 import graphene
+from django.core.exceptions import ValidationError
 from graphql_jwt.decorators import login_required
-
+import phonenumbers
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
@@ -32,8 +33,6 @@ class EditUserMutation(graphene.Mutation):
         phone = kwargs.get('phone', '').strip()
         profile_picture = kwargs.get('profile_picture', '').strip()
 
-        print(len(phone))
-
 
         if len(username) > 1:
             if len(username) < 6 or len(username) > 25:
@@ -51,9 +50,6 @@ class EditUserMutation(graphene.Mutation):
             if ("@" not in email) or ("." not in email):
                 raise ValueError(_("El email no es válido"))
 
-        if not phone.isdigit() or len(phone) < 9:
-            raise ValueError(_("El número de teléfono no es válido"))
-
         if user.username != username:
             if _exists_user(username):
                 raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
@@ -61,6 +57,15 @@ class EditUserMutation(graphene.Mutation):
         if user.email != email:
             if _exists_email(email):
                 raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
+
+        if phone:
+            try:
+                parsed_number = phonenumbers.parse(phone, None)
+                if not phonenumbers.is_valid_number(parsed_number):
+                    raise ValidationError(_("El número de teléfono no es válido."))
+            except phonenumbers.NumberParseException as e:
+                raise ValidationError(_("Error al validar el número de teléfono: %(error)s"),
+                                      code="invalid_phone_number", params={"error": str(e)})
 
         user_selected = FlatterUser.objects.get(pk=user.id)
 
