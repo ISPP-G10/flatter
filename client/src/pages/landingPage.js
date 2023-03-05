@@ -1,5 +1,5 @@
 import ZoomingImages from "../components/imagesZoom";
-import HeroHome from "../components/heroHome";
+import HeroHome from "../components/hero/heroHome";
 import FlatterPage from "../sections/flatterPage";
 import ToggleFeatures from "../components/toggleFeatures";
 import Modal from "../sections/modal";

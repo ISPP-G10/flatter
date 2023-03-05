@@ -46,3 +46,16 @@ section{
     box-shadow: 0px 4px 12px #00000045;
     border-radius: 8px;
 }
+
+.flatter-coins-row{
+    display: flex;
+    align-items: center;
+}
+
+.flatter-coins-row > div{
+    margin: 0;
+}
+
+.flatter-coins-row > span{
+    margin: 0 10px;
+}

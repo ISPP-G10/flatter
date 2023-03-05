@@ -1,5 +1,5 @@
-import Hero from '../sections/hero';
-import SolidButton from '../sections/solidButton';
+import Hero from '../../sections/hero';
+import SolidButton from '../../sections/solidButton';
 
 const HeroHome = () => {
 
