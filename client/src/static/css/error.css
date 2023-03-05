@@ -1,7 +1,3 @@
-* {
-  /* text-align: center; */
-}
-
 .main-container {
   position: absolute;
   width: 100%;
@@ -18,16 +14,21 @@
 }
 
 .error-message > h1 {
-    background: linear-gradient(90deg, var(--flatter-purple-color) 35%, var(--flatter-red-color) 50%, var(--flatter-yellow-color) 70%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-family: "Lato", sans-serif;
-    font-weight: 400;
-    font-size: 150px;
-    position: relative;
-    left: -100%;
-    transition: all 0.5s;
+  background: linear-gradient(
+    90deg,
+    var(--flatter-purple-color) 35%,
+    var(--flatter-red-color) 50%,
+    var(--flatter-yellow-color) 70%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  font-size: 150px;
+  position: relative;
+  left: -100%;
+  transition: all 0.5s;
 }
 
 .error-message > p {

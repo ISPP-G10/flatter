@@ -1,75 +1,79 @@
-:root{
-    --flatter-red-color: #ed3f79;
-    --flatter-purple-color: #92278f;
-    --flatter-yellow-color: #fecb35;
-    --flatter-blue-color: #00A8FF;
-    --flatter-orange-color: #FAB315;
+:root {
+  --flatter-red-color: #ed3f79;
+  --flatter-purple-color: #92278f;
+  --flatter-yellow-color: #fecb35;
+  --flatter-blue-color: #00a8ff;
+  --flatter-orange-color: #fab315;
 
-    /* Main Page Form */
+  /* Main Page Form */
 
-    --main-page-properties-form-bg-color: var(--flatter-blue-color);
-    --main-page-partners-form-bg-color: var(--flatter-orange-color);
-    --main-page-owners-form-bg-color: rgb(45, 45, 45);
+  --main-page-properties-form-bg-color: var(--flatter-blue-color);
+  --main-page-partners-form-bg-color: var(--flatter-orange-color);
+  --main-page-owners-form-bg-color: rgb(45, 45, 45);
 
-    /* Inputs */
+  /* Inputs */
 
-    --price-slider-color: var(--flatter-blue-color);
-    --price-slider-track-color: #ced4da;
-    --price-slider-text-color: black;
-    --checker-button-color: rgb(158, 158, 158);
-    --checker-track-color: rgb(217, 217, 217);
+  --price-slider-color: var(--flatter-blue-color);
+  --price-slider-track-color: #ced4da;
+  --price-slider-text-color: black;
+  --checker-button-color: rgb(158, 158, 158);
+  --checker-track-color: rgb(217, 217, 217);
 }
 
-*{
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-    background-color: #f5f5f5;
-    font-family: 'Franklin Gothic Medium', sans-serif;
-    font-size: 16px;
-    color: #333;
+body {
+  background-color: #f5f5f5;
+  font-family: "Franklin Gothic Medium", sans-serif;
+  font-size: 16px;
+  color: #333;
 }
 
-section{
-    width: 100%;
-    overflow-x: hidden;
+section {
+  width: 100%;
+  overflow-x: hidden;
 }
 
-.site-content{
-    width: 100vw;
-    height: 100vh;
-    padding-top: 70px;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('../files/images/flatter-bg.jpg');
-    background-size: cover;
-    overflow-y: scroll;
+.site-content {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 70px;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("../files/images/flatter-bg.jpg");
+  background-size: cover;
+  overflow-y: scroll;
 }
 
 .glass {
-    background: rgba(0, 0, 0, 0.21);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5.3px);
-    -webkit-backdrop-filter: blur(5.3px);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.3px);
+  -webkit-backdrop-filter: blur(5.3px);
 }
 
 .card {
-    background: #fff;
-    box-shadow: 0px 4px 12px #00000045;
-    border-radius: 8px;
+  background: #fff;
+  box-shadow: 0px 4px 12px #00000045;
+  border-radius: 8px;
 }
 
-.flatter-coins-row{
-    display: flex;
-    align-items: center;
+.flatter-coins-row {
+  display: flex;
+  align-items: center;
 }
 
-.flatter-coins-row > div{
-    margin: 0;
+.flatter-coins-row > div {
+  margin: 0;
 }
 
-.flatter-coins-row > span{
-    margin: 0 10px;
+.flatter-coins-row > span {
+  margin: 0 10px;
 }

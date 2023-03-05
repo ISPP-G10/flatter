@@ -1,45 +1,54 @@
 .button {
-    position: relative;
-    display: table;
-    color: #fff;
-    text-decoration: none;
-    text-align: center;
-    font-weight: 600;
-    padding: 12px 30px;
-    background: var(--flatter-blue-color);
-    border-radius: 25px;
+  position: relative;
+  display: table;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-weight: 600;
+  padding: 12px 30px;
+  background: var(--flatter-blue-color);
+  border-radius: 25px;
 }
 
 .button.featured {
-    background: conic-gradient(from 180deg at 50% 50%, #BB5799 0deg, rgba(255, 0, 245, 0.75) 18.75deg, #8D8EFF 86.25deg, rgba(66, 0, 255, 0.67) 144deg, rgba(255, 0, 8, 0.815588) 216deg, #FF8A00 288deg, #BB5799 360deg);
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #bb5799 0deg,
+    rgba(255, 0, 245, 0.75) 18.75deg,
+    #8d8eff 86.25deg,
+    rgba(66, 0, 255, 0.67) 144deg,
+    rgba(255, 0, 8, 0.815588) 216deg,
+    #ff8a00 288deg,
+    #bb5799 360deg
+  );
 }
 
 .button.outlined {
-    background: transparent;
+  background: transparent;
 }
 
 .button.outlined > .outline {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
 }
 
 .button.outlined > .outline > path {
-    transition: opacity 0.4s ease;
+  transition: opacity 0.4s ease;
 }
 
 .button.outlined > .outline > path:first-child {
-    fill: transparent;
-    stroke: url(#linearGradient-1);
-    stroke-width: 3;
-    opacity: 1;
+  fill: transparent;
+  stroke: url(#linearGradient-1);
+  stroke-width: 3;
+  opacity: 1;
 }
 
 .button.outlined > .outline > path.icon--plain {
-    opacity: 0;
-    stroke: none;
-    stroke-width: 0;
+  opacity: 0;
+  stroke: none;
+  stroke-width: 0;
 }
