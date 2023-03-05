@@ -1,3 +1,4 @@
+import SlideShow from "../components/slideShow";
 import SmallProfile from "../components/smallProfile";
 import FlatterPage from "../sections/flatterPage";
 import "../static/css/detalleVivienda.css";
@@ -48,18 +49,7 @@ const DetalleVivienda = () => {
       <section className="housing">
         <div className="housing__photo">
           <div className="photo-container">
-            <div className="photo-main">
-              <img src={piso.images[0]} alt="main" />
-            </div>
-            <div className="photo-album">
-              <ul>
-                {piso.images.slice(1).map((image, index) => (
-                  <li key={index}>
-                    <img src={image} alt={"photo" + index} />
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <SlideShow images={piso.images} />
           </div>
         </div>
         <div className="housing__info">
@@ -79,7 +69,7 @@ const DetalleVivienda = () => {
               src={require("../static/files/icons/ring-phone.png")}
               alt="ring phone"
             />
-            CONTACT NOW
+            CONTACTAR
           </button>
         </div>
       </section>
