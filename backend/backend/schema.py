@@ -1,8 +1,8 @@
 import graphene
 from authentication.queries import AuthenticationQuery as SchemeAuthenticationQuery
 from authentication.mutations import AuthenticationMutation as SchemeAuthenticationMutation
-
-class FlatterQuery(SchemeAuthenticationQuery, graphene.ObjectType):
+from mainApp.queries import MainAppQuery as SchemeMainAppQuery
+class FlatterQuery(SchemeAuthenticationQuery, SchemeMainAppQuery, graphene.ObjectType):
   pass
 
 class FlatterMutation(SchemeAuthenticationMutation, graphene.ObjectType):
