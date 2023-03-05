@@ -1,7 +1,5 @@
 import '../static/css/sections/button.css';
 
-import { useEffect } from "react";
-
 import PropTypes from "prop-types";
 
 const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuOpen, onClick}) => {

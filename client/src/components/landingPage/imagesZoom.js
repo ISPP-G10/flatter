@@ -1,7 +1,7 @@
-import '../static/css/components/imagesZoom.css';
+import '../../static/css/components/imagesZoom.css';
 import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
-import useWindowDimensions from "../hooks/useWindowDimesions";
+import useWindowDimensions from "../../hooks/useWindowDimesions";
 
 const ZoomingImages = ({imageSet, marginTop}) => {
 

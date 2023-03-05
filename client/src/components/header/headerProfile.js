@@ -9,7 +9,7 @@ import FlatterCoinsCounter from '../flatterCoinsLogo';
 
 const HeaderProfile = ({user}) => {
 
-    const {data, loading, error} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
+    const {data, loading} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
         username: user
     }});
 

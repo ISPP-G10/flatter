@@ -1,14 +1,17 @@
 import "../static/css/sections/header.css";
 
 import { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import PropTypes from "prop-types";
 import SolidButton from "./solidButton";
 import HeaderProfile from "../components/header/headerProfile";
 
-const Header = ({scrollY, user, token}) => {
+const Header = ({scrollY, userLogged}) => {
 
     let isScrolling = scrollY>0;
+
+    const navigate = useNavigate();
 
     const logo = require('../static/files/images/flatter-logo.png');
 
@@ -16,20 +19,28 @@ const Header = ({scrollY, user, token}) => {
     const headerMenu = useRef(null);
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    let [user, setUser] = useState(null);
+    let [token, setToken] = useState(null);
 
     function toggleMenu(){
         setIsMenuOpen(!isMenuOpen);
     }
 
     useEffect(() => {
-
         if(isMenuOpen){
             headerMenu.current.style.right = '0';
         }else{
             headerMenu.current.style.right = '100%';
         }
+    }, [isMenuOpen]);
 
-    }, [isMenuOpen, user]);
+    useEffect(() => {
+        if(userLogged){
+            localStorage.getItem("user") ? setUser(localStorage.getItem("user")) : navigate("/");
+            localStorage.getItem("token") ? setToken(localStorage.getItem("token")) : setToken("");
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return(
         <header className={`site-header${isScrolling ? ' scroll' : ''}`}>
@@ -64,14 +75,12 @@ const Header = ({scrollY, user, token}) => {
 
 Header.propTypes = {
     scrollY: PropTypes.number,
-    user: PropTypes.string,
-    token: PropTypes.string
+    userLogged: PropTypes.bool,
 }
 
 Header.defaultProps = {
     scrollY: 0,
-    user: null,
-    token: null,
+    userLogged: false,
 }
 
 export default Header;
