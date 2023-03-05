@@ -125,7 +125,7 @@
   height: 50px;
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 0 15px 0px 0px;
+  border-radius: 0 15px 0 0;
 }
 
 .carousel-item-owner img {

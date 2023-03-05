@@ -37,7 +37,7 @@
   left: 0;
   height: 100%;
   width: 80%;
-  border-radius: 15px 0px 0px 15px;
+  border-radius: 15px 0 0 15px;
 }
 
 .properties-form-container-bg-section-2,
@@ -48,7 +48,7 @@
   bottom: 0;
   height: 76%;
   width: 25%;
-  border-radius: 0px 15px 15px 0px;
+  border-radius: 0 15px 15px 0;
 }
 
 .owners-form-container-bg-section-3 {
@@ -57,7 +57,7 @@
   right: 28%;
   height: 30%;
   width: 24%;
-  border-radius: 0px 15px 0px 0px;
+  border-radius: 0 15px 0 0;
   background-color: var(--main-page-owners-form-bg-color);
 }
 
@@ -202,7 +202,7 @@
   border: solid 2px rgb(181, 181, 181);
   background-color: var(--flatter-orange-color);
   text-transform: uppercase;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: bolder;
   z-index: 5;
   cursor: pointer;

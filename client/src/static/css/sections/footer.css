@@ -112,7 +112,7 @@
     background-position-x: 1000px;
   }
   100% {
-    background-positon-x: 0px;
+    background-positon-x: 0;
   }
 }
 
@@ -121,6 +121,6 @@
     background-position-x: -1000px;
   }
   100% {
-    background-positon-x: 0px;
+    background-positon-x: 0;
   }
 }
