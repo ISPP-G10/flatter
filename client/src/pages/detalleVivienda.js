@@ -68,8 +68,8 @@ const DetalleVivienda = () => {
             <div className="btn__container">
               <button className="btn">
                 <img
-                  src={require("../static/files/icons/ring-phone.png")}
-                  alt="ring phone"
+                  src={require("../static/files/icons/chat.png")}
+                  alt="chat icon"
                 />
                 CONTACTAR
               </button>

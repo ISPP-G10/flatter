@@ -16,8 +16,7 @@
 
 .mySlides img {
   border-radius: 20px;
-  height: 50vh;
-  width: 100%;
+  max-height: 550px;
 }
 
 /* Next & previous buttons */
