@@ -3,10 +3,11 @@ import SolidButton from '../sections/solidButton';
 
 import ImageUploader from '../sections/imageUploader';
 
+import FormBuilder from './formBuilder';
+
 import PropTypes from "prop-types";
 
 const FormProperty = ({ property }) => {
-  const isSet = property.id !== undefined;
 
   const formSchema = [
     {
@@ -114,114 +115,8 @@ const FormProperty = ({ property }) => {
 
   const editProperty = () => {};
 
-  const recursiveRender = (group) => {
-    return Object.entries(group).map(([key, value]) => {
-      const propValue = property[key];
-      switch (value.type) {
-        case "text":
-        case "number":
-          return (
-            <label key={key} style={{ flex: value.flex }}>
-              {value.label}
-              <input
-                type={value.type}
-                name={key}
-                defaultValue={propValue || value.default}
-                placeholder={value.placeholder}
-              />
-            </label>
-          );
-        case "checkbox":
-          return (
-            <label key={key} style={{ flex: value.flex }}>
-              {value.label}
-              <input
-                type={value.type}
-                name={key}
-                defaultChecked={propValue || value.default}
-              />
-            </label>
-          );
-        case "select":
-          return (
-            <label key={key} style={{ flex: value.flex }}>
-              {value.label}
-              <select
-                name={key}
-                defaultValue={propValue || value.default}
-              >
-                <option disabled>{value.default}</option>
-                {value.options.map(({ id, text }) => (
-                  <option key={id} value={text}>
-                    {text}
-                  </option>
-                ))}
-              </select>
-            </label>
-          );
-        case "textarea":
-          return (
-            <label key={key} style={{ flex: value.flex }}>
-              {value.label}
-              <textarea
-                name={key}
-                defaultValue={propValue || value.default}
-                placeholder={value.placeholder}
-              />
-            </label>
-          );
-        case "imageUploader":
-          return (
-            <label key={key} style={{ flex: value.flex }}>
-              {value.label}
-              <ImageUploader />
-            </label>
-          );
-        case "group":
-          console.log('fncionaaa');
-          return (
-            <div
-              className="form-group-parent"
-              key={key}
-              style={{ flex: value.flex }}
-            >
-              {recursiveRender(value.children)}
-            </div>
-          );
-          break;
-
-        case "submit":
-        case "button":
-          return (
-            <div className="input-button" key={key} style={{ flex: value.flex }}>
-              <SolidButton type={ value.type } text={ value.text } />
-            </div>
-          );
-
-        default:
-          return null;
-      }
-    });
-  };
-
   return (
-    <form
-      onSubmit={
-        isSet
-          ? function () {
-              console.log("Editando propiedad");
-            }
-          : function () {
-              console.log("Creando propiedad");
-            }
-      }
-    >
-      {formSchema.map((group, i) => (
-        <div className="form-group" key={i}>
-          {recursiveRender(group)}
-        </div>
-      ))}
-    </form>
+    <FormBuilder inputs={ formSchema } values={ property } />
   );
 };
 
