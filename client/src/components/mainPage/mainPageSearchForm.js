@@ -68,13 +68,13 @@ const MainPageSearchForm = () => {
             <div className="container-wrapper">
 
                 <div className="properties-click-tracker" ref={propertiesClickTracker}>
-                    <p className='tracker-text'>VIVIENDAS</p>
+                    <span className='tracker-text'><img src={require('../../static/files/icons/properties-icon.png')} alt="Icono propiedades"/></span>
                 </div>
                 <div className="partners-click-tracker" ref={partnersClickTracker}>
-                    <p className='tracker-text'>COMPAÑEROS</p>
+                    <span className='tracker-text'><img src={require('../../static/files/icons/partners-icon.png')} alt="Icono compañeros"/></span>
                 </div>
                 <div className="owners-click-tracker" ref={ownersClickTracker}>
-                    <p className='tracker-text'>PROPIETARIOS</p>
+                    <span className='tracker-text'><img src={require('../../static/files/icons/owners-icon.png')} alt="Icono propietarios"/></span>
                 </div>
 
                 <div className="properties-form-container" ref={propertiesForm}>
@@ -134,17 +134,19 @@ const MainPageSearchForm = () => {
                         </div>
                     </form>
                 </div>
-                <div className="main-page-submit-button">
-                    <span style={{display: 'flex', alignItems: 'center'}}>
-                        BUSCAR OFERTAS
-                        <img 
-                            height={25} 
-                            width={25} 
-                            src={require('../../static/files/icons/lupa.png')} 
-                            style={{marginLeft: '20px'}}
-                            alt="lupa"
-                        />
-                    </span>
+                <div className="main-page-submit-button-row">
+                    <div className="main-page-submit-button">
+                        <span style={{display: 'flex', alignItems: 'center'}}>
+                            BUSCAR OFERTAS
+                            <img 
+                                height={25} 
+                                width={25} 
+                                src={require('../../static/files/icons/lupa.png')} 
+                                style={{marginLeft: '20px'}}
+                                alt="lupa"
+                            />
+                        </span>
+                    </div>
                 </div>
             </div>
         </>

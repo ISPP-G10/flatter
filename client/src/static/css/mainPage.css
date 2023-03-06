@@ -137,6 +137,38 @@
   margin-left: 48%;
 }
 
+.properties-click-tracker span,
+.partners-click-tracker span,
+.owners-click-tracker span {
+  display: flex;
+  align-items: center;
+}
+
+.properties-click-tracker span img,
+.partners-click-tracker span img,
+.owners-click-tracker span img {
+  height: 25px;
+  width: 25px;
+}
+
+.properties-click-tracker span::after,
+.partners-click-tracker span::after,
+.owners-click-tracker span::after{
+  margin-left: 15px;
+}
+
+.properties-click-tracker span::after{
+  content: 'VIVIENDAS';
+}
+
+.partners-click-tracker span::after{
+  content: 'COMPAÑEROS';
+}
+
+.owners-click-tracker span::after{
+  content: 'PROPIETARIOS';
+}
+
 #properties-form,
 #partners-form,
 #owners-form {
@@ -164,7 +196,7 @@
   background-color: white;
 }
 
-.range-input-container p {
+.range-input-container span {
   text-transform: capitalize;
   font-weight: bolder;
   font-size: 1.2rem;
@@ -173,7 +205,7 @@
 
 .main-page-input {
   height: 80px;
-  width: 100%;
+  width: 90%;
   max-width: 500px;
   border-radius: 15px;
   border: 3px solid rgb(195, 195, 195);
@@ -188,9 +220,17 @@
   text-transform: uppercase;
 }
 
-.main-page-submit-button {
+.main-page-submit-button-row{
   position: absolute;
   bottom: -25px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.main-page-submit-button {
+  position: absolute;
+  bottom: 0;
   right: 60px;
   display: flex;
   justify-content: center;
@@ -212,4 +252,38 @@
 .main-page-submit-button:hover {
   background-color: #ffcc5d;
   transition: all 0.5s;
+}
+
+/* RESPONSIVE */
+
+@media screen and (max-width: 1000px) {
+
+  .container-wrapper{
+    height: 400px;
+    width: 90%;
+  }
+
+  .properties-click-tracker span::after,
+  .partners-click-tracker span::after,
+  .owners-click-tracker span::after{
+    display: none;
+  }
+
+  #properties-form,
+  #partners-form,
+  #owners-form {
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 30px 0;
+  }
+
+  .range-input-container {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .main-page-submit-button {
+    position: static;
+  }
 }
