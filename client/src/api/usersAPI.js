@@ -11,12 +11,21 @@ const usersAPI = {
                 }
     `,
     getRoles: gql`
-            query{
+            query getRoles{
                 getRoles{
                     role
                 }
             }
-    `
+    `,
+    getUserByUsernameHeader: gql`
+            query getUserByUsername($username: String!){
+                getUserByUsername(username: $username){
+                    username
+                    profilePicture
+    				flatterCoins
+                }
+            }
+    `,
 
 }
 

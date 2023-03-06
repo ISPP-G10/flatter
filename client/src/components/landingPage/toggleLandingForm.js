@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../static/css/components/toggleLandingForm.css";
-import Switch from "../sections/switch"
+import "../../static/css/components/toggleLandingForm.css";
+import Switch from "../../sections/switch"
 
 const ToggleLandingForm = (props) => {
   const [isToggled, setIsToggled] = useState(false);
@@ -26,7 +26,7 @@ const ToggleLandingForm = (props) => {
       <>
         <div className="toggle-container">
             <span className="switch-label switch-label--left">Inquilino</span>
-            <Switch isOn={isToggled} handleToggle={(isOn) => toggle(isOn)} />
+            <Switch isOn={isToggled} handleToggle={() => toggle()} />
 
             <span className="switch-label switch-label--right">Propietario</span>
         </div>

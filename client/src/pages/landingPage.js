@@ -1,10 +1,10 @@
-import ZoomingImages from "../components/imagesZoom";
-import HeroHome from "../components/heroHome";
+import ZoomingImages from "../components/landingPage/imagesZoom";
+import HeroHome from "../components/hero/heroHome";
 import FlatterPage from "../sections/flatterPage";
-import ToggleFeatures from "../components/toggleFeatures";
+import ToggleFeatures from "../components/landingPage/toggleFeatures";
 import Modal from "../sections/modal";
 
-import ToggleLandingForm from "../components/toggleLandingForm";
+import ToggleLandingForm from "../components/landingPage/toggleLandingForm";
 
 import '../static/css/landingPage.css';
 

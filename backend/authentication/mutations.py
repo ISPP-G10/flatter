@@ -55,7 +55,7 @@ class CreateUserMutation(graphene.Mutation):
                                           last_name=last_name, 
                                           email=email, 
                                           phone_number=phone, 
-                                          profile_picture="/assets/user-images/default.png",
+                                          profile_picture="users/images/default.jpg",
                                           flatter_coins=0,
                                           genre='O',
                                           )

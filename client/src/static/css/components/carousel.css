@@ -1,0 +1,154 @@
+.carousel {
+  width: 100%;
+  margin-top: 5vh;
+}
+
+.carousel-status-bar {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 30px;
+}
+
+.carousel-status-bar .carousel-status-bar-item {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #8e8e8e;
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  height: 60vh;
+  margin: 0 auto;
+  max-width: 1000px;
+  position: relative;
+}
+
+.carousel-item {
+  height: 80%;
+  width: 40vw;
+  opacity: 0;
+  position: absolute;
+  transition: all 1s ease-in-out;
+  z-index: 0;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.carousel-item-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-item-content img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  aspect-ratio: 1/1;
+}
+
+.carousel-item-1 {
+  left: 15%;
+  opacity: 0.4;
+  transform: translateX(-50%);
+}
+
+.carousel-item-2,
+.carousel-item-4 {
+  height: 90%;
+  width: 45vw;
+  opacity: 0.8;
+  z-index: 1;
+  transform: translateX(-50%);
+}
+
+.carousel-item-2 {
+  left: 30%;
+  transform: translateX(-50%);
+}
+
+.carousel-item-3 {
+  box-shadow: -2px 5px 33px 6px rgba(0, 0, 0, 0.35);
+  height: 100%;
+  width: 50vw;
+  opacity: 1;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.carousel-item-4 {
+  left: 70%;
+  transform: translateX(-50%);
+}
+
+.carousel-item-5 {
+  left: 85%;
+  opacity: 0.4;
+  transform: translateX(-50%);
+}
+
+.carousel-nav {
+  bottom: -15px;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.carousel-nav li {
+  background-color: #ccc;
+  border-radius: 50%;
+  height: 10px;
+  margin: 0 16px;
+  width: 10px;
+}
+
+.carousel-nav li.carousel-item-selected {
+  background-color: #555;
+}
+
+.carousel-item-owner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 0 15px 0 0;
+}
+
+.carousel-item-owner img {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.carousel-item-owner span {
+  font-size: 12px;
+  font-weight: bolder;
+  margin-left: 40px;
+}
+
+@media screen and (max-width: 768px) {
+  .carousel-item-1,
+  .carousel-item-2,
+  .carousel-item-4,
+  .carousel-item-5 {
+    opacity: 0;
+  }
+
+  .carousel-item-3 {
+    width: 80vw;
+  }
+}

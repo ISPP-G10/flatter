@@ -1,7 +1,4 @@
-import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
-import usersAPI from '../api/usersAPI';
-
-import { useEffect } from 'react';
+import {useQuery, gql} from '@apollo/client';
 
 const Ejemplo = () => {
 
