@@ -194,33 +194,6 @@ const SearchProperties = () => {
             </div>
 
           </section>
-          {/*<div className="listview-header">
-            <Slider>
-            </Slider>
-          </div>
-          <div className="listview-content">
-                    
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-            Encuentra el hogar perfecto en la zona favorita. ¡marca un punto de referencia que conozcas y nosotros haremos el resto!
-
-          </div>
-           <div className="view-footer">
-                        <div>
-                            <a href="#" className="button featured">Más información</a>
-                        </div>
-                    </div> */}
         </div>
            
       </section>
