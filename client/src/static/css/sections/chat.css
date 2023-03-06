@@ -1,6 +1,6 @@
 .class-button-chat{
     position:fixed;
-    z-index:10;
+    z-index:9999;
     right:0;
     bottom:0;
 }
@@ -86,7 +86,7 @@
 }
 
 .class-close-chat{
-    background-image: url("../files/icons/chat-close.png");
+    background-image: url("../../files/icons/chat-close.png");
     background-repeat: no-repeat;
     background-size: contain;
     opacity: 0.5;
@@ -230,7 +230,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url("../files/icons/send.png");
+    background-image: url("../../files/icons/send.png");
     background-repeat: no-repeat;
     background-size: 25px;
     background-position: center;
@@ -246,7 +246,7 @@
 }
 
 .class-chat-arrow{
-    background-image: url("../files/icons/left-arrow-edited.png");
+    background-image: url("../../files/icons/left-arrow-edited.png");
     background-repeat: no-repeat;
     background-size: contain;
     width: 30px;
@@ -385,7 +385,7 @@
 }
 
 .class-chat-search {
-    background-image: url("../files/icons/lens.png");
+    background-image: url("../../files/icons/lens.png");
     float: left;
     background-color:transparent;
     font-size: 18px;
@@ -406,12 +406,12 @@
 }
 
 .class-chat-search:hover{
-    background-image: url("../files/icons/lens-edited.png");
+    background-image: url("../../files/icons/lens-edited.png");
     font-weight: bold;
 }
 
 .class-chat-search:focus{
-    background-image: url("../files/icons/lens-edited.png");
+    background-image: url("../../files/icons/lens-edited.png");
     font-weight: bold;
 }
 

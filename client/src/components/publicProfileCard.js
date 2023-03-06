@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import '../static/css/components/publicProfileCard.css'
+import Tag from './tag';
 
 const PublicProfileCard = () => {
 
@@ -7,7 +7,7 @@ const PublicProfileCard = () => {
         <div className='containerFlex'>
             <div style={{marginLeft: '2%'}}>
                 <h2>Lucía Martín</h2>
-                <p>Estudiante en universidad de Sevilla</p>
+                <p>Estudiante en Universidad de Sevilla</p>
                 <p>24 años</p>
                 <img className='photo' src={require('../static/files/images/foto.jpg')} alt='Profile Photo'/>    
             </div>
@@ -21,9 +21,9 @@ const PublicProfileCard = () => {
                      CJSCBAOCAS JBOS CSUBVSD VVDUSBV DSVUSIB
                 </p>
                 <br/>
-                <div className='etiquetas' style={{textAlign: 'center'}}>
-                    <span id='etiqueta'>LGTBI</span>
-                    <span id='etiqueta'>LOL</span>
+                <div className='tags-container'>
+                    <Tag name='LOL' color='#f783de' />
+                    <Tag name="LGBT" color='#f783de' />               
                 </div>
             </div>           
         </div>

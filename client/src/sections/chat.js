@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Conversation from "../components/chat/conversation";
 import Groups from "../components/chat/groups";
 import Settings from "../components/chat/settings";
-import "../static/css/chat.css";
+import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
 
 const Chat = () => {
@@ -53,11 +53,11 @@ const Chat = () => {
                 chatSlide.current.style.width = "25%";
                 chatSlide.current.style.height = "90%";
             } else if (window.innerWidth > 768) {
-                chatSlide.current.style.left = "14%";
+                chatSlide.current.style.left = "12.5%";
                 chatSlide.current.style.width = "100%";
                 chatSlide.current.style.height = "100%";
             } else{
-                chatSlide.current.style.top = "0px";
+                chatSlide.current.style.top = window.scrollY+"px";
                 chatSlide.current.style.width = "100vw";
                 chatSlide.current.style.height = "100vh";
             }
@@ -267,13 +267,13 @@ const Chat = () => {
         let parent = groups.current.firstChild;
         let nodesOrdered = [];
         let searchMessage = document.createElement("h4");
-        let newContent = document.createTextNode("Your search didn't have any results. Please, try again with another word.");
+        let newContent = document.createTextNode("La búsqueda no tuvo ningún resultado. Por favor, pruebe de nuevo.");
         searchMessage.appendChild(newContent);
         searchMessage.style.color = "#FFFFFF";
         searchMessage.classList.add("ml-2");
         searchMessage.classList.add("mr-2");
 
-        if (parent.parentNode.lastChild.innerText === "Your search didn't have any results. Please, try again with another word.") {
+        if (parent.parentNode.lastChild.innerText === "La búsqueda no tuvo ningún resultado. Por favor, pruebe de nuevo.") {
             parent.parentNode.removeChild(parent.parentNode.lastChild);
         }
 
@@ -312,7 +312,7 @@ const Chat = () => {
                 parent.removeChild(node);
             }
 
-            if (parent.firstChild === null && parent.parentNode.lastChild.innerText !== "Your search didn't have any results. Please, try again with another word.") {
+            if (parent.firstChild === null && parent.parentNode.lastChild.innerText !== "La búsqueda no tuvo ningún resultado. Por favor, pruebe de nuevo.") {
                 parent.parentNode.appendChild(searchMessage);
             }
         }
@@ -385,7 +385,7 @@ const Chat = () => {
                 <div ref={groupsHeader}>
                     <div className="class-groups-header d-flex justify-content-center align-items-center">
                         <input ref={search} id="chat-search" className="class-chat-search" type="Search"
-                            placeholder="Busca tus chats" title="Search your chats by name" onKeyUp={searchGroups} required />
+                            placeholder="Busca tus chats" title="Busca tus chats por nombre" onKeyUp={searchGroups} required />
                     </div>
                 </div>
                 <div ref={chat} className="chat">
