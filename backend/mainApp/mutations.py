@@ -12,7 +12,7 @@ class CreatePropertyMutation(graphene.Mutation):
   class Input:
     title = graphene.String(required=True)
     description = graphene.String(required=True)
-    bedrooms_number = graphene.Int(required=False)
+    bedrooms_number = graphene.Int(required=True)
     bathrooms_number = graphene.Int(required=True)
     price = graphene.Float(required=True)
     location = graphene.String(required=True)
