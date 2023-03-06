@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import graphene, graphql_jwt
 
 from authentication.models import FlatterUser
@@ -79,6 +80,15 @@ class CreatePropertyMutation(graphene.Mutation):
     )
         
     return CreatePropertyMutation(property=obj)
+=======
+import graphene, graphql_jwt, json
+from django.utils.translation import gettext_lazy as _
+
+from .types import PropertyType
+from .models import Property
+
+
+>>>>>>> Stashed changes
 
 
 class DeleteInmuebleMutation(graphene.Mutation):
@@ -92,6 +102,7 @@ class DeleteInmuebleMutation(graphene.Mutation):
     property = Property.objects.get(pk=property_id)
     property.delete()
     return DeleteInmuebleMutation(property=property)
+<<<<<<< Updated upstream
   
 class UpdatePropertyMutation(graphene.Mutation):
       class Input:
@@ -181,3 +192,12 @@ class PropertyMutation(graphene.ObjectType):
 
 def _exists_property(title):
     return Property.objects.filter(title=title).exists()
+=======
+
+
+
+class MainAppMutation(graphene.ObjectType):
+  delete_property = DeleteInmuebleMutation.Field()
+  
+  
+>>>>>>> Stashed changes
