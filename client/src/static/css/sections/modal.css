@@ -33,8 +33,18 @@
     width: 100%;
 }
 
+.modal .modal-header h3 {
+    font-weight: 500;
+    padding: 10px;
+    border-bottom: 1px solid #c8c8c8;
+}
+
 .modal > div > div * {
     margin: initial;
+}
+
+.modal .modal-content {
+    padding: 10px;
 }
 
 .toggle-container > span {

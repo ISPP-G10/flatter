@@ -36,9 +36,11 @@ const Modal = (props) => {
         <div className={classes} data-modalid={props.id} onClick={close}>
             <div onClick={ stopPropagation }>
                 <div>
-                    <div className="modal-header">
-                        
-                    </div>
+                    { props.title &&
+                        <div className="modal-header">
+                            <h3>{props.title}</h3>
+                        </div>
+                    }
                     <div className="modal-content">
                         { props.children }
                     </div>
