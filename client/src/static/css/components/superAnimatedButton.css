@@ -72,7 +72,6 @@
   width: 200%;
   height: 200%;
   pointer-events: none;
-  z-index: 10002;
 }
 
 .super-animated-button-wrapper .shapes canvas {

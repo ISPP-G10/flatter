@@ -1,7 +1,7 @@
 import Hero from '../../sections/hero';
 import SolidButton from '../../sections/solidButton';
 
-const HeroHome = () => {
+const HeroHome = ({pilotUsersModal}) => {
 
     return (
         <Hero height={100} horizontalBackground="hero-home-background.jpg" verticalBackground="hero-home-vertical-bg.jpg" class="home">
@@ -18,22 +18,27 @@ const HeroHome = () => {
                         <p className='hero-glass-text' style={{marginBottom: '20px'}}>¿Quiéres más información?</p>
 
                         <div className="button-group">
-                            <SolidButton text="Únete como propietario" type="featured" modalid="ejemplo" onClick = {() => {
-                                const modal = document.querySelector('.modal[data-modalid="ejemplo"]'),
-                                    isInquilino = modal.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
+                            <SolidButton text="Únete como propietario" type="featured" onClick = {() => {
+                                pilotUsersModal.current.open();
+                                setTimeout(()=>{
+                                    let isInquilino = document.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
 
-                                 if(isInquilino) {
-                                    modal.querySelector('.switch').click();
-                                 }
+                                    if(isInquilino) {
+                                        document.querySelector('.switch').click();
+                                    }
+                                }, 300)
                                 
                             }}/>
-                            <SolidButton text="Únete como inquilino" type="featured" modalid="ejemplo" onClick = {() => {
-                                const modal = document.querySelector('.modal[data-modalid="ejemplo"]'),
-                                    isInquilino = modal.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
+                            <SolidButton text="Únete como inquilino" type="featured" onClick = {() => {
+                                pilotUsersModal.current.open();
+                                setTimeout(()=>{
+                                    
+                                    let isInquilino = document.querySelectorAll('.switch-toggle.switch-toggle--orange').length>0;
 
-                                 if(!isInquilino) {
-                                    modal.querySelector('.switch').click();
-                                 }
+                                    if(!isInquilino) {
+                                        document.querySelector('.switch').click();
+                                    }
+                                }, 300)
                                 
                             }}/>
                         </div>

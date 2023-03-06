@@ -122,7 +122,6 @@ export function Material() {
   return <meshPhongMaterial color="#fff" specular="#61dafb" shininess={10} />;
 }
 
-// Adapted from https://github.com/pmndrs/drei/blob/master/src/core/PerspectiveCamera.tsx
 function Camera({ mouseX, mouseY, ...props }) {
   const cameraX = useSmoothTransform(mouseX, spring, (x) => x / 350);
   const cameraY = useSmoothTransform(mouseY, spring, (y) => (-1 * y) / 350);
