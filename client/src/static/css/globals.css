@@ -18,6 +18,19 @@
   --price-slider-text-color: black;
   --checker-button-color: rgb(158, 158, 158);
   --checker-track-color: rgb(217, 217, 217);
+
+  /* Buttons */
+
+  --featured-button-background: conic-gradient(
+    from 180deg at 50% 50%,
+    #bb5799 0deg,
+    rgba(255, 0, 245, 0.75) 18.75deg,
+    #8d8eff 86.25deg,
+    rgba(66, 0, 255, 0.67) 144deg,
+    rgba(255, 0, 8, 0.815588) 216deg,
+    #ff8a00 288deg,
+    #bb5799 360deg
+  );
 }
 
 * {
@@ -28,7 +41,7 @@
 
 body {
   background-color: #f5f5f5;
-  font-family: "Franklin Gothic Medium", sans-serif;
+  font-family: "Poppins";
   font-size: 16px;
   color: #333;
 }
