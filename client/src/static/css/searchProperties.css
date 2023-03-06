@@ -16,7 +16,7 @@
   /*filterview (left side) */
 #searchView > .filterview {
     max-width: 400px;
-    max-height: 265px;
+    max-height: 275px;
     background: #fff;
     box-shadow: 0px 4px 12px #00000045;
     border-radius: 20px;
@@ -70,6 +70,7 @@
     box-shadow: 0px 4px 12px #00000045;
     border-radius: 20px;
     margin: 0 20px;
+    margin-top: 3px;
 }
   
 #searchView > .listview > .listview-header {
@@ -137,7 +138,7 @@
 
 #informationView > .listview {
         width: 360px;
-        height: 520px;
+        height: 485px;
         background: #fff;
         box-shadow: 0px 4px 12px #00000045;
         border-radius: 20px;
@@ -212,6 +213,10 @@
 
 .small-size{
     font-size: small;
+    overflow: scroll ;
+    height: 55px;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .styled-button{
@@ -295,3 +300,16 @@
         background-color: #feba00;
         transition: 0.7s;
         }
+
+.etiquetacontainer{
+    height: 50px;
+    overflow-x: scroll;
+    padding-left: 10px;
+}
+.etiquetaindv{
+    width:fit-content;
+    height:fit-content;
+    display: inline-flex;
+
+
+}

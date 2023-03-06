@@ -55,10 +55,85 @@ const SearchProperties = () => {
 
                 </Slider>
               </div>
-              <div className="pruebaetiqueta">
-                <button className="etiqueta2">Compañerismo</button>
+              <div className="etiquetacontainer">
+                <div className="etiquetaindv">
+                  <button className="etiqueta2">Compañerismo</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">LGTB</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Familiar</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Deportes</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Estudios</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Pet-Friendly</button>
+                </div>
               </div>
-              <button className="etiqueta1">LGTB</button>
+
+
+              <div className="listview-content">
+ 
+                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
+                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias .Está localizado en el barrio de Bami, cerca de 
+                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias
+                </p>
+              </div>
+              <div className="listview-content">
+                <div className="prueba2">
+                  <button className="styled-info-button">Ver piso</button>
+                  </div>
+                  <button className="styled-info-button">Reseñas</button>
+              </div>
+            </div>
+
+            <div className="listview">
+              <div className="listview-header">
+                <h3>Habitación en Bami cerca de facultades</h3>
+              </div>
+              <div>
+                <div className="prueba"> 
+                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
+                  <p className = "location">Sevilla</p>
+                </div>
+                <div>
+                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
+                  <p className = "team">2/4</p>
+                </div>
+
+              </div>
+
+              <div className="listview-content">
+
+                <Slider>
+
+                </Slider>
+              </div>
+              <div className="etiquetacontainer">
+                <div className="etiquetaindv">
+                  <button className="etiqueta2">Compañerismo</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">LGTB</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Familiar</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Deportes</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Estudios</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Pet-Friendly</button>
+                </div>
+              </div>
               <div className="listview-content">
  
                 <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
@@ -95,10 +170,26 @@ const SearchProperties = () => {
 
                 </Slider>
               </div>
-              <div className="pruebaetiqueta">
-                <button className="etiqueta2">Compañerismo</button>
+              <div className="etiquetacontainer">
+                <div className="etiquetaindv">
+                  <button className="etiqueta2">Compañerismo</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">LGTB</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Familiar</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Deportes</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Estudios</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Pet-Friendly</button>
+                </div>
               </div>
-              <button className="etiqueta1">LGTB</button>
               <div className="listview-content">
  
                 <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
@@ -135,50 +226,26 @@ const SearchProperties = () => {
 
                 </Slider>
               </div>
-              <div className="pruebaetiqueta">
-                <button className="etiqueta2">Compañerismo</button>
-              </div>
-              <button className="etiqueta1">LGTB</button>
-              <div className="listview-content">
- 
-                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias
-                </p>
-              </div>
-              <div className="listview-content">
-                <div className="prueba2">
-                  <button className="styled-info-button">Ver piso</button>
-                  </div>
-                  <button className="styled-info-button">Reseñas</button>
-              </div>
-            </div>
-
-            <div className="listview">
-              <div className="listview-header">
-                <h3>Habitación en Bami cerca de facultades</h3>
-              </div>
-              <div>
-                <div className="prueba"> 
-                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">Sevilla</p>
+              <div className="etiquetacontainer">
+                <div className="etiquetaindv">
+                  <button className="etiqueta2">Compañerismo</button>
                 </div>
-                <div>
-                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
-                  <p className = "team">2/4</p>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">LGTB</button>
                 </div>
-
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Familiar</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Deportes</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Estudios</button>
+                </div>
+                <div className="etiquetaindv">
+                  <button className="etiqueta1">Pet-Friendly</button>
+                </div>
               </div>
-
-              <div className="listview-content">
-
-                <Slider>
-
-                </Slider>
-              </div>
-              <div className="pruebaetiqueta">
-                <button className="etiqueta2">Compañerismo</button>
-              </div>
-              <button className="etiqueta1">LGTB</button>
               <div className="listview-content">
  
                 <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
