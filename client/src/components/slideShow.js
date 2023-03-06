@@ -6,15 +6,10 @@ const SlideShow = ({ images }) => {
 
   function showSlides(n) {
     const slides = document.getElementsByClassName("mySlides");
-    const dots = document.getElementsByClassName("dot");
     for (let i = 0; i < slides.length; i++) {
       slides[i].style.display = "none";
     }
-    for (let i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace(" active", "");
-    }
     slides[n - 1].style.display = "block";
-    dots[n - 1].className += " active";
   }
 
   useEffect(() => {
@@ -54,16 +49,6 @@ const SlideShow = ({ images }) => {
         <button className="next arrow" onClick={() => plusSlides(1)}>
           &#10095;
         </button>
-      </div>
-
-      <div style={{ textAlign: "center" }}>
-        {images.map((_, index) => (
-          <span
-            key={index}
-            className={`dot ${index + 1 === slideIndex ? "active" : ""}`}
-            onClick={() => setSlideIndex(index + 1)}
-          ></span>
-        ))}
       </div>
     </>
   );

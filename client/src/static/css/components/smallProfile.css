@@ -13,10 +13,10 @@
 }
 
 .small-profile img {
-  width: 100px;
+  width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 40px;
+  border-radius: 50%;
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -36,9 +36,10 @@
 .small-profile span {
   background-color: #eb5f62;
   color: #fff;
-  padding: 3px;
-  border-radius: 40px;
+  padding: 5px;
+  border-radius: 50%;
   width: 2em;
+  height: 2em;
   text-align: center;
   position: absolute;
   bottom: -15px;

@@ -3,42 +3,62 @@ img {
   max-width: 100%;
 }
 
+.housing-page {
+  padding: 15px;
+}
+
 /* ----- Housing Section ----- */
 .housing {
-  background-color: white;
-  padding: 10px;
-  border: 3px solid #e2dfdf;
-  border-radius: 20px;
-  margin: 10px;
-  width: auto;
+  width: 100%;
   display: flex;
-  gap: 1em;
+  gap: 0.7em;
 }
 
 @media screen and (max-width: 900px) {
   .housing {
     flex-direction: column;
+    padding: 10px;
   }
 }
 
 /* ----- Photo Section ----- */
 .housing__photo {
-  position: relative;
+  width: 140%;
+  min-width: 550px;
+}
+
+@media screen and (max-width: 900px) {
+  .housing__photo {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .photo-container {
-  padding: 5px;
   left: -2.5em;
   display: grid;
   width: 100%;
   height: 100%;
-  border-radius: 6px;
-  box-shadow: 4px 4px 25px -2px rgba(0, 0, 0, 0.3);
 }
 
 /* ----- Info Section ----- */
 .housing__info {
-  padding: 0.8em 0;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  border: 3px solid #e2dfdf;
+}
+
+@media screen and (max-width: 900px) {
+  .housing__info {
+    text-align: center;
+  }
+
+  .btn__container {
+    justify-content: center;
+    display: flex;
+    gap: 1em;
+  }
 }
 
 .title h1 {
@@ -67,12 +87,13 @@ img {
 .description {
   clear: left;
   margin: 2em 0;
+  text-align: justify;
 }
 .description h3 {
   margin-bottom: 1em;
 }
 
-.buy--btn {
+.btn {
   padding: 1.5em 1.5em;
   border: none;
   border-radius: 7px;
@@ -89,7 +110,7 @@ img {
   margin-bottom: 1em;
 }
 
-.buy--btn:active {
+.btn:active {
   transform: scale(0.97);
 }
 
@@ -133,7 +154,6 @@ img {
 
 .container__title h1 {
   margin-left: 0;
-  padding-top: 0.6em;
 }
 
 .container__title img {
