@@ -1,0 +1,180 @@
+/* ----- General ----- */
+img {
+  max-width: 100%;
+}
+
+.housing-page {
+  padding: 3.5%;
+}
+
+/* ----- Housing Section ----- */
+.housing {
+  width: 100%;
+  display: flex;
+  gap: 0.7em;
+}
+
+@media screen and (max-width: 900px) {
+  .housing {
+    flex-direction: column;
+    padding: 10px;
+  }
+}
+
+/* ----- Photo Section ----- */
+.housing__photo {
+  width: 140%;
+  min-width: 550px;
+}
+
+@media screen and (max-width: 900px) {
+  .housing__photo {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.photo-container {
+  left: -2.5em;
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+/* ----- Info Section ----- */
+.housing__info {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  border: 3px solid #e2dfdf;
+}
+
+@media screen and (max-width: 900px) {
+  .housing__info {
+    text-align: center;
+  }
+
+  .btn__container {
+    justify-content: center;
+    display: flex;
+    gap: 1em;
+  }
+}
+
+.title h1 {
+  margin-bottom: 0.1em;
+  color: #4c4c4c;
+  font-size: 1.5em;
+  font-weight: 900;
+}
+
+.title span {
+  font-size: 0.7em;
+  color: #a6a6a6;
+}
+
+.price {
+  margin: 1.5em 0;
+  color: #00a8ff;
+  font-size: 1.2em;
+}
+
+.price span {
+  padding-left: 0.15em;
+  font-size: 2.9em;
+}
+
+.description {
+  clear: left;
+  margin: 2em 0;
+  text-align: justify;
+}
+.description h3 {
+  margin-bottom: 1em;
+}
+
+.btn {
+  padding: 1.5em 1.5em;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  color: #fff;
+  background-color: #00a8ff;
+  box-shadow: 2px 2px 25px -7px #4c4c4c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  float: left;
+  margin-bottom: 1em;
+}
+
+.btn img {
+  margin-right: 0.5em;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* ----- People Section ----- */
+.people {
+  display: flex;
+}
+
+@media screen and (max-width: 900px) {
+  .people {
+    flex-direction: column;
+  }
+}
+
+/* ----- Flatmates Section ----- */
+.flatmates {
+  padding: 10px;
+  background-color: #f9be46;
+  border-radius: 20px;
+  margin: 10px;
+  width: auto;
+}
+
+.flatmates__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+@media screen and (max-width: 300px) {
+  .flatmates__container {
+    flex-direction: column;
+  }
+}
+
+/* ----- Container Title ----- */
+.container__title {
+  display: flex;
+  align-items: center;
+}
+
+.container__title h1 {
+  margin-left: 0;
+}
+
+.container__title img {
+  margin-right: 1.2em;
+  margin-left: 1.4em;
+}
+
+/* ----- Owner Section ----- */
+
+.owner {
+  padding: 10px;
+  background-color: #464b4f;
+  border-radius: 20px;
+  margin: 10px;
+  width: auto;
+}
+
+.owner h1 {
+  color: #fff;
+}
