@@ -44,9 +44,6 @@ const Modal = (props) => {
                     <div className="modal-content">
                         { props.children }
                     </div>
-                    <div className="modal-footer">
-
-                    </div>
                 </div>
             </div>
         </div>

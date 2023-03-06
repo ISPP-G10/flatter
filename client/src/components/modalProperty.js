@@ -7,9 +7,11 @@ import PropTypes from "prop-types";
 
 const ModalProperty = ({property}) => {
 
+    property = {};
+
     return (
         <Modal id="edit-property" title={ property.title !== undefined ? `Editar Propiedad ${property.title}` : `Crear nueva Propiedad` }>
-            <FormProperty />
+            <FormProperty property={property} />
         </Modal>
     )
 

@@ -38,7 +38,7 @@ const PropertyPage = ({}) => {
         tags: [
             {
                 title: "Elegante",
-                color: "pink"
+                color: "#f44336"
             },
             {
                 title: "Social",
@@ -49,6 +49,8 @@ const PropertyPage = ({}) => {
 
     const { id } = useParams();
 
+    // TODO si no se encuentra el id o ha sido proporcionado algo diferente
+    // a un integer mayor que 0, se devuelve false y redirección a 404
     const getPropertyId = (id) => {
         console.log(id);
         return exampleProperty;
@@ -108,7 +110,7 @@ const PropertyPage = ({}) => {
                 </div>
             </article>
 
-            <ModalProperty />
+            <ModalProperty property={property} />
         </FlatterPage>
     )
 }

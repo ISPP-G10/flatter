@@ -49,13 +49,19 @@ section{
 
 .form-group {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 10px !important;
 }
 
-.form-group > label > *:not([type="checkbox"]) {
+.form-group label *:not(div, span, [type="checkbox"], [type="file"]) {
     display: block;
     width: 100%;
-    margin-top: auto;
+    padding: 8px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+
+.form-group > label > * {
+    margin-top: 4px !important;
 }
 
 .form-group > label {
@@ -68,4 +74,20 @@ section{
 }
 .form-group > label {
     padding-left: 10px;
+}
+
+.form-group-parent {
+    display: flex;
+}
+
+.form-group > label:has(> input[type="checkbox"]) {
+    display: block;
+}
+
+.form-group input[type="checkbox"] {
+    margin-left: 10px;
+}
+
+form:has(> .form-group) .form-group:last-child {
+    margin-bottom: 0 !important;
 }
