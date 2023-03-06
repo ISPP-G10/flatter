@@ -24,7 +24,7 @@ const DetalleVivienda = () => {
       {
         name: "Lucía López García",
         job: "Estudiante Enfermería",
-        rating: 4.1,
+        rating: 4.13,
         avatar: require("../static/files/images/estudiante2.jpeg"),
       },
     ],
