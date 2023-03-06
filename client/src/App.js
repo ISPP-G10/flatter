@@ -4,6 +4,7 @@ import Error from './pages/error';
 import './static/css/globals.css';
 import Ejemplo from './pages/ejemploIntegracion';
 import SearchProperties from './pages/searchProperties';
+import OwnerProperties from './pages/ownerProperties';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/prueba" element={<Ejemplo/>}/>
         <Route path="*" element={<Error/>}/>
         <Route path="/searchProperties" element={<SearchProperties/>}/>
+        <Route path="/properties" element={<OwnerProperties />}/>
       </Routes>
     </Router>
   );
