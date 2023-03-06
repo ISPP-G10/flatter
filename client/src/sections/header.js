@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import SolidButton from "./solidButton";
 import HeaderProfile from "../components/header/headerProfile";
+import FlatterModal from "../components/flatterModal";
+import LoginRegisterForm from "../components/header/loginRegisterForm";
 
 const Header = ({scrollY, userLogged}) => {
 
@@ -17,13 +19,30 @@ const Header = ({scrollY, userLogged}) => {
 
     const headerToggler = useRef(null);
     const headerMenu = useRef(null);
-
+    const modalRef = useRef(null);
+    const loginFormRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     let [user, setUser] = useState(null);
     let [token, setToken] = useState(null);
 
     function toggleMenu(){
         setIsMenuOpen(!isMenuOpen);
+    }
+
+    function handleLoggingButtonClick(){
+        isMenuOpen && toggleMenu();
+        modalRef.current.open();
+        setTimeout(() => {
+            loginFormRef.current.login();
+        }, 300);
+    }
+
+    function handleRegisterButtonClick(){
+        isMenuOpen && toggleMenu();
+        modalRef.current.open();
+        setTimeout(() => {
+            loginFormRef.current.register();
+        }, 300);
     }
 
     useEffect(() => {
@@ -43,33 +62,38 @@ const Header = ({scrollY, userLogged}) => {
     }, []);
 
     return(
-        <header className={`site-header${isScrolling ? ' scroll' : ''}`}>
-            <div>
-                <img src={logo} alt='Logo Flatter'/>
-            </div>
-            <nav>
-                <ul ref={headerMenu}>
-                    <div style={{width: '100%', display: `${isMenuOpen ? 'block' : 'none'}`}}>
-                        <div className="wrapper-header-icon--close" ref={headerToggler} onClick={toggleMenu}></div>
-                    </div>
-                    <div>
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/">Buscador de viviendas</a></li>
-                        <li><a href="/">Buscador de compañeros</a></li>
-                    </div>
-                    {
-                        user ?
-                        <HeaderProfile user={user}/>
-                        :
-                        <div>
-                            <SolidButton text="Registrarme" href="/login" type="outlined" modalid="ejemplo" setIsMenuOpen={setIsMenuOpen}/>
-                            <SolidButton text="Acceder" href="/login" type="featured" modalid="ejemplo" setIsMenuOpen={setIsMenuOpen}/>
+        <>
+            <header className={`site-header${isScrolling ? ' scroll' : ''}`}>
+                <div>
+                    <img src={logo} alt='Logo Flatter'/>
+                </div>
+                <nav>
+                    <ul ref={headerMenu}>
+                        <div style={{width: '100%', display: `${isMenuOpen ? 'block' : 'none'}`}}>
+                            <div className="wrapper-header-icon--close" ref={headerToggler} onClick={toggleMenu}></div>
                         </div>
-                    }
-                </ul>
-            </nav>
-            <div className="wrapper-header-icon--open" ref={headerToggler} onClick={toggleMenu}></div>
-        </header>
+                        <div>
+                            <li><a href="/">Inicio</a></li>
+                            <li><a href="/">Buscador de viviendas</a></li>
+                            <li><a href="/">Buscador de compañeros</a></li>
+                        </div>
+                        {
+                            user ?
+                            <HeaderProfile user={user}/>
+                            :
+                            <div>
+                                <SolidButton text="Registrarme" type="outlined" onClick={handleRegisterButtonClick}/>
+                                <SolidButton text="Acceder" type="featured" onClick={handleLoggingButtonClick}/>
+                            </div>
+                        }
+                    </ul>
+                </nav>
+                <div className="wrapper-header-icon--open" ref={headerToggler} onClick={toggleMenu}></div>
+            </header>
+            <FlatterModal ref={modalRef}>
+                <LoginRegisterForm ref={loginFormRef}/>
+            </FlatterModal>
+        </>
     );
 }
 

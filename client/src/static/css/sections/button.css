@@ -8,19 +8,12 @@
   padding: 12px 30px;
   background: var(--flatter-blue-color);
   border-radius: 25px;
+  border: transparent;
+  cursor: pointer;
 }
 
 .button.featured {
-  background: conic-gradient(
-    from 180deg at 50% 50%,
-    #bb5799 0deg,
-    rgba(255, 0, 245, 0.75) 18.75deg,
-    #8d8eff 86.25deg,
-    rgba(66, 0, 255, 0.67) 144deg,
-    rgba(255, 0, 8, 0.815588) 216deg,
-    #ff8a00 288deg,
-    #bb5799 360deg
-  );
+  background: var(--featured-button-background)
 }
 
 .button.outlined {
