@@ -14,10 +14,12 @@ const LoginRegisterForm = forwardRef((props, ref) => {
     const navigator = useNavigate();
 
     const [currentForm, setCurrentForm] = useState('register');
+    //eslint-disable-next-line
     const [currentFormValues, setCurrentFormValues] = useState({
         genre: 'Hombre',
         role: 'Propietario'
     });
+    const [currentFormErrors, setCurrentFormErrors] = useState([]);
 
     useImperativeHandle(ref, () => {
         return{
@@ -29,49 +31,58 @@ const LoginRegisterForm = forwardRef((props, ref) => {
 
     function sendRegisterForm(e){
         e.preventDefault();
-        client.mutate({
-            mutation: usersAPI.createUser,
-            variables: {
-                firstName: currentFormValues.first_name,
-                lastName: currentFormValues.last_name,
-                username: currentFormValues.username,
-                password: currentFormValues.password,
-                email: currentFormValues.email,
-                genre: currentFormValues.genre,
-                roles: currentFormValues.role
-            }
-        }).then((response) => {
-            let token = response.data.tokenAuth.token;
-            let username = response.data.tokenAuth.user.username;
+        setCurrentFormErrors(validateRegisterForm(currentFormValues));
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', username);
+        if(currentFormErrors.length === 0){
+            client.mutate({
+                mutation: usersAPI.createUser,
+                variables: {
+                    firstName: currentFormValues.first_name,
+                    lastName: currentFormValues.last_name,
+                    username: currentFormValues.username,
+                    password: currentFormValues.password,
+                    email: currentFormValues.email,
+                    genre: currentFormValues.genre,
+                    roles: currentFormValues.role
+                }
+            }).then((response) => {
+                let token = response.data.tokenAuth.token;
+                let username = response.data.tokenAuth.user.username;
 
-            navigator('/main-page');
-        }).catch((error) => {
-            console.log(error);
-        });
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', username);
+
+                navigator('/main-page');
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     function sendLoginForm(e){
         e.preventDefault();
-        client.mutate({
-            mutation: usersAPI.logUser,
-            variables: {
-                username: currentFormValues.username,
-                password: currentFormValues.password,
-            }
-        }).then((response) => {
-            let token = response.data.tokenAuth.token;
-            let username = response.data.tokenAuth.user.username;
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', username);
+        setCurrentFormErrors(validateLoginForm(currentFormValues));
 
-            navigator('/main-page');
-        }).catch((error) => {
-            console.log(error);
-        });
+        if(currentFormErrors.length === 0){
+            client.mutate({
+                mutation: usersAPI.logUser,
+                variables: {
+                    username: currentFormValues.username,
+                    password: currentFormValues.password,
+                }
+            }).then((response) => {
+                let token = response.data.tokenAuth.token;
+                let username = response.data.tokenAuth.user.username;
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', username);
+
+                navigator('/main-page');
+            }).catch((error) => {
+                setCurrentFormErrors(['Usuario o contraseña incorrectos']);
+            });
+        }
     }
 
     useEffect(() => {
@@ -80,8 +91,14 @@ const LoginRegisterForm = forwardRef((props, ref) => {
         inputs.forEach(input => {
             input.addEventListener('change', (e) => {
                 currentFormValues[e.target.name] = e.target.value;
+                if(currentForm === 'login'){
+                    setCurrentFormErrors(validateLoginForm(currentFormValues));
+                }else{
+                    setCurrentFormErrors(validateRegisterForm(currentFormValues));
+                }
             });
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentForm]);
 
     return (
@@ -98,6 +115,13 @@ const LoginRegisterForm = forwardRef((props, ref) => {
                         </div>
                         <div style={{height: '50px', width: '200px'}}>
                             <SuperAnimatedButton onClick={sendLoginForm}>Iniciar Sesión</SuperAnimatedButton>
+                        </div>
+                        <div className='errors-container'>
+                            {
+                                currentFormErrors.length > 0 && currentFormErrors.map((error, index) => {
+                                    return <p key={index} className='error'>{error}</p>
+                                })
+                            }
                         </div>
                     </form>
                     :
@@ -126,11 +150,68 @@ const LoginRegisterForm = forwardRef((props, ref) => {
                         <div style={{height: '50px', width: '150px'}}>
                             <SuperAnimatedButton onClick={sendRegisterForm}>Regístrate</SuperAnimatedButton>
                         </div>
+                        <div className='errors-container'>
+                            {
+                                currentFormErrors.length > 0 && currentFormErrors.map((error, index) => {
+                                    return <p key={index} className='error'>{error}</p>
+                                })
+                            }
+                        </div>
                     </form>
                     
             }
         </div>
     );
 });
+
+function validateLoginForm(formValues){
+    let errors = [];
+
+    if(formValues.username === '' || formValues.username === undefined){
+        errors.push('El campo de usuario no puede estar vacío');
+    }
+
+    if(formValues.password === '' || formValues.password === undefined){
+        errors.push('El campo de contraseña no puede estar vacío');
+    }
+
+    return errors;
+}
+
+function validateRegisterForm(formValues){
+    let errors = [];
+
+    try{
+        for(let key in formValues){
+            if(formValues[key] === '' || formValues[key] === undefined){
+                errors.push('Todos los campos del formulario son obligatorios');
+                break;
+            }
+        }
+    
+        if(formValues.first_name.length < 3 || formValues.first_name.length >= 50){
+            errors.push('El nombre debe tener entre 3 y 50 caracteres');
+        }
+    
+        if(formValues.last_name.length < 3 || formValues.last_name.length >= 50){
+            errors.push('Los apellidos deben tener entre 3 y 50 caracteres');
+        }
+    
+        if(formValues.username.length < 6 || formValues.username.length > 25){
+            errors.push('El nombre de usuario debe tener entre 6 y 24 caracteres');
+        }
+    
+        if(formValues.password.length < 6){
+            errors.push('La contraseña debe tener al menos 6 caracteres');
+        }
+    
+        if(!formValues.email.includes('@') || formValues.email.includes('.') === false){
+            errors.push('El email no es válido');
+        }
+    }catch(error){}
+
+    return errors;
+
+}
 
 export default LoginRegisterForm;
