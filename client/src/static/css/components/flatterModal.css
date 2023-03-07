@@ -15,13 +15,11 @@
     left: 0;
     right: 0;
     width: 90vw;
-    max-width: 500px;
     height: 90vh;
-    max-height: 600px;
     background: white;
     border-radius: 15px;
     margin: auto;
-    padding: 50px;
+    padding: 2vw;
     z-index: 10001;
 }
 

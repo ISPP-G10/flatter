@@ -18,7 +18,7 @@ const SuperAnimatedButton = (props) => {
   };
 
   return (
-    <div className="super-animated-button-wrapper">
+    <div className="super-animated-button-wrapper" onClick={props.onClick}>
         <MotionConfig transition={transition}>
         <motion.button
             ref={ref}

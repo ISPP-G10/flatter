@@ -10,7 +10,7 @@ const SolidButton = ({text, type, onClick}) => {
     const isOutlined = type==="outlined";
 
     return (
-        <button type="submit" className={classes} onClick={onClick}>{text} <SVGBorder show={isOutlined} /></button>
+        <button type="submit" className={classes} onClick={onClick} style={{fontSize: "14px"}}>{text} <SVGBorder show={isOutlined}/></button>
     );
 }
 

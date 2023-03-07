@@ -100,6 +100,7 @@
   width: 25% !important;
   max-width: 200px;
   justify-content: space-between !important;
+  cursor: pointer;
 }
 
 .header-user-section__avatar > img {

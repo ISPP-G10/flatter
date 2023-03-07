@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {useQuery} from '@apollo/client';
 import usersAPI from '../../api/usersAPI';
 
-import FlatterCoinsCounter from '../flatterCoinsLogo';
+import FlatterCoinsCounter from '../flatterCoinsCounter';
 
 const HeaderProfile = ({user}) => {
 
@@ -13,11 +13,17 @@ const HeaderProfile = ({user}) => {
         username: user
     }});
 
+    function logout(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = "/";
+    }
+
     if (loading) return <p>Loading...</p>
 
     return(
         <>
-            <div className="header-user-section">
+            <div className="header-user-section" onClick={logout}>
                 <div className="header-user-section__avatar">
                     <img src={`${settings.API_SERVER_MEDIA}${data.getUserByUsername.profilePicture}`} alt="Avatar"/>
                 </div>
