@@ -24,6 +24,7 @@ class Tag(models.Model):
     
     name= models.CharField(max_length=20)
     entity = models.CharField(choices=choices_entity, max_length=1)
+    color = models.CharField(max_length=7)
     
     class Meta:
         constraints = [
