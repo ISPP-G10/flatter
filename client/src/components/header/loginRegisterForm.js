@@ -65,23 +65,7 @@ const LoginRegisterForm = forwardRef((props, ref) => {
         setCurrentFormErrors(validateLoginForm(currentFormValues));
 
         if(currentFormErrors.length === 0){
-            client.mutate({
-                mutation: usersAPI.logUser,
-                variables: {
-                    username: currentFormValues.username,
-                    password: currentFormValues.password,
-                }
-            }).then((response) => {
-                let token = response.data.tokenAuth.token;
-                let username = response.data.tokenAuth.user.username;
-
-                localStorage.setItem('token', token);
-                localStorage.setItem('user', username);
-
-                navigator('/main-page');
-            }).catch((error) => {
-                setCurrentFormErrors(['Usuario o contraseña incorrectos']);
-            });
+            
         }
     }
 

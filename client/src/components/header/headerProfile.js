@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import {useQuery} from '@apollo/client';
 import usersAPI from '../../api/usersAPI';
 
-import FlatterCoinsCounter from '../flatterCoinsLogo';
+import FlatterCoinsCounter from '../flatterCoinsCounter';
 
 const HeaderProfile = ({user}) => {
 

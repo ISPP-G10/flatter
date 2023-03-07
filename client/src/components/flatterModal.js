@@ -1,10 +1,11 @@
 import '../static/css/components/flatterModal.css'
 import {motion, AnimatePresence} from 'framer-motion';
-import {forwardRef, useImperativeHandle, useState} from 'react';
+import {forwardRef, useImperativeHandle, useState, useRef, useEffect} from 'react';
 
 const FlatterModal = forwardRef((props, ref) => {
 
     const [open, setOpen] = useState(false);
+    let modalContentWrapper = useRef(null);
 
     useImperativeHandle(ref, () => {
         return{
@@ -12,6 +13,15 @@ const FlatterModal = forwardRef((props, ref) => {
             close: () => setOpen(false),
         };
     });
+
+    useEffect(() => {
+        if(modalContentWrapper.current){
+            modalContentWrapper.current.style.maxHeight = `${props.maxHeight ? props.maxHeight : 600}px`;
+            modalContentWrapper.current.style.maxWidth = `${props.maxWidth ? props.maxWidth : 500}px`;
+        }
+
+        // eslint-disable-next-line
+    }, [open]);
 
     return(
         <AnimatePresence>
@@ -53,7 +63,7 @@ const FlatterModal = forwardRef((props, ref) => {
                                     delay: 0.3,
                                 }
                             }}
-                            className="modal-content-wrapper">
+                            className="modal-content-wrapper" ref={modalContentWrapper}>
 
                             <motion.div 
                                 initial={{

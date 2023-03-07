@@ -1,26 +1,4 @@
-.authentication-form {
-	position: relative;
-	width:100%;
-	height: 100%;
-}
-
-.authentication-form .login-page-form{
-	display: flex;
-	flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-	height: 100%;
-}
-
-.authentication-form .login-inputs{
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
-
-.authentication-form p{
+.class-form p{
 	width: 100%;
 	color: #573b8a;
 	font-size: 2.3em;
@@ -32,52 +10,133 @@
 	cursor: pointer;
 	transition: .5s ease-in-out;
 }
-.authentication-form input{
+
+/* FORM */
+
+.class-profile-form{
+	position: relative;
 	width: 100%;
-	max-width: 300px;
-	height: 40px;
-	background: var(--main-button-background-color);
-	justify-content: center;
-	display: flex;
-	margin: 20px 0;
-	padding: 10px;
-	border: solid 1px rgb(0,0,0);
-	outline: none;
-	border-radius: 5px;
-	font-size: revert;
+	height: 100%;
+    background-color: var(--main-button-background-color);
 }
-.authentication-form .class-link{
+
+.class-profile-img{
+    width:100px;
+    height: 100px;
+    border-radius: 50px;
+    border: 1px solid var(--main-button-hover-dark-color);
+}
+
+.class-form > *{
+    width: 90%;
+    margin-top: 5%;
+}
+
+.class-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.class-form-group{
     position: relative;
-    top: 10px;
-    display: inline-block;
-    padding: 12px 30px;
-    background: var(--main-button-background-color);
-    border-radius: 40px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: var(--main-black);
-    text-decoration: none;
-    text-transform: uppercase;
 }
 
-.authentication-form .class-link:hover{
-    box-shadow: 0 10px 25px var(--main-button-shadow-hover-color);
-    background: linear-gradient(to bottom, var(--main-button-hover-dark-color), var(--main-button-hover-light-color));
-    transition: 0.5s all;
+.class-form-input{
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--color-input);
+    padding: .6em .3em;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid var(--main-button-hover-dark-color);
+    background-color: transparent;
 }
 
-/* Errors management */
-
-.authentication-form .errors-container{
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+.class-form-label{
+    color: var(--color-label);
+    cursor: text;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    transform: translateY(10px);
+    transition: transform .5s, color .3s;
 }
 
-.authentication-form .error{
-	width: 100%;
-	color: red;
-	font-size: 14px;
+.class-form-input:focus + .class-form-label,
+.class-form-input:not(:placeholder-shown) + .class-form-label{ 
+    transform: translateY(-15px) scale(.7);
+    transform-origin: top left;
+    color: var(--main-button-hover-dark-color);
+    cursor: pointer;
+}
+
+.class-profile-div-btn{
+    width: 100%;
+    justify-content: end;
+}
+
+.class-profile-btn{
+    width: auto;
+}
+
+input.class-form-input[required] + label.class-form-label:after {
+	content: '*';
+    color: var(--color-error)!important;
+}
+
+/* MOBILE */
+
+@media screen and (max-width: 991px) {
+    .class-profile-div-btn{
+        justify-content: center;
+    }
+
+    .class-profile-btn{
+        width: 100%;
+    }
+}
+
+/* ERRORS */
+
+.class-error-form{
+    animation: shake 0.2s ease-in-out 0s 2;
+    transition: transform .5s, color .3s;
+}
+
+.class-error-form label.class-form-label{
+    color: var(--color-error) !important;
+}
+  
+.class-error-form input.class-form-input{
+    background-color: var(--color-error-background);
+    border-color: var(--color-error);
+    outline: none;
+}
+  
+.class-error-form .class-error-message {
+    display: flex;
+    width: 100%;
+    position: relative;
+    font-size: 0.7em;
+    color: var(--color-error);
+    padding-left: 3px;
+}
+
+.class-link:disabled, .class-link:disabled:hover{
+    color: var(--color-btn-disabled);
+    cursor: not-allowed;
+    background: transparent;
+    border-color: var(--color-border-disabled);
+    box-shadow: none;
+}
+
+@keyframes shake {
+    0% { margin-left: 0rem; }
+    25% { margin-left: 0.5rem; }
+    75% { margin-left: -0.5rem; }
+    100% { margin-left: 0rem; }
 }

@@ -31,6 +31,19 @@
     #ff8a00 288deg,
     #bb5799 360deg
   );
+
+  /* Form generator colors */
+
+  --color-input: #303030;
+  --color-label: #5e5e5e;
+  --color-btn-disabled: #5757577e;
+  --color-error: #cc0033;
+  --color-error-background: #fce4e4;
+  --color-border-disabled: #706c6c;
+  --main-button-hover-dark-color: var(--flatter-purple-color);
+  --main-button-hover-light-color: var(var(--flatter-purple-color););
+  --main-button-shadow-hover-color: rgba(0,0,0,0.4);
+  --main-black: #111;
 }
 
 * {
