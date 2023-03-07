@@ -6,7 +6,7 @@ import Modal from "../sections/modal";
 
 import ToggleLandingForm from "../components/toggleLandingForm";
 
-import '../static/css/landingPage.css';
+import '../static/css/pages/landing.css';
 
 const LandingPage = () => {
 

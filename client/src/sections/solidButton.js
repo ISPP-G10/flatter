@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import PropTypes from "prop-types";
 
-const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuOpen, onClick}) => {
+const SolidButton = ({text, href, type, className, modalid, setIsMenuOpen, onClick}) => {
 
     let classes = 'button';
     classes += type.length>0 ? ` ${type}` : '';
@@ -12,8 +12,8 @@ const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuO
 
     const isOutlined = type==="outlined";
 
-    return isSubmit ? (
-        <button type="submit" className={classes} data-modalid={modalid} onClick={() => onClick()}>{text} <SVGBorder show={isOutlined} /></button>
+    return type==="submit"||type==="button" ? (
+        <button type={ type } className={classes} data-modalid={modalid} onClick={() => onClick()}>{text} <SVGBorder show={isOutlined} /></button>
     ) : (
         // TODO: pasar setIsMenuOpen a funcion callback
         <a href={href} className={classes} data-modalid={modalid} onClick={()=>{onClick();}}>{text} <SVGBorder show={isOutlined} /></a>

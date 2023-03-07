@@ -10,6 +10,10 @@
     border-radius: 25px;
 }
 
+button.button {
+    border: 0;
+}
+
 .button.featured {
     background: conic-gradient(from 180deg at 50% 50%, #BB5799 0deg, rgba(255, 0, 245, 0.75) 18.75deg, #8D8EFF 86.25deg, rgba(66, 0, 255, 0.67) 144deg, rgba(255, 0, 8, 0.815588) 216deg, #FF8A00 288deg, #BB5799 360deg);
 }
