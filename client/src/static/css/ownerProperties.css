@@ -1,0 +1,125 @@
+.properties-title{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 65px 40px 0px;
+    color: #000000;
+    text-align: center;
+}
+
+.site-content-sidebar {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.site-content-sidebar > .sidebar {
+    flex: 1;
+}
+
+.site-content-sidebar > .sidebar > div {
+    padding: 10px;
+}
+
+.site-content-sidebar > .sidebar > div > label {
+    margin-top: 10px;
+    display: block;
+}
+
+.site-content-sidebar > .sidebar input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+}
+
+.site-content-sidebar > .content {
+    flex: 3;
+}
+
+.properties > .content {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-left: 25px;
+}
+
+.properties .property-card {
+    margin-bottom: 20px;
+}
+
+.properties .property-card {
+    width: 100%;
+    display: flex;
+}
+
+.properties .property-card > .property-gallery {
+    flex: 1;
+}
+
+.properties .property-card > .property-body {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    margin-top: initial;
+}
+
+.properties .property-card > .property-body > .property-meta {
+    margin-top: auto;
+    width: 100%;
+    display: flex;
+}
+
+.properties .property-card > .property-body > .property-footer {
+    display: flex;
+    width: 100%;
+}
+
+.properties .property-card > .property-body > .property-footer > a {
+    flex: 1;
+    border-radius: 0;
+}
+
+.properties .container-slider {
+    height: 225px;
+}
+
+.properties .property-body-content {
+    width: 100%;
+    padding: 10px;
+}
+
+.properties .property-card > .property-body > .property-meta > div:last-child {
+    flex: 1;
+    display: flex;
+}
+
+.properties .meta-right button {
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 25px;
+    border: 0px;
+    margin-bottom: 8px;
+    margin-left: 10px;
+}
+
+
+@media only screen and (max-width: 768px) {
+
+    .site-content-sidebar {
+        display: block;
+    }
+
+    .site-content-sidebar > .sidebar {
+        margin: 20px;
+    }
+
+    .properties > .content {
+        padding-right: 25px;
+    }
+
+    .properties .property-card {
+        display: block;
+    }
+}

@@ -8,21 +8,22 @@ class Image(models.Model):
     image = models.ImageField( upload_to='property/images/', blank=True, null=True)
     
 class Property(models.Model):
-    is_outstanding = models.BooleanField()
+    is_outstanding = models.BooleanField(default=False)
     title = models.CharField(max_length=50)
-    description = models.TextField
-    visits_counter = models.IntegerField()
-    beedrooms_number = models.IntegerField()
+    description = models.CharField(max_length=250, default="")
+    visits_counter = models.IntegerField(default=0)
+    bedrooms_number = models.IntegerField()
     bathrooms_number = models.IntegerField()
     price = models.FloatField()
     #LOCATION DEBERIA SER UN SELECT
     location = models.CharField(max_length=50)
     province = models.CharField(max_length=50)
-    is_in_offer = models.BooleanField()
-    is_full = models.BooleanField
+    is_in_offer = models.BooleanField(default=False)
+    is_full = models.BooleanField(default=False)
     dimensions = models.IntegerField()
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
-    images = models.ManyToManyField(Image) 
+    images = models.ManyToManyField(Image)
+    owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
 
 class Review(models.Model):
     assessment = models.IntegerField()
@@ -42,4 +43,3 @@ class Application(models.Model):
     property = models.ForeignKey(Property,on_delete=models.CASCADE)
     user = models.ManyToManyField(FlatterUser)
     type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
-
