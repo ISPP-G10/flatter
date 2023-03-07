@@ -104,22 +104,29 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
 class AddTagToUser(graphene.Mutation):
   
   class Input:
-    username = graphene.String(required=True)
     tag = graphene.String(required=True)
 
   user = graphene.Field(FlatterUserType)
   
   @staticmethod
   def mutate(root, info, **kwargs):
-    username = kwargs.get('username', '').strip()
+    user = info.context.user
     tag = kwargs.get('tag', '').strip()
     
-    selected_user = FlatterUser.objects.get(username=username)
-    tag = Tag.objects.get_or_create(name=tag, entity='U')
+    user_selected = FlatterUser.objects.get(username=user.username)
+    try:
+      tag = Tag.objects.get(name=tag)
+    except:
+      raise ValueError(_("La etiqueta no existe"))
+
+    if tag in user_selected.tags.all():
+      raise ValueError(_("Ya tienes esta etiqueta"))
+    if user.id != user_selected.id:
+      raise Exception(_("You are not authorized to perform this action."))
+
+    user_selected.tags.add(tag)
     
-    selected_user.tags.add(tag[0])
-    
-    return AddTagToUser(user=selected_user)
+    return AddTagToUser(user=user_selected)
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()

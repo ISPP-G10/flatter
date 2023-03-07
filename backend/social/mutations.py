@@ -5,6 +5,8 @@ import phonenumbers
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
+from mainApp.models import Review, Property
+from social.types import ReviewType
 
 
 class EditUserMutation(graphene.Mutation):
@@ -170,6 +172,66 @@ class DeleteRoleToUserMutation(graphene.Mutation):
 
             return DeleteRoleToUserMutation(user=user_selected)
 
+class CreateReview(graphene.Mutation):
+
+    class Input:
+        assessment = graphene.Int(required=True)
+        text = graphene.String(required=True)
+        valued_user = graphene.Int(required=True)
+        evaluator_user = graphene.Int(required=True)
+        relationship = graphene.String(required=True)
+        property = graphene.Int(required=False)
+
+
+    review = graphene.Field(ReviewType)
+
+    @staticmethod
+    @login_required
+    def mutate(root, info, **kwargs):
+
+            assessment = kwargs.get('assessment', '')
+            text = kwargs.get('text', '').strip()
+            valued_user = kwargs.get('valued_user', '')
+            evaluator_user = kwargs.get('evaluator_user', '')
+            relationship = kwargs.get('relationship', '').strip()
+            property = kwargs.get('property', '')
+
+
+
+            if assessment < 0 or assessment > 5:
+                raise ValueError(_("La valoración debe estar entre 0 y 5"))
+            if len(text) < 10 or len(text) > 500:
+                raise ValueError(_("El texto debe tener entre 10 y 500 caracteres"))
+            try:
+                valued_user = FlatterUser.objects.get(pk=valued_user)
+            except:
+                raise ValueError(_("El usuario valorado no existe"))
+            try:
+                evaluator_user = FlatterUser.objects.get(pk=evaluator_user)
+            except:
+                raise ValueError(_("El usuario evaluador no existe"))
+            if property:
+                try:
+                    property = Property.objects.get(pk=property)
+                except:
+                    raise ValueError(_("La propiedad no existe"))
+            else:
+                property = None
+
+            if valued_user == evaluator_user:
+                raise ValueError(_("No puedes valorarte a ti mismo"))
+
+            evaluators = [review.evaluator_user for review in Review.objects.filter(valued_user=valued_user)]
+
+            if evaluator_user in evaluators:
+                raise ValueError(_("Ya has valorado a este usuario"))
+
+
+            review = Review.objects.create(assessment=assessment, text=text, valued_user=valued_user, evaluator_user=evaluator_user, relationship=relationship , property=property)
+
+            return CreateReview(review=review)
+
+
 
 
 
@@ -178,6 +240,7 @@ class SocialMutation(graphene.ObjectType):
     delete_tag_to_user = DeleteTagToUserMutation.Field()
     add_role_to_user = AddRoleToUserMutation.Field()
     delete_role_to_user = DeleteRoleToUserMutation.Field()
+    create_review = CreateReview.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
