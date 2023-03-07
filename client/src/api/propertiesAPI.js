@@ -3,17 +3,18 @@ import {gql} from 'apollo-boost';
 const propertiesAPI = {
     createProperty: gql`
         mutation createProperty($title: String!, $description: String!, $province: String!, $bathroomsNumber: Int!, 
-            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerId: Int!, $price: Float!) {
-            createProperty(
-            title: $title, 
-            description: $description, 
-            dimensions:$dimensions, 
-            ownerId:$ownerId, 
-            location:$location, 
-            bedroomsNumber:$bedroomsNumber,
-            bathroomsNumber:$bathroomsNumber, 
-            province:$province, 
-            price:$price) {
+            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerUsername: String!, $price: Float!) {
+                createProperty(
+                    title: $title, 
+                    description: $description, 
+                    dimensions:$dimensions, 
+                    ownerUsername: $ownerUsername, 
+                    location: $location, 
+                    bedroomsNumber: $bedroomsNumber,
+                    bathroomsNumber: $bathroomsNumber, 
+                    province: $province, 
+                    price: $price
+                ) {
                 property {
                     title
                     description
@@ -52,4 +53,4 @@ const propertiesAPI = {
 
 }
 
-export default usersAPI;
+export default propertiesAPI;

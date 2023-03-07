@@ -4,8 +4,6 @@ from authentication.models import FlatterUser
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
 
-
-
 class AddTagToProperty(graphene.Mutation):
   
   class Input:
@@ -41,7 +39,7 @@ class CreatePropertyMutation(graphene.Mutation):
     location = graphene.String(required=True)
     province = graphene.String(required=True)
     dimensions = graphene.Int(required=True)
-    ownerId = graphene.Int(required=True)
+    ownerUsername = graphene.String(required=True)
 
   property = graphene.Field(PropertyType)
 
@@ -55,7 +53,7 @@ class CreatePropertyMutation(graphene.Mutation):
     location = kwargs.get("location", "").strip()
     province = kwargs.get("province", "").strip()
     dimensions = kwargs.get("dimensions", "")
-    ownerId = kwargs.get("ownerId", "")
+    ownerUsername = kwargs.get("ownerUsername", "")
     
     if not title or len(title) < 4 or len(title) > 25:
       raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -84,7 +82,7 @@ class CreatePropertyMutation(graphene.Mutation):
     if _exists_property(title):
       raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
     
-    owner = FlatterUser.objects.get(pk=ownerId)
+    owner = FlatterUser.objects.get(username=ownerUsername)
 
     #if owner.roles.contains(RoleType.owner) == False:
     #raise ValueError(_("El usuario debe ser propietario."))

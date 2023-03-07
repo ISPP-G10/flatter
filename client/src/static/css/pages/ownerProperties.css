@@ -22,17 +22,8 @@
     padding: 10px;
 }
 
-.site-content-sidebar > .sidebar > div > label {
-    margin-top: 10px;
-    display: block;
-}
-
-.site-content-sidebar > .sidebar input {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
+.site-content-sidebar > .sidebar .class-form-group {
+    margin-bottom: 20px;
 }
 
 .site-content-sidebar > .content {

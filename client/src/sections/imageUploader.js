@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import '../static/css/sections/imageUploader.css';
 
+import PropTypes from "prop-types";
+
 import DOMPurify from 'dompurify';
 
-function ImageUploader() {
+function ImageUploader({name}) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [mainImageIndex, setMainImageIndex] = useState(0);
@@ -87,11 +89,19 @@ function ImageUploader() {
       >
         <div className="image-upload-placeholder">
           <span>Arrastra imágenes o haz click aquí</span>
-          <input type="file" multiple onChange={handleImageChange} />
+          <input name={ name } type="file" multiple onChange={handleImageChange} />
         </div>
       </div>
     </div>
   );
+}
+
+ImageUploader.propTypes = {
+  name: PropTypes.string
+}
+
+ImageUploader.defaultProps = {
+  name: ""
 }
 
 export default ImageUploader;

@@ -1,19 +1,16 @@
 import "../static/css/pages/ownerProperties.css";
+
 import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
-
-import { useParams } from "react-router-dom";
-
 import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
-import MultiRangeSlider from "../components/inputs/multiRangeSlider";
-
+import FlatterForm from "../components/forms/flatterForm";
 import FlatterModal from "../components/flatterModal";
-
 import FormProperty from "../components/forms/formProperty";
-import ModalButton from "../components/modalButton";
 
-import { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useRef } from "react";
+import { filterInputs } from "../forms/filterPropertiesForm";
 
 const OwnerProperties = () => {
 
@@ -53,14 +50,18 @@ const getProperties = (page) => {
 
 const properties = getProperties(page);
 
+const handleFilterForm = () => {
+
+}
+
 return (
     <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Todas tus propiedades</h1>
       </div>
   
-      <div class="over-listing">
-        <div classNAme="actions">
+      <div className="over-listing">
+        <div className="actions">
           <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
               addPropertyModalRef.current.open();
           } } />
@@ -69,27 +70,17 @@ return (
       <section className="site-content-sidebar properties">
         <div className="sidebar">
           <div className="card">
-            <h3>Filtrar por</h3>
-  
-            <label>
-              Ciudad
-              <input type="text" name="province" placeholder="Selecciona ciudad" />
-            </label>
-  
-            <label>
-              Precio
-              <MultiRangeSlider min="5" max="2000" onChange={({min, max}) => {}}/>
-            </label>
-  
-            <label>
-              <SolidButton text="Buscar" />
-            </label>
+            <div className="filters">
+              <h3>Filtrar por</h3>
+
+              <FlatterForm inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades" />
+            </div>
           </div>
         </div>
   
         <div className="content">
-          {properties.map((property) => (
-            <article key={property.id} className="property-card card">
+          {properties.map((property, index) => (
+            <article key={ index } className="property-card card">
               <div className="property-gallery">
                 <Slider>
                 </Slider>
@@ -102,8 +93,8 @@ return (
   
                 <div className="property-meta">
                   <div className="meta-right">
-                    {property.tags.map((tag) => (
-                      <Tag name={tag.title} color={tag.color}></Tag>
+                    {property.tags.map((tag, index) => (
+                      <Tag key={ index } name={tag.title} color={tag.color}></Tag>
                     ))}
                   </div>
   

@@ -5,13 +5,20 @@ import ImageUploader from '../../sections/imageUploader';
 
 import PropTypes from "prop-types";
 
-const FormBuilder = ({ inputs, values }) => {
+const FormBuilder = ({ inputs, values, onSubmit }) => {
 
-    const isSet = Object.keys(values)>0;
+    const schema = {};
 
     const recursiveRender = (group) => {
         return Object.entries(group).map(([key, value]) => {
           const propValue = values[key];
+
+          if(value.type !== 'group') {
+            schema[key] = {
+              type: value.type
+            }
+          }
+
           switch (value.type) {
             case "text":
             case "number":
@@ -47,7 +54,7 @@ const FormBuilder = ({ inputs, values }) => {
                   >
                     <option disabled>{value.default}</option>
                     {value.options.map(({ id, text }) => (
-                      <option key={id} value={text}>
+                      <option key={id} value={id}>
                         {text}
                       </option>
                     ))}
@@ -69,7 +76,7 @@ const FormBuilder = ({ inputs, values }) => {
               return (
                 <label key={key} style={{ flex: value.flex }}>
                   {value.label}
-                  <ImageUploader />
+                  <ImageUploader name={ key } />
                 </label>
               );
             case "group":
@@ -87,7 +94,7 @@ const FormBuilder = ({ inputs, values }) => {
             case "button":
               return (
                 <div className="input-button" key={key} style={{ flex: value.flex }}>
-                  <SolidButton type={ value.type } text={ value.text } />
+                  <SolidButton type={ value.type } text={ value.text } onClick={ value.onClick } />
                 </div>
               );
     
@@ -98,17 +105,40 @@ const FormBuilder = ({ inputs, values }) => {
     };
 
     return (
-        <form style={{overflow: 'scroll', width: '100%'}}
-            onSubmit={
-                isSet
-                ? function () {
-                    console.log("Editando propiedad");
-                    }
-                : function () {
-                    console.log("Creando propiedad");
-                    }
+        <form style={{overflowY: 'scroll', width: '100%'}} onSubmit = { function (e) {
+          e.preventDefault();
+
+          const formInputs = Array.prototype.slice.call(e.target.querySelectorAll('*[name]')),
+          values = {};
+
+          for(let index in Object.keys(schema)) {
+            // para almacenar los tipos de los inputs y darle los valores en tipo String o Int
+            const key = Object.keys(schema)[index],
+              inputSchema = schema[key],
+              inputForm = formInputs.map(x=>x).filter(input => {
+                return input.getAttribute('name') === key;
+              }),
+              inputValue = inputForm[0]!==undefined ? inputForm[0].value : '';
+
+            console.log(inputForm);
+
+            let parsedValue = null;
+            switch(inputSchema.type) {
+              case 'number':
+                parsedValue = parseInt(inputValue);
+                break;
+
+              default:
+                parsedValue = inputValue;
+                break;
             }
-            >
+
+            values[key] = parsedValue;
+          }
+
+          onSubmit(values);
+
+        } } >
             {inputs.map((group, i) => (
                 <div className="form-group" key={i}>
                 {recursiveRender(group)}
