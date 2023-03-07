@@ -1,22 +1,16 @@
 import '../static/css/sections/button.css';
 
-import { useEffect } from "react";
-
 import PropTypes from "prop-types";
 
-const SolidButton = ({text, href, type, isSubmit, className, modalid, setIsMenuOpen, onClick}) => {
+const SolidButton = ({text, type, onClick}) => {
 
     let classes = 'button';
     classes += type.length>0 ? ` ${type}` : '';
-    classes += className.length>0 ? ` ${className}` : '';
 
     const isOutlined = type==="outlined";
 
-    return isSubmit ? (
-        <button type="submit" className={classes} data-modalid={modalid} onClick={() => onClick()}>{text} <SVGBorder show={isOutlined} /></button>
-    ) : (
-        // TODO: pasar setIsMenuOpen a funcion callback
-        <a href={href} className={classes} data-modalid={modalid} onClick={()=>{onClick();}}>{text} <SVGBorder show={isOutlined} /></a>
+    return (
+        <button type="submit" className={classes} onClick={onClick} style={{fontSize: "14px"}}>{text} <SVGBorder show={isOutlined}/></button>
     );
 }
 

@@ -1,5 +1,5 @@
 import '../static/css/sections/commentsBox.css'
-import Comment from '../components/comment';
+import Comment from '../components/profile/comment';
 
 const CommentsBox = () => {
 

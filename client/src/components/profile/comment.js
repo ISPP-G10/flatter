@@ -1,6 +1,6 @@
-import "../static/css/components/comment.css"
+import "../../static/css/components/comment.css"
 import PropTypes from 'prop-types';
-import Tag from "./tag";
+import Tag from "../tag";
 
 const Comment = (props) => {
 
