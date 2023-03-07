@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import '../static/css/sections/imageUploader.css';
 
+import DOMPurify from 'dompurify';
+
 function ImageUploader() {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -11,10 +13,10 @@ function ImageUploader() {
     if (files) {
       const fileArray = Array.from(files);
       setSelectedFiles(fileArray);
-      const previewArray = fileArray.map((file) => URL.createObjectURL(file));
+      const previewArray = fileArray.map((file) => DOMPurify.sanitize(URL.createObjectURL(file)));
       setImagePreviews(previewArray);
     }
-  };
+  };  
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -57,7 +59,7 @@ function ImageUploader() {
         <div className="main-image-preview">
           {selectedFiles.length > 0 && (
             <img
-              src={imagePreviews[mainImageIndex]}
+              src={DOMPurify.sanitize(imagePreviews[mainImageIndex])}
               alt={`preview-${mainImageIndex}`}
             />
           )}
@@ -72,7 +74,7 @@ function ImageUploader() {
                 key={index}
                 onClick={() => handleMainImageClick(index)}
               >
-                <img src={preview} alt={`preview-${index}`} />
+                <img src={DOMPurify.sanitize(preview)} alt={`preview-${index}`} />
                 <button type="button" onClick={() => handleRemoveImage(index)}>x</button>
               </div>
             ))}
