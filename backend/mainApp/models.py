@@ -12,7 +12,7 @@ class Property(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField
     visits_counter = models.IntegerField()
-    beedrooms_number = models.IntegerField()
+    bedrooms_number = models.IntegerField()
     bathrooms_number = models.IntegerField()
     price = models.FloatField()
     #LOCATION DEBERIA SER UN SELECT

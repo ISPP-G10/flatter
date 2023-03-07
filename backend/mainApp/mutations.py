@@ -24,8 +24,7 @@ class AddTagToProperty(graphene.Mutation):
     if len(selected_property_tags)<8:
       selected_property.tags.add(tag[0])
     else:
-      #Duda como manejo esto
-      pass
+      raise ValueError(_("Este inmueble ya tiene el máximo número de tags posibles"))
     
     return AddTagToProperty(property=selected_property)
 
