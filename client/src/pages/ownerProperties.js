@@ -1,11 +1,12 @@
-import "../static/css/ownerProperties.css";
+import "../static/css/pages/ownerProperties.css";
 import FlatterPage from "../sections/flatterPage";
-import Slider from "../components/Slider";
+import Slider from "../components/slider/slider";
 
 import { useParams } from "react-router-dom";
 
 import RangeSelector from "../sections/rangeSelector";
 import SolidButton from "../sections/solidButton";
+import Tag from "../components/tag";
 
 const OwnerProperties = () => {
 
@@ -44,7 +45,7 @@ const getProperties = (page) => {
 const properties = getProperties(page);
 
 return (
-    <FlatterPage withBackground>
+    <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Todas tus propiedades</h1>
       </div>
@@ -86,9 +87,7 @@ return (
                 <div className="property-meta">
                   <div className="meta-right">
                     {property.tags.map((tag) => (
-                      <button key={tag.title} style={{ backgroundColor: tag.color }}>
-                        {tag.title}
-                      </button>
+                      <Tag name={tag.title} color={tag.color}></Tag>
                     ))}
                   </div>
   

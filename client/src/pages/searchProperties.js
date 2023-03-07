@@ -1,11 +1,12 @@
-import "../static/css/searchProperties.css";
+import "../static/css/pages/searchProperties.css";
 import FlatterPage from "../sections/flatterPage";
-import Slider from "../components/Slider";
+import Slider from "../components/slider/slider";
+import Tag from "../components/tag";
 
 const SearchProperties = () => {
 
   return (
-    <FlatterPage withBackground>
+    <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Habitaciones en pisos compartidos en Sevilla</h1>
       </div>
@@ -56,24 +57,10 @@ const SearchProperties = () => {
                 </Slider>
               </div>
               <div className="etiquetacontainer">
-                <div className="etiquetaindv">
-                  <button className="etiqueta2">Compañerismo</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">LGTB</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Familiar</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Deportes</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Estudios</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Pet-Friendly</button>
-                </div>
+                <Tag name="Ejemplo" color="blue"/>
+                <Tag name="Ejemplo" color="blue"/>
+                <Tag name="Ejemplo" color="blue"/>
+                <Tag name="Ejemplo" color="blue"/>
               </div>
 
 
