@@ -1,0 +1,77 @@
+
+.photo {
+    width: 200px;
+    height: 200px;
+    margin-left: 14%;
+    margin-top: 3%;
+    margin-right: 3%;
+    border-radius: 50%;
+}
+
+
+#etiqueta {
+    font-size: medium;
+    font-weight: bold;
+    background-color: rgb(199, 139, 255);
+    border-radius: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-right: 6px;
+
+} 
+
+.containerFlex {
+    background-color: rgb(255, 228, 196);
+    display: flex;
+    position: relative;
+    margin-left: 10%;
+    margin-right: 35%;
+    border: 0.2rem solid;
+    border-color: #00000044;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.biografia {
+    background-color: rgb(255, 255, 255);
+    border: 0.1rem solid;
+    border-color: #38383844;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 5%;
+    margin-bottom: 1%;
+    margin-left: 12%;
+}
+
+#text {
+    text-align: justify;
+    text-justify: inter-word;
+    height: 150px;
+    overflow: scroll;
+}
+
+.tags-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.tags-container > *{
+    margin-bottom: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+@media screen and (max-width: 1319px) {
+    .containerFlex {
+        flex-direction: column;
+        margin-right: 10%;
+    }
+
+    .biografia {
+        margin-left: 0%;
+    }
+    
+}

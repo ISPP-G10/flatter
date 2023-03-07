@@ -40,6 +40,7 @@ class FlatterUser(AbstractUser):
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', blank=True, null=True)
     roles = models.ManyToManyField(Role, related_name=_('roles'))
     genre = models.CharField(choices=choices_genre, max_length=2)
+    bibliography = models.TextField(_("bibliography"), blank=True, null=True)
     flatter_coins = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, related_name=_('user_tags'))
     
