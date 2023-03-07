@@ -1,0 +1,99 @@
+.range-selector {
+    position: relative;
+    height: 8px;
+    width: 100%;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 20px;
+  }
+  
+  .thumb {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    border: 2px solid #f1f1f1;
+    z-index: 2;
+    top: -6px;
+    transform: translateX(-50%);
+  }
+  
+  .thumb:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #007aff;
+  }
+  
+  .thumb.left:after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  
+  .thumb.right:after {
+    transform: translate(-50%, -50%) rotate(135deg);
+  }
+  
+  .thumb.left:hover,
+  .thumb.right:hover {
+    border-color: #007aff;
+  }
+  
+  .thumb.left:active,
+  .thumb.right:active {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .thumb.left:focus,
+  .thumb.right:focus {
+    outline: none;
+  }
+  
+  .track {
+    position: absolute;
+    height: 4px;
+    width: 100%;
+    background-color: #007aff;
+    border-radius: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+  
+  .range-selector:hover .thumb {
+    border-color: #007aff;
+  }
+  
+  .range-selector:hover .thumb:after {
+    background-color: #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .range-selector:hover .thumb.left:hover,
+  .range-selector:hover .thumb.right:hover {
+    background-color: #007aff;
+    border-color: #007aff;
+  }
+  
+  .range-selector:hover .thumb.left:after,
+  .range-selector:hover .thumb.right:after {
+    background-color: #fff;
+  }
+  
+  .range-selector:hover .thumb.left:active,
+  .range-selector:hover .thumb.right:active {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .range-selector:hover .thumb.left:focus,
+  .range-selector:hover .thumb.right:focus {
+    outline: none;
+  }
