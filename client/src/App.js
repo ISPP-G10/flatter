@@ -1,10 +1,12 @@
-import "./static/css/bootstrap.min.css";
+import './static/css/globals.css';
+import "./static/css/legacyBootstrap.css";
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import LandingPage from './pages/landingPage';
 import Error from './pages/error';
-import './static/css/globals.css';
-import PropertyPage from './pages/propertyPage';
-import Ejemplo from './pages/ejemploIntegracion';
+import PropertyDetails from './pages/propertyDetails';
+import MainPage from './pages/mainPage';
 import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
@@ -15,12 +17,12 @@ function App() {
     <Router>
       <Routes>
         <Route exact path="/" element={<LandingPage/>}/>
-        <Route path="/property/:id" element={<PropertyPage />}/>
-        <Route path="/prueba" element={<Ejemplo/>}/>
+        <Route exact path="/main-page" element={<MainPage/>}/>
+        <Route path="/properties" element={<OwnerProperties />}/>
+        <Route path="/searchProperties" element={<SearchProperties/>}/>
+        <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/profile' element={<> <Chat /> <PublicProfile/> </>}/>
         <Route path="*" element={<Error/>}/>
-        <Route path="/searchProperties" element={<SearchProperties/>}/>
-        <Route path="/properties" element={<OwnerProperties />}/>
       </Routes>
     </Router>
   );

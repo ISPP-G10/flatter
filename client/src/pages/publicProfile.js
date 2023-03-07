@@ -1,13 +1,13 @@
+import '../static/css/pages/publicProfile.css';
+
 import FlatterPage from "../sections/flatterPage";
 import CommentsBox from "../sections/commentsBox";
-import PublicProfileCard from "../components/publicProfileCard";
-
-import '../static/css/publicProfile.css'
+import PublicProfileCard from "../components/profile/publicProfileCard";
 
 const PublicProfile = () => {
 
     return(
-        <FlatterPage>
+        <FlatterPage withBackground userLogged>
             <div style={{marginTop: "5%"}}>
                 <section id="profileCard">
                     <PublicProfileCard/>

@@ -1,12 +1,14 @@
-import ZoomingImages from "../components/imagesZoom";
-import HeroHome from "../components/heroHome";
-import FlatterPage from "../sections/flatterPage";
-import ToggleFeatures from "../components/toggleFeatures";
-import Modal from "../sections/modal";
-
-import ToggleLandingForm from "../components/toggleLandingForm";
-
 import '../static/css/pages/landing.css';
+
+import ZoomingImages from "../components/landingPage/imagesZoom";
+import HeroHome from "../components/hero/heroHome";
+import FlatterPage from "../sections/flatterPage";
+import ToggleFeatures from "../components/landingPage/toggleFeatures";
+import FlatterModal from "../components/flatterModal";
+import ToggleLandingForm from "../components/landingPage/toggleLandingForm";
+
+import { useRef } from "react";
+
 
 const LandingPage = () => {
 
@@ -19,9 +21,11 @@ const LandingPage = () => {
         require("../static/files/images/sample-6.jpg"),
     ];
 
+    const pilotUsersForm = useRef(null)
+
     return(
         <FlatterPage>
-            <HeroHome />
+            <HeroHome pilotUsersModal={pilotUsersForm}/>
 
             <section id="whatsFlatter">
                 <div>
@@ -129,13 +133,13 @@ const LandingPage = () => {
                 </div>
                 
             </section>
-            <Modal id="ejemplo">
+            <FlatterModal ref={pilotUsersForm}>
                 <ToggleLandingForm>
                     <>
                         <div id="mc_embed_signup">
                             <form action="https://seafony.us18.list-manage.com/subscribe/post?u=a6fea00d426951e0520437e5d&id=67cc14792f&f_id=005328e7f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" className="validate" target="_blank" noValidate>
                                 <div id="mc_embed_signup_scroll">
-                                <h2>Regístrate como <b>Propietario</b></h2>
+                                <h2 style={{textAlign: 'center', marginTop: '40px'}}>Regístrate como <b>Propietario</b></h2>
                                 <div className="indicates-required"><span className="asterisk">*</span> indica requerido</div>
                                 <div className="mc-field-group">
                                     <label htmlFor="mce-EMAIL">Correo electrónico  <span className="asterisk">*</span>
@@ -171,7 +175,7 @@ const LandingPage = () => {
                         <div id="mc_embed_signup">
                             <form action="https://seafony.us18.list-manage.com/subscribe/post?u=a6fea00d426951e0520437e5d&amp;id=67cc14792f&amp;f_id=005328e7f0" method="post" id="mc-embedded-subscribe-form-2" name="mc-embedded-subscribe-form-2" className="validate" target="_blank" noValidate>
                                 <div id="mc_embed_signup_scroll">
-                                    <h2>Regístrate como <b>Inquilino</b></h2>
+                                    <h2 style={{textAlign: 'center', marginTop: '40px'}}>Regístrate como <b>Inquilino</b></h2>
                                     <div className="indicates-required"><span className="asterisk">*</span> indica requerido</div>
                                     <div className="mc-field-group">
                                         <label htmlFor="mce-EMAIL-2">Correo electrónico  <span className="asterisk">*</span></label>
@@ -206,7 +210,7 @@ const LandingPage = () => {
                         </div>
                     </>
                 </ToggleLandingForm>
-            </Modal>
+            </FlatterModal>
         </FlatterPage>
     );
 }
