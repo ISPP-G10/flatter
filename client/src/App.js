@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<> <Chat /> <LandingPage/> </>}/>
         <Route path="/prueba" element={<Ejemplo/>}/>
-        <Route path='/publicProfile' element={<PublicProfile/>}/>
+        <Route path='/profile' element={<> <Chat /> <PublicProfile/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
