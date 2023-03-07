@@ -23,8 +23,8 @@ const FlatterPage = (props) => {
                 props.withBackground ? 
                 (
                     <div className="site-content">
-                            {props.children}
-                            <Footer />
+                        {props.children}
+                        <Footer />
                     </div>    
                 )
                 :

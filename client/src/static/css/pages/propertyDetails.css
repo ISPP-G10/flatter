@@ -14,7 +14,7 @@ img {
   gap: 0.7em;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
   .housing {
     flex-direction: column;
     padding: 10px;
@@ -27,7 +27,7 @@ img {
   min-width: 550px;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
   .housing__photo {
     width: 100%;
     min-width: 0;
@@ -49,7 +49,7 @@ img {
   border: 3px solid #e2dfdf;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
   .housing__info {
     text-align: center;
   }
@@ -93,6 +93,20 @@ img {
   margin-bottom: 1em;
 }
 
+.tags-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 1em;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.btn__container{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .btn {
   padding: 1.5em 1.5em;
   border: none;
@@ -107,6 +121,7 @@ img {
   display: flex;
   align-items: center;
   float: left;
+  margin: 0;
   margin-bottom: 1em;
 }
 
@@ -127,6 +142,10 @@ img {
   .people {
     flex-direction: column;
   }
+
+  .tags-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ----- Flatmates Section ----- */
@@ -144,7 +163,12 @@ img {
   gap: 1em;
 }
 
-@media screen and (max-width: 300px) {
+@media screen and (max-width: 450px) {
+  
+  .tags-row {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
   .flatmates__container {
     flex-direction: column;
   }

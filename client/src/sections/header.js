@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import SolidButton from "./solidButton";
 import HeaderProfile from "../components/header/headerProfile";
 import FlatterModal from "../components/flatterModal";
-import FlatterForm from "../components/flatterForm";
+import FlatterForm from "../components/forms/flatterForm";
 import usersAPI from "../api/usersAPI";
 
 const Header = ({scrollY, userLogged}) => {
@@ -146,6 +146,7 @@ const Header = ({scrollY, userLogged}) => {
                 <div className="wrapper-header-icon--open" ref={headerToggler} onClick={toggleMenu}></div>
             </header>
             <FlatterModal maxWidth={700} ref={registerModalRef}>
+                <h1 className="auth-form-title">Regístrate</h1>
                 <FlatterForm 
                     buttonText="Regístrate"
                     showSuperAnimatedButton
@@ -158,7 +159,7 @@ const Header = ({scrollY, userLogged}) => {
                 maxHeight={400}
                 ref={loginModalRef}
                 >
-
+                <h1 className="auth-form-title">Iniciar Sesión</h1>
                 <FlatterForm 
                     buttonText="Iniciar Sesión"
                     showSuperAnimatedButton

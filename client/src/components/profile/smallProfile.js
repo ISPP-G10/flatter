@@ -1,4 +1,4 @@
-import "../static/css/components/smallProfile.css"
+import "../../static/css/components/smallProfile.css"
 
 const SmallProfile = ({ user }) => {
   return (

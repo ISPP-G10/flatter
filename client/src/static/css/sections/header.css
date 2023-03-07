@@ -57,6 +57,7 @@
 
 .site-header > nav ul > div:nth-child(3) {
   width: 30%;
+  justify-content: space-evenly;
 }
 
 .site-header > nav > ul > div > li {
@@ -138,6 +139,18 @@
 
 #wrapped-name {
   display: inline;
+}
+
+.auth-form-title{
+	width: 100%;
+	color: #573b8a;
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+	margin-top: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
 }
 
 /* RESPONSIVE */

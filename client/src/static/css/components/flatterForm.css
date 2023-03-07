@@ -1,15 +1,3 @@
-.class-profile-form p{
-	width: 100%;
-	color: #573b8a;
-	font-size: 2.3em;
-	justify-content: center;
-	display: flex;
-	margin-top: 20px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: .5s ease-in-out;
-}
-
 /* FORM */
 
 .class-profile-form{
@@ -40,6 +28,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    column-gap: 20px;
     height: 100%;
     width: 100%;
 }

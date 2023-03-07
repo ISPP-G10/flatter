@@ -1,13 +1,14 @@
+import '../static/css/pages/landing.css';
+
 import ZoomingImages from "../components/landingPage/imagesZoom";
 import HeroHome from "../components/hero/heroHome";
 import FlatterPage from "../sections/flatterPage";
 import ToggleFeatures from "../components/landingPage/toggleFeatures";
 import FlatterModal from "../components/flatterModal";
-
 import ToggleLandingForm from "../components/landingPage/toggleLandingForm";
 
-import '../static/css/landingPage.css';
 import { useRef } from "react";
+
 
 const LandingPage = () => {
 

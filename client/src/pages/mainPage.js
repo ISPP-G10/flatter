@@ -1,4 +1,4 @@
-import '../static/css/mainPage.css'
+import '../static/css/pages/mainPage.css'
 
 import FlatterPage from "../sections/flatterPage";
 

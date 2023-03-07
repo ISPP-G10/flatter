@@ -26,7 +26,7 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired, numberOf
         {
             type === "select" ?
             (
-                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {padding: `2% 1% 0 1%`, width: `${100/numberOfColumns}%`} : {marginTop: `7.5%`}}>	
+                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {marginTop: `7.5%`}}>	
                     <select className="class-form-input" id={`${name}`} name={`${name}`} required={isRequired} defaultValue={defaultValue} ref={inputField}>
                         {
                             values && values.map((option, index) => {
@@ -46,7 +46,7 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired, numberOf
             )
             :
             (
-                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {padding: `0% 1% 0 1%`, width: `${100/numberOfColumns}%`} : {}}>	
+                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {width: `${100/numberOfColumns-3}%`} : {}}>	
                     <input className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " defaultValue={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
                     <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
                     {

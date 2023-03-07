@@ -1,12 +1,12 @@
-import '../static/css/components/loginRegisterForm.css'
+import '../../static/css/components/flatterForm.css'
 
-import SuperAnimatedButton from "./superAnimatedButton/superAnimatedButton";
+import SuperAnimatedButton from "../superAnimatedButton/superAnimatedButton";
 
 import {useState, useImperativeHandle, forwardRef, useEffect} from 'react';
 
 import PropTypes from 'prop-types';
 import FormInput from './formInput';
-import SolidButton from '../sections/solidButton';
+import SolidButton from '../../sections/solidButton';
 
 const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimatedButton, numberOfColumns}, ref) => {
 

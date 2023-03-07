@@ -1,9 +1,11 @@
-import SlideShow from "../components/slideShow";
-import SmallProfile from "../components/smallProfile";
-import FlatterPage from "../sections/flatterPage";
-import "../static/css/detalleVivienda.css";
+import "../static/css/pages/propertyDetails.css";
 
-const DetalleVivienda = () => {
+import SlideShow from "../components/slider/slideShow";
+import SmallProfile from "../components/profile/smallProfile";
+import FlatterPage from "../sections/flatterPage";
+import Tag from "../components/tag";
+
+const PropertyDetails = () => {
   const piso = {
     id: 45999,
     name: "Piso en C/Luis Montoto",
@@ -45,7 +47,7 @@ const DetalleVivienda = () => {
   };
 
   return (
-    <FlatterPage withBackground>
+    <FlatterPage withBackground userLogged>
       <div className="housing-page">
         <section className="housing">
           <div className="housing__photo">
@@ -65,10 +67,20 @@ const DetalleVivienda = () => {
               <h3>Descripción</h3>
               <p>{piso.description}</p>
             </div>
+            <div className="tags-row">
+              <Tag name="Prueba" color="#000000"/>
+              <Tag name="Pruebaasdasdas" color="#000000"/>
+              <Tag name="Pra" color="#000000"/>
+              <Tag name="Pruasdasdeba" color="#000000"/>
+              <Tag name="Pru" color="#000000"/>
+              <Tag name="Prusadeba" color="#000000"/>
+              <Tag name="Prue" color="#000000"/>
+              <Tag name="Pa" color="#000000"/>      
+            </div>
             <div className="btn__container">
               <button className="btn">
                 <img
-                  src={require("../static/files/icons/chat.png")}
+                  src={require("../static/files/icons/chat-icon.png")}
                   alt="chat icon"
                 />
                 CONTACTAR
@@ -107,4 +119,4 @@ const DetalleVivienda = () => {
   );
 };
 
-export default DetalleVivienda;
+export default PropertyDetails;

@@ -1,0 +1,89 @@
+#commentsBox {
+    padding: 30px;
+  }
+
+.comments-box {
+    background-color: rgb(243, 185, 24);
+    display: flex;
+    position: relative;
+    margin-left: 10%;
+    margin-right: 35%;
+    border-radius: 20px;
+    padding: 10px;
+    flex-direction: column;
+}
+.comments-box-header {
+    margin: 0;
+}
+
+.comments-box-header > * {
+    margin: 0;
+}
+
+.comments-box-scollable{
+    overflow-y: scroll;
+    width: 90%;
+    max-height: 500px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.comments-btn{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    min-width: 100px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    font-size: 15px;
+    background-color: black;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+.comments-btn:hover{
+    border: none;
+    outline: none;
+}
+
+@media screen and (max-width: 1319px) {
+    .comments-box {
+        margin-right: 10%;
+        margin-left: 10%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .comments-box {
+        flex-direction: column;
+        margin: 0%;
+    }
+
+    .comments-btn-text{
+        display: none;
+    }
+
+    .comments-btn{
+        background-image: url("../../files/icons/add-comment.png");
+        background-repeat: no-repeat;
+        background-size: 75%;
+        background-position: center;
+        min-width: 50px;
+        min-height: 50px;
+    }
+}
+
+@media screen and (max-width: 310px) {
+    .comments-box-title{
+        margin-left: 0 !important;
+    }
+    .comments-box-star{
+        display: none;
+    }
+}

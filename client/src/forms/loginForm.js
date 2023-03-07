@@ -1,9 +1,4 @@
-const notEmptyValidator = {
-    validate: (value) => {
-        return value.trim().length > 0
-    },
-    message: "El campo no puede estar vacío"
-}
+import { loginValidators } from "../libs/validators/loginValidators";
 
 export const loginInputs = [
     {
@@ -13,7 +8,7 @@ export const loginInputs = [
         defaultValue: "",
         isRequired: true,
         validators: [
-            notEmptyValidator
+            loginValidators.notEmptyValidator
         ]
     },
     {
@@ -23,7 +18,7 @@ export const loginInputs = [
         defaultValue: "",
         isRequired: true,
         validators: [
-            notEmptyValidator
+            loginValidators.notEmptyValidator
         ]
     }
 ]
