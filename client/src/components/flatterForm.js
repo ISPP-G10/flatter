@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import FormInput from './formInput';
 import SolidButton from '../sections/solidButton';
 
-const FlatterForm = forwardRef(({title, inputs, onSubmit, buttonText, showSuperAnimatedButton, numberOfColumns}, ref) => {
+const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimatedButton, numberOfColumns}, ref) => {
 
     const [formValues, setFormValues] = useState({});
 
@@ -34,22 +34,24 @@ const FlatterForm = forwardRef(({title, inputs, onSubmit, buttonText, showSuperA
     }
 
     useEffect(() => {
-        let newFormValues = {};
 
-        inputs && inputs.forEach(input => {
-            newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
-        });
+        if(Object.keys(formValues).length === 0){
+            let newFormValues = {};
 
-        setFormValues(newFormValues);
+            inputs && inputs.forEach(input => {
+                newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
+            });
+
+            setFormValues(newFormValues);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [formValues]);
 
     return (
         <div className="class-profile-form">
-            <p>{title}</p>
             <form className="class-form" style={numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
                     { 
-                        inputs && inputs.map((input, index) => {
+                        Object.keys(formValues).length > 0 && inputs.map((input, index) => {
                             return(
                                 <FormInput  key={index} 
                                             tag={input.tag}
@@ -85,7 +87,6 @@ const FlatterForm = forwardRef(({title, inputs, onSubmit, buttonText, showSuperA
 });
 
 FlatterForm.propTypes = {
-    title: PropTypes.string,
     inputs: PropTypes.array,
     onSubmit: PropTypes.func,
     buttonText: PropTypes.string,
@@ -94,7 +95,6 @@ FlatterForm.propTypes = {
 }
 
 FlatterForm.defaultProps = {
-    title: "",
     inputs: {},
     onSubmit: () => {},
     buttonText: "Enviar",

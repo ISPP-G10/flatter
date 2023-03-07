@@ -73,7 +73,9 @@ const Header = ({scrollY, userLogged}) => {
 
     function handleRegisterSubmit({values}){
 
-        if(!loginFormRef.current.validate()) return;
+        console.log(values);
+
+        if(!registerFormRef.current.validate()) return;
 
         client.mutate({
             mutation: usersAPI.createUser,
@@ -95,7 +97,7 @@ const Header = ({scrollY, userLogged}) => {
 
             navigator('/main-page');
         }).catch((error) => {
-            alert("Ha ocurrido un error en el servidor. Por favor, inténtelo más tarde");
+            alert(error.message.split("\n")[0]);
         });
         
     }
@@ -147,7 +149,6 @@ const Header = ({scrollY, userLogged}) => {
             </header>
             <FlatterModal maxWidth={700} ref={registerModalRef}>
                 <FlatterForm 
-                    title="Regístrate"
                     buttonText="Regístrate"
                     showSuperAnimatedButton
                     numberOfColumns={2}
@@ -161,7 +162,6 @@ const Header = ({scrollY, userLogged}) => {
                 >
 
                 <FlatterForm 
-                    title="Iniciar Sesión"
                     buttonText="Iniciar Sesión"
                     showSuperAnimatedButton
                     inputs={loginInputs}

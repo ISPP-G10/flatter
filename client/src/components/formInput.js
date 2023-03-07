@@ -38,8 +38,8 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired, numberOf
                     </select>
                     <label htmlFor={`${name}`} className="class-form-label" style={numberOfColumns>1 ? {paddingLeft: `1%`} : {}}>{tag}:</label>
                     {
-                        inputErrors.length > 0 && inputErrors.map((error) => {
-                            return(<span className="class-error-message">{error}</span>)
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
                         })
                     }
                 </div>
