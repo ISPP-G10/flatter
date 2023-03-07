@@ -71,6 +71,35 @@ const Header = ({scrollY, userLogged}) => {
         registerModalRef.current.open();
     }
 
+    function handleRegisterSubmit({values}){
+
+        if(!loginFormRef.current.validate()) return;
+
+        client.mutate({
+            mutation: usersAPI.createUser,
+            variables: {
+                firstName: values.first_name,
+                lastName: values.last_name,
+                username: values.username,
+                password: values.password,
+                email: values.email,
+                genre: values.genre,
+                roles: values.role
+            }
+        }).then((response) => {
+            let token = response.data.tokenAuth.token;
+            let username = response.data.tokenAuth.user.username;
+
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', username);
+
+            navigator('/main-page');
+        }).catch((error) => {
+            alert("Ha ocurrido un error en el servidor. Por favor, inténtelo más tarde");
+        });
+        
+    }
+
     useEffect(() => {
         if(isMenuOpen){
             headerMenu.current.style.right = '0';
@@ -116,12 +145,14 @@ const Header = ({scrollY, userLogged}) => {
                 </nav>
                 <div className="wrapper-header-icon--open" ref={headerToggler} onClick={toggleMenu}></div>
             </header>
-            <FlatterModal ref={registerModalRef}>
+            <FlatterModal maxWidth={700} ref={registerModalRef}>
                 <FlatterForm 
                     title="Regístrate"
                     buttonText="Regístrate"
                     showSuperAnimatedButton
+                    numberOfColumns={2}
                     inputs={registerInputs}
+                    onSubmit={handleRegisterSubmit}
                     ref={registerFormRef}/>
             </FlatterModal>
             <FlatterModal 

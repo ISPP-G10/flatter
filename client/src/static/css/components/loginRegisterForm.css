@@ -1,11 +1,10 @@
-.class-form p{
+.class-profile-form p{
 	width: 100%;
 	color: #573b8a;
 	font-size: 2.3em;
 	justify-content: center;
 	display: flex;
-	margin: 0 60px;
-	margin-bottom: 20px;
+	margin-top: 20px;
 	font-weight: bold;
 	cursor: pointer;
 	transition: .5s ease-in-out;
@@ -18,6 +17,10 @@
 	width: 100%;
 	height: 100%;
     background-color: var(--main-button-background-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .class-profile-img{
@@ -38,6 +41,7 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    width: 100%;
 }
 
 .class-form-group{
@@ -83,9 +87,15 @@
     width: auto;
 }
 
-input.class-form-input[required] + label.class-form-label:after {
+input.class-form-input[required] + label.class-form-label:after,
+select.class-form-input[required] + label.class-form-label:after {
 	content: '*';
     color: var(--color-error)!important;
+}
+
+select.class-form-input{
+    font-size: 16px;
+    padding: 0.5em 0;
 }
 
 /* MOBILE */

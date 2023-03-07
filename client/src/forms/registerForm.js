@@ -28,6 +28,19 @@ const emailValidator = {
     message: "El campo debe ser un email válido"
 }
 
+const validGenre = {
+    validate: (value) => {
+        const validGenres = ['Hombre', 'Mujer', 'No Binario', 'Otro'];
+        return validGenres.includes(value);
+    }
+}
+
+const validRole = {
+    validate: (value) => {
+        const validRoles = ['Propietario', 'Inquilino', 'Ambos'];
+        return validRoles.includes(value);
+    }
+}
 
 export const registerInputs = [
     {
@@ -53,6 +66,30 @@ export const registerInputs = [
             noNumbersValidator,
             namesLengthValidator
         ]
+    },
+    {
+        tag: "Género",
+        name: "genre",
+        type: "select",
+        defaultValue: "Hombre",
+        isRequired: true,
+        values: ['Hombre', 'Mujer', 'No Binario', 'Otro'],
+        validators: [
+            notEmptyValidator,
+            validGenre
+        ],
+    },
+    {
+        tag: "Rol",
+        name: "role",
+        type: "select",
+        defaultValue: "Propietario",
+        isRequired: true,
+        values: ['Propietario', 'Inquilino', 'Ambos'],
+        validators: [
+            notEmptyValidator,
+            validRole
+        ],
     },
     {
         tag: "Nombre de usuario",
