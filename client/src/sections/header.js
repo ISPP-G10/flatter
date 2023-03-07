@@ -73,8 +73,6 @@ const Header = ({scrollY, userLogged}) => {
 
     function handleRegisterSubmit({values}){
 
-        console.log(values);
-
         if(!registerFormRef.current.validate()) return;
 
         client.mutate({
