@@ -6,47 +6,47 @@ const ToggleFeatures = () => {
 
     const scheme = [
         {
-            image: require("../static/files/images/mockup-propietarios.png"),
+            image: require("../../static/files/images/mockup-propietarios.png"),
             title: 'Cómo funciona nuestra web',
             subtitle: '¡Entra en nuestra comunidad! Crea una cuenta y publica la/s vivienda/s que te gustaría alquilar. Solo debes preocuparte de aceptar o denegar solicitudes, ¡el resto lo hacemos nosotros!',
             children: [
                 {
-                    image: require("../static/files/icons/upload.png"),
+                    image: require("../../static/files/icons/upload.png"),
                     title: 'Subir ofertas',
                     description: 'Tu especificas los detalles. Simplemente da la información y dejanos darle visibilidad a tu vivienda en nuestra comunidad'
                 }, {
-                    image: require("../static/files/icons/lista-de-verificacion.png"),
+                    image: require("../../static/files/icons/lista-de-verificacion.png"),
                     title: 'Recibir solicitudes',
                     description: 'Flatter te ayudará con tus evaluaciones y localización de posibles inquilinos'
                 }, {
-                    image: require("../static/files/icons/resenas.png"),
+                    image: require("../../static/files/icons/resenas.png"),
                     title: 'Evalúa a tus inquilinos',
                     description: 'Manten una comunicación clara y efectiva en la relación arrendador-inquilino. Siempre podrá valorar a sus arrendatarios y compartir su experiencia al finalizar el contrato'
                 }, {
-                    image: require("../static/files/icons/candado.png"),
+                    image: require("../../static/files/icons/candado.png"),
                     title: 'Pago seguro',
                     description: 'Al alquilar tu vivienda a través de nuestra plataforma puedes disfrutar de un seguro de alquiler sin complicaciones. Nosotros te llevamos el papeleo'
                 }
             ]
         }, {
-            image: require("../static/files/images/mockup-inquilinos.png"),
+            image: require("../../static/files/images/mockup-inquilinos.png"),
             title: 'Cómo funciona nuestra web',
             subtitle: '¡Entra en nuestra comunidad y encuentra el piso y los compañeros perfectos para vivir! Publica la/s vivienda/s que te gustaría alquilar y valora a otros usuarios.',
             children: [
                 {
-                    image: require("../static/files/icons/conversation.png"),
+                    image: require("../../static/files/icons/conversation.png"),
                     title: 'Conoce a tus compañeros',
                     description: 'A través de Flatter puedes contactar con otros usuarios y formar grupos. ¡Así conocerás las manías, gustos y aficiones de las personas con las que convivirás antes de firmar el contrato!'
                 }, {
-                    image: require("../static/files/icons/habilidad.png"),
+                    image: require("../../static/files/icons/habilidad.png"),
                     title: 'Valora a los propietarios',
                     description: 'Puedes influir en la reputación de un arrendador en la plataforma. ¡Así otros usuarios podrán conocer tu experiencia y valorarla!'
                 }, {
-                    image: require("../static/files/icons/user-likes.png"),
+                    image: require("../../static/files/icons/user-likes.png"),
                     title: 'Personaliza tu perfil',
                     description: 'Podrás detallar tus gustos y preferencias para que otros usuarios puedan conocer mejor tu personalidad. Además, te ayudará a encontrar compañeros con los que te sientas cómod@'
                 }, {
-                    image: require("../static/files/icons/resenas.png"),
+                    image: require("../../static/files/icons/resenas.png"),
                     title: 'Valora a tus compañeros',
                     description: 'Al finalizar el contrato, podrás valorar a tus compañeros de piso y compartir tu experiencia. Aunque estas reseñas sean las que más influyen, también puedes valorar a otros usuarios en cualquier momento'
                 }

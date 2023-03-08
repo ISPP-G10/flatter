@@ -16,16 +16,16 @@ class MainAppQuery(object):
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
-    
+
     def resolve_get_property_by_id(self, info, id):
         return Property.objects.get(id=id)
-    
+
     def resolve_get_properties(self, info):
         return Property.objects.all()
         
     def resolve_get_all_tags(self,info):
         return Tag.objects.filter(entity = 'P')
-  
+
     def resolve_get_property_tags(self,info,property):
         property = Property.objects.get(id = property)
         return property.tags.all()

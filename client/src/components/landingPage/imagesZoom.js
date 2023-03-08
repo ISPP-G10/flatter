@@ -1,7 +1,7 @@
-import '../static/css/components/imagesZoom.css';
+import '../../static/css/components/imagesZoom.css';
 import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
-import useWindowDimensions from "../hooks/useWindowDimesions";
+import useWindowDimensions from "../../hooks/useWindowDimesions";
 
 const ZoomingImages = ({imageSet, marginTop}) => {
 
@@ -69,7 +69,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
 
                 let previousTransformData = image.style.transform.substring(0, image.style.transform.lastIndexOf(","));
 
-                let newTransformValue = `${previousTransformData}, 0px)`;
+                let newTransformValue = `${previousTransformData}, 0)`;
 
                 if(value > 0){
                     image.style.top = `50%`;
@@ -98,7 +98,7 @@ const ZoomingImages = ({imageSet, marginTop}) => {
                     let imageStyle = {
                         maxHeight: `${250/(index+1)+125}px`,
                         maxWidth: `${250/(index+1)+125}px`,
-                        transform: `perspective(${((index+1)*750)+1000}px) translate3d(${spiralPoints[index].x}px, ${spiralPoints[index].y}px, 0px)`,
+                        transform: `perspective(${((index+1)*750)+1000}px) translate3d(${spiralPoints[index].x}px, ${spiralPoints[index].y}px, 0)`,
                         zIndex: `${100-index}`
                     }
 

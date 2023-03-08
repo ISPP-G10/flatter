@@ -3,13 +3,15 @@ from authentication.queries import AuthenticationQuery as SchemeAuthenticationQu
 from authentication.mutations import AuthenticationMutation as SchemeAuthenticationMutation
 from mainApp.queries import MainAppQuery as SchemeMainAppQuery
 from mainApp.mutations import PropertyMutation as SchemeMainAppMutation
+from social.mutations import SocialMutation as SchemeSocialMutations
+from social.queries import SocialQueries as SchemeSocialQueries
 
 
-class FlatterQuery(SchemeAuthenticationQuery, SchemeMainAppQuery,graphene.ObjectType):
+
+class FlatterQuery(SchemeAuthenticationQuery, SchemeSocialQueries, SchemeMainAppQuery, graphene.ObjectType):
   pass
 
-class FlatterMutation(SchemeAuthenticationMutation, SchemeMainAppMutation,graphene.ObjectType):
-
+class FlatterMutation(SchemeAuthenticationMutation, SchemeSocialMutations, SchemeMainAppMutation, graphene.ObjectType):
   pass
 
 schema = graphene.Schema(query=FlatterQuery, mutation=FlatterMutation)

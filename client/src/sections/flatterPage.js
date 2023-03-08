@@ -1,6 +1,7 @@
 import Header from "./header"
 import Footer from "./footer"
 
+import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
 const FlatterPage = (props) => {
@@ -9,21 +10,21 @@ const FlatterPage = (props) => {
 
     useEffect(() => {
         document.addEventListener("scroll", (e) => {
-
             setScrollY(window.scrollY);
         });
     });
 
     return(
         <main>
-            <Header scrollY={props.withBackground ? 100 : scrollY} />
+
+            <Header scrollY={props.withBackground ? 100 : scrollY} userLogged={props.userLogged}/>
 
             {
                 props.withBackground ? 
                 (
                     <div className="site-content">
-                            {props.children}
-                            <Footer />
+                        {props.children}
+                        <Footer />
                     </div>    
                 )
                 :
@@ -39,6 +40,14 @@ const FlatterPage = (props) => {
             }
         </main>
     );
+}
+
+FlatterPage.propTypes = {
+    withBackground: PropTypes.bool
+}
+
+FlatterPage.defaultProps = {
+    withBackground: false
 }
 
 export default FlatterPage;
