@@ -78,6 +78,9 @@ class DeleteUserMutation(graphene.Mutation):
     selected_user.delete()
     
     return DeleteUserMutation(user=selected_user)
+  
+
+
 
 class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     user = graphene.Field(FlatterUserType)

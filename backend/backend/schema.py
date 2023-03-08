@@ -1,10 +1,8 @@
 import graphene
-from mainApp.queries import MainAppQuery as SchemeMainAppQuery
-from mainApp.mutations import PropertyMutation as SchemeMainAppMutation
 from authentication.queries import AuthenticationQuery as SchemeAuthenticationQuery
 from authentication.mutations import AuthenticationMutation as SchemeAuthenticationMutation
 from mainApp.queries import MainAppQuery as SchemeMainAppQuery
-from mainApp.mutations import MainAppMutation as SchemeMainAppMutation
+from mainApp.mutations import PropertyMutation as SchemeMainAppMutation
 
 
 class FlatterQuery(SchemeAuthenticationQuery, SchemeMainAppQuery,graphene.ObjectType):
