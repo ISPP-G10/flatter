@@ -1,8 +1,36 @@
+from graphene_file_upload.scalars import Upload
+
 from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
+from mainApp.models import Image
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
+
+
+
+
+class AddImageToProperty(graphene.Mutation):
+    class Input:
+        property_title = graphene.String(required=True)
+        file = Upload(required=True)
+
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+
+        property_title = kwargs.get('property_title', '').strip()
+        image = kwargs.get('file', None)
+
+
+        property = Property.objects.get(title=property_title)
+        image = Image.objects.create(image=image)
+        property.images.add(image)
+        property.save()
+
+        return AddImageToProperty(property=property)
+
 
 
 
@@ -201,6 +229,7 @@ class PropertyMutation(graphene.ObjectType):
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
+  add_image_to_property = AddImageToProperty.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 

@@ -22,7 +22,7 @@ class Property(models.Model):
     is_full = models.BooleanField(default=False)
     dimensions = models.IntegerField()
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
-    images = models.ManyToManyField(Image)
+    images = models.ManyToManyField(Image, related_name=_('property_images'))
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
 
 class Review(models.Model):
