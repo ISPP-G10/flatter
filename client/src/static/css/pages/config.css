@@ -15,7 +15,7 @@
     text-align: center;
     font-weight: bold;
     font-size: x-large;
-    width: 90%;
+    width: 97%;
 }
 
 #menu {
@@ -33,6 +33,7 @@
     border-radius: 20px;
     padding: 10px;
     margin-bottom: 3%;
+    width: 70%;
 }
 
 .options {
@@ -75,8 +76,26 @@
         flex-direction: column;
     }
 
+    .title {
+        width: 90%;
+    }
+
     .options{
-        width: 70%;
+        width: 90%;
+
+    }
+
+    .form{
+        width: 90%;
+    }
+
+    .class-form-input {
+        margin-bottom: 15px;
+    }
+
+    .opt{
+        display: block;
+        text-align: center;
     }
     
 }

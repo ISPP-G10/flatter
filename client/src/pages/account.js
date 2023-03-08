@@ -3,35 +3,32 @@ import { useRef } from "react";
 import FlatterForm from "../components/forms/flatterForm";
 import { useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
-import { registerInputs } from "../forms/registerForm";
+import { accountInputs } from "../forms/accountForm";
 
 import '../static/css/pages/config.css';
 
-const Config = () => {
+const Account = () => {
 
     const registerFormRef = useRef(null);
     const client = useApolloClient();
-    const micuenta = useRef(null)
-    const planDePrecio = useRef(null)
 
     const user = {
             first_name: "Rafael",
             last_name: "Ornedo",
             genre: "Hombre",
             role: "Ambos",
-            username: "rafestorn",
-            password: "rafestorn",
+            telefono: "956675234",
+            ubicacion: "Sevilla",
             email: "rafa@gmail.com"
         }
-    const inputs = registerInputs
+    const inputs = accountInputs
 
     inputs[0].defaultValue=user.first_name
     inputs[1].defaultValue=user.last_name
     inputs[2].defaultValue=user.genre
     inputs[3].defaultValue=user.role
-    inputs[4].defaultValue=user.username
-    inputs[5].defaultValue=user.password
-    inputs[6].defaultValue=user.email
+    inputs[4].defaultValue=user.telefono
+    inputs[5].defaultValue=user.email
 
     
     function handleRegisterSubmit({values}){
@@ -58,7 +55,7 @@ const Config = () => {
     }
 
     return(
-        <FlatterPage withBackground>
+        <FlatterPage withBackground userLogged>
             <section id="configBody">
                 <div className="title">CONFIGURACIÓN DE FLATTER</div>
                 <div id="menu">
@@ -66,18 +63,30 @@ const Config = () => {
                         <div><p style={{fontWeight:'bold', fontSize: '25px', color: '#005f8f', marginLeft: '8px', paddingBottom:'15px'
                         , paddingTop:'15px'}}>
                             Opciones</p></div>
-                        <div className="opt" style={{backgroundColor: '#00aaff97'}} ref={micuenta}>
-                            Mi cuenta
+                        <div className="opt" style={{backgroundColor: '#00aaff97'}}>
+                            <a href="/config/account" style={{marginLeft: '5px', marginRight:'5px', height:'20px', textDecorationLine:'none', color: 'black'}}>
+                                <img src={require('../static/files/icons/usuario.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                                Mi cuenta
+                            </a>
                         </div>
-                        <div className="opt" ref={planDePrecio}>Plan de precio</div>
+                        <div className="opt">
+                            <a href="/config/changePassword" style={{marginLeft: '5px', marginRight:'5px', height:'20px', textDecorationLine:'none', color:'black'}}>
+                                <img src={require('../static/files/icons/candado.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                                Cambiar contraseña
+                            </a>
+                        </div>
                     </div>
                     
-                    <div className="form" style={{width: '70%'}}>
+                    <div className="form">
+                        <div style={{display: 'flex', flexDirection: 'row', marginBottom: '5px', marginTop:'10px'}}>
+                            <img src={require('../static/files/icons/usuario.png')} style={{marginLeft: '5px', marginRight:'5px', height:'25px'}}></img>
+                            <p style={{fontWeight:'bold', fontSize: '25px', color: '#005f8f'}}>Mi Cuenta</p>
+                        </div>
                         <FlatterForm
                             buttonText="Actualizar Datos"
                             showSuperAnimatedButton
                             numberOfColumns={2}
-                            inputs={registerInputs}
+                            inputs={inputs}
                             onSubmit={handleRegisterSubmit}
                             ref={registerFormRef}/>
                     </div>
@@ -87,4 +96,4 @@ const Config = () => {
     );
 }
 
-export default Config
+export default Account
