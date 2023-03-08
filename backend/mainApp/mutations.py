@@ -25,11 +25,28 @@ class StandOutProperty(graphene.Mutation):
         property=Property.objects.get(pk=id_property)
         
         #if owner.roles.contains(RoleType.owner) El usuario debe ser OWNER para poder destacar un inmueble
-        if property.is_outstanding==False and owner.flatter_coins>0:  
-            property.is_outstanding=True
-            property.save()
-        return StandOutProperty(property=property)
+        #if property.is_outstanding==False and owner.flatter_coins>0:  
+         #   property.is_outstanding=True
+          #  property.save()
+        #return StandOutProperty(property=property)
         
+        if not owner.roles.filter(role="OWNER").exists():
+          
+          raise ValueError(_("Sólo los propietarios pueden destacar inmuebles"))
+       
+        
+        if  property.is_outstanding==True:
+          
+          raise ValueError(_("El inmueble ya está destacado"))
+        
+        if owner.flatter_coins<=0:
+          raise ValueError(_("Necesitas más flatter coins para destacar un inmueble"))
+        
+        else:
+          property.is_outstanding=True
+          property.save()
+        
+        return StandOutProperty(property=property)
         
 class PropertyMutation(graphene.ObjectType):
   
