@@ -91,6 +91,7 @@ const MainPageSearchForm = () => {
                                     setMinPrice(min);
                                     setMaxPrice(max);
                                 }}
+                                sliderTrackColor='var(--flatter-orange-color)'
                             />
                         </div>
                     </form>

@@ -39,7 +39,12 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
             let newFormValues = {};
 
             inputs && inputs.forEach(input => {
-                newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
+                if(input.type === "interval"){
+                    newFormValues[`min_${input.name}`] = input.min;
+                    newFormValues[`max_${input.name}`] = input.max;
+                }else{
+                    newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
+                }
             });
 
             setFormValues(newFormValues);
@@ -60,6 +65,8 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
                                             values={input.values}
                                             defaultValue={input.defaultValue}
                                             isRequired={input.isRequired}
+                                            minValue={input.min}
+                                            maxValue={input.max}
                                             numberOfColumns={numberOfColumns}
                                             validators={input.validators}
                                             formValues={formValues}

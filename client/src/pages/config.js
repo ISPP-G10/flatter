@@ -1,9 +1,9 @@
 import FlatterPage from "../sections/flatterPage";
-import { useState, useEffect, useRef } from "react";
-import { registerValidators } from "../libs/validators/registerValidators"
+import { useRef } from "react";
 import FlatterForm from "../components/forms/flatterForm";
 import { useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
+import { registerInputs } from "../forms/registerForm";
 
 import '../static/css/pages/config.css';
 
@@ -23,91 +23,17 @@ const Config = () => {
             password: "rafestorn",
             email: "rafa@gmail.com"
         }
+    const inputs = registerInputs
 
-    const registerInputs = [
-        {
-            tag: "Nombre",
-            name: "first_name",
-            type: "text",
-            defaultValue: `${user.first_name}`,
-            isRequired: true,
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.noNumbersValidator,
-                registerValidators.namesLengthValidator
-            ]
-        },
-        {
-            tag: "Apellidos",
-            name: "last_name",
-            type: "text",
-            defaultValue: `${user.last_name}`,
-            isRequired: true,
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.noNumbersValidator,
-                registerValidators.namesLengthValidator
-            ]
-        },
-        {
-            tag: "Género",
-            name: "genre",
-            type: "select",
-            defaultValue: `${user.genre}`,
-            isRequired: true,
-            values: ['Hombre', 'Mujer', 'No Binario', 'Otro'],
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.validGenre
-            ],
-        },
-        {
-            tag: "Rol",
-            name: "role",
-            type: "select",
-            defaultValue: `${user.role}`,
-            isRequired: true,
-            values: ['Propietario', 'Inquilino', 'Ambos'],
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.validRole
-            ],
-        },
-        {
-            tag: "Nombre de usuario",
-            name: "username",
-            type: "text",
-            defaultValue: `${user.username}`,
-            isRequired: true,
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.usernameLengthValidator
-            ]
-        },
-        {
-            tag: "Contraseña",
-            name: "password",
-            type: "password",
-            defaultValue: `${user.password}`,
-            isRequired: true,
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.passwordLengthValidator
-            ]
-        },
-        {
-            tag: "Email",
-            name: "email",
-            type: "email",
-            defaultValue: `${user.email}`,
-            isRequired: true,
-            validators: [
-                registerValidators.notEmptyValidator,
-                registerValidators.emailValidator
-            ]
-        }
-    ]
+    inputs[0].defaultValue=user.first_name
+    inputs[1].defaultValue=user.last_name
+    inputs[2].defaultValue=user.genre
+    inputs[3].defaultValue=user.role
+    inputs[4].defaultValue=user.username
+    inputs[5].defaultValue=user.password
+    inputs[6].defaultValue=user.email
 
+    
     function handleRegisterSubmit({values}){
 
         if(!registerFormRef.current.validate()) return;
