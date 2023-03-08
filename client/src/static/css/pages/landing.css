@@ -451,16 +451,13 @@
   overflow-y: auto;
 }
 
-@media screen and (max-width: 760px) {
-  .info-modal {
-    padding: 20px;
-  }
+.info-modal h3::before {
+  content: '· ';
 }
 
 .info-modal h3 {
-  margin: 10px;
-  text-align: center;
-  color: var(--flatter-blue-color);
+  margin-bottom: 20px;
+  font-size: bolder;
 }
 
 .info-modal p {
@@ -478,4 +475,27 @@
   text-align: center;
   color: var(--flatter-orange-color);
   font-size: 2rem;
+}
+
+.info-modal::-webkit-scrollbar {
+	width: 7px;
+}
+
+.info-modal::-webkit-scrollbar-thumb {
+	background: var(--flatter-orange-color);
+	border-radius: 5px;
+}
+
+@media screen and (max-width: 760px) {
+  .info-modal {
+    padding: 20px;
+  }
+
+  .info-modal h3 {
+    text-align: center;
+  }
+
+  .info-modal h3::before {
+    content: '';
+  }
 }
