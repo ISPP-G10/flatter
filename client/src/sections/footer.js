@@ -31,6 +31,7 @@ const Footer = () => {
                 <li className="menu-item"><Link className="menu-link" to="/">Alquilar habitación</Link></li>
                 <li className="menu-item"><Link className="menu-link" to="/">Publicar mi inmueble</Link></li>
                 <li className="menu-item"><Link className="menu-link" to="/">Encontrar compañeros</Link></li>
+                <li className="menu-item"><Link className="menu-link" to="/privacy">Políticas de privacidad</Link></li>
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>

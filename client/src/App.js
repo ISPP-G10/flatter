@@ -11,6 +11,7 @@ import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
 import Chat from './sections/chat';
+import PrivacyPage from './pages/privacyPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<LandingPage/>}/>
         <Route exact path="/main-page" element={<MainPage/>}/>
+        <Route path="/privacy" element={<PrivacyPage/>}/>
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/searchProperties" element={<SearchProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>

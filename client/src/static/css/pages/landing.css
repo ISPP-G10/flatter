@@ -443,3 +443,39 @@
     transform: rotate(0deg);
   }
 }
+
+/* INFO MODAL */
+
+.info-modal {
+  padding: 10px;
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 760px) {
+  .info-modal {
+    padding: 20px;
+  }
+}
+
+.info-modal h3 {
+  margin: 10px;
+  text-align: center;
+  color: var(--flatter-blue-color);
+}
+
+.info-modal p {
+  text-align: justify;
+  margin-bottom: 30px;
+}
+
+.info-modal-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.info-modal-header h1 {
+  text-align: center;
+  color: var(--flatter-orange-color);
+  font-size: 2rem;
+}

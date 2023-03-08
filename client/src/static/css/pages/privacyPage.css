@@ -1,0 +1,32 @@
+/* General */
+
+.privacy-container {
+    background-color: rgba(185, 196, 208, 0.8);
+    text-align: center;
+    margin: 5%;
+    padding: 50px;
+}
+
+.privacy-container h1 {
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+.privacy-container h3 {
+    color: #976dd0;
+    margin: 30px auto;
+}
+
+.privacy-container p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.privacy-container ul {
+    margin: 0 auto;
+}
+
+.privacy-container li {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
