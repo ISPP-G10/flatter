@@ -9,6 +9,7 @@
     text-align: justify;
     margin: 5%;
     padding: 50px;
+    border-radius: 20px;
 }
 
 .privacy-container h1 {
@@ -44,4 +45,14 @@
 .privacy-container li {
     margin: 10px 0;
     font-size: 1.2em;
+}
+
+@media screen and (max-width: 769px) {
+    .privacy-container h3 {
+        text-align: center;
+    }
+
+    .privacy-container h3::before {
+        content: '';
+    }
 }
