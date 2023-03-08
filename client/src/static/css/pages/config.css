@@ -1,0 +1,82 @@
+#configBody {
+    margin-top: 50px;
+  }
+
+.title {
+    background-color: #00A8FF;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 0.1rem solid;
+    border-color: #41414144;
+    border-radius: 20px;
+    padding: 15px;
+    margin-bottom: 3%;
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+    width: 90%;
+}
+
+#menu {
+    display: flex;
+    flex-direction: row;
+}
+
+.form {
+    background-color: rgba(255, 255, 255, 0.807);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 0.1rem solid;
+    border-color: #41414144;
+    border-radius: 20px;
+    padding: 10px;
+    margin-bottom: 3%;
+}
+
+.options {
+    background-color: white;
+    /* display: flex;
+    flex-direction: column; */
+    position: relative;
+    border: 0.1rem solid;
+    border-color: #00A8FF;
+    border-radius: 20px;
+    padding: 2px;
+    margin-bottom: 3%;
+    width: 25%;
+}
+
+.opt{
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    border: 0.1rem solid;
+    border-color: #00A8FF;
+    border-radius: 10px;
+    width: 100%;
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.opt:hover {
+    color: #00547e;
+}
+
+.login-page-form > *{
+    display: flex;
+}
+
+@media screen and (max-width: 730px) {
+    #menu {
+        flex-direction: column;
+    }
+
+    .options{
+        width: 70%;
+    }
+    
+}
