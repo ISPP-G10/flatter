@@ -1,19 +1,14 @@
-from graphene_file_upload.scalars import Upload
-
 from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
 from mainApp.models import Image
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
-
-
-
-
+import base64, random, string
 class AddImageToProperty(graphene.Mutation):
     class Input:
         property_title = graphene.String(required=True)
-        file = Upload(required=True)
+        image = graphene.String(required=True)
 
     property = graphene.Field(PropertyType)
 
@@ -21,13 +16,17 @@ class AddImageToProperty(graphene.Mutation):
     def mutate(self, info, **kwargs):
 
         property_title = kwargs.get('property_title', '').strip()
-        image = kwargs.get('file', None)
+        image = kwargs.get('image', '')
+        
+        imgdata = base64.b64decode(image.split(',')[1])
+        filename = 'media/properties/images/' + random_string(property_title) + '.png'
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
 
-
-        property = Property.objects.get(title=property_title)
-        image = Image.objects.create(image=image)
-        property.images.add(image)
-        property.save()
+        # property = Property.objects.get(title=property_title)
+        # image = Image.objects.create(image=image)
+        # property.images.add(image)
+        # property.save()
 
         return AddImageToProperty(property=property)
 
@@ -236,3 +235,12 @@ class PropertyMutation(graphene.ObjectType):
 def _exists_property(title):
     return Property.objects.filter(title=title).exists()
 
+def random_string(atributo):
+    # Obtenemos las primeras tres letras del atributo
+    prefijo = atributo[:3].lower()
+    # Generamos una cadena aleatoria de cuatro caracteres
+    sufijo = ''.join(random.choices(string.ascii_lowercase, k=4))
+    # Combinamos el prefijo y el sufijo para formar el nombre
+    random_string = prefijo + sufijo
+    
+    return random_string

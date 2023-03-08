@@ -7,22 +7,37 @@ const FileUploadTest = () => {
     const client = useApolloClient();
 
     function handleClick(){
-        let value = inputTest.current.value;
+        let value = inputTest.current.files;
 
-        client.mutate({
-            mutation: gql``,
-            variables: {
-                image: value
-            }
-        })
-        .then((response) => console.log(response)
-        .catch((error) => console.log(error)));
+        console.log(value[0]);
+
+        var reader = new FileReader();
+        reader.readAsDataURL(value[0]);
+        reader.onload = function () {
+            client.mutate({
+                mutation: gql`
+                    mutation addImageToProperty($image: String!, $propertyTitle: String!){
+                        addImageToProperty(image: $image, propertyTitle: $propertyTitle){
+                            property{
+                                location
+                            }
+                        }
+                    }`,
+                variables: {
+                    propertyTitle: "test",
+                    image: reader.result
+                },
+    
+            })
+            .then((response) => console.log(response)
+            .catch((error) => console.log(error)));
+        };
     }
 
     return(
         <>
             <input type="file" name="test_file" ref={inputTest}/>
-            <button onClick={handleClick}></button>    
+            <button onClick={handleClick}>asdasd</button>    
         </>
     )
 }

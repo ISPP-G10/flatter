@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class Image(models.Model):
-    image = models.ImageField( upload_to='property/images/', blank=True, null=True)
+    image = models.ImageField( upload_to='properties/images/', blank=True, null=True)
     
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
