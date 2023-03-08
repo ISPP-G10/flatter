@@ -1,0 +1,698 @@
+[
+  {
+    "model": "authentication.tag",
+    "pk": 1,
+    "fields": {
+      "name": "Amistoso",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 2,
+    "fields": {
+      "name": "Creativo",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 3,
+    "fields": {
+      "name": "Inteligente",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 4,
+    "fields": {
+      "name": "Sincero",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 5,
+    "fields": {
+      "name": "Generoso",
+      "entity": "U",
+      "color": "#2196F3"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 6,
+    "fields": {
+      "name": "Amante del fútbol",
+      "entity": "U",
+      "color": "#008CBA"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 7,
+    "fields": {
+      "name": "Fan de Marvel",
+      "entity": "U",
+      "color": "#F012BE"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 8,
+    "fields": {
+      "name": "Amable",
+      "entity": "U",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 9,
+    "fields": {
+      "name": "Comprensivo",
+      "entity": "U",
+      "color": "#607D8B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 10,
+    "fields": {
+      "name": "Divertido",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 11,
+    "fields": {
+      "name": "Audaz",
+      "entity": "U",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 12,
+    "fields": {
+      "name": "Apasionado",
+      "entity": "U",
+      "color": "#F44336"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 13,
+    "fields": {
+      "name": "Persistente",
+      "entity": "U",
+      "color": "#8BC34A"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 14,
+    "fields": {
+      "name": "Honesto",
+      "entity": "U",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 15,
+    "fields": {
+      "name": "Respetuoso",
+      "entity": "U",
+      "color": "#795548"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 16,
+    "fields": {
+      "name": "Cariñoso",
+      "entity": "U",
+      "color": "#CDDC39"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 17,
+    "fields": {
+      "name": "Amante de la música",
+      "entity": "U",
+      "color": "#00BCD4"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 18,
+    "fields": {
+      "name": "Amante de la lectura",
+      "entity": "U",
+      "color": "#009688"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 19,
+    "fields": {
+      "name": "Cocinar",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 20,
+    "fields": {
+      "name": "Naturaleza",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 21,
+    "fields": {
+      "name": "Animales",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 22,
+    "fields": {
+      "name": "Videojuegos",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 23,
+    "fields": {
+      "name": "Tecnología",
+      "entity": "U",
+      "color": "#2196F3"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 24,
+    "fields": {
+      "name": "Fotografía",
+      "entity": "U",
+      "color": "#008CBA"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 25,
+    "fields": {
+      "name": "Astronomía",
+      "entity": "U",
+      "color": "#F012BE"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 26,
+    "fields": {
+      "name": "Historia",
+      "entity": "U",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 27,
+    "fields": {
+      "name": "Ciencia",
+      "entity": "U",
+      "color": "#607D8B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 28,
+    "fields": {
+      "name": "Política",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 29,
+    "fields": {
+      "name": "Filosofía",
+      "entity": "U",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 30,
+    "fields": {
+      "name": "Economía",
+      "entity": "U",
+      "color": "#F44336"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 31,
+    "fields": {
+      "name": "Psicología",
+      "entity": "U",
+      "color": "#8BC34A"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 32,
+    "fields": {
+      "name": "Biología",
+      "entity": "U",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 33,
+    "fields": {
+      "name": "Química",
+      "entity": "U",
+      "color": "#795548"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 34,
+    "fields": {
+      "name": "Física",
+      "entity": "U",
+      "color": "#CDDC39"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 35,
+    "fields": {
+      "name": "LGTBIQ+",
+      "entity": "U",
+      "color": "#00BCD4"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 36,
+    "fields": {
+      "name": "Ambicioso",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 37,
+    "fields": {
+      "name": "Artístico",
+      "entity": "U",
+      "color": "#F44336"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 38,
+    "fields": {
+      "name": "Atlético",
+      "entity": "U",
+      "color": "#2196F3"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 39,
+    "fields": {
+      "name": "Auténtico",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 40,
+    "fields": {
+      "name": "Aventurero",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 41,
+    "fields": {
+      "name": "Bromista",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 42,
+    "fields": {
+      "name": "Limpieza",
+      "entity": "U",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 43,
+    "fields": {
+      "name": "Comunicativo",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 44,
+    "fields": {
+      "name": "Coqueto",
+      "entity": "U",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 45,
+    "fields": {
+      "name": "Cultural",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 46,
+    "fields": {
+      "name": "Curioso",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 47,
+    "fields": {
+      "name": "Deportista",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 48,
+    "fields": {
+      "name": "Emprendedor",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 49,
+    "fields": {
+      "name": "Entusiasta",
+      "entity": "U",
+      "color": "#F44336"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 50,
+    "fields": {
+      "name": "Fashionista",
+      "entity": "U",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 51,
+    "fields": {
+      "name": "Foodie",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 52,
+    "fields": {
+      "name": "Futbolero",
+      "entity": "U",
+      "color": "#2196F3"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 53,
+    "fields": {
+      "name": "Gamer",
+      "entity": "U",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 54,
+    "fields": {
+      "name": "Gastronómico",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 55,
+    "fields": {
+      "name": "Geek",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 56,
+    "fields": {
+      "name": "Hipster",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 57,
+    "fields": {
+      "name": "Metalero",
+      "entity": "U",
+      "color": "#616161"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 58,
+    "fields": {
+      "name": "Rapero",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 59,
+    "fields": {
+      "name": "Reggaetonero",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 60,
+    "fields": {
+      "name": "Rockero",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 61,
+    "fields": {
+      "name": "Rumbero",
+      "entity": "U",
+      "color": "#F44336"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 62,
+    "fields": {
+      "name": "Salsómano",
+      "entity": "U",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 63,
+    "fields": {
+      "name": "Skater",
+      "entity": "U",
+      "color": "#607D8B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 64,
+    "fields": {
+      "name": "Dark",
+      "entity": "U",
+      "color": "#000000"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 65,
+    "fields": {
+      "name": "Emo",
+      "entity": "U",
+      "color": "#8BC34A"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 66,
+    "fields": {
+      "name": "Rocker",
+      "entity": "U",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 67,
+    "fields": {
+      "name": "Gótico",
+      "entity": "u",
+      "color": "#FF00FF"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 68,
+    "fields": {
+      "name": "Fútbol",
+      "entity": "u",
+      "color": "#2196F3"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 69,
+    "fields": {
+      "name": "Baloncesto",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 70,
+    "fields": {
+      "name": "Tenis",
+      "entity": "U",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 71,
+    "fields": {
+      "name": "Golf",
+      "entity": "U",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 72,
+    "fields": {
+      "name": "Atletismo",
+      "entity": "U",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 73,
+    "fields": {
+      "name": "Natación",
+      "entity": "U",
+      "color": "#03A9F4"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 74,
+    "fields": {
+      "name": "Béisbol",
+      "entity": "U",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 75,
+    "fields": {
+      "name": "Voleibol",
+      "entity": "U",
+      "color": "#9E9E9E"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 76,
+    "fields": {
+      "name": "Matemáticas",
+      "entity": "U",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 77,
+    "fields": {
+      "name": "Informática",
+      "entity": "U",
+      "color": "#FF5722"
+    }
+  }
+]
+
+
+
