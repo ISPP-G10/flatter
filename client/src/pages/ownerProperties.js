@@ -62,7 +62,7 @@ return (
   
             <label>
               Precio
-              <MultiRangeSlider min="5" max="2000"/>
+              <MultiRangeSlider min="5" max="2000" onChange={({min, max}) => {}}/>
             </label>
   
             <label>
