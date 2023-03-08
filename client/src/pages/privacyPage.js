@@ -15,12 +15,17 @@ const PrivacyPage = () => {
           relacionada con nuestra política de privacidad, no dude en ponerse en
           contacto con nosotros.
         </p>
-        <p>
-          Nombre de la empresa: Flatter
-          <br />
-          Correo electrónico de contacto:{" "}
-          <a href="mailto:flatter@gmail.com">flatter@gmail.com</a>
-        </p>
+        <br/>
+        <ul>
+          <li>
+            <span className="strong-text">Nombre de la empresa:</span> Flatter
+          </li>
+          <li>
+            <span className="strong-text">Correo electrónico de contacto:</span>{" "}
+            <a href="mailto:flatter.ispp@gmail.com">flatter@gmail.com</a>
+          </li>
+        </ul>
+        <br/>
         <p>
           Lamentablemente, actualmente no tenemos una dirección física. Sin
           embargo, puede contactarnos por correo electrónico y le responderemos
@@ -39,39 +44,41 @@ const PrivacyPage = () => {
           través de nuestra aplicación, Flatter recopila los siguientes datos
           personales de los usuarios:
         </p>
+        <br/>
         <ul>
           <li>
-            Nombre y apellidos: se recopila esta información para identificar al
+            <span className="strong-text">Nombre y apellidos:</span> se recopila esta información para identificar al
             usuario y personalizar su experiencia en la plataforma.
           </li>
           <li>
-            Correo electrónico: se recopila para poder enviar comunicaciones
+            <span className="strong-text">Correo electrónico:</span> se recopila para poder enviar comunicaciones
             relevantes a los usuarios sobre su cuenta y los servicios de
             Flatter.
           </li>
           <li>
-            Teléfono de contacto: se recopila para poder contactar con los
+            <span className="strong-text">Teléfono de contacto:</span> se recopila para poder contactar con los
             usuarios en caso de necesidad relacionada con su reserva.
           </li>
           <li>
-            Nombre de usuario y contraseña: se recopila para permitir el acceso
+            <span className="strong-text">Nombre de usuario y contraseña:</span> se recopila para permitir el acceso
             seguro y personalizado a la plataforma.
           </li>
           <li>
-            Fotografía de perfil: se recopila para permitir que los usuarios
+            <span className="strong-text">Fotografía de perfil:</span> se recopila para permitir que los usuarios
             personalicen su cuenta y se identifiquen ante otros usuarios.
           </li>
           <li>
-            Género: se recopila para personalizar la experiencia del usuario en
+            <span className="strong-text">Género:</span> se recopila para personalizar la experiencia del usuario en
             la plataforma y ofrecer recomendaciones de alojamientos adecuados a
             sus preferencias.
           </li>
           <li>
-            Etiquetas de preferencias de usuario: se recopilan para personalizar
+            <span className="strong-text">Etiquetas de preferencias de usuario:</span> se recopilan para personalizar
             la experiencia del usuario en la plataforma y ofrecer
             recomendaciones de alojamientos adecuados a sus preferencias.
           </li>
         </ul>
+        <br/>
         <p>
           Flatter se compromete a tratar los datos personales de los usuarios
           con la máxima confidencialidad y a utilizarlos únicamente para los
@@ -85,6 +92,7 @@ const PrivacyPage = () => {
           de preferencias de usuario, serán utilizados únicamente para los fines
           específicos para los que han sido recopilados, y en particular para:
         </p>
+        <br/>
         <ul>
           <li>
             Personalizar la experiencia de los usuarios en la plataforma,
@@ -108,6 +116,7 @@ const PrivacyPage = () => {
             preferencias.
           </li>
         </ul>
+        <br/>
         <p>
           Flatter se compromete a no utilizar los datos personales de los
           usuarios para fines distintos a los anteriormente descritos, ni a
