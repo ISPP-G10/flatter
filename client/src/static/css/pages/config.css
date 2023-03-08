@@ -71,6 +71,11 @@
     display: flex;
 }
 
+a{
+    display: block;
+    margin-bottom: 20px;
+}
+
 @media screen and (max-width: 730px) {
     #menu {
         flex-direction: column;

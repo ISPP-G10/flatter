@@ -1,42 +1,18 @@
 import FlatterPage from "../sections/flatterPage";
 import { useRef } from "react";
 import FlatterForm from "../components/forms/flatterForm";
-import { useApolloClient } from "@apollo/client";
-import usersAPI from "../api/usersAPI";
 import { changePasswordInputs } from "../forms/changePasswordForm";
-import OptionMenu from "../components/config/optionsMenu";
 
 import '../static/css/pages/config.css';
 
 const ChangePassword = () => {
 
     const registerFormRef = useRef(null);
-    const client = useApolloClient();
 
     const inputs = changePasswordInputs;
 
-    
-    function handleRegisterSubmit({values}){
-
-        if(!registerFormRef.current.validate()) return;
-
-        client.mutate({
-            mutation: usersAPI.createUser,
-            variables: {
-                firstName: values.first_name,
-                lastName: values.last_name,
-                username: values.username,
-                password: values.password,
-                email: values.email,
-                genre: values.genre,
-                roles: values.role
-            }
-        }).then((response) => {
-            navigator('/config');
-        }).catch((error) => {
-            alert(error.message.split("\n")[0]);
-        });
-        
+    function handleChangePasswordSubmit({values}){
+        return null;
     }
 
     return(
@@ -44,7 +20,24 @@ const ChangePassword = () => {
             <section id="configBody">
                 <div className="title">CONFIGURACIÓN DE FLATTER</div>
                 <div id="menu">
-                    <OptionMenu/>
+                    <div className="options">
+                        <div><p style={{fontWeight:'bold', fontSize: '25px', color: '#005f8f', marginLeft: '8px', paddingBottom:'15px'
+                            , paddingTop:'15px'}}>
+                                Opciones</p></div>
+                        <a href="/config/account" style={{marginLeft: '5px', marginRight:'5px', height:'20px', textDecorationLine:'none', color: 'black'}}>
+                            <div className="opt">
+                                <img src={require('../static/files/icons/usuario.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                                Mi cuenta
+                            </div>
+                        </a>
+                        <a href="/config/changePassword" style={{marginLeft: '5px', marginRight:'5px', height:'20px',
+                        textDecorationLine:'none', color:'black'}}>
+                            <div className="opt" style={{backgroundColor: '#00aaff76'}}>
+                                <img src={require('../static/files/icons/candado.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                                Cambiar contraseña
+                            </div>
+                        </a>
+                    </div>
                     <div className="form">
                         <div style={{display: 'flex', flexDirection: 'row', marginBottom: '5px', marginTop:'10px'}}>
                             <img src={require('../static/files/icons/candado.png')} style={{marginLeft: '5px', marginRight:'5px', height:'25px'}}></img>
@@ -55,7 +48,7 @@ const ChangePassword = () => {
                             showSuperAnimatedButton
                             numberOfColumns={1}
                             inputs={inputs}
-                            onSubmit={handleRegisterSubmit}
+                            onSubmit={handleChangePasswordSubmit}
                             ref={registerFormRef}/>
                     </div>
                 </div>
