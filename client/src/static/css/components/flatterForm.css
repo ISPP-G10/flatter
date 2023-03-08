@@ -37,7 +37,8 @@
     position: relative;
 }
 
-.class-form-input{
+input.class-form-input,
+select.class-form-input{
     width: 100%;
     font-family: inherit;
     font-size: 1rem;
@@ -47,6 +48,18 @@
     outline: none;
     border-bottom: 1px solid var(--main-button-hover-dark-color);
     background-color: transparent;
+}
+
+textarea.class-form-input{
+    width: 100%;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--color-input);
+    padding: .6em .3em;
+    border: 1px solid var(--main-button-hover-dark-color);
+    outline: none;
+    background-color: transparent;
+    resize: none;
 }
 
 .class-form-label{
@@ -60,7 +73,8 @@
 }
 
 .class-form-input:focus + .class-form-label,
-.class-form-input:not(:placeholder-shown) + .class-form-label{ 
+.class-form-input:not(:placeholder-shown) + .class-form-label,
+.interval-group > label{ 
     transform: translateY(-15px) scale(.7);
     transform-origin: top left;
     color: var(--main-button-hover-dark-color);
@@ -77,7 +91,8 @@
 }
 
 input.class-form-input[required] + label.class-form-label:after,
-select.class-form-input[required] + label.class-form-label:after {
+select.class-form-input[required] + label.class-form-label:after,
+textarea.class-form-input[required] + label.class-form-label:after {
 	content: '*';
     color: var(--color-error)!important;
 }

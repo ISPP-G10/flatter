@@ -13,9 +13,9 @@
 
   /* Inputs */
 
-  --price-slider-color: var(--flatter-blue-color);
-  --price-slider-track-color: #ced4da;
-  --price-slider-text-color: black;
+  --price-range-slider-color: var(--flatter-purple-color);
+  --price-range-slider-track-color: #ced4da;
+  --price-range-slider-text-color: black;
   --checker-button-color: rgb(158, 158, 158);
   --checker-track-color: rgb(217, 217, 217);
 
