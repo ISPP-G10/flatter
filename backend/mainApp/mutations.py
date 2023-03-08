@@ -1,16 +1,43 @@
+from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
+
 from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
 
+
+
+class AddTagToProperty(graphene.Mutation):
+  
+  class Input:
+    id = graphene.Int(required=True)
+    tag = graphene.String(required=True)
+
+  property = graphene.Field(PropertyType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    id = kwargs.get('id', '')
+    tag = kwargs.get('tag', '').strip()
+    
+    selected_property = Property.objects.get(id=id)
+    tag = Tag.objects.get_or_create(name=tag, entity='P')
+    
+    selected_property_tags = selected_property.tags.all()
+    if len(selected_property_tags)<8:
+      selected_property.tags.add(tag[0])
+    else:
+      raise ValueError(_("Este inmueble ya tiene el máximo número de tags posibles"))
+    
+    return AddTagToProperty(property=selected_property)
 
 class CreatePropertyMutation(graphene.Mutation):
 
   class Input:
     title = graphene.String(required=True)
     description = graphene.String(required=True)
-    bedrooms_number = graphene.Int(required=False)
+    bedrooms_number = graphene.Int(required=True)
     bathrooms_number = graphene.Int(required=True)
     price = graphene.Float(required=True)
     location = graphene.String(required=True)
@@ -32,29 +59,29 @@ class CreatePropertyMutation(graphene.Mutation):
     dimensions = kwargs.get("dimensions", "")
     ownerId = kwargs.get("ownerId", "")
     
-    if not title or len(title) < 6 or len(title) > 25:
-      raise ValueError(_("El título debe tener entre 6 y 24 caracteres"))
+    if not title or len(title) < 4 or len(title) > 25:
+      raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
     
-    if not description or len(description) < 9 or len(description) > 256:
-      raise ValueError(_("La descripción debe tener al menos 10 caracteres y 255 caracteres"))
+    if not description or len(description) > 256:
+      raise ValueError(_("La descripción no puede tener más de 256 caracteres"))
     
-    if not bedrooms_number or bedrooms_number > 8:
-      raise ValueError(_("El número de dormitorios no debe ser mayor a 7"))
+    if not bedrooms_number or bedrooms_number < 1:
+      raise ValueError(_("El número de dormitorios no debe ser inferior a 1"))
     
-    if not bathrooms_number or bathrooms_number > 4:
-      raise ValueError(_("El número de cuartos de baño no debe ser mayor a 3"))
+    if not bathrooms_number or bathrooms_number < 1:
+      raise ValueError(_("El número de cuartos de baño no debe ser inferior a 1"))
     
-    if not price or price < 1 or price > 1000:
-      raise ValueError(_("El precio debe estar entre 1 y 999€"))
+    if not price or price < 1:
+      raise ValueError(_("El precio debe tener un valor positivo"))
     
-    if not location or len(location) < 9 or len(location) > 16:
-      raise ValueError(_("La localización debe tener entre 6 y 15 caracteres"))
+    if not location or len(location) < 4 or len(location) > 16:
+      raise ValueError(_("La localización debe tener entre 4 y 16 caracteres"))
     
-    if len(province) and len(province) > 10:
-      raise ValueError(_("La provincia debe tener máximo 10 caracteres"))
+    if not province or len(province) > 15:
+      raise ValueError(_("La provincia debe tener máximo 15 caracteres"))
     
-    if dimensions and dimensions > 200:
-      raise ValueError(_("Las dimensiones deben ser máximo de 200 metros cuadrados"))
+    if not dimensions or dimensions < 1:
+      raise ValueError(_("Las dimensiones deben poseer un valor positivo"))
     
     if _exists_property(title):
       raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
@@ -108,52 +135,67 @@ class UpdatePropertyMutation(graphene.Mutation):
 
       @staticmethod
       def mutate(root, info, **kwargs):
-        title = kwargs.get('title', '').strip()
-        description = kwargs.get('description', '').strip()
-        bedrooms_number = kwargs.get("bedrooms_number", "")
-        bathrooms_number = kwargs.get("bathrooms_number", "")
-        price = kwargs.get("price", "")
-        location = kwargs.get("location", "").strip()
-        province = kwargs.get("province", "").strip()
-        dimensions = kwargs.get("dimensions", "")
-        propertyId = kwargs.get("propertyId", "")
+        title = kwargs.get('title', '').strip() if 'title' in kwargs else None
+        description = kwargs.get('description', '').strip() if 'description' in kwargs else None
+        bedrooms_number = kwargs.get("bedrooms_number", "") if 'bedrooms_number' in kwargs else None
+        bathrooms_number = kwargs.get("bathrooms_number", "") if 'bathrooms_number' in kwargs else None
+        price = kwargs.get("price", "") if 'price' in kwargs else None
+        location = kwargs.get("location", "").strip() if 'location' in kwargs else None
+        province = kwargs.get("province", "").strip() if 'province' in kwargs else None
+        dimensions = kwargs.get("dimensions", "") if 'dimensions' in kwargs else None
+        propertyId = kwargs.get("propertyId", "") if 'propertyId' in kwargs else None
 
         #ToDo FALTARÍA SABER QUIÉN ESTA INICIADA LA SESIÓN (SI ES OWNER O ADMIN)
       
-        if not title or len(title) < 6 or len(title) > 25:
-          raise ValueError(_("El título debe tener entre 6 y 24 caracteres"))
+        if  title and (len(title) < 4 or len(title) > 25):
+          raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
         
-        if not description or len(description) < 9 or len(description) > 256:
-          raise ValueError(_("La descripción debe tener al menos 10 caracteres y 255 caracteres"))
+        if description and len(description) > 256:
+          raise ValueError(_("La descripción no puede tener más de 256 caracteres"))
         
-        if not bedrooms_number or bedrooms_number > 8:
-          raise ValueError(_("El número de dormitorios no debe ser mayor a 7"))
+        if bedrooms_number and bedrooms_number < 1:
+          raise ValueError(_("El número de dormitorios no debe ser inferior a 1"))
         
-        if not bathrooms_number or bathrooms_number > 4:
-          raise ValueError(_("El número de cuartos de baño no debe ser mayor a 3"))
+        if bathrooms_number and bathrooms_number < 1:
+          raise ValueError(_("El número de cuartos de baño no debe ser inferior a 1"))
         
-        if not price or price < 1 or price > 1000:
-          raise ValueError(_("El precio debe estar entre 1 y 999€"))
+        if price and price < 1:
+          raise ValueError(_("El precio debe tener un valor positivo"))
         
-        if not location or len(location) < 9 or len(location) > 16:
-          raise ValueError(_("La localización debe tener entre 6 y 15 caracteres"))
+        if location and (len(location) < 4 or len(location) > 16):
+          raise ValueError(_("La localización debe tener entre 4 y 16 caracteres"))
         
-        if len(province) and len(province) > 10:
-          raise ValueError(_("La provincia debe tener máximo 10 caracteres"))
+        if province and len(province) > 16:
+          raise ValueError(_("La provincia debe tener máximo 16 caracteres"))
         
-        if dimensions and dimensions > 200:
-          raise ValueError(_("Las dimensiones deben ser máximo de 200 metros cuadrados"))
+        if dimensions and dimensions < 1:
+          raise ValueError(_("Las dimensiones deben poseer un valor positivo"))
         
         property_edit = Property.objects.get(pk=propertyId)
 
-        property_edit.title = title
-        property_edit.description = description
-        property_edit.bedrooms_number = bedrooms_number
-        property_edit.bathrooms_number = bathrooms_number
-        property_edit.price = price
-        property_edit.location = location
-        property_edit.province = province
-        property_edit.dimensions = dimensions
+        if title:
+          property_edit.title = title
+        
+        if description:
+          property_edit.description = description
+
+        if bedrooms_number:
+          property_edit.bedrooms_number = bedrooms_number  
+        
+        if bathrooms_number:
+          property_edit.bathrooms_number = bathrooms_number
+
+        if price:
+          property_edit.price = price
+
+        if location:
+          property_edit.location = location
+
+        if province:
+          property_edit.province = province
+
+        if dimensions:  
+          property_edit.dimensions = dimensions
 
         property_edit.save()
 
@@ -175,6 +217,8 @@ class PropertyMutation(graphene.ObjectType):
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
   delete_property = DeleteInmuebleMutation.Field()
+  add_tag_to_property = AddTagToProperty.Field()
+
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
@@ -186,4 +230,5 @@ def _exists_property(title):
 
 
   
+
 
