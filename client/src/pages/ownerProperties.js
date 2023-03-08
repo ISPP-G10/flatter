@@ -4,9 +4,9 @@ import Slider from "../components/slider/slider";
 
 import { useParams } from "react-router-dom";
 
-import RangeSelector from "../sections/rangeSelector";
 import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
+import MultiRangeSlider from "../components/inputs/multiRangeSlider";
 
 const OwnerProperties = () => {
 
@@ -62,7 +62,7 @@ return (
   
             <label>
               Precio
-              <RangeSelector min="5" max="2000" />
+              <MultiRangeSlider min="5" max="2000"/>
             </label>
   
             <label>

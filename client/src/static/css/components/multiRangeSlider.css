@@ -1,13 +1,15 @@
 .container {
-  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 30px;
+  width: 100%;
+  position: relative;
 }
 
 .slider {
   position: relative;
-  width: 200px;
+  width: 100%;
 }
 
 .slider__track,
@@ -24,19 +26,19 @@
 }
 
 .slider__track {
-  background-color: var(--price-slider-track-color);
+  background-color: var(--price-range-slider-track-color);
   width: 100%;
   z-index: 1;
 }
 
 .slider__range {
-  background-color: var(--price-slider-color);
+  background-color: var(--price-range-slider-color);
   z-index: 2;
 }
 
 .slider__left-value,
 .slider__right-value {
-  color: var(--price-slider-text-color);
+  color: var(--price-range-slider-text-color);
   font-weight: bolder;
   font-size: 12px;
   margin-top: 20px;
@@ -60,17 +62,20 @@
 .thumb {
   pointer-events: none;
   position: absolute;
+  top: 50%;
   height: 0;
-  width: 200px;
+  width: 100%;
   outline: none;
 }
 
 .thumb--left {
   z-index: 3;
+  left: 0;
 }
 
 .thumb--right {
   z-index: 4;
+  right: 0;
 }
 
 /* For Chrome browsers */

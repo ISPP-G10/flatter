@@ -42,7 +42,6 @@ const Header = ({scrollY, userLogged}) => {
     }
 
     function handleLoginSubmit({values}){
-
         if(!loginFormRef.current.validate()) return;
 
         client.mutate({

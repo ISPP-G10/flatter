@@ -9,7 +9,7 @@ const PublicProfileCard = () => {
                 <h2>Lucía Martín</h2>
                 <p>Estudiante en Universidad de Sevilla</p>
                 <p>24 años</p>
-                <img className='photo' src={require('../../static/files/images/foto.jpg')} alt='Profile Photo'/>    
+                <img className='photo' src={require('../../static/files/images/foto.jpg')} alt='Profile'/>    
             </div>
             <div className='biografia'>
                 <h2 style={{textAlign: 'left'}}>Yo...</h2>
