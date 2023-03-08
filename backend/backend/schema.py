@@ -7,7 +7,10 @@ from social.mutations import SocialMutation as SchemeSocialMutations
 from social.queries import SocialQueries as SchemeSocialQueries
 
 
+
+
 class FlatterQuery(SchemeAuthenticationQuery, SchemeSocialQueries, SchemeMainAppQuery, graphene.ObjectType):
+
   pass
 
 class FlatterMutation(SchemeAuthenticationMutation, SchemeSocialMutations, SchemeMainAppMutation, graphene.ObjectType):
