@@ -1,3 +1,10 @@
+#TODO danidinogo borrar en vez de pasar a la siguiente rama
+backend/entorno-virtual/
+
+# TODO borrar el archivo antes antes de pasar a la siguiente rama
+#docker/backend/postgres.yml
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

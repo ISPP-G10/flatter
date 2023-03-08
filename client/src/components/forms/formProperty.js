@@ -15,7 +15,6 @@ const FormProperty = ({ property }) => {
         price: {
             label: 'Precio',
             placeholder: '50',
-            default: 50,
             type: 'number',
             flex: 1
         }

@@ -8,7 +8,16 @@ import RangeSelector from "../sections/rangeSelector";
 import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
 
+import FlatterModal from "../components/flatterModal";
+
+import FormProperty from "../components/forms/formProperty";
+import ModalButton from "../components/modalButton";
+
+import { useEffect, useState, useRef } from "react";
+
 const OwnerProperties = () => {
+
+  const addPropertyModalRef = useRef(null);
 
     const exampleProperty = {
         id: 1,
@@ -50,6 +59,13 @@ return (
         <h1 className="properties-title">Todas tus propiedades</h1>
       </div>
   
+      <div class="over-listing">
+        <div classNAme="actions">
+          <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
+              addPropertyModalRef.current.open();
+          } } />
+        </div>
+      </div>
       <section className="site-content-sidebar properties">
         <div className="sidebar">
           <div className="card">
@@ -108,6 +124,10 @@ return (
           ))}
         </div>
       </section>
+
+      <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
+        <FormProperty property={{}} />
+      </FlatterModal>
     </FlatterPage>
   );
 };
