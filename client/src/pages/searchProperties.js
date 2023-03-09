@@ -2,30 +2,75 @@ import "../static/css/pages/searchProperties.css";
 import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
+import SolidButton from "../sections/solidButton";
+import {useApolloClient} from '@apollo/client';
+import {useNavigate} from 'react-router-dom';
 
-const SearchProperties = () => {
+import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
+import propertiesAPI from '../api/propertiesAPI';
+//import usersAPI from '../api/usersAPI';
 
-  return (
+import { useEffect } from 'react';
+
+
+const SearchProperties = ({}) => {
+
+    const client = useApolloClient();
+    const navigator = useNavigate();
+
+    function deleteProperty(id){
+
+          client.mutate({
+              mutation: propertiesAPI.deletePropertyById,
+              variables: {
+                  propertyId: parseInt(id),
+              }
+          }).then((response) => {
+
+              navigator('/searchProperties');
+          }).catch((error) => {
+              console.log(error);
+          });
+      
+    }
+
+    function standOutProperty(idPiso, idPropietario){
+
+      client.mutate({
+          mutation: propertiesAPI.outStandPropertyById,
+          variables: {
+              propertyId: parseInt(idPiso),
+              ownerId: parseInt(idPropietario)
+          }
+      }).then((response) => {
+
+          navigator('/searchProperties');
+      }).catch((error) => {
+          console.log(error);
+      });
+  
+}
+
+    const usern = localStorage.getItem('user','');
+
+    const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
+      username: usern
+    }});
+
+    if (loading) return <p>Loading...</p>
+    // if (loading2) return <p>Loading2...</p>
+
+  return(
     <FlatterPage withBackground userLogged>
       <div>
-        <h1 className="properties-title">Habitaciones en pisos compartidos en Sevilla</h1>
+        <h1 className="properties-title">Tus Propiedades</h1>
       </div>
       <section id="searchView">
         <div className="filterview">
-          <div className="filterview-header">
-
-            <h3>Filtrar por:</h3>
-          </div>
           <div className="filterview-content">
-            <div>Ciudad:</div>
-            <div>
-              <input type="text" name="city" className="text-input" id="city" placeholder="Escribe tu Ciudad"/>
-            </div>
-            <div>Rango de Precio:</div>
-            <input type="text" className="text-input" id="minprice" placeholder="Precio Mínimo"></input>
-            <input type="text" className="text-input" id="maxprice" placeholder="Precio Máximo"></input>
-            <div></div>
-            <button className="styled-button">Filtrar</button>
+            <SolidButton text="Crear Piso">
+
+            </SolidButton>
           </div>
 
           
@@ -34,20 +79,26 @@ const SearchProperties = () => {
         
         <div className="listview">
           <section id="informationView">
+          {
+          data && 
+            (
+              data.getPropertiesByOwner.map ((prop) => { 
+                return(
             <div className="listview">
               <div className="listview-header">
-                <h3>Habitación en Bami cerca de facultades</h3>
+                <h3>{prop.title}</h3>
               </div>
               <div>
-                <div className="prueba"> 
-                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">Sevilla</p>
+                <div className="attrcontainer"> 
+                  <div className="attrindv">
+                    <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
+                    <p className = "location">{prop.province}</p>  
+                  </div>
+                  <div className="attrindvder">
+                    <p className = "team">{prop.price}</p>
+                    <img className="small-picture-back" src={require('../static/files/icons/flattercoins-icon.png')} alt='Precio'/>
+                  </div>
                 </div>
-                <div>
-                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
-                  <p className = "team">2/4</p>
-                </div>
-
               </div>
 
               <div className="listview-content">
@@ -57,195 +108,37 @@ const SearchProperties = () => {
                 </Slider>
               </div>
               <div className="etiquetacontainer">
-                <Tag name="Ejemplo" color="blue"/>
-                <Tag name="Ejemplo" color="blue"/>
-                <Tag name="Ejemplo" color="blue"/>
-                <Tag name="Ejemplo" color="blue"/>
+                {prop && prop.tags.map((tag,index) => {
+                  <div className="etiquetaindv">
+                  <Tag name={tag.title} color={tag.color} key={index}/>
+                  </div>  
+                })
+              }
+                
               </div>
 
 
               <div className="listview-content">
  
-                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias .Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias
-                </p>
+                <p className="small-size">{prop.description}</p>
               </div>
-              <div className="listview-content">
-                <div className="prueba2">
-                  <button className="styled-info-button">Ver piso</button>
+              
+                <div className="btncontainer">
+                    <div className="btnindv">
+                      <button className="styled-info-button">Editar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      {/* hay que sustituir ese 1 por el id del propietario. todavia no se como se consigue */}
+                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id,1)}}>Destacar Piso</button>
+                    </div>
+
                   </div>
-                  <button className="styled-info-button">Reseñas</button>
+                  
               </div>
-            </div>
-
-            <div className="listview">
-              <div className="listview-header">
-                <h3>Habitación en Bami cerca de facultades</h3>
-              </div>
-              <div>
-                <div className="prueba"> 
-                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">Sevilla</p>
-                </div>
-                <div>
-                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
-                  <p className = "team">2/4</p>
-                </div>
-
-              </div>
-
-              <div className="listview-content">
-
-                <Slider>
-
-                </Slider>
-              </div>
-              <div className="etiquetacontainer">
-                <div className="etiquetaindv">
-                  <button className="etiqueta2">Compañerismo</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">LGTB</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Familiar</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Deportes</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Estudios</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Pet-Friendly</button>
-                </div>
-              </div>
-              <div className="listview-content">
- 
-                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias
-                </p>
-              </div>
-              <div className="listview-content">
-                <div className="prueba2">
-                  <button className="styled-info-button">Ver piso</button>
-                  </div>
-                  <button className="styled-info-button">Reseñas</button>
-              </div>
-            </div>
-
-            <div className="listview">
-              <div className="listview-header">
-                <h3>Habitación en Bami cerca de facultades</h3>
-              </div>
-              <div>
-                <div className="prueba"> 
-                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">Sevilla</p>
-                </div>
-                <div>
-                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
-                  <p className = "team">2/4</p>
-                </div>
-
-              </div>
-
-              <div className="listview-content">
-
-                <Slider>
-
-                </Slider>
-              </div>
-              <div className="etiquetacontainer">
-                <div className="etiquetaindv">
-                  <button className="etiqueta2">Compañerismo</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">LGTB</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Familiar</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Deportes</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Estudios</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Pet-Friendly</button>
-                </div>
-              </div>
-              <div className="listview-content">
- 
-                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias
-                </p>
-              </div>
-              <div className="listview-content">
-                <div className="prueba2">
-                  <button className="styled-info-button">Ver piso</button>
-                  </div>
-                  <button className="styled-info-button">Reseñas</button>
-              </div>
-            </div>
-
-            <div className="listview">
-              <div className="listview-header">
-                <h3>Habitación en Bami cerca de facultades</h3>
-              </div>
-              <div>
-                <div className="prueba"> 
-                  <img className="small-picture" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">Sevilla</p>
-                </div>
-                <div>
-                  <img className="small-picture-back" src={require('../static/files/icons/conversation.png')} alt='Ubicacion'/>
-                  <p className = "team">2/4</p>
-                </div>
-
-              </div>
-
-              <div className="listview-content">
-
-                <Slider>
-
-                </Slider>
-              </div>
-              <div className="etiquetacontainer">
-                <div className="etiquetaindv">
-                  <button className="etiqueta2">Compañerismo</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">LGTB</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Familiar</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Deportes</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Estudios</button>
-                </div>
-                <div className="etiquetaindv">
-                  <button className="etiqueta1">Pet-Friendly</button>
-                </div>
-              </div>
-              <div className="listview-content">
- 
-                <p className="small-size">Buscamos 2 integrantes para un piso de hasta 4 personas. Está localizado en el barrio de Bami, cerca de 
-                todas las facultades. El piso tiene 90m2 repartidos en diferentes estancias.
-                </p>
-              </div>
-              <div className="listview-content">
-                <div className="prueba2">
-                  <button className="styled-info-button">Ver piso</button>
-                  </div>
-                  <button className="styled-info-button">Reseñas</button>
-              </div>
-            </div>
+          );}))}
 
           </section>
         </div>
