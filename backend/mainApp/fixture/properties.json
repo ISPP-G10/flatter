@@ -1,0 +1,222 @@
+[  {    "model": "authentication.role",    "pk": 1,    "fields": {      "role": "OWNER"    }  },{    "model": "authentication.role",    "pk": 2,    "fields": {      "role": "RENTER"    }  },
+
+{
+  "model": "authentication.flatteruser",
+  "pk": 1,
+  "fields": {
+      "username": "johndoe",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "johndoe@example.com",
+      "phone_number": "555551234",
+      "profile_picture": null,
+      "genre": "H",
+      "bibliography": "Lorem ipsum dolor sit amet",
+      "flatter_coins": 10,
+      "roles": [1, 2],
+      "tags": [1],
+      "password": "1234"
+  }
+},{
+  "model": "mainApp.property",
+  "pk": 1,
+  "fields": {
+    "is_outstanding": false,
+    "title": "Mi propiedad",
+    "description": "Una hermosa propiedad en la playa",
+    "visits_counter": 10,
+    "bedrooms_number": 3,
+    "bathrooms_number": 2,
+    "price": 150000,
+    "location": "Playa del Carmen",
+    "province": "Quintana Roo",
+    "is_in_offer": false,
+    "is_full": false,
+    "dimensions": 300,
+    "tags": [],
+    "images": [],
+    "owner":1
+  }
+  },{
+    "model": "mainApp.property",
+    "pk": 2,
+    "fields": {
+        "is_outstanding": true,
+        "title": "Casa con piscina",
+        "description": "Una hermosa casa con piscina en el jardín",
+        "visits_counter": 50,
+        "bedrooms_number": 4,
+        "bathrooms_number": 3,
+        "price": 300000,
+        "location": "Ciudad de México",
+        "province": "Distrito Federal",
+        "is_in_offer": false,
+        "is_full": false,
+        "dimensions": 500,
+        "tags": [],
+        "images": [],
+        "owner":1
+    }
+},{
+  "model": "mainApp.property",
+  "pk": 3,
+  "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento en la ciudad",
+      "description": "Un acogedor apartamento en el centro de la ciudad",
+      "visits_counter": 20,
+      "bedrooms_number": 1,
+      "bathrooms_number": 1,
+      "price": 80000,
+      "location": "Guadalajara",
+      "province": "Jalisco",
+      "is_in_offer": true,
+      "is_full": false,
+      "dimensions": 100,
+      "tags": [],
+      "images": [],
+      "owner":1
+  }
+},{
+  "model": "mainApp.property",
+  "pk": 4,
+  "fields": {
+      "is_outstanding": true,
+      "title": "Casa de campo",
+      "description": "Una hermosa casa de campo rodeada de naturaleza",
+      "visits_counter": 100,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 500000,
+      "location": "San Miguel de Allende",
+      "province": "Guanajuato",
+      "is_in_offer": false,
+      "is_full": false,
+      "dimensions": 800,
+      "tags": [],
+      "images": [],
+      "owner":1
+  }
+},{
+  "model": "mainApp.property",
+  "pk": 5,
+  "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento en la playa",
+      "description": "Un cómodo apartamento frente al mar",
+      "visits_counter": 30,
+      "bedrooms_number": 2,
+      "bathrooms_number": 1,
+      "price": 120000,
+      "location": "Puerto Vallarta",
+      "province": "Jalisco",
+      "is_in_offer": false,
+      "is_full": false,
+      "dimensions": 150,
+      "tags": [],
+      "images": [],
+      "owner":1
+  }
+},{
+  "model": "mainApp.property",
+  "pk": 6,
+  "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento normalito",
+      "description": "Una casa normal",
+      "visits_counter": 45,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 1200000,
+      "location": "La casa de Vallarta",
+      "province": "Sevilla",
+      "is_in_offer": true,
+      "is_full": true,
+      "dimensions": 198,
+      "tags": [],
+      "images": [],
+      "owner":1
+  }
+  },{
+    "model": "mainApp.property",
+    "pk": 7,
+    "fields": {
+      "is_outstanding": true,
+      "title": "Casa moderna",
+      "description": "Una casa moderna y elegante en el centro de la ciudad",
+      "visits_counter": 25,
+      "bedrooms_number": 4,
+      "bathrooms_number": 3,
+      "price": 450000,
+      "location": "Ciudad de México",
+      "province": "Ciudad de México",
+      "is_in_offer": false,
+      "is_full": false,
+      "dimensions": 400,
+      "tags": [],
+      "images": [],
+      "owner": 1
+    }
+  },{
+    "model": "mainApp.property",
+    "pk": 8,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Departamento en renta",
+      "description": "Un departamento céntrico en renta por temporada",
+      "visits_counter": 15,
+      "bedrooms_number": 2,
+      "bathrooms_number": 1,
+      "price": 2000,
+      "location": "Guadalajara",
+      "province": "Jalisco",
+      "is_in_offer": true,
+      "is_full": false,
+      "dimensions": 150,
+      "tags": [],
+      "images": [],
+      "owner": 1
+    }
+  },{
+    "model": "mainApp.property",
+    "pk": 9,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Casa de campo",
+      "description": "Una hermosa casa de campo con vistas a la montaña",
+      "visits_counter": 5,
+      "bedrooms_number": 3,
+      "bathrooms_number": 2,
+      "price": 350000,
+      "location": "San Miguel de Allende",
+      "province": "Guanajuato",
+      "is_in_offer": false,
+      "is_full": false,
+      "dimensions": 500,
+      "tags": [],
+      "images": [],
+      "owner": 1
+    }
+  },{
+    "model": "mainApp.property",
+    "pk": 10,
+    "fields": {
+      "is_outstanding": true,
+      "title": "Penthouse con vista al mar",
+      "description": "Un espectacular penthouse con vista al mar en la costa del Pacífico",
+      "visits_counter": 50,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 800000,
+      "location": "Puerto Vallarta",
+      "province": "Jalisco",
+      "is_in_offer": false,
+      "is_full": false,
+      "dimensions": 700,
+      "tags": [],
+      "images": [],
+      "owner": 1
+    }
+  }
+      
+]
