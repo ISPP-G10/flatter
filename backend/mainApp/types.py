@@ -11,4 +11,3 @@ class TagType(DjangoObjectType):
     class Meta:
         model = Tag
 
-

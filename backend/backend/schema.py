@@ -6,9 +6,8 @@ from authentication.mutations import AuthenticationMutation as SchemeAuthenticat
 from social.mutations import SocialMutation as SchemeSocialMutations
 from social.queries import SocialQueries as SchemeSocialQueries
 
-
-
 class FlatterQuery(SchemeAuthenticationQuery, SchemeSocialQueries, SchemeMainAppQuery, graphene.ObjectType):
+
   pass
 
 
