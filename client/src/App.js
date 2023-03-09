@@ -23,7 +23,7 @@ function App() {
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/searchProperties" element={<SearchProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
-        <Route path='/profile' element={<> <Chat /> <PublicProfile/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/me/account' element={<Account/>}/>
         <Route path='/me/changePassword' element={<ChangePassword/>}/>
         <Route path="*" element={<Error/>}/>
