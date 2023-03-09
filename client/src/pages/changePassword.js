@@ -5,6 +5,7 @@ import { changePasswordInputs } from "../forms/changePasswordForm";
 import OptionMenu from "../components/config/options";
 
 import '../static/css/pages/config.css';
+import TitleConfig from "../components/config/title";
 
 const ChangePassword = () => {
 
@@ -18,25 +19,22 @@ const ChangePassword = () => {
 
     return(
         <FlatterPage withBackground userLogged>
-            <div id="configBody">
-                <div className="title">CONFIGURACIÓN DE FLATTER</div>
-                <div id="menu">
-                    <OptionMenu/>
-                    <div className="form">
-                        <div id="titleForm">
-                            <img  className="imgTitle" src={require('../static/files/icons/candado.png')}></img>
-                            <p className="pTitle">Cambiar Contraseña</p>
-                        </div>
-                        <FlatterForm
-                            buttonText="Cambiar Contraseña"
-                            showSuperAnimatedButton
-                            numberOfColumns={1}
-                            inputs={inputs}
-                            onSubmit={handleChangePasswordSubmit}
-                            ref={registerFormRef}/>
+            <TitleConfig>
+                <OptionMenu/>
+                <div className="form">
+                    <div id="titleForm">
+                        <img  className="imgTitle" src={require('../static/files/icons/candado.png')}></img>
+                        <p className="pTitle">Cambiar Contraseña</p>
                     </div>
+                    <FlatterForm
+                        buttonText="Cambiar Contraseña"
+                        showSuperAnimatedButton
+                        numberOfColumns={1}
+                        inputs={inputs}
+                        onSubmit={handleChangePasswordSubmit}
+                        ref={registerFormRef}/>
                 </div>
-            </div>
+            </TitleConfig>
         </FlatterPage>
     );
 }

@@ -5,6 +5,7 @@ import { accountInputs } from "../forms/accountForm";
 import OptionMenu from "../components/config/options";
 
 import '../static/css/pages/config.css';
+import TitleConfig from "../components/config/title";
 
 const Account = () => {
 
@@ -35,25 +36,22 @@ const Account = () => {
 
     return(
         <FlatterPage withBackground userLogged>
-            <div id="configBody">
-                <div className="title">CONFIGURACIÓN DE FLATTER</div>
-                <div id="menu">
-                    <OptionMenu/>
-                    <div className="form">
-                        <div id="titleForm">
-                            <img  className='imgTitle' src={require('../static/files/icons/usuario.png')}></img>
-                            <p className="pTitle">Mi Cuenta</p>
-                        </div>
-                        <FlatterForm
-                            buttonText="Actualizar Datos"
-                            showSuperAnimatedButton
-                            numberOfColumns={2}
-                            inputs={inputs}
-                            onSubmit={handleRegisterSubmit}
-                            ref={registerFormRef}/>
+            <TitleConfig>
+                <OptionMenu/>
+                <div className="form">
+                    <div id="titleForm">
+                        <img  className='imgTitle' src={require('../static/files/icons/usuario.png')}></img>
+                        <p className="pTitle">Mi Cuenta</p>
                     </div>
+                    <FlatterForm
+                        buttonText="Actualizar Datos"
+                        showSuperAnimatedButton
+                        numberOfColumns={2}
+                        inputs={inputs}
+                        onSubmit={handleRegisterSubmit}
+                        ref={registerFormRef}/>
                 </div>
-            </div>
+            </TitleConfig>
         </FlatterPage>
     );
 
