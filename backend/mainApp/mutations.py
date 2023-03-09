@@ -1,10 +1,11 @@
-import os
 
-from .models import Tag, Property
+import graphene, graphql_jwt, json
+from .models import FlatterUser, Property
+import os
+from .models import Tag
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
 from mainApp.models import Image
-from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
 import base64, random, string
@@ -83,6 +84,44 @@ class DeleteImageToProperty(graphene.Mutation):
         property.save()
 
         return DeleteImageToProperty(property=property)
+
+class StandOutProperty(graphene.Mutation):
+    class Input:
+        id_property=graphene.Int(required=True)
+        is_outstanding=graphene.Boolean(required=False)
+        owner_id=graphene.Int(required=True)
+    
+    property=graphene.Field(PropertyType)    
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        id_property = kwargs.get('id_property', '')
+        owner_id = kwargs.get("owner_id", "")
+    
+        owner=FlatterUser.objects.get(pk=owner_id)
+        property=Property.objects.get(pk=id_property)
+        
+        if not owner.roles.filter(role="OWNER").exists():
+          
+          raise ValueError(_("Sólo los propietarios pueden destacar inmuebles"))
+       
+        
+        if  property.is_outstanding==True:
+          
+          raise ValueError(_("El inmueble ya está destacado"))
+        
+        if owner.flatter_coins<=0:
+          raise ValueError(_("Necesitas más flatter coins para destacar un inmueble"))
+        
+        else:
+          property.is_outstanding=True
+          property.save()
+        
+        return StandOutProperty(property=property)
+        
+class PropertyMutation(graphene.ObjectType):
+  
+    standOut_property= StandOutProperty.Field()
 
 
 class AddTagToProperty(graphene.Mutation):
@@ -316,7 +355,14 @@ class PropertyMutation(graphene.ObjectType):
   add_images_to_property = AddImagesToProperty.Field()
   delete_image_to_property = DeleteImageToProperty.Field()
 
-  delete_property = DeleteInmuebleMutation.Field()
+
+
+# ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
+
+def _exists_property(title):
+    return Property.objects.filter(title=title).exists()
+
+
 
 
 
@@ -333,3 +379,4 @@ def random_string(atributo):
     random_string = prefijo + sufijo
     
     return random_string
+

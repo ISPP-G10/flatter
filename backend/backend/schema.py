@@ -10,6 +10,7 @@ class FlatterQuery(SchemeAuthenticationQuery, SchemeSocialQueries, SchemeMainApp
 
   pass
 
+
 class FlatterMutation(SchemeAuthenticationMutation, SchemeSocialMutations, SchemeMainAppMutation, graphene.ObjectType):
   pass
 
