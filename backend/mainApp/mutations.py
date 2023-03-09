@@ -1,6 +1,8 @@
 from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
+
+from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
 
@@ -102,7 +104,6 @@ class CreatePropertyMutation(graphene.Mutation):
     )
         
     return CreatePropertyMutation(property=obj)
-
 
 
 class DeleteInmuebleMutation(graphene.Mutation):
@@ -215,10 +216,13 @@ class PropertyMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
+  delete_property = DeleteInmuebleMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
   delete_property = DeleteInmuebleMutation.Field()
+
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
 def _exists_property(title):
     return Property.objects.filter(title=title).exists()
+
