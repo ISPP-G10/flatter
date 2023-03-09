@@ -10,10 +10,10 @@ import MainPage from './pages/mainPage';
 import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
-import Chat from './sections/chat';
 import FileUploadTest from './pages/fileUploadTest';
 import Account from './pages/account';
 import ChangePassword from './pages/changePassword';
+import PrivacyPage from './pages/privacyPage';
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<LandingPage/>}/>
         <Route exact path="/main" element={<MainPage/>}/>
+        <Route path="/privacy" element={<PrivacyPage/>}/>
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/searchProperties" element={<SearchProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>

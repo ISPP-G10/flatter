@@ -1,0 +1,58 @@
+/* General */
+
+.privacy-container span.strong-text{
+    font-weight: bolder;
+}
+
+.privacy-container {
+    background-color: rgba(185, 196, 208, 0.8);
+    text-align: justify;
+    margin: 5%;
+    padding: 50px;
+    border-radius: 20px;
+}
+
+.privacy-container h1 {
+    font-weight: 600;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.privacy-container h2 {
+    text-align: center;
+}
+
+.privacy-container h3 {
+    color: var(--flatter-purple-color);
+    margin: 30px auto;
+    font-size: 1.5em;
+}
+
+.privacy-container h3::before{
+    content: '· ';
+    color: var(--flatter-purple-color);
+}
+
+.privacy-container p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.privacy-container ul {
+    margin-left: 40px;
+}
+
+.privacy-container li {
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+
+@media screen and (max-width: 769px) {
+    .privacy-container h3 {
+        text-align: center;
+    }
+
+    .privacy-container h3::before {
+        content: '';
+    }
+}

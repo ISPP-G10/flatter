@@ -47,6 +47,7 @@ img {
   padding: 20px;
   border-radius: 20px;
   border: 3px solid #e2dfdf;
+  width: 100%;
 }
 
 @media screen and (max-width: 1200px) {
