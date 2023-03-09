@@ -3,6 +3,7 @@ from authentication.models import Tag
 from .types import PropertyType,TagType
 from .models import Property
 from django.db.models import Q
+from django.utils.translation import gettext_lazy as _
 
 
 class MainAppQuery(object):
@@ -30,8 +31,10 @@ class MainAppQuery(object):
         property = Property.objects.get(id = property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self,info,max_price,min_price,city):
+    def resolve_get_filtered_properties_by_price_and_city(self,info,max_price=None,min_price=None,city=None):
             q = Q()
+            if max_price<min_price:
+                raise ValueError(_("El precio máximo introducido es menor al mínimo"))
             if max_price:
                 q &= Q(price__lte = max_price)
             if min_price:
