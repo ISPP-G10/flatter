@@ -14,6 +14,7 @@ class MainAppQuery(object):
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
 
+
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
 
@@ -30,8 +31,10 @@ class MainAppQuery(object):
         property = Property.objects.get(id = property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self,info,max_price,min_price,city):
+    def resolve_get_filtered_properties_by_price_and_city(self,info,max_price=None,min_price=None,city=None):
             q = Q()
+            if max_price<min_price:
+                raise ValueError(_("El precio máximo introducido es menor al mínimo"))
             if max_price:
                 q &= Q(price__lte = max_price)
             if min_price:
@@ -43,7 +46,7 @@ class MainAppQuery(object):
     
     def resolve_get_properties_by_owner(self,info,username):
         user = FlatterUser.objects.get(username = username)
-        if user.roles.filter(role="OWNER").exists :
+        if user.roles.filter(role="OWNER").exists:
             properties = Property.objects.filter(owner = user)
             if len(properties)>0:
                 return properties

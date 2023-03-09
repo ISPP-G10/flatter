@@ -1,8 +1,38 @@
+import os
+
 from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
+from mainApp.models import Image
+from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
+import base64, random, string
+
+
+class DeleteImageToProperty(graphene.Mutation):
+    class Input:
+        property_title = graphene.String(required=True)
+        image = graphene.String(required=True)
+
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+
+        property_title = kwargs.get('property_title', '').strip()
+        image = kwargs.get('image', '')
+
+        os.remove(f"media/{image}")
+
+
+        property = Property.objects.get(title=property_title)
+        image = Image.objects.get(image=image)
+        property.images.remove(image)
+        property.save()
+
+        return DeleteImageToProperty(property=property)
+
 
 class AddTagToProperty(graphene.Mutation):
   
@@ -39,7 +69,8 @@ class CreatePropertyMutation(graphene.Mutation):
     location = graphene.String(required=True)
     province = graphene.String(required=True)
     dimensions = graphene.Int(required=True)
-    ownerUsername = graphene.String(required=True)
+    owner_username = graphene.String(required=True)
+    images = graphene.List(graphene.String, required=False)
 
   property = graphene.Field(PropertyType)
 
@@ -53,7 +84,7 @@ class CreatePropertyMutation(graphene.Mutation):
     location = kwargs.get("location", "").strip()
     province = kwargs.get("province", "").strip()
     dimensions = kwargs.get("dimensions", "")
-    ownerUsername = kwargs.get("ownerUsername", "")
+    owner_username = kwargs.get("owner_username", "")
     
     if not title or len(title) < 4 or len(title) > 25:
       raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -79,10 +110,8 @@ class CreatePropertyMutation(graphene.Mutation):
     if not dimensions or dimensions < 1:
       raise ValueError(_("Las dimensiones deben poseer un valor positivo"))
     
-    if _exists_property(title):
-      raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
-    
-    owner = FlatterUser.objects.get(username=ownerUsername)
+    owner = FlatterUser.objects.get(username=owner_username)
+
 
     #if owner.roles.contains(RoleType.owner) == False:
     #raise ValueError(_("El usuario debe ser propietario."))
@@ -98,8 +127,35 @@ class CreatePropertyMutation(graphene.Mutation):
       dimensions=dimensions,
       owner=owner
     )
+
+    images = kwargs.get('images', )
+    for image in images:
+        imgdata = base64.b64decode(image.split(',')[1])
+        name = random_string(title) + '.png'
+        filename = 'media/properties/images/' + name
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
+
+        property = Property.objects.get(title=title)
+        image = Image.objects.create(image="properties/images/" + name)
+        property.images.add(image)
+        property.save()
         
     return CreatePropertyMutation(property=obj)
+
+
+class DeleteInmuebleMutation(graphene.Mutation):
+  class Input:
+    property_id = graphene.Int(required=True)
+  
+  property = graphene.Field(PropertyType)
+  
+  @staticmethod
+  def mutate(root, info, property_id):
+    property = Property.objects.get(pk=property_id)
+    property.delete()
+    return DeleteInmuebleMutation(property=property)
+
   
 class UpdatePropertyMutation(graphene.Mutation):
       class Input:
@@ -198,10 +254,26 @@ class PropertyMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
+  delete_property = DeleteInmuebleMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
+  add_image_to_property = AddImageToProperty.Field()
+  add_images_to_property = AddImagesToProperty.Field()
+  delete_image_to_property = DeleteImageToProperty.Field()
+
+  delete_property = DeleteInmuebleMutation.Field()
+
+
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
-def _exists_property(title):
-    return Property.objects.filter(title=title).exists()
 
+
+def random_string(atributo):
+    # Obtenemos las primeras tres letras del atributo
+    prefijo = atributo[:3].lower()
+    # Generamos una cadena aleatoria de cuatro caracteres
+    sufijo = ''.join(random.choices(string.ascii_lowercase, k=4))
+    # Combinamos el prefijo y el sufijo para formar el nombre
+    random_string = prefijo + sufijo
+    
+    return random_string
