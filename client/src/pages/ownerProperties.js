@@ -1,126 +1,161 @@
 import "../static/css/pages/ownerProperties.css";
-
 import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
-import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
-import FlatterForm from "../components/forms/flatterForm";
+import SolidButton from "../sections/solidButton";
+import {useApolloClient} from '@apollo/client';
+import {useNavigate} from 'react-router-dom';
+
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
-import propertiesAPI from "../api/propertiesAPI";
 
-import { useParams } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
-import { filterInputs } from "../forms/filterPropertiesForm";
-import {useQuery} from '@apollo/client';
+import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
 
-const FilteredProperties = ({min, max, city}) => {
+import propertiesAPI from '../api/propertiesAPI';
+//import usersAPI from '../api/usersAPI';
 
-  const {data, loading} = useQuery(propertiesAPI.filterProperties, {
-    variables: {
-      minPrice: min,
-      maxPrice: max,
-      city: city
-    }
-  });
-    
-  return {
-    loading,
-    properties: data?.getFilteredPropertiesByPriceAndCity ?? []
-  };
-};
+import { useState, useEffect, useRef } from 'react';
 
-const OwnerProperties = () => {
+
+const OwnerProperties = ({}) => {
+
+  const [ property, setProperty ] = useState({});
 
   const addPropertyModalRef = useRef(null);
   const editPropertyModalRef = useRef(null);
-  const registerFormRef = useRef(null);
 
-  const [filterValues, setFilterValues] = useState({
-    min: 0,
-    max: 2000,
-    city: ''
-  });
+    const client = useApolloClient();
+    const navigator = useNavigate();
 
-  const properties = FilteredProperties(filterValues).properties;
+    function deleteProperty(id){
 
-  const { page } = useParams();
+          client.mutate({
+              mutation: propertiesAPI.deletePropertyById,
+              variables: {
+                  propertyId: parseInt(id),
+              }
+          }).then((response) => {
 
-  function handleFilterForm({values}) {
+              navigator('/properties');
+          }).catch((error) => {
+              console.log(error);
+          });
+      
+    }
 
-    console.log(values);
+    function standOutProperty(idPiso, idPropietario){
 
-    setFilterValues({
-      min: 100,
-      max: 300,
-      city: 'Sevilla'
-    })
-  }
+      client.mutate({
+          mutation: propertiesAPI.outStandPropertyById,
+          variables: {
+              propertyId: parseInt(idPiso),
+              ownerId: parseInt(idPropietario)
+          }
+      }).then((response) => {
 
-return (
+          navigator('/properties');
+      }).catch((error) => {
+          console.log(error);
+      });
+  
+}
+
+    const usern = localStorage.getItem('user','');
+
+    const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
+      username: usern
+    }});
+
+    if (loading) return <p>Loading...</p>
+    // if (loading2) return <p>Loading2...</p>
+
+  return(
     <FlatterPage withBackground userLogged>
       <div>
-        <h1 className="properties-title">Todas tus propiedades</h1>
+        <h1 className="properties-title">Tus Propiedades</h1>
       </div>
-  
-      <div className="over-listing">
-        <div className="actions">
-          <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
-              addPropertyModalRef.current.open();
-          } } />
-
-          <SolidButton text="Editar Propiedad" type="" onClick={ () => { 
-              editPropertyModalRef.current.open();
-          } } />
-        </div>
-      </div>
-      <section className="site-content-sidebar properties">
-        <div className="sidebar">
-          <div className="card">
-            <div className="filters">
-              <h3>Filtrar por</h3>
-
-              <FlatterForm ref={registerFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades" />
-            </div>
+      <section id="searchView">
+        <div className="filterview">
+          <div className="filterview-content">
+            <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
+                addPropertyModalRef.current.open();
+            } } />
           </div>
+
+          
+           
         </div>
-  
-        <div className="content">
-          {properties.map((property, index) => (
-            <article key={ index } className="property-card card">
-              <div className="property-gallery">
+        
+        <div className="listview">
+          <section id="informationView">
+          {
+          data && 
+            (
+              data.getPropertiesByOwner.map ((prop) => { 
+                return(
+            <div className="listview">
+              <div className="listview-header">
+                <h3>{prop.title}</h3>
+              </div>
+              <div>
+                <div className="attrcontainer"> 
+                  <div className="attrindv">
+                    <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
+                    <p className = "location">{prop.province}</p>  
+                  </div>
+                  <div className="attrindvder">
+                    <p className = "team">{prop.price}</p>
+                    <img className="small-picture-back" src={require('../static/files/icons/flattercoins-icon.png')} alt='Precio'/>
+                  </div>
+                </div>
+              </div>
+
+              <div className="listview-content">
+
                 <Slider>
+
                 </Slider>
               </div>
-              <div className="property-body">
-                <div className="property-body-content">
-                  <h3>{property.title}</h3>
-                  <p>{property.description}</p>
-                </div>
-  
-                <div className="property-meta">
-                  <div className="meta-right">
-                    {property.tags && property.tags.map((tag, index) => (
-                      <Tag key={ index } name={tag.title} color={tag.color}></Tag>
-                    ))}
-                  </div>
-  
-                  <div className="meta-left">
-                    <div className="meta-location">{ property.province }</div>
-  
-                    <div className="meta-flatmates">2/4</div>
-                  </div>
-                </div>
-  
-                <footer className="property-footer">
-                  <SolidButton text="Ver piso" />
-                  <SolidButton text="Ver reseñas" />
-                  <SolidButton text="Compartir" />
-                </footer>
+              <div className="etiquetacontainer">
+                {prop && prop.tags.map((tag,index) => {
+                  <div className="etiquetaindv">
+                  <Tag name={tag.title} color={tag.color} key={index}/>
+                  </div>  
+                })
+              }
+                
               </div>
-            </article>
-          ))}
+
+
+              <div className="listview-content">
+ 
+                <p className="small-size">{prop.description}</p>
+              </div>
+              
+                <div className="btncontainer">
+                    <div className="btnindv">
+                      <button className="styled-info-button" onClick={ () => {
+                        
+                        setProperty(prop);
+                        editPropertyModalRef.current.open();
+                      } }>Editar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      {/* hay que sustituir ese 1 por el id del propietario. todavia no se como se consigue */}
+                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id,1)}}>Destacar Piso</button>
+                    </div>
+
+                  </div>
+                  
+              </div>
+          );}))}
+
+          </section>
         </div>
+           
       </section>
 
       <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
@@ -128,7 +163,7 @@ return (
       </FlatterModal>
 
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
-        <FormProperty property={properties[0] ?? {}} />
+        <FormProperty property={property} />
       </FlatterModal>
     </FlatterPage>
   );

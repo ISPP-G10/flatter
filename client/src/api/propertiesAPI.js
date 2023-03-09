@@ -53,6 +53,10 @@ const propertiesAPI = {
                 location
                 bedroomsNumber
                 bathroomsNumber
+                tags {
+                    name
+                    color
+                }
                 province
                 price
             }
