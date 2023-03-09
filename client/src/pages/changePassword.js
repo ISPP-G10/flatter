@@ -23,7 +23,7 @@ const ChangePassword = () => {
                 <OptionMenu/>
                 <div className="form">
                     <div id="titleForm">
-                        <img  className="imgTitle" src={require('../static/files/icons/candado.png')}></img>
+                        <img  className="imgTitle" src={require('../static/files/icons/candado.png')} alt="Icono contraseña"></img>
                         <p className="pTitle">Cambiar Contraseña</p>
                     </div>
                     <FlatterForm

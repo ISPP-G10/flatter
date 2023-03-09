@@ -8,14 +8,14 @@ import PropTypes from 'prop-types';
 import FormInput from './formInput';
 import SolidButton from '../../sections/solidButton';
 
-const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimatedButton, numberOfColumns}, ref) => {
+const FlatterForm = forwardRef((props, ref) => {
 
     const [formValues, setFormValues] = useState({});
 
     useImperativeHandle(ref, () => {
         return{
             validate: () => {
-                for(let input of inputs){
+                for(let input of props.inputs){
                     for(let validator of input.validators){
                         if(!validator.validate(formValues[input.name])){
                             return false;
@@ -30,7 +30,7 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
 
     function handleSubmit(e){
         e.preventDefault();
-        onSubmit({values: formValues});
+        props.onSubmit({values: formValues});
     }
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
         if(Object.keys(formValues).length === 0){
             let newFormValues = {};
 
-            inputs && inputs.forEach(input => {
+            props.inputs && props.inputs.forEach(input => {
                 if(input.type === "interval"){
                     newFormValues[`min_${input.name}`] = input.min;
                     newFormValues[`max_${input.name}`] = input.max;
@@ -54,9 +54,10 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
 
     return (
         <div className="class-profile-form">
-            <form className="class-form" style={numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
+            <form className="class-form" style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
+                    {props.children}
                     { 
-                        Object.keys(formValues).length > 0 && inputs.map((input, index) => {
+                        Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
                             return(
                                 <FormInput  key={index} 
                                             tag={input.tag}
@@ -67,7 +68,7 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
                                             isRequired={input.isRequired}
                                             minValue={input.min}
                                             maxValue={input.max}
-                                            numberOfColumns={numberOfColumns}
+                                            numberOfColumns={props.numberOfColumns}
                                             validators={input.validators}
                                             formValues={formValues}
                                             setFormValues={setFormValues}/>
@@ -76,16 +77,16 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
                     }
             </form>
             {
-                showSuperAnimatedButton ?
+                props.showSuperAnimatedButton ?
                 (
-                    <div style={{height: '50px', width: '100%', maxWidth: `${buttonText.length*15}px`, marginTop: '40px'}}>
-                        <SuperAnimatedButton onClick={handleSubmit}>{buttonText}</SuperAnimatedButton>
+                    <div style={{height: '50px', width: '100%', maxWidth: `${props.buttonText.length*15}px`, marginTop: '40px'}}>
+                        <SuperAnimatedButton onClick={handleSubmit}>{props.buttonText}</SuperAnimatedButton>
                     </div>
                 )
                 :
                 (
                     <div style={{marginTop: '40px'}}>
-                        <SolidButton text={buttonText} type="featured" onClick={onSubmit}/>
+                        <SolidButton text={props.buttonText} type="featured" onClick={props.onSubmit}/>
                     </div>
                 )
             }

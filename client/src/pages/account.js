@@ -40,7 +40,7 @@ const Account = () => {
                 <OptionMenu/>
                 <div className="form">
                     <div id="titleForm">
-                        <img  className='imgTitle' src={require('../static/files/icons/usuario.png')}></img>
+                        <img  className='imgTitle' src={require('../static/files/icons/usuario.png')} alt="Icono usuario"></img>
                         <p className="pTitle">Mi Cuenta</p>
                     </div>
                     <FlatterForm
