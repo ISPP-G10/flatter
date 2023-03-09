@@ -18,6 +18,28 @@ const propertiesAPI = {
         }
     }
 `,
-}
+    deletePropertyById: gql`
+    mutation deletePropertyById($propertyId: Int!){
+        deleteProperty(
+          propertyId:$propertyId){
+          property{
+            title
+          }
+        }
+      }
+`,
+    outStandPropertyById: gql`
+    mutation outStandPropertyById($propertyId: Int!, $ownerId: Int!){
+        standOutProperty(
+          propertyId:$propertyId,
+            ownerId:$ownerId){
+          property{
+            isOutstanding,
+            title
+          }
+        }
+      }
+
+`,}
 
 export default propertiesAPI;

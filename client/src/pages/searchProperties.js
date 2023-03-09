@@ -3,6 +3,8 @@ import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
+import {useApolloClient} from '@apollo/client';
+import {useNavigate} from 'react-router-dom';
 
 import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
 import propertiesAPI from '../api/propertiesAPI';
@@ -10,53 +12,46 @@ import propertiesAPI from '../api/propertiesAPI';
 
 import { useEffect } from 'react';
 
-// const Ejemplo = () => {
-
-    
-
-//     return data && data.getRoles.map(({role}) => (
-//         <p>Role: {role}</p>
-//     ));
-
-// }
-
-// query uno {
-//   getPropertiesByOwner(username: "joseluisps21"){
-//     id
-//     description
-//     tags {
-//       name
-//       color
-//     }
-//     title
-//     price
-//     isOutstanding
-    
-//   }
-// }
-
-// const GET_ROLES = gql`
-// query GetRoles{
-//     getRoles{
-//         role
-//     }
-// }`;
-
-// const {data, loading} = useQuery(GET_ROLES);
-
-// if (loading) return <p>Loading...</p>
-
-// return data && data.getRoles.map (({role}) => (
-
-const prueba = sessionStorage.userId;
 
 const SearchProperties = ({}) => {
 
-    // const {data2, loading2} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
-    //   username: user
-    // }});
+    const client = useApolloClient();
+    const navigator = useNavigate();
 
-     const usern = localStorage.getItem('user','');
+    function deleteProperty(id){
+
+          client.mutate({
+              mutation: propertiesAPI.deletePropertyById,
+              variables: {
+                  propertyId: parseInt(id),
+              }
+          }).then((response) => {
+
+              navigator('/searchProperties');
+          }).catch((error) => {
+              console.log(error);
+          });
+      
+    }
+
+    function standOutProperty(idPiso, idPropietario){
+
+      client.mutate({
+          mutation: propertiesAPI.outStandPropertyById,
+          variables: {
+              propertyId: parseInt(idPiso),
+              ownerId: parseInt(idPropietario)
+          }
+      }).then((response) => {
+
+          navigator('/searchProperties');
+      }).catch((error) => {
+          console.log(error);
+      });
+  
+}
+
+    const usern = localStorage.getItem('user','');
 
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
       username: usern
@@ -113,10 +108,12 @@ const SearchProperties = ({}) => {
                 </Slider>
               </div>
               <div className="etiquetacontainer">
-                <div className="etiquetaindv">
-                  {/* hay que cambiar el color a el de la etiqueta. de momento esta uno por defecto */}
-                <Tag name={prop.tags.title} color="red"/>
-                </div>
+                {prop && prop.tags.map((tag,index) => {
+                  <div className="etiquetaindv">
+                  <Tag name={tag.title} color={tag.color} key={index}/>
+                  </div>  
+                })
+              }
                 
               </div>
 
@@ -131,10 +128,11 @@ const SearchProperties = ({}) => {
                       <button className="styled-info-button">Editar Piso</button>
                     </div>
                     <div className="btnindv">
-                      <button className="styled-red-info-button">Borrar Piso</button>
+                      <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
                     </div>
                     <div className="btnindv">
-                      <button className="styled-info-button">Destacar Piso</button>
+                      {/* hay que sustituir ese 1 por el id del propietario. todavia no se como se consigue */}
+                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id,1)}}>Destacar Piso</button>
                     </div>
 
                   </div>
