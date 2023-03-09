@@ -1,18 +1,18 @@
-form.form {
+.formed {
     padding-top: 20px;
 }
 
-form.form .form-group > div {
+.formed .form-group > div {
     padding-right: 20px;
     flex: 1;
     margin-top: initial !important;
 }
 
-form.form .class-form-group {
+.formed .class-form-group {
     width: 100%;
 }
 
-form.form .form-group > div:last-child, form.form .form-group-parent > div:last-child {
+.formed .form-group > div:last-child, .formed .form-group-parent > div:last-child {
     padding-right: 0;
 }
 
@@ -21,11 +21,11 @@ form.form .form-group > div:last-child, form.form .form-group-parent > div:last-
     margin-bottom: 35px !important;
 }
 
-form.form .form-group-parent > div {
+.formed .form-group-parent > div {
     flex: 1;
 }
 
-form.form .form-group-parent > div {
+.formed .form-group-parent > div {
     padding-right: 20px;
 }
 

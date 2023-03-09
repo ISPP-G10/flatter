@@ -120,7 +120,7 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
     }
 
     return (
-        <form className="form" style={{overflowY: 'auto', width: '100%'}} onSubmit = { handleFormSubmit } >
+        <form className="formed" style={{overflowY: 'auto', width: '100%'}} onSubmit = { handleFormSubmit } >
             {inputs.map((group, i) => (
                 <div className="form-group" key={i}>
                 {recursiveRender(group)}

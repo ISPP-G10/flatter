@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import '../static/css/sections/imageUploader.css';
+import "../static/css/sections/imageUploader.css";
 
 import PropTypes from "prop-types";
 
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 
-function ImageUploader({name}) {
+function ImageUploader({ name }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [mainImageIndex, setMainImageIndex] = useState(0);
@@ -15,10 +15,28 @@ function ImageUploader({name}) {
     if (files) {
       const fileArray = Array.from(files);
       setSelectedFiles(fileArray);
-      const previewArray = fileArray.map((file) => DOMPurify.sanitize(URL.createObjectURL(file)));
-      setImagePreviews(previewArray);
+      Promise.all(fileArray.map((file) => blobToBase64(file)))
+        .then((base64Array) => {
+          setImagePreviews(base64Array);
+          document.getElementById("image-urls").value = JSON.stringify(
+            base64Array
+          );
+        })
+        .catch((error) => console.log(error));
     }
-  };  
+  };
+
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(blob);
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+    });
+  }
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -32,55 +50,31 @@ function ImageUploader({name}) {
     if (files) {
       const fileArray = Array.from(files);
       setSelectedFiles(fileArray);
-      const previewArray = fileArray.map((file) => URL.createObjectURL(file));
-      setImagePreviews(previewArray);
+      Promise.all(fileArray.map((file) => blobToBase64(file)))
+        .then((base64Array) => {
+          setImagePreviews(base64Array);
+          document.getElementById("image-urls").value = JSON.stringify(
+            base64Array
+          );
+        })
+        .catch((error) => console.log(error));
     }
-  };
-
-  const handleRemoveImage = (index) => {
-    const newSelectedFiles = [...selectedFiles];
-    const newImagePreviews = [...imagePreviews];
-    if (index !== mainImageIndex) {
-      newSelectedFiles.splice(index, 1);
-      newImagePreviews.splice(index, 1);
-      setSelectedFiles(newSelectedFiles);
-      setImagePreviews(newImagePreviews);
-      if (mainImageIndex > index) {
-        setMainImageIndex(mainImageIndex - 1);
-      }
-    }
-  };
-
-  const handleMainImageClick = (index) => {
-    setMainImageIndex(index);
   };
 
   return (
     <div>
-      <div className="image-preview-container">
-        <div className="main-image-preview">
-          {selectedFiles.length > 0 && (
-            <img
-              src={DOMPurify.sanitize(imagePreviews[mainImageIndex])}
-              alt={`preview-${mainImageIndex}`}
-            />
-          )}
-        </div>
-        <div className="thumbnail-container">
-          {selectedFiles.length > 0 &&
-            imagePreviews.map((preview, index) => (
-              <div
-                className={`thumbnail ${
-                  mainImageIndex === index ? "selected" : ""
-                }`}
-                key={index}
-                onClick={() => handleMainImageClick(index)}
-              >
-                <img src={DOMPurify.sanitize(preview)} alt={`preview-${index}`} />
-                <button type="button" onClick={() => handleRemoveImage(index)}>x</button>
-              </div>
-            ))}
-        </div>
+      <div className="thumbnail-container">
+        {selectedFiles.length > 0 &&
+          imagePreviews.map((preview, index) => (
+            <div
+              className={`thumbnail ${
+                mainImageIndex === index ? "selected" : ""
+              }`}
+              key={index}
+            >
+              <img src={preview} alt={`preview-${index}`} />
+            </div>
+          ))}
       </div>
       <div
         className="image-uploader-container"
@@ -89,19 +83,12 @@ function ImageUploader({name}) {
       >
         <div className="image-upload-placeholder">
           <span>Arrastra imágenes o haz click aquí</span>
-          <input name={ name } type="file" multiple onChange={handleImageChange} />
+          <input type="file" multiple onChange={handleImageChange} />
         </div>
       </div>
+      <input type="hidden" id="image-urls" name={name} />
     </div>
   );
-}
-
-ImageUploader.propTypes = {
-  name: PropTypes.string
-}
-
-ImageUploader.defaultProps = {
-  name: ""
 }
 
 export default ImageUploader;
