@@ -7,14 +7,11 @@ import PublicProfileCard from "../components/profile/publicProfileCard";
 const PublicProfile = () => {
 
     return(
-        <FlatterPage withBackground userLogged>
-            <div style={{marginTop: "5%"}}>
-                <section id="profileCard">
-                    <PublicProfileCard/>
-                </section> 
-                <section id="commentsBox">
-                    <CommentsBox />
-                </section>
+        <FlatterPage withBackground >
+            <div class="profile-grid">
+                <PublicProfileCard/>
+                <span>Pruebas</span>
+                <CommentsBox />
             </div>
         </FlatterPage>
     );

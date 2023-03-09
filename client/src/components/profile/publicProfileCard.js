@@ -4,26 +4,22 @@ import Tag from '../tag';
 const PublicProfileCard = () => {
 
     return (
-        <div className='containerFlex'>
-            <div style={{marginLeft: '2%'}}>
+        <div className='profile-card-container'>
+            <div className="profile-card-info">
                 <h2>Lucía Martín</h2>
                 <p>Estudiante en Universidad de Sevilla</p>
-                <p>24 años</p>
-                <img className='photo' src={require('../../static/files/images/foto.jpg')} alt='Profile'/>    
+                <p>24 años</p>    
             </div>
-            <div className='biografia'>
-                <h2 style={{textAlign: 'left'}}>Yo...</h2>
-                <br/>
-                <p id='text'>Soy estudiante d bikb wincwnc pwncc ncffwoeifjnwepvinvobsw siovhwsvnboisv as csno cvsn vsdn vdwfobeofbwoi fbsofibesf ejfbiubf
-                    fwoufcbwof bfuosbfes fubwsfc oibsoifcbeaebf coeiebfcbeacoiabfcff eaofcbaic eoice acoifbac aoichba coeiebfcbeacoiabfcffncf
-                    nsoibncvsc nasibocas coiab caiocba cobascv ao voisbn asj. 
-                    bloabicalciabcisnbvsiobvosv ajbvsoibvoiusvjs vkjsbvbs vkjbsv soiv hbasbvioasbavoisbvusbvc skjvb. jBCAOIUABWCOIUA CJUABCAB caiocbaCAOICN BASBCA
-                     CJSCBAOCAS JBOS CSUBVSD VVDUSBV DSVUSIB
-                </p>
-                <br/>
-                <div className='tags-container'>
-                    <Tag name='LOL' color='#f783de' />
-                    <Tag name="LGBT" color='#f783de' />               
+            <div className='profile-card-details'>
+                <img className='profile-card-img' src={require('../../static/files/images/foto.jpg')} alt='Profile'/>
+                <div className='profile-card-bio'>
+                    <h2>Yo...</h2>
+                    <p class="profile-card-description">Soy una estudiante a la que le pasárselo bien pero que también es responsable.
+                    </p>
+                    <div className='tags-container'>
+                        <Tag name='LOL' color='#f783de' />
+                        <Tag name="LGTB" color='#f783de' />               
+                    </div>
                 </div>
             </div>           
         </div>
