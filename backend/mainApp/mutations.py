@@ -218,17 +218,11 @@ class PropertyMutation(graphene.ObjectType):
   update_property = UpdatePropertyMutation.Field()
   delete_property = DeleteInmuebleMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
+  delete_property = DeleteInmuebleMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
 def _exists_property(title):
     return Property.objects.filter(title=title).exists()
-
-
-
-
-
-  
-
 
