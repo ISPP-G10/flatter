@@ -4,6 +4,7 @@ from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
 from mainApp.models import Image
+from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
 import base64, random, string
@@ -197,6 +198,20 @@ class CreatePropertyMutation(graphene.Mutation):
         property.save()
         
     return CreatePropertyMutation(property=obj)
+
+
+class DeleteInmuebleMutation(graphene.Mutation):
+  class Input:
+    property_id = graphene.Int(required=True)
+  
+  property = graphene.Field(PropertyType)
+  
+  @staticmethod
+  def mutate(root, info, property_id):
+    property = Property.objects.get(pk=property_id)
+    property.delete()
+    return DeleteInmuebleMutation(property=property)
+
   
 class UpdatePropertyMutation(graphene.Mutation):
       class Input:
@@ -295,10 +310,15 @@ class PropertyMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
+  delete_property = DeleteInmuebleMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
   add_image_to_property = AddImageToProperty.Field()
   add_images_to_property = AddImagesToProperty.Field()
   delete_image_to_property = DeleteImageToProperty.Field()
+
+  delete_property = DeleteInmuebleMutation.Field()
+
+
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
