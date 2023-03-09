@@ -7,6 +7,7 @@ class PropertyType(DjangoObjectType):
   class Meta:
     model = Property
 
+
 class TagType(DjangoObjectType):
     class Meta:
         model = Tag
