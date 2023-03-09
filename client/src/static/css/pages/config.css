@@ -96,6 +96,10 @@ a{
     color: #005f8f;
 }
 
+.site-content {
+    overflow-x: hidden;
+}
+
 @media screen and (max-width: 730px) {
     #menu {
         flex-direction: column;
