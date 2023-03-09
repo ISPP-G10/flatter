@@ -3,6 +3,8 @@ from authentication.models import Tag,FlatterUser
 from .types import PropertyType,TagType
 from .models import Property
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
+
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
@@ -12,6 +14,7 @@ class MainAppQuery(object):
     get_properties = graphene.List(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
+
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
