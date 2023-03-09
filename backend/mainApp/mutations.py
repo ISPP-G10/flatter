@@ -1,16 +1,14 @@
-import os
-
 from .models import Tag, Property
-import graphene, graphql_jwt
-from authentication.models import FlatterUser
+from authentication.models import FlatterUser, Role
 from mainApp.models import Image
 from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
-import base64, random, string
-class AddImageToProperty(graphene.Mutation):
+import base64, random, string, os, graphene
+
+class DeleteImageFromProperty(graphene.Mutation):
     class Input:
-        property_title = graphene.String(required=True)
+        property_id = graphene.Int(required=True)
         image = graphene.String(required=True)
 
     property = graphene.Field(PropertyType)
@@ -18,71 +16,17 @@ class AddImageToProperty(graphene.Mutation):
     @staticmethod
     def mutate(self, info, **kwargs):
 
-        property_title = kwargs.get('property_title', '').strip()
-        image = kwargs.get('image', '')
-
-        imgdata = base64.b64decode(image.split(',')[1])
-        name = random_string(property_title) + '.png'
-        filename = 'media/properties/images/' + name
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
-
-        property = Property.objects.get(title=property_title)
-        image = Image.objects.create(image="properties/images/"+ name)
-        property.images.add(image)
-        property.save()
-
-        return AddImageToProperty(property=property)
-
-class AddImagesToProperty(graphene.Mutation):
-    class Input:
-        property_title = graphene.String(required=True)
-        images = graphene.List(graphene.String, required=True)
-
-    property = graphene.Field(PropertyType)
-
-    @staticmethod
-    def mutate(self, info, **kwargs):
-
-        property_title = kwargs.get('property_title', '').strip()
-        images = kwargs.get('images', [])
-        for image in images:
-            imgdata = base64.b64decode(image.split(',')[1])
-            name = random_string(property_title) + '.png'
-            filename = 'media/properties/images/' + name
-            with open(filename, 'wb') as f:
-                f.write(imgdata)
-
-            property = Property.objects.get(title=property_title)
-            image = Image.objects.create(image="properties/images/"+ name)
-            property.images.add(image)
-            property.save()
-
-        return AddImagesToProperty(property=property)
-
-
-class DeleteImageToProperty(graphene.Mutation):
-    class Input:
-        property_title = graphene.String(required=True)
-        image = graphene.String(required=True)
-
-    property = graphene.Field(PropertyType)
-
-    @staticmethod
-    def mutate(self, info, **kwargs):
-
-        property_title = kwargs.get('property_title', '').strip()
+        property_id = kwargs.get('property_id', '').strip()
         image = kwargs.get('image', '')
 
         os.remove(f"media/{image}")
 
 
-        property = Property.objects.get(title=property_title)
+        property = Property.objects.get(pk=property_id)
         image = Image.objects.get(image=image)
         property.images.remove(image)
-        property.save()
 
-        return DeleteImageToProperty(property=property)
+        return DeleteImageFromProperty(property=property)
 
 
 class AddTagToProperty(graphene.Mutation):
@@ -120,7 +64,7 @@ class CreatePropertyMutation(graphene.Mutation):
     location = graphene.String(required=True)
     province = graphene.String(required=True)
     dimensions = graphene.Int(required=True)
-    ownerId = graphene.Int(required=True)
+    owner_id = graphene.Int(required=True)
     images = graphene.List(graphene.String, required=False)
 
   property = graphene.Field(PropertyType)
@@ -135,7 +79,7 @@ class CreatePropertyMutation(graphene.Mutation):
     location = kwargs.get("location", "").strip()
     province = kwargs.get("province", "").strip()
     dimensions = kwargs.get("dimensions", "")
-    ownerId = kwargs.get("ownerId", "")
+    owner_id = kwargs.get("owner_id", "")
     
     if not title or len(title) < 4 or len(title) > 25:
       raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -164,13 +108,10 @@ class CreatePropertyMutation(graphene.Mutation):
     if title and Property.objects.filter(title=title).exists():
         raise ValueError(_("Ya existe un inmueble con ese título"))
 
-    if info.context.user != FlatterUser.objects.get(id=ownerId):
-        raise ValueError(_("No puedes crear un inmueble con otro usuario"))
+    owner = FlatterUser.objects.get(pk=owner_id)
 
-    owner = FlatterUser.objects.get(pk=ownerId)
-
-    #if owner.roles.contains(RoleType.owner) == False:
-    #raise ValueError(_("El usuario debe ser propietario."))
+    if not owner.roles.contains(Role.objects.get(role="OWNER")):
+      raise ValueError(_("El usuario debe ser propietario"))
 
     obj = Property.objects.create(
       title=title, 
@@ -185,22 +126,28 @@ class CreatePropertyMutation(graphene.Mutation):
     )
 
     images = kwargs.get('images', )
-    for image in images:
-        imgdata = base64.b64decode(image.split(',')[1])
-        name = random_string(title) + '.png'
-        filename = 'media/properties/images/' + name
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
+    images_to_add = []
+    if images:
+      for image in images:
+          imgdata = base64.b64decode(image.split(',')[1])
+          name = random_string(title) + '.png'
+          filename = os.path.join('media', 'properties', 'images', name)
+          with open(filename, 'wb') as f:
+              f.write(imgdata)
 
-        property = Property.objects.get(title=title)
-        image = Image.objects.create(image="properties/images/" + name)
-        property.images.add(image)
-        property.save()
+          image = Image.objects.create(image="properties/images/" + name)
+          images_to_add.append(image)
+          
+      obj.images.add(*images_to_add)
+    
+    else:
+      image = Image.objects.get(image="properties/images/default.png")
+      obj.images.add(image)
         
     return CreatePropertyMutation(property=obj)
 
 
-class DeleteInmuebleMutation(graphene.Mutation):
+class DeletePropertyMutation(graphene.Mutation):
   class Input:
     property_id = graphene.Int(required=True)
   
@@ -210,12 +157,12 @@ class DeleteInmuebleMutation(graphene.Mutation):
   def mutate(root, info, property_id):
     property = Property.objects.get(pk=property_id)
     property.delete()
-    return DeleteInmuebleMutation(property=property)
+    return DeletePropertyMutation(property=property)
 
   
 class UpdatePropertyMutation(graphene.Mutation):
       class Input:
-          propertyId = graphene.Int(required=True)
+          property_id = graphene.Int(required=True)
           title = graphene.String(required=False)
           description = graphene.String(required=False)
           bedrooms_number = graphene.Int(required=False)
@@ -224,24 +171,24 @@ class UpdatePropertyMutation(graphene.Mutation):
           location = graphene.String(required=False)
           province = graphene.String(required=False)
           dimensions = graphene.Int(required=False)
+          images = graphene.List(graphene.String, required=False)
 
       property = graphene.Field(PropertyType)
 
       @staticmethod
       def mutate(root, info, **kwargs):
-        title = kwargs.get('title', '').strip() if 'title' in kwargs else None
-        description = kwargs.get('description', '').strip() if 'description' in kwargs else None
-        bedrooms_number = kwargs.get("bedrooms_number", "") if 'bedrooms_number' in kwargs else None
-        bathrooms_number = kwargs.get("bathrooms_number", "") if 'bathrooms_number' in kwargs else None
-        price = kwargs.get("price", "") if 'price' in kwargs else None
-        location = kwargs.get("location", "").strip() if 'location' in kwargs else None
-        province = kwargs.get("province", "").strip() if 'province' in kwargs else None
-        dimensions = kwargs.get("dimensions", "") if 'dimensions' in kwargs else None
-        propertyId = kwargs.get("propertyId", "") if 'propertyId' in kwargs else None
-
-        #ToDo FALTARÍA SABER QUIÉN ESTA INICIADA LA SESIÓN (SI ES OWNER O ADMIN)
+        title = kwargs.get('title', '').strip()
+        description = kwargs.get('description', '').strip()
+        bedrooms_number = kwargs.get("bedrooms_number", '')
+        bathrooms_number = kwargs.get("bathrooms_number", "")
+        price = kwargs.get("price", "")
+        location = kwargs.get("location", "").strip()
+        province = kwargs.get("province", "").strip()
+        dimensions = kwargs.get("dimensions", "")
+        property_id = kwargs.get("property_id", 0)
+        images = kwargs.get('images', [])
       
-        if  title and (len(title) < 4 or len(title) > 25):
+        if title and (len(title) < 4 or len(title) > 25):
           raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
         
         if description and len(description) > 256:
@@ -265,58 +212,60 @@ class UpdatePropertyMutation(graphene.Mutation):
         if dimensions and dimensions < 1:
           raise ValueError(_("Las dimensiones deben poseer un valor positivo"))
         
-        property_edit = Property.objects.get(pk=propertyId)
-
-        if title:
+        property_edit = Property.objects.get(pk=property_id)
+        
+        if title and title != property_edit.title:
           property_edit.title = title
         
-        if description:
+        if description and description != property_edit.description:
           property_edit.description = description
 
-        if bedrooms_number:
+        if bedrooms_number and bedrooms_number != property_edit.bedrooms_number:
           property_edit.bedrooms_number = bedrooms_number  
         
-        if bathrooms_number:
+        if bathrooms_number and bathrooms_number != property_edit.bathrooms_number:
           property_edit.bathrooms_number = bathrooms_number
 
-        if price:
+        if price and price != property_edit.price:
           property_edit.price = price
 
-        if location:
+        if location and location != property_edit.location:
           property_edit.location = location
 
-        if province:
+        if province and province != property_edit.province:
           property_edit.province = province
 
-        if dimensions:  
+        if dimensions and dimensions != property_edit.dimensions:
           property_edit.dimensions = dimensions
+          
+        images_to_add = []
+        
+        if images:
+          for image in images:
+              imgdata = base64.b64decode(image.split(',')[1])
+              name = random_string(title) + '.png'
+              filename = os.path.join('media', 'properties', 'images', name)
+              with open(filename, 'wb') as f:
+                  f.write(imgdata)
+
+              property = Property.objects.get(pk=property_id)
+              image = Image.objects.create(image="properties/images/" + name)
+              images_to_add.append(image)
+          
+        property.images.add(*images_to_add)
 
         property_edit.save()
-
+        
         # Devolver la propiedad actualizada
         return UpdatePropertyMutation(property=property_edit)
 
-
-class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
-    property = graphene.Field(PropertyType)
-
-    @classmethod
-    def resolve(cls, root, info, **kwargs):
-        return cls(property=info.context.property)
-
 class PropertyMutation(graphene.ObjectType):
-  token_auth = ObtainJSONWebToken.Field()
-  verify_token = graphql_jwt.Verify.Field()
-  refresh_token = graphql_jwt.Refresh.Field()
   create_property = CreatePropertyMutation.Field()
   update_property = UpdatePropertyMutation.Field()
-  delete_property = DeleteInmuebleMutation.Field()
+  delete_property = DeletePropertyMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
-  add_image_to_property = AddImageToProperty.Field()
-  add_images_to_property = AddImagesToProperty.Field()
-  delete_image_to_property = DeleteImageToProperty.Field()
-
-  delete_property = DeleteInmuebleMutation.Field()
+  delete_image_to_property = DeleteImageFromProperty.Field()
+  delete_property = DeletePropertyMutation.Field()
 
 
 

@@ -5,6 +5,7 @@ from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan
 class FlatterUserType(DjangoObjectType):
   class Meta:
     model = FlatterUser
+    exclude = ('password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'user_permissions')
     
 class RoleType(DjangoObjectType):
   class Meta:
