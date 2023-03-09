@@ -35,7 +35,7 @@ const Account = () => {
     }
 
     return(
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withBackground >
             <TitleConfig>
                 <OptionMenu/>
                 <div className="form">

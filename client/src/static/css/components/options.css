@@ -20,3 +20,9 @@
     margin-right: 5px;
     height: 16px; 
 }
+
+@media screen and (max-width: 730px) {
+    .titleOptions {
+        text-align: center;
+    }
+}

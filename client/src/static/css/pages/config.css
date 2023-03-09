@@ -1,6 +1,6 @@
 #configBody {
     margin-top: 50px;
-  }
+}
 
 .title {
     background-color: #00A8FF;
@@ -86,7 +86,6 @@ a{
 #titleForm {
     display: flex;
     flex-direction: row;
-    margin-bottom: 5px;
     margin-top: 10px;
 }
 
@@ -101,13 +100,25 @@ a{
         flex-direction: column;
     }
 
+    #configBody{
+        margin-top: 30px;
+    }
+
+    #configBody > *{
+        margin-bottom: 20px;
+    }
+
+    #titleForm{
+        margin-bottom: 20px;
+    }
+
     .title {
         width: 90%;
     }
 
     .options{
         width: 90%;
-
+        margin-bottom: 20px;
     }
 
     .form{
