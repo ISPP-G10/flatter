@@ -12,6 +12,8 @@ import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
 import Chat from './sections/chat';
 import FileUploadTest from './pages/fileUploadTest';
+import Account from './pages/account';
+import ChangePassword from './pages/changePassword';
 
 function App() {
   return (
@@ -22,8 +24,11 @@ function App() {
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/searchProperties" element={<SearchProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
-        <Route path='/profile' element={<> <Chat /> <PublicProfile/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/test' element={ <FileUploadTest/> }/>
+        <Route path='/profile' element={<> <PublicProfile/> </>}/>
+        <Route path='/me/account' element={<Account/>}/>
+        <Route path='/me/changePassword' element={<ChangePassword/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

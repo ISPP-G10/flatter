@@ -94,9 +94,6 @@ class DeleteUserMutation(graphene.Mutation):
     
     return DeleteUserMutation(user=selected_user)
   
-
-
-
 class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     user = graphene.Field(FlatterUserType)
 
@@ -107,25 +104,27 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
 class AddTagToUser(graphene.Mutation):
   
   class Input:
+    username = graphene.String(required=True)
     tag = graphene.String(required=True)
 
   user = graphene.Field(FlatterUserType)
   
   @staticmethod
   def mutate(root, info, **kwargs):
-    user = info.context.user
+    username = kwargs.get('username', '').strip()
     tag = kwargs.get('tag', '').strip()
     
-    user_selected = FlatterUser.objects.get(username=user.username)
+    if not username:
+      raise ValueError(_("El usuario no puede estar vacío"))
+    
+    user_selected = FlatterUser.objects.get(username=username)
     try:
       tag = Tag.objects.get(name=tag)
-    except:
+    except Exception:
       raise ValueError(_("La etiqueta no existe"))
 
     if tag in user_selected.tags.all():
       raise ValueError(_("Ya tienes esta etiqueta"))
-    if user.id != user_selected.id:
-      raise Exception(_("You are not authorized to perform this action."))
 
     user_selected.tags.add(tag)
     
