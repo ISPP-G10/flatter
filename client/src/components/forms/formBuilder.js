@@ -8,6 +8,8 @@ import FormInput from './formInput';
 
 const FormBuilder = ({ inputs, values, onSubmit }) => {
 
+  console.log(values);
+
     const schema = {};
 
     const recursiveRender = (group) => {
@@ -26,8 +28,11 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
             case "number":
             case "textarea":
             case "select":
+              let formInputValue = propValue;
+              formInputValue = formInputValue!==undefined ? formInputValue.toString() : undefined;
+
               return (
-                <FormInput key={key} values={ value.options } tag={ value.label } defaultValue={propValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
+                <FormInput key={key} values={ value.options } tag={ value.label } defaultValue={formInputValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
               );
             case "checkbox":
               return (

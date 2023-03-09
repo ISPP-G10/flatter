@@ -82,7 +82,14 @@ return (
               </div>
               <div className="property-body">
                 <div className="property-body-content">
-                  <h3>{property.title}</h3>
+                  <div className="property-header">
+                    <h3>{property.title}</h3>
+
+                    <div className="property-price">
+                    <img src={require('../static/files/icons/flattercoins-icon.png')} alt="Logo Flatter Coins" style={{height: 32, width: 32, margin: 0}}></img> { property.price }
+                    </div>
+                  </div>
+                  
                   <p>{property.description}</p>
                 </div>
   
@@ -96,7 +103,7 @@ return (
                   <div className="meta-left">
                     <div className="meta-location"><img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/> { property.province }</div>
   
-                    <div className="meta-flatmates">2/4</div>
+                    <div className="meta-flatmates"><img className="small-picture-back" src={require('../static/files/icons/partners.png')} alt='Compañeros'/> 2/4</div>
                   </div>
                 </div>
   

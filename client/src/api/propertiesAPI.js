@@ -75,6 +75,8 @@ const propertiesAPI = {
                 price
                 isOutstanding
                 province
+                location
+                dimensions
             }
         }
     `,

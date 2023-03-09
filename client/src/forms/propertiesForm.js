@@ -66,11 +66,10 @@ export const propertyInputs = [
       }
     },
     {
-      gallery: {
+      images: {
         label: 'Galería',
         type: 'imageUploader',
-        flex: 1,
-        name: 'property-gallery'
+        flex: 1
       }
     },
     {
@@ -114,11 +113,7 @@ export const propertyInputs = [
       },
     },
     {
-      is_oustanding: {
-        label: 'Destaca tu propiedad y gana visibilidad',
-        type: 'checkbox',
-        flex: 1
-      },
+      
       submit: {
         type: 'submit',
         text: 'Guardar'

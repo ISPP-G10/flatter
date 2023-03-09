@@ -81,6 +81,23 @@
     padding: 10px;
 }
 
+.properties .property-body-content .property-header {
+    display: flex;
+}
+
+.properties .property-body-content .property-header > .property-price {
+    display: flex;
+    align-items: center;
+}
+
+.properties .property-body-content .property-header > .property-price > img {
+    margin-right: 6px !important;
+}
+
+.properties .property-body-content h3 {
+    flex: 1;
+}
+
 .properties .property-card > .property-body > .property-meta > .meta-left {
     flex: 1;
     display: flex;
