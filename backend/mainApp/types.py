@@ -1,4 +1,5 @@
 from graphene_django.types import DjangoObjectType
+from mainApp.models import Property
 from .models import Property
 
 class PropertyType(DjangoObjectType):

@@ -59,6 +59,7 @@ const propertiesAPI = {
                 }
                 province
                 price
+                isOutstanding
             }
         }
     `,
@@ -77,6 +78,8 @@ const propertiesAPI = {
                 province
                 location
                 dimensions
+                bedroomsNumber
+                bathroomsNumber
             }
         }
     `,
