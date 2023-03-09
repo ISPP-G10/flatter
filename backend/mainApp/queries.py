@@ -45,7 +45,7 @@ class MainAppQuery(object):
     
     def resolve_get_properties_by_owner(self,info,username):
         user = FlatterUser.objects.get(username = username)
-        if user.roles.filter(role="OWNER").exists :
+        if user.roles.filter(role="OWNER").exists:
             properties = Property.objects.filter(owner = user)
             if len(properties)>0:
                 return properties
