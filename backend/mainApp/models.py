@@ -28,7 +28,7 @@ class Property(models.Model):
 
 class Review(models.Model):
 
-    choices_entity = (('A', 'Amigos'), ('C', 'Compañeros'), ('E', 'Excompañeros'), ('P', 'Propietario'))
+    choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'))
 
     assessment = models.IntegerField()
     text = models.TextField()

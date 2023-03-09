@@ -1,6 +1,7 @@
 import graphene
 from authentication.models import Tag
-from .types import PropertyType,TagType
+from .types import PropertyType
+from authentication.types import TagType
 from .models import Property
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _

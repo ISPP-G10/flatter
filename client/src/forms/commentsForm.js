@@ -14,7 +14,7 @@ export const commentsFormInputs = [
         ],
     },
     {
-        tag: "Comentario",
+        tag: "Reseña",
         name: "comment",
         type: "textarea",
         defaultValue: "",

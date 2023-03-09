@@ -5,8 +5,9 @@ import FlatterModal from '../flatterModal';
 import FlatterForm from '../forms/flatterForm';
 import Comment from './comment';
 import ReactStars from "react-rating-stars-component";
+import PropTypes from 'prop-types';
 
-const CommentsBox = () => {
+const CommentsBox = (props) => {
 
     const commentsModalRef = useRef(null)
     const commentsFormRef = useRef(null);
@@ -41,7 +42,7 @@ const CommentsBox = () => {
         //     localStorage.setItem('token', token);
         //     localStorage.setItem('user', username);
 
-        //     navigator('/main-page');
+        //     navigator('/main');
         // }).catch((error) => {
         //     alert(error.message.split("\n")[0]);
         // });
@@ -61,8 +62,18 @@ const CommentsBox = () => {
                     </button>
                 </div>
                 <div className="comments-box-scollable">
-                    <Comment name="Lucía Martín" pic={require("../../static/files/images/default-user.png")} tagName="Amiga" tagColor="#f783de" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nisl, nec aliquet nisl nisl sit amet nisl. Sed euismod, nunc vel tincidunt lacinia, nunc nisl aliquet nisl, nec aliquet nisl nisl sit amet nisl." />
-                    {/*<Comment />*/}
+                    {
+                        props.comments.length !== 0 ? (
+                            props.comments.map((comment, index) => {
+                                return(
+                                    <Comment key={'comment-' + index} name={comment.name} pic={comment.pic} tagName={comment.tagName} tagColor={comment.tagColor} text={comment.text} />
+                                );
+                            }))
+                        :
+                            (
+                                <Comment />
+                            )
+                    }
                 </div>
             </div>
             <FlatterModal maxWidth={500} maxHeight={500} ref={commentsModalRef}>
@@ -85,6 +96,14 @@ const CommentsBox = () => {
             </FlatterModal>
         </>
     );
+}
+
+CommentsBox.propTypes = {
+    comments: PropTypes.array
+}
+
+CommentsBox.defaultProps = {
+    comments: []
 }
 
 export default CommentsBox;

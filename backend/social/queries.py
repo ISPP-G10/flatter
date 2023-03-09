@@ -3,7 +3,8 @@ from django.db.models import Avg
 
 from authentication.models import Tag
 from mainApp.models import Review
-from social.types import ReviewType, TagType
+from social.types import ReviewType
+from authentication.types import TagType
 
 
 class SocialQueries(object):
