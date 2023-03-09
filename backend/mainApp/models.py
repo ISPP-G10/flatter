@@ -5,8 +5,9 @@ from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
 class Image(models.Model):
-    image = models.ImageField( upload_to='property/images/', blank=True, null=True)
-    
+    image = models.ImageField( upload_to='properties/images/', blank=True, null=True)
+
+
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
     title = models.CharField(max_length=50)
@@ -22,7 +23,7 @@ class Property(models.Model):
     is_full = models.BooleanField(default=False)
     dimensions = models.IntegerField()
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
-    images = models.ManyToManyField(Image)
+    images = models.ManyToManyField(Image, related_name=_('property_images'))
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
 
 class Review(models.Model):

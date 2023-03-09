@@ -43,6 +43,8 @@ class FlatterUser(AbstractUser):
     genre = models.CharField(choices=choices_genre, max_length=2)
     bibliography = models.TextField(_("bibliography"), blank=True, null=True)
     flatter_coins = models.IntegerField(default=0)
+    profession = models.CharField(max_length=100, blank=True, null=True)
+    birthday = models.DateField(_("birthday"), blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name=_('user_tags'))
     
     
