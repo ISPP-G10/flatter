@@ -25,8 +25,6 @@ class StandOutProperty(graphene.Mutation):
         owner=FlatterUser.objects.get(pk=owner_id)
         property=Property.objects.get(pk=id_property)
         
-        
-        
         if not owner.roles.filter(role="OWNER").exists():
           
           raise ValueError(_("Sólo los propietarios pueden destacar inmuebles"))
