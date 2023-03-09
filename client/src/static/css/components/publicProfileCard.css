@@ -1,55 +1,114 @@
-
-.photo {
-    width: 200px;
-    height: 200px;
-    margin-left: 14%;
-    margin-top: 3%;
-    margin-right: 3%;
-    border-radius: 50%;
-}
-
-
-#etiqueta {
-    font-size: medium;
-    font-weight: bold;
-    background-color: rgb(199, 139, 255);
-    border-radius: 20px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    margin-right: 6px;
-
-} 
-
-.containerFlex {
-    background-color: rgb(255, 228, 196);
+.profile-card-container {
     display: flex;
+    flex-direction: column;
     position: relative;
     margin-left: 10%;
-    margin-right: 35%;
     border: 0.2rem solid;
-    border-color: #00000044;
     border-radius: 20px;
     padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 75%;
+    text-align: left;
+    row-gap: 25px;
 }
 
-.biografia {
-    background-color: rgb(255, 255, 255);
+.profile-card-info{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+}
+
+.profile-card-edit{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.profile-card-btn{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    font-size: 15px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-image: url("../../files/icons/edit.png");
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: center;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.profile-card-edit > *{
+    margin: 0;
+}
+
+.profile-card-data{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    width: 100%;
+    row-gap: 10px;
+}
+
+.profile-card-data > *{
+    margin: 0;
+    width: 100%;
+}
+
+.profile-card-details{
+    display: grid;
+    grid-template-columns: 25% 75%;
+}
+
+.profile-card-bio{
+    background-color: #FFFFFF;
+    border-radius: 25px;
     border: 0.1rem solid;
-    border-color: #38383844;
-    border-radius: 20px;
+    border-color: #00000044;
     padding: 10px;
-    margin-top: 5%;
-    margin-bottom: 1%;
-    margin-left: 12%;
+    margin: 0;
+    width: 80%;
+    justify-self: flex-end;
+    align-self: center;
 }
 
-#text {
+.profile-card-bio > *{
+    padding: 10px;
+}
+
+.profile-card-img{
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: white;
+    aspect-ratio: 1/1;
+    align-self: center;
+    justify-self: center;
+}
+
+.profile-card-description{
     text-align: justify;
-    text-justify: inter-word;
-    height: 150px;
-    overflow: scroll;
+    overflow-y: scroll;
+    max-height: 175px;
 }
 
 .tags-container{
@@ -64,14 +123,77 @@
     margin-left: 5px;
 }
 
+.no-edit > button{
+    display: none;
+}
+
+.profile-card-me{
+    background-color: #a6ccdecd;
+    border-color: #8492A6;
+}
+
+.profile-card-propietary{
+    background-color: #d4d1cbdf;
+    border-color: #8492A6;
+}
+
+.profile-card-tenant{
+    background-color: #e4cc98b6;
+    border-color: #8492A6;
+}
+
 @media screen and (max-width: 1319px) {
-    .containerFlex {
-        flex-direction: column;
-        margin-right: 10%;
+    .no-edit{
+        justify-content: center;
     }
 
-    .biografia {
-        margin-left: 0%;
+    .profile-card-container {
+        text-align: center;
     }
-    
+
+    .profile-card-info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .profile-card-img{
+        max-width: 300px;
+    }
+
+    .profile-card-description{
+        max-height: 300px;
+    }
+
+    .profile-card-details{
+        display: flex;
+        flex-direction: column;
+        row-gap: 25px;
+        width: 100%;
+    }
+
+    .profile-card-bio{
+        width: 100%;
+        justify-self: center;
+        align-self: center;
+        padding: 5px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .tags-container{
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+
+    .profile-card-container {
+        margin-right: 10%;
+        width: 90%;
+        text-align: center;
+        padding: 20px;
+    }
+
 }
