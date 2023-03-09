@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 
 class Image(models.Model):
     image = models.ImageField( upload_to='properties/images/', blank=True, null=True)
-    
+
+
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
     title = models.CharField(max_length=50)

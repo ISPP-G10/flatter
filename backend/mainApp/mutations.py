@@ -1,3 +1,5 @@
+import os
+
 from .models import Tag, Property
 import graphene, graphql_jwt
 from authentication.models import FlatterUser
@@ -17,20 +19,69 @@ class AddImageToProperty(graphene.Mutation):
 
         property_title = kwargs.get('property_title', '').strip()
         image = kwargs.get('image', '')
-        
+
         imgdata = base64.b64decode(image.split(',')[1])
-        filename = 'media/properties/images/' + random_string(property_title) + '.png'
+        name = random_string(property_title) + '.png'
+        filename = 'media/properties/images/' + name
         with open(filename, 'wb') as f:
             f.write(imgdata)
 
-        # property = Property.objects.get(title=property_title)
-        # image = Image.objects.create(image=image)
-        # property.images.add(image)
-        # property.save()
+        property = Property.objects.get(title=property_title)
+        image = Image.objects.create(image="properties/images/"+ name)
+        property.images.add(image)
+        property.save()
 
         return AddImageToProperty(property=property)
 
+class AddImagesToProperty(graphene.Mutation):
+    class Input:
+        property_title = graphene.String(required=True)
+        images = graphene.List(graphene.String, required=True)
 
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+
+        property_title = kwargs.get('property_title', '').strip()
+        images = kwargs.get('images', [])
+        for image in images:
+            imgdata = base64.b64decode(image.split(',')[1])
+            name = random_string(property_title) + '.png'
+            filename = 'media/properties/images/' + name
+            with open(filename, 'wb') as f:
+                f.write(imgdata)
+
+            property = Property.objects.get(title=property_title)
+            image = Image.objects.create(image="properties/images/"+ name)
+            property.images.add(image)
+            property.save()
+
+        return AddImagesToProperty(property=property)
+
+
+class DeleteImageToProperty(graphene.Mutation):
+    class Input:
+        property_title = graphene.String(required=True)
+        image = graphene.String(required=True)
+
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+
+        property_title = kwargs.get('property_title', '').strip()
+        image = kwargs.get('image', '')
+
+        os.remove(f"media/{image}")
+
+
+        property = Property.objects.get(title=property_title)
+        image = Image.objects.get(image=image)
+        property.images.remove(image)
+        property.save()
+
+        return DeleteImageToProperty(property=property)
 
 
 class AddTagToProperty(graphene.Mutation):
@@ -69,6 +120,7 @@ class CreatePropertyMutation(graphene.Mutation):
     province = graphene.String(required=True)
     dimensions = graphene.Int(required=True)
     ownerId = graphene.Int(required=True)
+    images = graphene.List(graphene.String, required=False)
 
   property = graphene.Field(PropertyType)
 
@@ -107,10 +159,13 @@ class CreatePropertyMutation(graphene.Mutation):
     
     if not dimensions or dimensions < 1:
       raise ValueError(_("Las dimensiones deben poseer un valor positivo"))
-    
-    if _exists_property(title):
-      raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
-    
+
+    if title and Property.objects.filter(title=title).exists():
+        raise ValueError(_("Ya existe un inmueble con ese título"))
+
+    if info.context.user != FlatterUser.objects.get(id=ownerId):
+        raise ValueError(_("No puedes crear un inmueble con otro usuario"))
+
     owner = FlatterUser.objects.get(pk=ownerId)
 
     #if owner.roles.contains(RoleType.owner) == False:
@@ -127,6 +182,19 @@ class CreatePropertyMutation(graphene.Mutation):
       dimensions=dimensions,
       owner=owner
     )
+
+    images = kwargs.get('images', )
+    for image in images:
+        imgdata = base64.b64decode(image.split(',')[1])
+        name = random_string(title) + '.png'
+        filename = 'media/properties/images/' + name
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
+
+        property = Property.objects.get(title=title)
+        image = Image.objects.create(image="properties/images/" + name)
+        property.images.add(image)
+        property.save()
         
     return CreatePropertyMutation(property=obj)
   
@@ -229,11 +297,12 @@ class PropertyMutation(graphene.ObjectType):
   update_property = UpdatePropertyMutation.Field()
   add_tag_to_property = AddTagToProperty.Field()
   add_image_to_property = AddImageToProperty.Field()
+  add_images_to_property = AddImagesToProperty.Field()
+  delete_image_to_property = DeleteImageToProperty.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
-def _exists_property(title):
-    return Property.objects.filter(title=title).exists()
+
 
 def random_string(atributo):
     # Obtenemos las primeras tres letras del atributo
