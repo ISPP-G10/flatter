@@ -16,15 +16,19 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
 
           if(value.type !== 'group') {
             schema[key] = {
-              type: value.type
+              type: value.type,
+              validators: value.validators
             }
           }
 
           switch (value.type) {
             case "text":
             case "number":
+            case "textarea":
+            case "select":
+            console.log(value.validators);
               return (
-                <FormInput key={key} tag={ value.label } defaultValue={propValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
+                <FormInput key={key} values={ value.options } tag={ value.label } defaultValue={propValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
               );
             case "checkbox":
               return (
@@ -37,34 +41,7 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
                   />
                 </label>
               );
-            case "select":
-              return (
-                <label key={key} style={{ flex: value.flex }}>
-                  {value.label}
-                  <select
-                    name={key}
-                    defaultValue={propValue || value.default}
-                  >
-                    <option disabled>{value.default}</option>
-                    {value.options.map(({ id, text }) => (
-                      <option key={id} value={id}>
-                        {text}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              );
-            case "textarea":
-              return (
-                <label key={key} style={{ flex: value.flex }}>
-                  {value.label}
-                  <textarea
-                    name={key}
-                    defaultValue={propValue || value.default}
-                    placeholder={value.placeholder}
-                  />
-                </label>
-              );
+            
             case "imageUploader":
               return (
                 <label key={key} style={{ flex: value.flex }}>
@@ -97,42 +74,50 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
         });
     };
 
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const formInputs = Array.prototype.slice.call(e.target.querySelectorAll('*[name]')),
+      values = {},
+      validationError = false;
+
+      for(let index in Object.keys(schema)) {
+        
+        // para almacenar los tipos de los inputs y darle los valores en tipo String o Int
+        const key = Object.keys(schema)[index],
+          inputSchema = schema[key],
+          inputForm = formInputs.map(x=>x).filter(input => {
+            return input.getAttribute('name') === key;
+          }),
+          inputValue = inputForm[0]!==undefined ? inputForm[0].value : "";
+
+        // valicaciones
+        (inputSchema.validators ?? []).map(v => {
+          v.validate(inputValue);
+        });
+
+        let parsedValue = null;
+        switch(inputSchema.type) {
+          case 'number':
+            parsedValue = parseInt(inputValue);
+            break;
+
+          default:
+            parsedValue = inputValue;
+            break;
+        }
+
+        values[key] = parsedValue;
+      }
+
+      if(!validationError) {
+        onSubmit(values);
+      }
+
+    }
+
     return (
-        <form className="form" style={{overflowY: 'auto', width: '100%'}} onSubmit = { function (e) {
-          e.preventDefault();
-
-          const formInputs = Array.prototype.slice.call(e.target.querySelectorAll('*[name]')),
-          values = {};
-
-          for(let index in Object.keys(schema)) {
-            
-            // para almacenar los tipos de los inputs y darle los valores en tipo String o Int
-            const key = Object.keys(schema)[index],
-              inputSchema = schema[key],
-              inputForm = formInputs.map(x=>x).filter(input => {
-                return input.getAttribute('name') === key;
-              }),
-              inputValue = inputForm[0]!==undefined ? inputForm[0].value : '';
-
-            console.log(inputForm);
-
-            let parsedValue = null;
-            switch(inputSchema.type) {
-              case 'number':
-                parsedValue = parseInt(inputValue);
-                break;
-
-              default:
-                parsedValue = inputValue;
-                break;
-            }
-
-            values[key] = parsedValue;
-          }
-
-          onSubmit(values);
-
-        } } >
+        <form className="form" style={{overflowY: 'auto', width: '100%'}} onSubmit = { handleFormSubmit } >
             {inputs.map((group, i) => (
                 <div className="form-group" key={i}>
                 {recursiveRender(group)}

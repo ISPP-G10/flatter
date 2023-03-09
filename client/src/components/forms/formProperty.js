@@ -28,6 +28,9 @@ const FormProperty = ({ property }) => {
             } : {}), 
             ...values
           }
+        }).catch(e => {
+          
+          console.log('Error validación backend: '+ e);
         });
       }
 

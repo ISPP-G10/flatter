@@ -23,8 +23,7 @@ export const propertyInputs = [
     {
       province: {
           label: 'Provincia',
-          default: 'Seleccionar',
-          type: 'select',
+          type: 'text',
           flex: 1,
           options: [{
               id: 1,
