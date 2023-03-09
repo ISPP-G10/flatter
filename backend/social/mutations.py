@@ -23,7 +23,7 @@ class EditUserMutation(graphene.Mutation):
         phone = graphene.String(required=False)
         profile_picture = graphene.String(required=False)
         profession = graphene.String(required=False)
-        brithday = graphene.String(required=False)
+        birthday = graphene.String(required=False)
 
 
     user = graphene.Field(FlatterUserType)
@@ -41,7 +41,7 @@ class EditUserMutation(graphene.Mutation):
         phone = kwargs.get('phone', '').strip()
         profile_picture = kwargs.get('profile_picture', '')
         profession = kwargs.get('profession', '').strip()
-        brithday = kwargs.get('brithday', '').strip()
+        birthday = kwargs.get('birthday', '').strip()
 
 
 
@@ -112,8 +112,8 @@ class EditUserMutation(graphene.Mutation):
 
             user_selected.profile_picture = f"properties/images/{name}"
 
-        if brithday:
-            user_selected.brithday = datetime.strptime(brithday, '%Y-%m-%d')
+        if birthday:
+            user_selected.birthday = datetime.strptime(birthday, '%Y-%m-%d')
 
         user_selected.profession = profession
 
