@@ -78,7 +78,7 @@ const FlatterForm = forwardRef(({inputs, onSubmit, buttonText, showSuperAnimated
             {
                 showSuperAnimatedButton ?
                 (
-                    <div style={{height: '50px', width: `${buttonText.length*15}px`, marginTop: '40px'}}>
+                    <div style={{height: '50px', width: '100%', maxWidth: `${buttonText.length*15}px`, marginTop: '40px'}}>
                         <SuperAnimatedButton onClick={handleSubmit}>{buttonText}</SuperAnimatedButton>
                     </div>
                 )

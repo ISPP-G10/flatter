@@ -11,6 +11,8 @@ import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
 import Chat from './sections/chat';
+import Account from './pages/account';
+import ChangePassword from './pages/changePassword';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route path="/searchProperties" element={<SearchProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/profile' element={<> <Chat /> <PublicProfile/> </>}/>
+        <Route path='/me/account' element={<Account/>}/>
+        <Route path='/me/changePassword' element={<ChangePassword/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
