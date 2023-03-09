@@ -1,19 +1,22 @@
+import '../../static/css/components/options.css'
+
 const OptionMenu= () => {
     return (
     <div className="options">
-        <div><p style={{fontWeight:'bold', fontSize: '25px', color: '#005f8f', marginLeft: '8px', paddingBottom:'15px'
-            , paddingTop:'15px'}}>
-                Opciones</p></div>
-        <a href="/config/account" style={{marginLeft: '5px', marginRight:'5px', height:'20px', textDecorationLine:'none', color: 'black'}}>
+        <div>
+            <p className='titleOptions'>
+                Opciones
+            </p>
+        </div>
+        <a className='aOptions' href="/me/account">
             <div className="opt" id='opt1'>
-                <img src={require('../../static/files/icons/usuario.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                <img className='imgOptions' src={require('../../static/files/icons/usuario.png')}></img>
                 Mi cuenta
             </div>
         </a>
-        <a href="/config/changePassword" style={{marginLeft: '5px', marginRight:'5px', height:'20px',
-        textDecorationLine:'none', color:'black'}}>
+        <a className="aOptions" href="/me/changePassword">
             <div className="opt" id='opt2'>
-                <img src={require('../../static/files/icons/candado.png')} style={{marginLeft: '5px', marginRight:'5px', height:'20px'}}></img>
+                <img className="imgOptions" src={require('../../static/files/icons/candado.png')}></img>
                 Cambiar contraseña
             </div>
         </a>

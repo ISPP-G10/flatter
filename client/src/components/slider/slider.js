@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import '../../static/css/components/Slider.css'
+import '../../static/css/components/slider.css'
 import BtnSlider from './btnSlider'
 
 export default function Slider() {

@@ -76,6 +76,26 @@ a{
     margin-bottom: 20px;
 }
 
+.imgTitle {
+    margin-left: 5px;
+    margin-right: 5px;
+    height: 23px;
+    margin-top: 1.5px;
+}
+
+#titleForm {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.pTitle {
+    font-weight: bold;
+    font-size: 25px;
+    color: #005f8f;
+}
+
 @media screen and (max-width: 730px) {
     #menu {
         flex-direction: column;

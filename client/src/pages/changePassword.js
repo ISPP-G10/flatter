@@ -18,17 +18,17 @@ const ChangePassword = () => {
 
     return(
         <FlatterPage withBackground userLogged>
-            <section id="configBody">
+            <div id="configBody">
                 <div className="title">CONFIGURACIÓN DE FLATTER</div>
                 <div id="menu">
                     <OptionMenu/>
                     <div className="form">
-                        <div style={{display: 'flex', flexDirection: 'row', marginBottom: '5px', marginTop:'10px'}}>
-                            <img src={require('../static/files/icons/candado.png')} style={{marginLeft: '5px', marginRight:'5px', height:'25px'}}></img>
-                            <p style={{fontWeight:'bold', fontSize: '25px', color: '#005f8f'}}>Cambiar Contraseña</p>
+                        <div id="titleForm">
+                            <img  className="imgTitle" src={require('../static/files/icons/candado.png')}></img>
+                            <p className="pTitle">Cambiar Contraseña</p>
                         </div>
                         <FlatterForm
-                            buttonText="Cambiar"
+                            buttonText="Cambiar Contraseña"
                             showSuperAnimatedButton
                             numberOfColumns={1}
                             inputs={inputs}
@@ -36,7 +36,7 @@ const ChangePassword = () => {
                             ref={registerFormRef}/>
                     </div>
                 </div>
-            </section>
+            </div>
         </FlatterPage>
     );
 }
