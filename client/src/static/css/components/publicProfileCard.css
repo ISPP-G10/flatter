@@ -1,11 +1,9 @@
 .profile-card-container {
-    background-color: rgb(255, 228, 196);
     display: flex;
     flex-direction: column;
     position: relative;
     margin-left: 10%;
     border: 0.2rem solid;
-    border-color: #00000044;
     border-radius: 20px;
     padding: 10px;
     padding-left: 30px;
@@ -22,12 +20,58 @@
     justify-content: flex-start;
     align-items: center;
     margin: 0;
+}
+
+.profile-card-edit{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.profile-card-btn{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    font-size: 15px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-image: url("../../files/icons/edit.png");
+    background-repeat: no-repeat;
+    background-size: 75%;
+    background-position: center;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+.profile-card-edit > *{
+    margin: 0;
+}
+
+.profile-card-data{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    width: 100%;
     row-gap: 10px;
 }
 
-.profile-card-info > *{
-    width: 100%;
+.profile-card-data > *{
     margin: 0;
+    width: 100%;
 }
 
 .profile-card-details{
@@ -79,12 +123,32 @@
     margin-left: 5px;
 }
 
+.no-edit > button{
+    display: none;
+}
+
+.profile-card-me{
+    background-color: #a6ccdecd;
+    border-color: #8492A6;
+}
+
+.profile-card-propietary{
+    background-color: #d4d1cbdf;
+    border-color: #8492A6;
+}
+
+.profile-card-tenant{
+    background-color: #e4cc98b6;
+    border-color: #8492A6;
+}
+
 @media screen and (max-width: 1319px) {
+    .no-edit{
+        justify-content: center;
+    }
+
     .profile-card-container {
-        margin-right: 10%;
-        width: 90%;
         text-align: center;
-        padding: 20px;
     }
 
     .profile-card-info{
@@ -92,6 +156,10 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+
+    .profile-card-img{
+        max-width: 300px;
     }
 
     .profile-card-description{
@@ -117,4 +185,15 @@
     .tags-container{
         margin-top: 10px;
     }
+}
+
+@media screen and (max-width: 767px) {
+
+    .profile-card-container {
+        margin-right: 10%;
+        width: 90%;
+        text-align: center;
+        padding: 20px;
+    }
+
 }
