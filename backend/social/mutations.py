@@ -1,4 +1,4 @@
-import base64
+import base64, os
 
 import graphene
 from django.core.exceptions import ValidationError
@@ -15,7 +15,7 @@ from datetime import datetime
 
 class EditUserMutation(graphene.Mutation):
     class Input:
-        username = graphene.String(required=False)
+        username = graphene.String(required=True)
         first_name = graphene.String(required=False)
         last_name = graphene.String(required=False)
         email = graphene.String(required=False)
@@ -32,7 +32,6 @@ class EditUserMutation(graphene.Mutation):
     @login_required
     def mutate(root, info, **kwargs):
 
-        user = info.context.user
         username = kwargs.get('username', '').strip()
         first_name = kwargs.get('first_name', '').strip()
         last_name = kwargs.get('last_name', '').strip()
@@ -43,31 +42,14 @@ class EditUserMutation(graphene.Mutation):
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
 
+        if len(first_name) < 3 or len(first_name) >= 50:
+            raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
 
+        if len(last_name) < 3 or len(last_name) >= 50:
+            raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
 
-        if len(username) > 1:
-            if len(username) < 6 or len(username) > 25:
-                raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
-
-        if len(first_name) > 1:
-            if len(first_name) < 3 or len(first_name) >= 50:
-                raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
-
-        if len(last_name) > 1:
-            if len(last_name) < 3 or len(last_name) >= 50:
-                raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
-
-        if len(email) > 1:
-            if ("@" not in email) or ("." not in email):
-                raise ValueError(_("El email no es válido"))
-
-        if user.username != username:
-            if _exists_user(username):
-                raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
-
-        if user.email != email:
-            if _exists_email(email):
-                raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
+        if email and ("@" not in email) or ("." not in email):
+            raise ValueError(_("El email no es válido"))
 
         if phone:
             try:
@@ -78,44 +60,51 @@ class EditUserMutation(graphene.Mutation):
                 raise ValidationError(_("Error al validar el número de teléfono: %(error)s"),
                                       code="invalid_phone_number", params={"error": str(e)})
 
-        print(profession)
         if profession and len(profession) < 1 and len(profession) > 100:
             raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
 
 
 
-        user_selected = FlatterUser.objects.get(pk=user.id)
+        user_selected = FlatterUser.objects.get(username=username)
 
-        # Check that the user making the request is the owner of the account
-        if user.id != user_selected.id:
-            raise Exception(_("You are not authorized to perform this action."))
-
-        if username:
+        if user_selected.username != username:
             user_selected.username = username
-        if first_name:
+        if user_selected.first_name != first_name:
             user_selected.first_name = first_name
-        if last_name:
+        if user_selected.last_name != last_name:
             user_selected.last_name = last_name
-        if email:
-            user_selected.email = email
-        if bibliography:
+        if user_selected.email != email:
+            if _exists_email(email):
+                raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
+            else:
+                user_selected.email = email    
+        if user_selected.bibliography != bibliography:
             user_selected.bibliography = bibliography
-        if phone:
+        if user_selected.phone_number != phone:
             user_selected.phone_number = phone
 
         if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
-            name = info.context.user.username + '.png'
-            filename = 'media/properties/images/' + name
+            name = user_selected.username + '.png'
+            filename = os.path.join('media', 'users', 'images', name)
+            
+            if os.path.exists(filename):
+                os.remove(filename)
+            
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
-            user_selected.profile_picture = f"properties/images/{name}"
+            user_selected.profile_picture = os.path.join('users', 'images', name)
 
         if birthday:
-            user_selected.birthday = datetime.strptime(birthday, '%Y-%m-%d')
+        
+            formated_birthday = datetime.strptime(birthday, '%Y-%m-%d')
 
-        user_selected.profession = profession
+            if user_selected.birthday != formated_birthday:
+                user_selected.birthday = formated_birthday
+
+        if user_selected.profession != profession:
+            user_selected.profession = profession
 
         user_selected.save()
 
