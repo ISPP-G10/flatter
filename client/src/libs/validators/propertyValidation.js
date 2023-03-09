@@ -1,4 +1,47 @@
-export const registerValidators = {
+import { interpolate } from "framer-motion"
+import { RedIntegerFormat } from "three"
+
+export const propertyValidators = {
+    minPrice: {
+        validate: (value) => parseInt(value)>0,
+        message: "El valor debe ser mayor de 0"
+    },
+
+    maxPrice: {
+        validate: (value) => parseInt(value)<5000,
+        message: "El valor debe ser menor de 5000"
+    },
+
+    minDimensions: {
+        validate: (value) => parseInt(value)>0,
+        message: "El valor debe ser mayor de 0"
+    },
+
+    maxDimensions: {
+        validate: (value) => parseInt(value)<320,
+        message: "El valor debe ser menor de 5000"
+    },
+
+    minRooms: {
+        validate: (value) => parseInt(value)>0,
+        message: "El valor debe ser mayor de 0"
+    },
+
+    maxRooms: {
+        validate: (value) => parseInt(value)<320,
+        message: "El valor debe ser menor de 30"
+    },
+
+    minBaths: {
+        validate: (value) => parseInt(value)>0,
+        message: "El valor debe ser mayor de 0"
+    },
+
+    maxBaths: {
+        validate: (value) => parseInt(value)<320,
+        message: "El valor debe ser menor de 8"
+    },
+
     notEmptyValidator: {
         validate: (value) => value.trim().length > 0,
         message: "El campo no puede estar vacío"
@@ -44,9 +87,4 @@ export const registerValidators = {
         },
         message: "El campo debe ser un rol válido",
     },
-
-    phoneNumber: {
-        validate: (value) => value.match(/^[9|6|7][0-9]{8}$/),
-        message: "El campo debe ser un número válido"
-    }
 }

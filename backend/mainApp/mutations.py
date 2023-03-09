@@ -379,4 +379,3 @@ def random_string(atributo):
     random_string = prefijo + sufijo
     
     return random_string
-

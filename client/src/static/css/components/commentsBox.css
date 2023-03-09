@@ -1,16 +1,12 @@
-#commentsBox {
-    padding: 30px;
-  }
-
 .comments-box {
     background-color: rgb(243, 185, 24);
     display: flex;
     position: relative;
     margin-left: 10%;
-    margin-right: 35%;
     border-radius: 20px;
     padding: 10px;
     flex-direction: column;
+    width: 75%;
 }
 .comments-box-header {
     margin: 0;
@@ -52,17 +48,47 @@
     outline: none;
 }
 
+.comments-box-star{
+    width: 25px;
+    height: 25px;
+}
+
+.profile-grid{
+    display: grid;
+    grid-template-columns: 75% 25%;
+    row-gap: 50px;
+    margin-top: 3em;
+}
+
+.comments-box-title{
+    margin-left: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 @media screen and (max-width: 1319px) {
     .comments-box {
         margin-right: 10%;
         margin-left: 10%;
     }
+
+    .profile-grid{
+        grid-template-columns: 65% 35%;
+    }
 }
 
 @media screen and (max-width: 767px) {
+    .profile-grid{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     .comments-box {
         flex-direction: column;
         margin: 0%;
+        width: 90%;
     }
 
     .comments-btn-text{
