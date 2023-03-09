@@ -26,7 +26,6 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
             case "number":
             case "textarea":
             case "select":
-            console.log(value.validators);
               return (
                 <FormInput key={key} values={ value.options } tag={ value.label } defaultValue={propValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
               );
@@ -78,8 +77,9 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
       e.preventDefault();
 
       const formInputs = Array.prototype.slice.call(e.target.querySelectorAll('*[name]')),
-      values = {},
-      validationError = false;
+      values = {};
+
+      let validationError = false;
 
       for(let index in Object.keys(schema)) {
         
@@ -93,9 +93,12 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
 
         // valicaciones
         (inputSchema.validators ?? []).map(v => {
-          v.validate(inputValue);
+          if(!v.validate(inputValue)) {
+            validationError = true;
+          }
         });
 
+        // parse dependiendo del tipo de input
         let parsedValue = null;
         switch(inputSchema.type) {
           case 'number':
@@ -111,7 +114,7 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
       }
 
       if(!validationError) {
-        onSubmit(values);
+        onSubmit({values: values});
       }
 
     }

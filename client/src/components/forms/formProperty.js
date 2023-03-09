@@ -11,7 +11,10 @@ const FormProperty = ({ property }) => {
   const isSet = property.id!==undefined;
 
   return (
-    <FormBuilder inputs={ propertyInputs } values={ property } onSubmit={ function (values) {
+    <FormBuilder inputs={ propertyInputs } values={ property } onSubmit={ ({values}) => {
+
+
+      console.log(values);
 
       let username = localStorage.getItem("user") ?? false;
 

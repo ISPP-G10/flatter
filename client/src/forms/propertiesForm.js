@@ -17,7 +17,11 @@ export const propertyInputs = [
           label: 'Precio',
           placeholder: '50',
           type: 'number',
-          flex: 1
+          flex: 1,
+          validators: [
+            propertyValidators.minPrice,
+            propertyValidators.maxPrice
+          ]
       }
     },
     {
@@ -25,26 +29,29 @@ export const propertyInputs = [
           label: 'Provincia',
           type: 'text',
           flex: 1,
-          options: [{
-              id: 1,
-              text: 'Sevilla',
-          }, {
-              id: 2,
-              text: 'Valencia',
-          }]
+          validators: [
+            propertyValidators.notEmptyValidator
+          ]
       },
       location: {
           label: 'Municipio',
           placeholder: 'Introduce el municipio de tu propiedad',
           type: 'text',
-          flex: 1
+          flex: 1,
+          validators: [
+            propertyValidators.notEmptyValidator
+          ]
       },
       dimensions: {
         label: 'Dimensiones en m2',
         placeholder: '100',
         default: "0",
         type: 'number',
-        flex: 1
+        flex: 1,
+        validators: [
+          propertyValidators.minDimensions,
+          propertyValidators.maxDimensions
+        ]
       }
     },
     {
@@ -52,7 +59,10 @@ export const propertyInputs = [
           label: 'Descripción',
           placeholder: 'Descripción de tu propiedad',
           type: 'textarea',
-          flex: 4
+          flex: 4,
+          validators: [
+            propertyValidators.notEmptyValidator
+          ]
       }
     },
     {
@@ -75,14 +85,22 @@ export const propertyInputs = [
                 placeholder: '3',
                 default: "",
                 type: 'number',
-                flex: 1
+                flex: 1,
+                validators: [
+                  propertyValidators.minRooms,
+                  propertyValidators.maxRooms
+                ]
             },
             bathroomsNumber: {
                 label: 'Baños',
                 placeholder: '2',
                 default: "",
                 type: 'number',
-                flex: 1
+                flex: 1,
+                validators: [
+                  propertyValidators.minBaths,
+                  propertyValidators.maxBaths
+                ]
             }
           }
         
