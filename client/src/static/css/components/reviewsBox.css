@@ -1,0 +1,43 @@
+.reviews-box-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-left: 10%;
+    border: 0.1rem solid;
+    border-radius: 20px;
+    padding: 10px;
+    padding-left: 30px;
+    padding-right: 30px;
+    width: 75%;
+    text-align: left;
+    background-color: white;
+    border-color: #8492A6;
+}
+
+.reviews-box-title{
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.reviews-box-stars{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.reviews-box-total {
+    display: flex;
+    border: 0.1rem solid;
+    border-radius: 20px;
+    width: 100%;
+    padding: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: white;
+    border-color: #8492A6;
+    justify-content: center;
+    align-items: center;
+}
