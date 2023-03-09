@@ -24,6 +24,7 @@ class Property(models.Model):
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
     images = models.ManyToManyField(Image)
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
+    flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
 
 class Review(models.Model):
 
