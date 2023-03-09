@@ -18,17 +18,12 @@ class StandOutProperty(graphene.Mutation):
     @staticmethod
     def mutate(root, info, **kwargs):
         id_property = kwargs.get('id_property', '')
-        is_outstanding = kwargs.get('is_outstanding', '').strip()
         owner_id = kwargs.get("owner_id", "")
     
         owner=FlatterUser.objects.get(pk=owner_id)
         property=Property.objects.get(pk=id_property)
         
-        #if owner.roles.contains(RoleType.owner) El usuario debe ser OWNER para poder destacar un inmueble
-        #if property.is_outstanding==False and owner.flatter_coins>0:  
-         #   property.is_outstanding=True
-          #  property.save()
-        #return StandOutProperty(property=property)
+        
         
         if not owner.roles.filter(role="OWNER").exists():
           
