@@ -28,7 +28,6 @@ class EditUserMutation(graphene.Mutation):
     user = graphene.Field(FlatterUserType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
 
         username = kwargs.get('username', '').strip()
@@ -41,13 +40,13 @@ class EditUserMutation(graphene.Mutation):
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
 
-        if len(first_name) < 3 or len(first_name) >= 50:
+        if first_name and (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
 
-        if len(last_name) < 3 or len(last_name) >= 50:
+        if last_name and (len(last_name) < 3 or len(last_name) >= 50):
             raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
 
-        if email and ("@" not in email) or ("." not in email):
+        if email and ("@" not in email or "." not in email):
             raise ValueError(_("El email no es válido"))
 
         if phone:
