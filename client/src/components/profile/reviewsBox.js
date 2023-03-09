@@ -7,11 +7,11 @@ const ReviewsBox = (props) => {
         <div class="reviews-box-container">
             <h3 className="reviews-box-title">Puntuación</h3>
             <div class="reviews-box-stars">
-                <img className="reviews-box-star" width="25px" heigth="25px" src={require("../../static/files/icons/star.png")} alt="Icono estrella"></img>
-                <p className="reviews-box-average">{props.average}/5.0</p>
+                <img className="reviews-box-img" src={require("../../static/files/icons/yellow-star.png")} alt="Icono estrella"></img>
+                <p className="reviews-box-average">{`${props.total > 0 ? parseFloat(props.average).toFixed(2) + ' / 5.00' : '- / -'}`}</p>
             </div>
             <div className="reviews-box-total">
-                <p className="reviews-box-total-text">Dispone de {props.total} valoraciones</p>
+                <p className="reviews-box-total-text">Dispone de {parseInt(props.total)} {`${props.total === 1 ? 'valoración' : 'valoraciones'}`}</p>
             </div>
         </div>
     );

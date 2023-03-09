@@ -57,7 +57,6 @@
     display: grid;
     grid-template-columns: 75% 25%;
     row-gap: 50px;
-    column-gap: 30px;
     margin-top: 3em;
 }
 
@@ -71,6 +70,10 @@
     .comments-box {
         margin-right: 10%;
         margin-left: 10%;
+    }
+
+    .profile-grid{
+        grid-template-columns: 65% 35%;
     }
 }
 
