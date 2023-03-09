@@ -8,7 +8,6 @@ from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
 from mainApp.models import Review, Property
-from mainApp.mutations import random_string
 from social.types import ReviewType
 from datetime import datetime
 
@@ -112,6 +111,7 @@ class EditUserMutation(graphene.Mutation):
 
 class DeleteTagToUserMutation(graphene.Mutation):
     class Input:
+        username = graphene.String(required=True)
         tag_name = graphene.String(required=True)
 
     user = graphene.Field(FlatterUserType)
@@ -120,14 +120,10 @@ class DeleteTagToUserMutation(graphene.Mutation):
     @login_required
     def mutate(root, info, **kwargs):
 
-            user = info.context.user
+            username = kwargs.get('username', '').strip()
             tag_name = kwargs.get('tag_name', '').strip()
 
-            user_selected = FlatterUser.objects.get(pk=user.id)
-
-            # Check that the user making the request is the owner of the account
-            if user.id != user_selected.id:
-                raise Exception(_("You are not authorized to perform this action."))
+            user_selected = FlatterUser.objects.get(username=username)
 
             tag = Tag.objects.get(name=tag_name)
             user_selected.tags.remove(tag)
@@ -136,6 +132,7 @@ class DeleteTagToUserMutation(graphene.Mutation):
 
 class AddRoleToUserMutation(graphene.Mutation):
     class Input:
+        username = graphene.String(required=True)
         role = graphene.String(required=True)
 
     user = graphene.Field(FlatterUserType)
@@ -143,24 +140,22 @@ class AddRoleToUserMutation(graphene.Mutation):
     @staticmethod
     @login_required
     def mutate(root, info, **kwargs):
-
-            user = info.context.user
+        
+            username = kwargs.get('username', '').strip()
             role = kwargs.get('role', '').strip()
 
-            user_selected = FlatterUser.objects.get(pk=user.id)
+            user_selected = FlatterUser.objects.get(username=username)
 
             # Check that the user making the request is the owner of the account
-            if user.id != user_selected.id:
-                raise Exception(_("You are not authorized to perform this action."))
 
             try:
                 role = Role.objects.get(role=role)
-            except:
-                raise Exception(_("El rol no existe"))
+            except Exception:
+                raise ValueError(_("El rol no existe"))
 
             user_roles = user_selected.roles.all()
             if role in user_roles:
-                raise Exception(_("El usuario ya tiene este rol"))
+                raise ValueError(_("El usuario ya tiene este rol"))
 
             user_selected.roles.add(role)
             user_selected.save()
@@ -177,19 +172,15 @@ class DeleteRoleToUserMutation(graphene.Mutation):
     @login_required
     def mutate(root, info, **kwargs):
 
-            user = info.context.user
+            username = kwargs.get('username', '').strip()
             role = kwargs.get('role', '').strip()
 
-            user_selected = FlatterUser.objects.get(pk=user.id)
-
-            # Check that the user making the request is the owner of the account
-            if user.id != user_selected.id:
-                raise Exception(_("You are not authorized to perform this action."))
+            user_selected = FlatterUser.objects.get(username=username)    
 
             try:
                 role = Role.objects.get(role=role)
-            except:
-                raise Exception(_("El rol no existe"))
+            except Exception:
+                raise ValueError(_("El rol no existe"))
 
             user_selected.roles.remove(role)
             user_selected.save()
@@ -228,16 +219,16 @@ class CreateReview(graphene.Mutation):
                 raise ValueError(_("El texto debe tener entre 10 y 500 caracteres"))
             try:
                 valued_user = FlatterUser.objects.get(pk=valued_user)
-            except:
+            except Exception:
                 raise ValueError(_("El usuario valorado no existe"))
             try:
                 evaluator_user = FlatterUser.objects.get(pk=evaluator_user)
-            except:
+            except Exception:
                 raise ValueError(_("El usuario evaluador no existe"))
             if property:
                 try:
                     property = Property.objects.get(pk=property)
-                except:
+                except Exception:
                     raise ValueError(_("La propiedad no existe"))
             else:
                 property = None
@@ -268,9 +259,6 @@ class SocialMutation(graphene.ObjectType):
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
-
-def _exists_user(username):
-    return FlatterUser.objects.filter(username=username).exists()
 
 def _exists_email(email):
     return FlatterUser.objects.filter(email=email).exists()
