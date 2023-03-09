@@ -7,52 +7,55 @@ import Tag from "../components/tag";
 import FlatterForm from "../components/forms/flatterForm";
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
+import propertiesAPI from "../api/propertiesAPI";
 
 import { useParams } from "react-router-dom";
-import { useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
+import {useQuery} from '@apollo/client';
+
+const FilteredProperties = ({min, max, city}) => {
+
+  const {data, loading} = useQuery(propertiesAPI.filterProperties, {
+    variables: {
+      minPrice: min,
+      maxPrice: max,
+      city: city
+    }
+  });
+    
+  return {
+    loading,
+    properties: data?.getFilteredPropertiesByPriceAndCity ?? []
+  };
+};
 
 const OwnerProperties = () => {
 
   const addPropertyModalRef = useRef(null);
+  const editPropertyModalRef = useRef(null);
+  const registerFormRef = useRef(null);
 
-    const exampleProperty = {
-        id: 1,
-        title: "Elegante y magífica chavola",
-        description: `¿Estás buscando un lugar acogedor y espacioso para vivir? ¡No busques más! Tenemos la solución perfecta para ti. En nuestra comunidad de apartamentos, estamos ofreciendo una habitación en un piso de 100m2`,
-        gallery: [
-            'https://images.unsplash.com/photo-1597047084897-51e81819a499?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
-            'https://images.unsplash.com/photo-1464890100898-a385f744067f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1529408632839-a54952c491e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1531383339897-f369f6422e40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1548777137-2235b9fd3222?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+  const [filterValues, setFilterValues] = useState({
+    min: 0,
+    max: 2000,
+    city: ''
+  });
 
-        ],
-        tags: [
-            {
-                title: "Elegante",
-                color: "#f44336"
-            },
-            {
-                title: "Social",
-                color: "purple"
-            }
-        ]
-    }
+  const properties = FilteredProperties(filterValues).properties;
 
-const { page } = useParams();
+  const { page } = useParams();
 
-// TODO si no se encuentra el id o ha sido proporcionado algo diferente
-// a un integer mayor que 0, se devuelve false y redirección a 404
-const getProperties = (page) => {
-    return [exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty];
-}
+  function handleFilterForm({values}) {
 
-const properties = getProperties(page);
+    console.log(values);
 
-const handleFilterForm = () => {
-
-}
+    setFilterValues({
+      min: 100,
+      max: 300,
+      city: 'Sevilla'
+    })
+  }
 
 return (
     <FlatterPage withBackground userLogged>
@@ -65,6 +68,10 @@ return (
           <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
               addPropertyModalRef.current.open();
           } } />
+
+          <SolidButton text="Editar Propiedad" type="" onClick={ () => { 
+              editPropertyModalRef.current.open();
+          } } />
         </div>
       </div>
       <section className="site-content-sidebar properties">
@@ -73,7 +80,7 @@ return (
             <div className="filters">
               <h3>Filtrar por</h3>
 
-              <FlatterForm inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades" />
+              <FlatterForm ref={registerFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades" />
             </div>
           </div>
         </div>
@@ -93,7 +100,7 @@ return (
   
                 <div className="property-meta">
                   <div className="meta-right">
-                    {property.tags.map((tag, index) => (
+                    {property.tags && property.tags.map((tag, index) => (
                       <Tag key={ index } name={tag.title} color={tag.color}></Tag>
                     ))}
                   </div>
@@ -106,9 +113,9 @@ return (
                 </div>
   
                 <footer className="property-footer">
-                  <SolidButton text="Destacar" />
-                  <SolidButton text="Editar" />
-                  <SolidButton text="Borrar" />
+                  <SolidButton text="Ver piso" />
+                  <SolidButton text="Ver reseñas" />
+                  <SolidButton text="Compartir" />
                 </footer>
               </div>
             </article>
@@ -118,6 +125,10 @@ return (
 
       <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
         <FormProperty property={{}} />
+      </FlatterModal>
+
+      <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
+        <FormProperty property={properties[0] ?? {}} />
       </FlatterModal>
     </FlatterPage>
   );

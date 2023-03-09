@@ -3,6 +3,7 @@ from authentication.models import Tag,FlatterUser
 from .types import PropertyType,TagType
 from .models import Property
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)

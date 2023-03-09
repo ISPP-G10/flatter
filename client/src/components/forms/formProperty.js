@@ -8,17 +8,26 @@ const FormProperty = ({ property }) => {
 
   const client = useApolloClient();
 
+  const isSet = property.id!==undefined;
+
   return (
     <FormBuilder inputs={ propertyInputs } values={ property } onSubmit={ function (values) {
 
       let username = localStorage.getItem("user") ?? false;
 
       if(username) {
-        values['ownerUsername'] = localStorage.getItem('user')
+        values['ownerUsername'] = localStorage.getItem('user');
+
+        console.log(values);
 
         client.mutate({
-          mutation: propertiesAPI.createProperty,
-          variables: values
+          mutation: isSet ? propertiesAPI.updateProperty : propertiesAPI.createProperty,
+          variables: {
+            ...(isSet ? {
+              id: parseInt(property.id)
+            } : {}), 
+            ...values
+          }
         });
       }
 

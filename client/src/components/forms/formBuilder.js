@@ -4,6 +4,7 @@ import SolidButton from '../../sections/solidButton';
 import ImageUploader from '../../sections/imageUploader';
 
 import PropTypes from "prop-types";
+import FormInput from './formInput';
 
 const FormBuilder = ({ inputs, values, onSubmit }) => {
 
@@ -23,15 +24,7 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
             case "text":
             case "number":
               return (
-                <label key={key} style={{ flex: value.flex }}>
-                  {value.label}
-                  <input
-                    type={value.type}
-                    name={key}
-                    defaultValue={propValue || value.default}
-                    placeholder={value.placeholder}
-                  />
-                </label>
+                <FormInput key={key} tag={ value.label } defaultValue={propValue || value.default} type={ value.type } name={ key } validators={ value.validators } />
               );
             case "checkbox":
               return (
@@ -105,13 +98,14 @@ const FormBuilder = ({ inputs, values, onSubmit }) => {
     };
 
     return (
-        <form style={{overflowY: 'scroll', width: '100%'}} onSubmit = { function (e) {
+        <form className="form" style={{overflowY: 'auto', width: '100%'}} onSubmit = { function (e) {
           e.preventDefault();
 
           const formInputs = Array.prototype.slice.call(e.target.querySelectorAll('*[name]')),
           values = {};
 
           for(let index in Object.keys(schema)) {
+            
             // para almacenar los tipos de los inputs y darle los valores en tipo String o Int
             const key = Object.keys(schema)[index],
               inputSchema = schema[key],

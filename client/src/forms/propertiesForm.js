@@ -1,4 +1,4 @@
-import { registerValidators } from "../libs/validators/registerValidators"
+import { propertyValidators } from "../libs/validators/propertyValidation"
 
 export const propertyInputs = [
     {
@@ -7,6 +7,11 @@ export const propertyInputs = [
           placeholder: 'Introduce un título para tu propiedad',
           type: 'text',
           flex: 3,
+          validators: [
+            propertyValidators.notEmptyValidator,
+            propertyValidators.noNumbersValidator,
+            propertyValidators.namesLengthValidator
+          ]
       },
       price: {
           label: 'Precio',
