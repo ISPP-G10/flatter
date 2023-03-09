@@ -57,7 +57,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
 
-            navigator('/main-page');
+            navigator('/main');
 
         }).catch((error) => {
             alert(['Usuario o contraseña incorrectos']);
@@ -92,7 +92,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
 
-            navigator('/main-page');
+            navigator('/main');
         }).catch((error) => {
             alert(error.message.split("\n")[0]);
         });

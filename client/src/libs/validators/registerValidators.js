@@ -44,4 +44,9 @@ export const registerValidators = {
         },
         message: "El campo debe ser un rol válido",
     },
+
+    phoneNumber: {
+        validate: (value) => value.match(/^[9|6|7][0-9]{8}$/),
+        message: "El campo debe ser un número válido"
+    }
 }
