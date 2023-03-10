@@ -29,7 +29,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
             }
         })
         .then((response) => {
-            correctModalRef.current.open();
+            window.location.reload();
         })
         .catch((error) => alert(error.message));
     }
