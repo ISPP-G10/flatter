@@ -73,7 +73,7 @@ def add_roles(sender=None, **kwargs):
     for role in RoleType:
         Role.objects.get_or_create(role=role)
 
-signals.post_migrate.connect(add_roles, sender=Role)
+signals.post_migrate.connect(add_roles)
 
 
 

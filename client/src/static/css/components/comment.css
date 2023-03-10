@@ -45,6 +45,25 @@
     text-align: justify;
 }
 
+.comment-content{
+    width: 100%;
+}
+
+.comment-link{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.comment-link:hover{
+    text-decoration: underline;
+    text-decoration-color: #0000006f;
+}
+
+.comment-link-img{
+    align-self: center;
+    margin: 0;
+}
+
 @media screen and (max-width: 767px) {
     .comment{
         flex-direction: column;

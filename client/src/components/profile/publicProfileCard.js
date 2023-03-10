@@ -3,7 +3,6 @@ import Tag from '../tag';
 import PropTypes from 'prop-types';
 
 const PublicProfileCard = (props) => {
-
     return (
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isTenant ? 'profile-card-tenant' : 'profile-card-propietary'}`}>
             <div className="profile-card-info">
@@ -12,20 +11,29 @@ const PublicProfileCard = (props) => {
                         <h2>{props.name}</h2>
                         <button className="profile-card-btn" title="Edita tu perfil"></button>
                     </div>
-                    <p>{props.job}</p>
-                    <p>{props.age} años</p> 
+                    <p>{props.job ? props.job : ''}</p>
+                    <p>{props.age ? props.age + "años": ''}</p> 
                 </div>
             </div>
             <div className='profile-card-details'>
-                <img className='profile-card-img' src={require('../../static/files/images/foto.jpg')} alt='Profile'/>
+                <img className='profile-card-img' src={props.pic} alt='Profile'/>
                 <div className='profile-card-bio'>
                     <h2>Yo...</h2>
                     <p className="profile-card-description">
-                        {props.bio}
+                        {props.bio ? props.bio : props.me ? 'Añade una descripción para que el resto te conozca' : 'No hay descripción disponible'}
                     </p>
                     <div className='tags-container'>
-                        <Tag name='LOL' color='#f783de' />
-                        <Tag name="LGTB" color='#f783de' />               
+                        {
+                            props.tags.length !== 0 ? (
+                                props.tags.map((tag, i) => { 
+                                    return(
+                                        <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                    )
+                                })
+                            ) : (
+                                <></>
+                            )
+                        }
                     </div>
                 </div>
             </div>           
@@ -39,7 +47,9 @@ PublicProfileCard.propTypes = {
     age: PropTypes.number,
     bio: PropTypes.string,
     isMe: PropTypes.bool,
-    isTenant: PropTypes.bool
+    isTenant: PropTypes.bool,
+    tags: PropTypes.array,
+    pic: PropTypes.string
 }
 
 PublicProfileCard.defaultProps = {
@@ -48,7 +58,9 @@ PublicProfileCard.defaultProps = {
     age: 0,
     bio: "",
     isMe: false,
-    isTenant: true
+    isTenant: true,
+    tags: [],
+    pic: ""
 }
 
 export default PublicProfileCard;

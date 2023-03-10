@@ -108,7 +108,7 @@ class EditUserMutation(graphene.Mutation):
 
         return EditUserMutation(user=user_selected)
 
-class DeleteTagToUserMutation(graphene.Mutation):
+class DeleteTagFromUserMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
         tag_name = graphene.String(required=True)
@@ -161,7 +161,7 @@ class AddRoleToUserMutation(graphene.Mutation):
 
             return AddRoleToUserMutation(user=user_selected)
 
-class DeleteRoleToUserMutation(graphene.Mutation):
+class DeleteRoleFromUserMutation(graphene.Mutation):
     class Input:
         role = graphene.String(required=True)
 
@@ -189,61 +189,54 @@ class DeleteRoleToUserMutation(graphene.Mutation):
 class CreateReview(graphene.Mutation):
 
     class Input:
-        assessment = graphene.Int(required=True)
+        rating = graphene.Int(required=False)
         text = graphene.String(required=True)
-        valued_user = graphene.Int(required=True)
-        evaluator_user = graphene.Int(required=True)
+        valued_user = graphene.String(required=True)
+        evaluator_user = graphene.String(required=True)
         relationship = graphene.String(required=True)
-        property = graphene.Int(required=False)
 
 
     review = graphene.Field(ReviewType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
+        rating = kwargs.get('rating', None)
+        text = kwargs.get('text', '').strip()
+        valued_user = kwargs.get('valued_user', '')
+        evaluator_user = kwargs.get('evaluator_user', '')
+        relationship = kwargs.get('relationship', '').strip()
+        
+        if rating and (rating < 1 or rating > 5):
+            raise ValueError(_("La valoración debe estar entre 1 y 5"))
+        
+        if len(text) < 2 or len(text) > 256:
+            raise ValueError(_("El texto debe tener entre 2 y 256 caracteres"))
+        
+        try:
+            valued_user = FlatterUser.objects.get(username=valued_user)
+        except Exception:
+            raise ValueError(_("El usuario valorado no existe"))
+        
+        try:
+            evaluator_user = FlatterUser.objects.get(username=evaluator_user)
+        except Exception:
+            raise ValueError(_("El usuario evaluador no existe"))
 
-            assessment = kwargs.get('assessment', '')
-            text = kwargs.get('text', '').strip()
-            valued_user = kwargs.get('valued_user', '')
-            evaluator_user = kwargs.get('evaluator_user', '')
-            relationship = kwargs.get('relationship', '').strip()
-            property = kwargs.get('property', '')
+        if valued_user == evaluator_user:
+            raise ValueError(_("No puedes valorarte a ti mismo"))
+        
+        if len(relationship) > 1:
+            relationship = _parse_relationship(relationship.lower().strip())
+        
+        if not relationship:
+            raise ValueError(_("La relación entre usuarios no es válida"))
 
+        if Review.objects.filter(valued_user=valued_user, evaluator_user=evaluator_user).exists():
+            raise ValueError(_("Ya has valorado a este usuario"))
 
+        review = Review.objects.create(rating=rating, text=text, valued_user=valued_user, evaluator_user=evaluator_user, relationship=relationship)
 
-            if assessment < 0 or assessment > 5:
-                raise ValueError(_("La valoración debe estar entre 0 y 5"))
-            if len(text) < 10 or len(text) > 500:
-                raise ValueError(_("El texto debe tener entre 10 y 500 caracteres"))
-            try:
-                valued_user = FlatterUser.objects.get(pk=valued_user)
-            except Exception:
-                raise ValueError(_("El usuario valorado no existe"))
-            try:
-                evaluator_user = FlatterUser.objects.get(pk=evaluator_user)
-            except Exception:
-                raise ValueError(_("El usuario evaluador no existe"))
-            if property:
-                try:
-                    property = Property.objects.get(pk=property)
-                except Exception:
-                    raise ValueError(_("La propiedad no existe"))
-            else:
-                property = None
-
-            if valued_user == evaluator_user:
-                raise ValueError(_("No puedes valorarte a ti mismo"))
-
-            evaluators = [review.evaluator_user for review in Review.objects.filter(valued_user=valued_user)]
-
-            if evaluator_user in evaluators:
-                raise ValueError(_("Ya has valorado a este usuario"))
-
-
-            review = Review.objects.create(assessment=assessment, text=text, valued_user=valued_user, evaluator_user=evaluator_user, relationship=relationship , property=property)
-
-            return CreateReview(review=review)
+        return CreateReview(review=review)
 
 
 
@@ -251,9 +244,9 @@ class CreateReview(graphene.Mutation):
 
 class SocialMutation(graphene.ObjectType):
     edit_user = EditUserMutation.Field()
-    delete_tag_to_user = DeleteTagToUserMutation.Field()
+    delete_tag_to_user = DeleteTagFromUserMutation.Field()
     add_role_to_user = AddRoleToUserMutation.Field()
-    delete_role_to_user = DeleteRoleToUserMutation.Field()
+    delete_role_to_user = DeleteRoleFromUserMutation.Field()
     create_review = CreateReview.Field()
 
 
@@ -261,3 +254,14 @@ class SocialMutation(graphene.ObjectType):
 
 def _exists_email(email):
     return FlatterUser.objects.filter(email=email).exists()
+
+def _parse_relationship(relationship):
+    if relationship == 'amigo':
+        return 'A'
+    if relationship == 'compañero':
+        return 'C'
+    if relationship == 'excompañero':
+        return 'E'
+    if relationship == 'propietario':
+        return 'P'
+    return None

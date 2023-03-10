@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { commentsFormInputs } from '../../forms/commentsForm';
 import '../../static/css/components/commentsBox.css'
 import FlatterModal from '../flatterModal';
@@ -6,14 +6,59 @@ import FlatterForm from '../forms/flatterForm';
 import Comment from './comment';
 import ReactStars from "react-rating-stars-component";
 import PropTypes from 'prop-types';
+import { API_SERVER_MEDIA } from '../../settings';
+import {useApolloClient} from '@apollo/client'
+import usersAPI from '../../api/usersAPI';
+
+function getTagName(tag, genre) {
+    let final_letter = "e"
+    if (genre === "H") {
+        final_letter = "o"
+    }else if (genre === "M"){
+        final_letter = "a"
+    }
+
+    switch(tag){
+        case "A":
+            return "Amig" + (final_letter==="e" ? "ue" : final_letter);
+        case "C":
+            return "Compañer" + final_letter;
+        case "E":
+            return "Excompañer" + final_letter;
+        default:
+            return "Propietari" + final_letter;
+    }
+}
+
+function getTagColor(tag) {
+    switch(tag){
+        case "A":
+            return "#AC00FF";
+        case "C":
+            return "#F95FCB";
+        case "E":
+            return "#F95F62";
+        default:
+            return "#176F9F";
+    }
+}
 
 const CommentsBox = (props) => {
 
     const commentsModalRef = useRef(null)
     const commentsFormRef = useRef(null);
+    const [rating, setRating] = useState(null);
+    const [comments, setComments] = useState(props.comments)
+    const client = useApolloClient();
  
     const ratingChanged = (newRating) => {
-    console.log(newRating);
+        if (rating === null || rating === undefined || rating === 0) {
+            setRating(null)
+        } else if (rating < 1 && rating > 5){
+            alert("La valoración debe estar entre 1 y 5");
+        } else{
+            setRating(newRating)
+        }
     };
 
     function handleCommentsButtonClick(){
@@ -24,30 +69,29 @@ const CommentsBox = (props) => {
 
         if(!commentsFormRef.current.validate()) return;
 
-        // client.mutate({
-        //     mutation: usersAPI.createUser,
-        //     variables: {
-        //         firstName: values.first_name,
-        //         lastName: values.last_name,
-        //         username: values.username,
-        //         password: values.password,
-        //         email: values.email,
-        //         genre: values.genre,
-        //         roles: values.role
-        //     }
-        // }).then((response) => {
-        //     let token = response.data.tokenAuth.token;
-        //     let username = response.data.tokenAuth.user.username;
-
-        //     localStorage.setItem('token', token);
-        //     localStorage.setItem('user', username);
-
-        //     navigator('/main');
-        // }).catch((error) => {
-        //     alert(error.message.split("\n")[0]);
-        // });
+        client.mutate({
+            mutation: usersAPI.createReview,
+            variables: {
+                valuedUser: props.username,
+                evaluatorUser: localStorage.getItem("user"),
+                text: values.comment,
+                rating: rating ? rating : null,
+                relationship: values.relationship
+            }
+        }).then((response) => {
+            setComments([
+                    response.data.createReview.review,
+                    ...comments
+                ]);
+        }).catch((error) => {
+            alert(error.message.split("\n")[0]);
+        });
         
     }
+
+    useEffect(() => {
+
+    }, [comments]);
 
     return(
         <>
@@ -63,10 +107,10 @@ const CommentsBox = (props) => {
                 </div>
                 <div className="comments-box-scollable">
                     {
-                        props.comments.length !== 0 ? (
-                            props.comments.map((comment, index) => {
+                        comments.length !== 0 ? (
+                            comments.map((comment, i) => {
                                 return(
-                                    <Comment key={'comment-' + index} name={comment.name} pic={comment.pic} tagName={comment.tagName} tagColor={comment.tagColor} text={comment.text} />
+                                    <Comment key={'comment-' + i} name={comment.evaluatorUser.firstName + " " + comment.evaluatorUser.lastName} pic={API_SERVER_MEDIA+comment.evaluatorUser.profilePicture} tagName={getTagName(comment.relationship, comment.evaluatorUser.genre)} tagColor={getTagColor(comment.relationship)} text={comment.text} username={comment.evaluatorUser.username} />
                                 );
                             }))
                         :
@@ -89,7 +133,7 @@ const CommentsBox = (props) => {
                         count={5}
                         onChange={ratingChanged}
                         size={24}
-                        isHalf={true}
+                        isHalf={false}
                         activeColor="#ffd700"
                     />
                 </FlatterForm>
@@ -99,11 +143,13 @@ const CommentsBox = (props) => {
 }
 
 CommentsBox.propTypes = {
-    comments: PropTypes.array
+    comments: PropTypes.array,
+    username: PropTypes.string
 }
 
 CommentsBox.defaultProps = {
-    comments: []
+    comments: [],
+    username: ""
 }
 
 export default CommentsBox;

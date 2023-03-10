@@ -36,6 +36,56 @@ const usersAPI = {
                 }
             }
     `,
+    getPublicProfileByUsername: gql`
+            query getUserReviews($username: String!){
+                getUserByUsername(username: $username){
+                    firstName
+                    lastName
+                    profilePicture
+                    bibliography
+                    profession
+                    birthday
+                    averageRating
+                    roles{
+                        role
+                    }
+                    tags{
+                        name
+                        color
+                    }
+                    valuedReviews{
+                        text
+                        evaluatorUser{
+                            username
+                            firstName
+                            lastName
+                            profilePicture
+                            genre
+                        }
+                        rating
+                        relationship
+                    }
+                }
+            }
+    `,
+    createReview: gql`
+        mutation createReview ($valuedUser: String!, $evaluatorUser: String!, $text: String!, $relationship: String!, $rating: Int){
+            createReview (valuedUser: $valuedUser, evaluatorUser: $evaluatorUser, text: $text, relationship: $relationship, rating: $rating){
+                review{
+                    text
+                    evaluatorUser{
+                        username
+                        firstName
+                        lastName
+                        profilePicture
+                        genre
+                    }
+                    rating
+                    relationship
+                }
+            }
+        }
+`,
 
 }
 

@@ -5,8 +5,8 @@ export const commentsValidators = {
     },
     
     commentsLengthValidator: {
-        validate: (value) => value.trim().length >= 3 && value.trim().length <= 50,
-        message: "El campo debe tener entre 3 y 50 caracteres"
+        validate: (value) => value.trim().length >= 2 && value.trim().length <= 256,
+        message: "El campo debe tener entre 2 y 256 caracteres"
     },
 
     validRelationship: {
