@@ -17,6 +17,15 @@ const usersAPI = {
                       }
                 }
     `,
+    updateUser: gql`
+                mutation editUser($username: String!, $firstName: String, $lastName: String, $email: String, $role: String, $genre: String, $phoneNumber: String, $profilePicture: String){
+                    editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, phone: $phoneNumber, profilePicture: $profilePicture){
+                        user{
+                            username
+                        }
+                    }
+                }
+    `,
     logUser: gql`
                 mutation logUser($username: String!, $password: String!){
                     tokenAuth(username: $username, password: $password){
@@ -33,6 +42,22 @@ const usersAPI = {
                     username
                     profilePicture
     				flatterCoins
+                }
+            }
+    `,
+    getUserByUsernameSettings: gql`
+            query getUserByUsername($username: String!){
+                getUserByUsername(username: $username){
+                    username
+                    profilePicture
+    				firstName
+                    lastName
+                    genre
+                    roles{
+                        role
+                    }
+                    phoneNumber
+                    email
                 }
             }
     `,

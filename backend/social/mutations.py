@@ -1,9 +1,7 @@
-import base64, os
+import base64, os, re
 
 import graphene
-from django.core.exceptions import ValidationError
 from graphql_jwt.decorators import login_required
-import phonenumbers
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
@@ -23,7 +21,8 @@ class EditUserMutation(graphene.Mutation):
         profile_picture = graphene.String(required=False)
         profession = graphene.String(required=False)
         birthday = graphene.String(required=False)
-
+        role = graphene.String(required=False)
+        genre = graphene.String(required=False)
 
     user = graphene.Field(FlatterUserType)
 
@@ -39,6 +38,8 @@ class EditUserMutation(graphene.Mutation):
         profile_picture = kwargs.get('profile_picture', '')
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
+        genre = kwargs.get('genre', '').strip()
+        role = kwargs.get('role', '').strip()
 
         if first_name and (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
@@ -49,38 +50,39 @@ class EditUserMutation(graphene.Mutation):
         if email and ("@" not in email or "." not in email):
             raise ValueError(_("El email no es válido"))
 
-        if phone:
-            try:
-                parsed_number = phonenumbers.parse(phone, None)
-                if not phonenumbers.is_valid_number(parsed_number):
-                    raise ValidationError(_("El número de teléfono no es válido."))
-            except phonenumbers.NumberParseException as e:
-                raise ValidationError(_("Error al validar el número de teléfono: %(error)s"),
-                                      code="invalid_phone_number", params={"error": str(e)})
+        # TODO: VALIDAR TELÉFONO
 
         if profession and len(profession) < 1 and len(profession) > 100:
             raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
 
-
+        if genre and not valid_genre(genre):
+            raise ValueError(_("El género no es válido"))
+            
+        if role and not valid_roles(role):
+            raise ValueError(_("Los roles no son válidos"))
+        
+        genre = parse_genre(genre)
+        roles = parse_roles(role)
 
         user_selected = FlatterUser.objects.get(username=username)
 
-        if user_selected.username != username:
+        if username and user_selected.username != username:
             user_selected.username = username
-        if user_selected.first_name != first_name:
+        if first_name and user_selected.first_name != first_name:
             user_selected.first_name = first_name
-        if user_selected.last_name != last_name:
+        if last_name and user_selected.last_name != last_name:
             user_selected.last_name = last_name
-        if user_selected.email != email:
+        if email and user_selected.email != email:
             if _exists_email(email):
                 raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
             else:
                 user_selected.email = email    
-        if user_selected.bibliography != bibliography:
+        if bibliography and user_selected.bibliography != bibliography:
             user_selected.bibliography = bibliography
-        if user_selected.phone_number != phone:
+        print(phone)
+        if phone and user_selected.phone_number != phone:
             user_selected.phone_number = phone
-
+        
         if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
@@ -101,10 +103,16 @@ class EditUserMutation(graphene.Mutation):
             if user_selected.birthday != formated_birthday:
                 user_selected.birthday = formated_birthday
 
-        if user_selected.profession != profession:
+        if profession and user_selected.profession != profession:
             user_selected.profession = profession
+            
+        if genre and user_selected.genre != genre:
+            user_selected.genre = genre
 
         user_selected.save()
+        
+        user_selected.roles.clear()
+        user_selected.roles.add(*roles)
 
         return EditUserMutation(user=user_selected)
 
@@ -261,3 +269,36 @@ class SocialMutation(graphene.ObjectType):
 
 def _exists_email(email):
     return FlatterUser.objects.filter(email=email).exists()
+
+def valid_genre(genre):
+    return genre in ['Hombre', 'Mujer', 'No Binario', 'Otro']
+  
+def valid_roles(roles):
+
+  for role in roles:
+    if role not in ['Propietario', 'Inquilino', 'Ambos']:
+      return True
+    
+  return False
+  
+def parse_genre(genre):
+  
+  if genre == 'Hombre':
+    return 'H'
+  elif genre == 'Mujer':
+    return 'M'
+  elif genre == 'No Binario':
+    return 'NB'
+  elif genre == 'Otro':
+    return 'O'
+  else:
+    return 'X'
+  
+def parse_roles(roles):
+  
+  if roles == 'Propietario':
+    return [Role.objects.get(role='OWNER')]
+  elif roles == 'Inquilino':
+    return [Role.objects.get(role='RENTER')]
+  else:
+    return list(Role.objects.all())

@@ -185,28 +185,28 @@
     "model": "mainApp.Image",
     "pk": 1,
     "fields": {
-      "image": "property/images/1.jpeg"
+      "image": "properties/images/1.jpeg"
     }
   },
   {
     "model": "mainApp.Image",
     "pk": 2,
     "fields": {
-      "image": "property/images/2.jpeg"
+      "image": "properties/images/2.jpeg"
     }
   },
   {
     "model": "mainApp.Image",
     "pk": 3,
     "fields": {
-      "image": "property/images/3.jpg"
+      "image": "properties/images/3.jpg"
     }
   },
   {
     "model": "mainApp.Image",
     "pk": 4,
     "fields": {
-      "image": "property/images/4.jpg"
+      "image": "properties/images/4.jpg"
     }
   },
   {

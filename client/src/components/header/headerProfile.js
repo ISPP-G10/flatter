@@ -28,12 +28,9 @@ const HeaderProfile = ({user}) => {
                     <img src={`${settings.API_SERVER_MEDIA}${data.getUserByUsername.profilePicture}`} alt="Avatar"/>
                 </div>
                 <div className="header-user-section__data">
-                    <p id="wrapped-name">{data.getUserByUsername.username.length > 10 ? data.getUserByUsername.username.substring(0, 10)+"…" : data.getUserByUsername.username}</p>
+                    <p id="wrapped-name">{data.getUserByUsername.username}</p>
                     <p id="full-name">{data.getUserByUsername.username}</p>
                     <FlatterCoinsCounter height={20} iconWidth={15} amount={data.getUserByUsername.flatterCoins}/>
-                </div>
-                <div className="header-user-section__arrow">
-                    <img src={require("../../static/files/icons/arrow-down.png")} alt="Opciones"/>
                 </div>
             </div>
         </>
