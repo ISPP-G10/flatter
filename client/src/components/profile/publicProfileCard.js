@@ -1,15 +1,93 @@
-import '../../static/css/components/publicProfileCard.css'
+import '../../static/css/components/publicProfileCard.css';
+
 import Tag from '../tag';
 import PropTypes from 'prop-types';
+import FlatterModal from '../flatterModal';
+import FlatterForm from '../forms/flatterForm';
+import usersAPI from '../../api/usersAPI';
+
+import { publicProfileFormInputs } from '../../forms/publicProfileForm';
+import { useApolloClient } from '@apollo/client';
+
+
+import {useEffect, useRef, useState} from 'react';
 
 const PublicProfileCard = (props) => {
+
+    const client = useApolloClient();
+
+    let [userImage, setUserImage] = useState(null);
+    let [publicProfileFormValues, setPublicProfileFormValues] = useState(publicProfileFormInputs);
+
+    const editPublicProfileModalRef = useRef(null);
+    const editPublicProfileForm = useRef(null);
+    const userImageField = useRef(null);
+
+    function performUserMutation(values, encodedImage){
+        client.mutate({
+            mutation: usersAPI.updateUser,
+            variables: {
+                username: localStorage.getItem('user', ''),
+                biography: values.biography,
+                profession: values.profession,
+                profilePicture: encodedImage,
+            }
+        })
+        .then((response) => {
+            editPublicProfileModalRef.current.close();
+            window.location.reload();
+        })
+        .catch((error) => alert(error.message));
+    }
+
+    function handlePublicProfileEdit({values}){
+
+        if(!editPublicProfileForm.current.validate()) {
+            alert('Hay campos incorrectos. Por favor, revise el formulario')
+            return;
+        }
+
+        try{
+            var reader = new FileReader();
+            reader.readAsDataURL(userImage);
+
+            reader.onload = function () {
+                performUserMutation(values, reader.result);
+            };
+        }catch(error){
+            performUserMutation(values, null);
+        }
+    }
+
+    function changeImage(e){
+
+        let file = e.target.files[0];
+
+        userImageField.current.src = URL.createObjectURL(file);
+
+        setUserImage(file);
+    }
+
+    useEffect(() => {
+
+        publicProfileFormValues.map((input) => {
+            if(input.name === 'biography'){
+                input.defaultValue = props.bio;
+            }else if(input.name === 'profession'){
+                input.defaultValue = props.job;
+            }
+        });
+
+    }, [userImage]);
+
     return (
+        <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
                 <div className="profile-card-data">
                     <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
                         <h2>{props.name}</h2>
-                        <button className="profile-card-btn" title="Edita tu perfil"></button>
+                        <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                     </div>
                     <p>{props.job ? props.job : ''}</p>
                     <p>{props.age ? props.age + "años": ''}</p> 
@@ -38,6 +116,28 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
+        <FlatterModal ref={editPublicProfileModalRef}>
+            <h1 className="comments-form-title">Editar perfil público</h1>
+            <FlatterForm 
+                buttonText="Actualizar perfil"
+                showSuperAnimatedButton
+                numberOfColumns={1}
+                inputs={publicProfileFormInputs}
+                onSubmit={handlePublicProfileEdit}
+                ref={editPublicProfileForm}>
+
+                <div className="setting-profile-pic" style={{width: '40%'}}>
+                    <label className="-label" htmlFor="file">
+                        <img src={require('../../static/files/icons/camera.png')} alt="camara" className="camera-icon"/>
+                        <span style={{margin: '0'}}>Cambiar</span>
+                    </label>
+                    <input id="file" type="file" onChange={changeImage}/>
+                    <img ref={userImageField} className="user-img" src={props.pic} id="output" width="200" alt="Imagen de perfil"/>
+                </div>
+
+            </FlatterForm>
+        </FlatterModal>
+        </>
     );
 }
 

@@ -2,6 +2,7 @@ from django.db import models
 from authentication.models import FlatterUser, Tag
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
+from django.db.models import signals
 
 # Create your models here.
 
@@ -22,7 +23,7 @@ class Property(models.Model):
     location = models.CharField(max_length=50)
     province = models.CharField(max_length=50)
     is_in_offer = models.BooleanField(default=False)
-    is_full = models.BooleanField(default=False)
+    max_flatmates = models.IntegerField(default=1)
     dimensions = models.IntegerField()
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
     images = models.ManyToManyField(Image, related_name=_('property_images'))
@@ -55,3 +56,8 @@ class Application(models.Model):
     property = models.ForeignKey(Property,on_delete=models.CASCADE)
     user = models.ManyToManyField(FlatterUser)
     type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
+    
+def add_default_img(sender=None, **kwargs):
+    Image.objects.get_or_create(image='properties/images/default.png')
+
+signals.post_migrate.connect(add_default_img)

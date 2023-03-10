@@ -15,6 +15,7 @@
     border-radius: 25px;
     padding: 20px 40px;
     background-color: rgba(0, 168, 255, 0.8);
+    border: 2px solid rgb(0, 57, 85);
 }
 
 .settings-content{

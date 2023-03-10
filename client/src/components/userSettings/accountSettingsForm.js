@@ -29,7 +29,12 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
             }
         })
         .then((response) => {
-            correctModalRef.current.open();
+
+            let roles = response.data.editUser.user.roles.map((role) => role.role);
+
+            localStorage.setItem('roles', roles);
+
+            window.location.reload();
         })
         .catch((error) => alert(error.message));
     }

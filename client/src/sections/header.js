@@ -55,9 +55,11 @@ const Header = ({scrollY, userLogged}) => {
         }).then((response) => {
             let token = response.data.tokenAuth.token;
             let username = response.data.tokenAuth.user.username;
+            let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
+            localStorage.setItem('roles', roles);
 
             navigator('/main');
 
@@ -130,8 +132,12 @@ const Header = ({scrollY, userLogged}) => {
                         </div>
                         <div>
                             <li><Link to="/main">Inicio</Link></li>
-                            <li><Link to="/">Buscador de viviendas</Link></li>
+                            <li><Link to="/search">Buscador de viviendas</Link></li>
                             <li><Link to="/">Buscador de compañeros</Link></li>
+                            {
+                                localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
+                                <li><Link to="/properties">Mis viviendas</Link></li>
+                            }
                         </div>
                         {
                             user ?

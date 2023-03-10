@@ -95,8 +95,11 @@ class EditUserMutation(graphene.Mutation):
         if role and not valid_roles(role):
             raise ValueError(_("Los roles no son válidos"))
         
-        genre = parse_genre(genre)
-        roles = parse_roles(role)
+        if genre:
+            genre = parse_genre(genre)
+        
+        if role:
+            roles = parse_roles(role)
 
         user_selected = FlatterUser.objects.get(username=username)
 
@@ -113,7 +116,7 @@ class EditUserMutation(graphene.Mutation):
                 user_selected.email = email    
         if biography and user_selected.biography != biography:
             user_selected.biography = biography
-        print(phone)
+        
         if phone and user_selected.phone_number != phone:
             user_selected.phone_number = phone
         
@@ -145,8 +148,9 @@ class EditUserMutation(graphene.Mutation):
 
         user_selected.save()
         
-        user_selected.roles.clear()
-        user_selected.roles.add(*roles)
+        if role:
+            user_selected.roles.clear()
+            user_selected.roles.add(*roles)
 
         return EditUserMutation(user=user_selected)
 

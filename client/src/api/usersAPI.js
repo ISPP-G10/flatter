@@ -18,10 +18,13 @@ const usersAPI = {
                 }
     `,
     updateUser: gql`
-                mutation editUser($username: String!, $firstName: String, $lastName: String, $email: String, $role: String, $genre: String, $phoneNumber: String, $profilePicture: String){
-                    editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, phone: $phoneNumber, profilePicture: $profilePicture){
+                mutation editUser($username: String!, $firstName: String, $lastName: String, $email: String, $role: String, $genre: String, $phoneNumber: String, $profilePicture: String, $biography: String, $profession: String){
+                    editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, phone: $phoneNumber, profilePicture: $profilePicture, biography: $biography, profession: $profession){
                         user{
                             username
+                            roles{
+                                role
+                            }
                         }
                     }
                 }
@@ -32,6 +35,9 @@ const usersAPI = {
                         token
                         user{
                           username
+                          roles{
+                            role
+                          }
                         }
                       }
                 }

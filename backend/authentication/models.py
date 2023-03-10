@@ -2,9 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 
 

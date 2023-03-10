@@ -6,44 +6,21 @@ import FlatterPage from "../sections/flatterPage";
 import Tag from "../components/tag";
 
 import { useParams } from "react-router-dom";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import * as settings from "../settings";
+import propertiesAPI from "../api/propertiesAPI";
 
 const PropertyDetails = () => {
   const { id } = useParams();
 
-  const GET_PROPERTY = gql`
-  {
-    getPropertyById(id: ${id}) {
-      title
-      location
-      province
-      description
-      price
-      owner {
-        username
-        firstName
-        lastName
-        profilePicture
-      }
-      images {
-          image
-      }
-      tags {
-        name
-        color
-      }
-      flatmates {
-        firstName
-        lastName
-        profilePicture
-      }
-    }
-  }
-  `;
+  console.log(parseInt(id));
 
-  const { loading, data } = useQuery(GET_PROPERTY);
+  const { loading, data } = useQuery(propertiesAPI.getPropertyById, {
+    variables: { 
+      id: parseInt(id),
+    },
+  });
 
   if (loading) return <p>Loading...</p>;
 
@@ -66,7 +43,7 @@ const PropertyDetails = () => {
               <span>LOCALIZACIÓN: {data.getPropertyById.province}, {data.getPropertyById.location}</span>
             </div>
             <div className="property-price">
-              <span>{data.getPropertyById.price}€/mes</span>
+              <span>{data.getPropertyById.price}</span> <span>€/mes</span>
             </div>
             <div className="property-description">
               <h3>Descripción</h3>

@@ -1,16 +1,21 @@
 import "../../static/css/components/smallProfile.css";
 import * as settings from "../../settings";
 
+import { useNavigate } from "react-router-dom";
+
 const SmallProfile = ({ user }) => {
+
+  const navigate = useNavigate();
+
   return (
-    <div className="small-profile">
+    <div className="small-profile" onClick={() => navigate(`/profile/${user.username}`)}>
       <img src={settings.API_SERVER_MEDIA + user.profilePicture} alt="avatar" />
       <div className="small-profile-details">
         <h2>
           {user.firstName} {user.lastName}
         </h2>
-        <h3>Trabajo</h3>
-        <span>4.2</span>
+        <h3>{user.profession ? user.profession : ''}</h3>
+        <span>{user.averageRating === 0 ? '-' : user.averageRating}</span>
       </div>
     </div>
   );
