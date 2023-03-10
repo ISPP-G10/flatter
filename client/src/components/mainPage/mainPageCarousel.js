@@ -1,17 +1,23 @@
 import '../../static/css/components/carousel.css'
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import * as settings from '../../settings';
 
 const MainPageCarousel = ({items}) => {
 
+    const navigator = useNavigate();
+
+    let [carouselItems, setCarouselItems] = useState([...items])
+
     let carouselContainer = useRef(null);
     let statusBar = useRef(null);
-    let carouselItems = useRef([]);
+    let carouselItemsRef = useRef([]);
 
     function updateCarousel(){
-        carouselItems.current.forEach((item, index) => {
+        carouselItemsRef.current.forEach((item, index) => {
             let itemId = parseInt(item.id)-1;
-            for(let i = 0; i <= carouselItems.current.length; i++){
+            for(let i = 0; i <= carouselItemsRef.current.length; i++){
                 statusBar.current.childNodes[itemId].style.backgroundColor = '#8e8e8e';
                 item.classList.remove(`carousel-item-${i+1}`);
             }
@@ -24,23 +30,33 @@ const MainPageCarousel = ({items}) => {
 
     function setCurrentState(direction){
         if(direction === 'previous'){
-            let extra = carouselItems.current.pop();
-            carouselItems.current.unshift(extra);
+            let extra = carouselItemsRef.current.pop();
+            carouselItemsRef.current.unshift(extra);
         }else{
-            let extra = carouselItems.current.shift();
-            carouselItems.current.push(extra);
+            let extra = carouselItemsRef.current.shift();
+            carouselItemsRef.current.push(extra);
         }
 
         updateCarousel();
     }
 
     useEffect(() => {
-        statusBar.current.childNodes[2].style.backgroundColor = 'var(--flatter-orange-color)';
-        setInterval(() => {
-            setCurrentState('next');
-        }, 4000);
+        if(carouselItems.length === 5){
+            statusBar.current.childNodes[2].style.backgroundColor = 'var(--flatter-orange-color)';
+            setInterval(() => {
+                setCurrentState('next');
+            }, 4000);
+        }else if(carouselItems.length < 5){
+            for(let i = carouselItems.length; i < 5; i++){
+                carouselItems.push(null);
+            }
+            setCarouselItems([...carouselItems]);
+        }else{
+            setCarouselItems([...carouselItems].slice(0, 5));
+        }
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [carouselItems]);
 
     return (
         <div className="carousel">
@@ -55,15 +71,28 @@ const MainPageCarousel = ({items}) => {
             </div>
             <div className="carousel-container" ref={carouselContainer}>
                 {
-                    items && items.map((item, index) => {
+                    carouselItems.length === 5 && carouselItems.map((item, index) => {
                         return (
-                            <div className={`carousel-item carousel-item-${index+1}`} id={`${index+1}`} key={index} ref={(image) => (carouselItems.current[index] = image)}>
+                            <div    className={`carousel-item carousel-item-${index+1}`} 
+                                    id={`${index+1}`} 
+                                    key={index} 
+                                    ref={(image) => (carouselItemsRef.current[index] = image)} 
+                                    onClick={() => navigator(`/property/${item.id}`)}
+                                    style={{cursor: item === null ? 'default' : 'pointer'}}
+                                    >
                                 <div className="carousel-item-content">
-                                    <img src={`${item.image}`} alt={`Item ${index+1}`}/>
-                                    <div className='carousel-item-owner'>
-                                        <img src={item.user.profilePicture} alt={`Foto perfil ${item.user.firstName} ${item.user.lastName}`}></img>
-                                        <span>{item.user.firstName} {item.user.lastName}</span>
-                                    </div>
+                                    {
+                                        item === null ?
+                                            <img src={require('../../static/files/images/carousel-marketing.jpg')} alt={`Item ${index+1}`}/>
+                                        :
+                                            <>
+                                                <img src={settings.API_SERVER_MEDIA + item.images[0].image} alt={`Item ${index+1}`}/>
+                                                <div className='carousel-item-owner'>
+                                                    <img src={ settings.API_SERVER_MEDIA + item.owner.profilePicture} alt={`Foto perfil ${item.owner.firstName} ${item.owner.lastName}`}></img>
+                                                    <span>{item.owner.firstName} {item.owner.lastName}</span>
+                                                </div>
+                                            </>
+                                    }
                                 </div>
                             </div>
                         );

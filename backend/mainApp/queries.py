@@ -14,6 +14,7 @@ class MainAppQuery(object):
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
     get_properties = graphene.List(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
+    get_outstanding_properties = graphene.List(PropertyType)
 
 
     def resolve_get_property_by_title(self, info, title):
@@ -44,6 +45,9 @@ class MainAppQuery(object):
                 q&= Q(province__icontains = city)
             properties = Property.objects.filter(q)
             return properties
+        
+    def resolve_get_outstanding_properties(self, info):
+        return Property.objects.filter(is_outstanding = True)
   
 
 
