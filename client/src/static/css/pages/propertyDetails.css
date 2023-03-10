@@ -1,40 +1,40 @@
 /* ----- General ----- */
-img {
+.property-img {
   max-width: 100%;
 }
 
-.housing-page {
+.property-housing-page {
   padding: 3.5%;
 }
 
 /* ----- Housing Section ----- */
-.housing {
+.property-housing {
   width: 100%;
   display: flex;
   gap: 0.7em;
 }
 
 @media screen and (max-width: 1200px) {
-  .housing {
+  .property-housing {
     flex-direction: column;
     padding: 10px;
   }
 }
 
 /* ----- Photo Section ----- */
-.housing__photo {
+.property-housing__photo {
   width: 140%;
   min-width: 550px;
 }
 
 @media screen and (max-width: 1200px) {
-  .housing__photo {
+  .property-housing__photo {
     width: 100%;
     min-width: 0;
   }
 }
 
-.photo-container {
+.property-photo-container {
   left: -2.5em;
   display: grid;
   width: 100%;
@@ -42,7 +42,7 @@ img {
 }
 
 /* ----- Info Section ----- */
-.housing__info {
+.property-housing__info {
   background-color: #fff;
   padding: 20px;
   border-radius: 20px;
@@ -51,50 +51,50 @@ img {
 }
 
 @media screen and (max-width: 1200px) {
-  .housing__info {
+  .property-housing__info {
     text-align: center;
   }
 
-  .btn__container {
+  .property-btn__container {
     justify-content: center;
     display: flex;
     gap: 1em;
   }
 }
 
-.title h1 {
+.property-title h1 {
   margin-bottom: 0.1em;
   color: #4c4c4c;
   font-size: 1.5em;
   font-weight: 900;
 }
 
-.title span {
+.property-title span {
   font-size: 0.7em;
   color: #a6a6a6;
 }
 
-.price {
+.property-price {
   margin: 1.5em 0;
   color: #00a8ff;
   font-size: 1.2em;
 }
 
-.price span {
+.property-price span {
   padding-left: 0.15em;
   font-size: 2.9em;
 }
 
-.description {
+.property-description {
   clear: left;
   margin: 2em 0;
   text-align: justify;
 }
-.description h3 {
+.property-description h3 {
   margin-bottom: 1em;
 }
 
-.tags-row {
+.property-tags-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 1em;
@@ -102,13 +102,13 @@ img {
   margin: 40px 0;
 }
 
-.btn__container{
+.property-btn__container{
   display: flex;
   justify-content: flex-end;
   width: 100%;
 }
 
-.btn {
+.property-btn {
   padding: 1.5em 1.5em;
   border: none;
   border-radius: 7px;
@@ -126,31 +126,31 @@ img {
   margin-bottom: 1em;
 }
 
-.btn img {
+.property-btn img {
   margin-right: 0.5em;
 }
 
-.btn:active {
+.property-btn:active {
   transform: scale(0.97);
 }
 
 /* ----- People Section ----- */
-.people {
+.property-people {
   display: flex;
 }
 
 @media screen and (max-width: 900px) {
-  .people {
+  .property-people {
     flex-direction: column;
   }
 
-  .tags-row {
+  .property-tags-row {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* ----- Flatmates Section ----- */
-.flatmates {
+.property-flatmates {
   padding: 10px;
   background-color: #f9be46;
   border-radius: 20px;
@@ -158,7 +158,7 @@ img {
   width: auto;
 }
 
-.flatmates__container {
+.property-flatmates__container {
   display: flex;
   flex-wrap: wrap;
   gap: 1em;
@@ -166,33 +166,33 @@ img {
 
 @media screen and (max-width: 450px) {
   
-  .tags-row {
+  .property-tags-row {
     grid-template-columns: repeat(1, 1fr);
   }
   
-  .flatmates__container {
+  .property-flatmates__container {
     flex-direction: column;
   }
 }
 
 /* ----- Container Title ----- */
-.container__title {
+.property-container__title {
   display: flex;
   align-items: center;
 }
 
-.container__title h1 {
+.property-container__title h1 {
   margin-left: 0;
 }
 
-.container__title img {
+.property-container__title img {
   margin-right: 1.2em;
   margin-left: 1.4em;
 }
 
 /* ----- Owner Section ----- */
 
-.owner {
+.property-owner {
   padding: 10px;
   background-color: #464b4f;
   border-radius: 20px;
@@ -200,6 +200,6 @@ img {
   width: auto;
 }
 
-.owner h1 {
+.property-owner h1 {
   color: #fff;
 }

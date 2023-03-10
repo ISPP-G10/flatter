@@ -11,8 +11,7 @@ import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
 import FileUploadTest from './pages/fileUploadTest';
-import Account from './pages/account';
-import ChangePassword from './pages/changePassword';
+import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 
 function App() {
@@ -28,8 +27,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/test' element={ <FileUploadTest/> }/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
-        <Route path='/me/account' element={<Account/>}/>
-        <Route path='/me/changePassword' element={<ChangePassword/>}/>
+        <Route path='/me' element={<AccountSettings/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

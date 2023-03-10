@@ -30,6 +30,10 @@ const FlatterForm = forwardRef((props, ref) => {
 
     function handleSubmit(e){
         e.preventDefault();
+        let inputs = document.getElementsByClassName("class-form-input");
+        for(let input of inputs){
+            formValues[input.name] = input.value;
+        }
         props.onSubmit({values: formValues});
     }
 

@@ -49,10 +49,10 @@ const PropertyDetails = () => {
 
   return (
     <FlatterPage withBackground userLogged>
-      <div className="housing-page">
-        <section className="housing">
-          <div className="housing__photo">
-            <div className="photo-container">
+      <div className="property-housing-page">
+        <section className="property-housing">
+          <div className="property-housing__photo">
+            <div className="property-photo-container">
               <SlideShow
                 images={data.getPropertyById.images.map(
                   (image) => settings.API_SERVER_MEDIA + image.image
@@ -60,29 +60,30 @@ const PropertyDetails = () => {
               />
             </div>
           </div>
-          <div className="housing__info">
-            <div className="title">
+          <div className="property-housing__info">
+            <div className="property-title">
               <h1>{data.getPropertyById.title}</h1>
               <span>LOCALIZACIÓN: {data.getPropertyById.province}, {data.getPropertyById.location}</span>
             </div>
-            <div className="price">
+            <div className="property-price">
               <span>{data.getPropertyById.price}€/mes</span>
             </div>
-            <div className="description">
+            <div className="property-description">
               <h3>Descripción</h3>
               <p>{data.getPropertyById.description}</p>
             </div>
-            <div className="tags-row">
+            <div className="property-tags-row">
               {data.getPropertyById.tags.map((tag, index) => (
                 <Tag key={index} name={tag.name} color={tag.color} />
               ))}
             </div>
-            <div className="btn__container">
-              <button className="btn">
+            <div className="property-btn__container">
+              <button className="property-btn">
                 {localStorage.getItem("user") ===
                 data.getPropertyById.owner.username ? (
                   <>
                     <img
+                      className="property-img"
                       src={require("../static/files/icons/lapiz.png")}
                       alt="lapiz icon"
                     />
@@ -91,6 +92,7 @@ const PropertyDetails = () => {
                 ) : (
                   <>
                     <img
+                      className="property-img"
                       src={require("../static/files/icons/chat-icon.png")}
                       alt="chat icon"
                     />
@@ -101,27 +103,29 @@ const PropertyDetails = () => {
             </div>
           </div>
         </section>
-        <section className="people">
+        <section className="property-people">
           {data.getPropertyById.flatmates.length !== 0 && (
-            <section className="flatmates">
-              <div className="container__title">
+            <section className="property-flatmates">
+              <div className="property-container__title">
                 <img
+                  className="property-img"
                   src={require("../static/files/icons/usuario.png")}
                   alt="user icon"
                 />
                 <h1>Compañeros</h1>
               </div>
 
-              <div className="flatmates__container">
+              <div className="property-flatmates__container">
                 {data.getPropertyById.flatmates.map((user, index) => (
                   <SmallProfile key={index} user={user} />
                 ))}
               </div>
             </section>
           )}
-          <section className="owner">
-            <div className="container__title">
+          <section className="property-owner">
+            <div className="property-container__title">
               <img
+                className="property-img"
                 src={require("../static/files/icons/estrella.png")}
                 alt="star icon"
               />

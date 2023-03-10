@@ -11,6 +11,7 @@ class Image(models.Model):
 
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
+    outstanding_start_date = models.DateTimeField(blank=True, null=True)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=250, default="")
     visits_counter = models.IntegerField(default=0)
