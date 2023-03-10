@@ -1,4 +1,4 @@
-import '../../static/css/components/slider.css'
+import '../../static/css/components/slider-style.css'
 
 import React, {useState} from 'react'
 import BtnSlider from './btnSlider'
