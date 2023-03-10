@@ -14,3 +14,10 @@ class Chat(models.Model):
     name = models.CharField(max_length=30)
     messages = models.ManyToManyField(Message)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    
+    
+class Incident(models.Model):
+    command = models.TextField()
+    
+class Request(models.Model):
+    command = models.TextField()

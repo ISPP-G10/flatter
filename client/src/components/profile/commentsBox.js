@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { commentsFormInputs } from '../../forms/commentsForm';
+import { commentsInputs } from '../../forms/commentsForm';
 import '../../static/css/components/commentsBox.css'
 import FlatterModal from '../flatterModal';
 import FlatterForm from '../forms/flatterForm';
@@ -128,7 +128,7 @@ const CommentsBox = (props) => {
                     buttonText="Enviar comentario"
                     showSuperAnimatedButton
                     numberOfColumns={1}
-                    inputs={commentsFormInputs}
+                    inputs={commentsInputs}
                     onSubmit={handleRegisterSubmit}
                     ref={commentsFormRef}>
                     <ReactStars

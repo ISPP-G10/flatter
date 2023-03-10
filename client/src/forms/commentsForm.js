@@ -1,6 +1,6 @@
 import { commentsValidators } from "../libs/validators/commentsValidators"
 
-export const commentsFormInputs = [
+export const commentsInputs = [
     {
         tag: "Relación",
         name: "relationship",

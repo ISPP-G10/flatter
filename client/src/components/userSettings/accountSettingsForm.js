@@ -1,4 +1,4 @@
-import FlatterForm from "../../components/forms/flatterForm";
+import FlatterForm from "../forms/flatterForm";
 import usersAPI from '../../api/usersAPI';
 import * as settings from '../../settings';
 

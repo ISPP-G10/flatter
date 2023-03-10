@@ -2,12 +2,47 @@ import base64, os
 
 import graphene
 from authentication.models import FlatterUser, Tag, Role
-from authentication.types import FlatterUserType
+from authentication.types import FlatterUserType, IncidentType, RequestType
 from django.utils.translation import gettext_lazy as _
 from mainApp.models import Review
+from social.models import Incident, Request
 from social.types import ReviewType
 from datetime import datetime
 
+
+class CreateIncident(graphene.Mutation):
+    class Input:
+        command = graphene.String(required=True)
+        
+    incident = graphene.Field(IncidentType)
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        command = kwargs.get('command', '').strip()
+
+        if not command:
+            raise ValueError(_("El comando no puede estar vacío"))
+        
+        incident = Incident.objects.create(command=command)
+
+        return CreateIncident(incident=incident)
+
+class CreateRequest(graphene.Mutation):
+    class Input:
+        command = graphene.String(required=True)
+        
+    request = graphene.Field(RequestType)
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        command = kwargs.get('command', '').strip()
+
+        if not command:
+            raise ValueError(_("El comando no puede estar vacío"))
+        
+        request = Request.objects.create(command=command)
+
+        return CreateRequest(request=request)
 
 class EditUserMutation(graphene.Mutation):
     class Input:
@@ -159,7 +194,7 @@ class DeleteTagFromUserMutation(graphene.Mutation):
             tag = Tag.objects.get(name=tag_name)
             user_selected.tags.remove(tag)
 
-            return DeleteTagToUserMutation(user=user_selected)
+            return DeleteTagFromUserMutation(user=user_selected)
 
 class AddRoleToUserMutation(graphene.Mutation):
     class Input:
@@ -260,7 +295,7 @@ class CreateReview(graphene.Mutation):
         
         if not relationship:
             raise ValueError(_("La relación entre usuarios no es válida"))
-
+            
         if Review.objects.filter(valued_user=valued_user, evaluator_user=evaluator_user).exists():
             raise ValueError(_("Ya has valorado a este usuario"))
 
@@ -279,6 +314,8 @@ class SocialMutation(graphene.ObjectType):
     delete_role_to_user = DeleteRoleFromUserMutation.Field()
     change_user_password = ChangePasswordMutation.Field()
     create_review = CreateReview.Field()
+    create_incident = CreateIncident.Field()
+    create_request = CreateRequest.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
