@@ -50,14 +50,6 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client:latest
 
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        context: ./nginx/remote
-        file: ./nginx/remote/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx:latest
-
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
