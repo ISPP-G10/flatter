@@ -101,9 +101,9 @@ class CreatePropertyMutation(graphene.Mutation):
         if not price or price < 1:
             raise ValueError(_("El precio debe tener un valor positivo"))
 
-        if not location or len(location) < 4 or len(location) > 16:
-            raise ValueError(
-                _("La localización debe tener entre 4 y 16 caracteres"))
+        # if not location or len(location) < 4 or len(location) > 16:
+        #     raise ValueError(
+        #         _("La localización debe tener entre 4 y 16 caracteres"))
 
         if not province or len(province) > 15:
             raise ValueError(_("La provincia debe tener máximo 15 caracteres"))

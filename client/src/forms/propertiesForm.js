@@ -104,13 +104,13 @@ export const propertyInputs = [
           }
         
       },
-      tags: {
-          label: 'Etiquetas',
-          placeholder: 'Selecciona hasta 8 etiquetas',
-          default: "",
-          type: 'textarea',
-          flex: 1
-      },
+      // tags: {
+      //     label: 'Etiquetas',
+      //     placeholder: 'Selecciona hasta 8 etiquetas',
+      //     default: "",
+      //     type: 'textarea',
+      //     flex: 1
+      // },
     },
     {
       max_flatmates: {

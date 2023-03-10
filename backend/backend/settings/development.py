@@ -163,3 +163,5 @@ GRAPHENE = {
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
 }
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100000000

@@ -13,8 +13,6 @@ const FormProperty = ({ property }) => {
   return (
     <FormBuilder inputs={ propertyInputs } values={ property } onSubmit={ ({values}) => {
 
-      console.log(values);
-
       let username = localStorage.getItem("user") ?? false;
 
       if(username) {
