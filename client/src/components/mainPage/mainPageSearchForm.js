@@ -1,17 +1,25 @@
 import {useEffect, useState, useRef} from 'react';
 
 import MultiRangeSlider from '../inputs/multiRangeSlider';
+import { useNavigate } from 'react-router-dom';
 
 const MainPageSearchForm = () => {
 
-    let minPosiblePrice = 50;
-    let maxPosiblePrice = 500;
+    const navigate = useNavigate();
+
+    let minPosiblePrice = 0;
+    let maxPosiblePrice = 2000;
 
     let [currentForm, setCurrentForm] = useState('properties');
+    let [city, setCity] = useState('');
+    let [userTag, setUserTag] = useState('');
+    let [ownerTag, setOwnerTag] = useState('');
     let [minPrice, setMinPrice] = useState(minPosiblePrice);
     let [maxPrice, setMaxPrice] = useState(maxPosiblePrice);
     let [minPartnerScore, setMinPartnerScore] = useState(1);
     let [maxPartnerScore, setMaxPartnerScore] = useState(5);
+    let [minOwnerScore, setMinOwnerScore] = useState(1);
+    let [maxOwnerScore, setMaxOwnerScore] = useState(5);
 
     let propertiesForm = useRef(null);
     let partnersForm = useRef(null);
@@ -24,6 +32,16 @@ const MainPageSearchForm = () => {
         propertiesForm.current.style.zIndex = 1;
         partnersForm.current.style.zIndex = 1;
         ownersForm.current.style.zIndex = 1;
+    }
+
+    function performSearch(){
+        if(currentForm === 'properties'){
+            navigate(`/search?min=${minPrice}&max=${maxPrice}&city=${city}`);
+        }else if(currentForm === 'partners'){
+            navigate(`/users?min=${minPartnerScore}&max=${maxPartnerScore}&tag=${userTag}&owner=false`);
+        }else{
+            navigate(`/users?min=${minOwnerScore}&max=${maxOwnerScore}&tag=${ownerTag}&owner=true`);
+        }
     }
 
     useEffect(()=>{
@@ -81,7 +99,7 @@ const MainPageSearchForm = () => {
                     <div className="properties-form-container-bg-section-1"></div>
                     <div className="properties-form-container-bg-section-2"></div>
                     <form id="properties-form">
-                        <input className="main-page-input" type="text" name="city-filter" id="city-filter" placeholder='Ciudad'></input>
+                        <input className="main-page-input" type="text" name="city-filter" id="city-filter" placeholder='Ciudad' onChange={(e) => setCity(e.target.value)}/>
                         <div className="range-input-container">
                             <p>Precio (€)</p>
                             <MultiRangeSlider
@@ -100,7 +118,7 @@ const MainPageSearchForm = () => {
                     <div className="partners-form-container-bg-section-1"></div>
                     <div className="partners-form-container-bg-section-2"></div>
                     <form id="partners-form">
-                        <input className="main-page-input" type="text" name="partners-tag-filter" id="partners-tag-filter" placeholder='Etiqueta'></input>
+                        <input className="main-page-input" type="text" name="partners-tag-filter" id="partners-tag-filter" placeholder='Etiqueta' onChange={(e) => setUserTag(e.target.value)}/>
                         <div className="range-input-container">
                             <p>Puntuación</p>
                             <MultiRangeSlider
@@ -120,15 +138,15 @@ const MainPageSearchForm = () => {
                     <div className="owners-form-container-bg-section-2"></div>
                     <div className="owners-form-container-bg-section-3"></div>
                     <form id="owners-form">
-                        <input className="main-page-input" type="text" name="partners-tag-filter" id="partners-tag-filter" placeholder='Etiqueta'></input>
+                        <input className="main-page-input" type="text" name="partners-tag-filter" id="partners-tag-filter" placeholder='Etiqueta' onChange={(e) => setOwnerTag(e.target.value)} />
                         <div className="range-input-container">
                             <p>Puntuación</p>
                             <MultiRangeSlider
                                 min={1}
                                 max={5}
                                 onChange={({min, max})=>{
-                                    setMinPartnerScore(min);
-                                    setMaxPartnerScore(max);
+                                    setMinOwnerScore(min);
+                                    setMaxOwnerScore(max);
                                 }}
                                 sliderTrackColor='var(--flatter-orange-color)'
                             />
@@ -136,7 +154,7 @@ const MainPageSearchForm = () => {
                     </form>
                 </div>
                 <div className="main-page-submit-button-row">
-                    <div className="main-page-submit-button">
+                    <div className="main-page-submit-button" onClick={performSearch}>
                         <span style={{display: 'flex', alignItems: 'center'}}>
                             BUSCAR OFERTAS
                             <img 

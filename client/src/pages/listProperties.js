@@ -20,8 +20,8 @@ const ListProperties = () => {
   const filterFormRef = useRef(null);
 
   let [filterValues, setFilterValues] = useState({
-    min: query.get("min"),
-    max: query.get("max"),
+    min: parseInt(query.get("min")),
+    max: parseInt(query.get("max")),
     city: query.get("city") ?? '',
   });
 
@@ -31,16 +31,16 @@ const ListProperties = () => {
 
     if(!filterFormRef.current.validate()) return;
 
-    console.log(values);
-
     setFilterValues({
-      min: 100,
-      max: 300,
-      city: 'Sevilla'
+      min: values.min_price,
+      max: values.max_price,
+      city: values.province
     })
+
   }
 
   useEffect(() => {
+
     client.query({
       query: propertiesAPI.filterProperties,
       variables: {
@@ -51,7 +51,18 @@ const ListProperties = () => {
     })
     .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
     .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+
+    filterInputs.map((input) => {
+      if(input.name === 'price'){
+       input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+       input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
+      }
+      if(input.name === 'province') input.defaultValue = filterValues.city ?? '';
+    })
+
   }, [filterValues]);
+
+
 
   return (
     <FlatterPage withBackground userLogged>
@@ -68,6 +79,16 @@ const ListProperties = () => {
               <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
             </div>
           </div>
+          <div style={{marginTop: '20px'}}>
+            <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
+              navigator('/search')
+              setFilterValues({
+                min: 0,
+                max: 2000,
+                city: '',
+              })
+            }}/>
+          </div>
         </div>
   
         <div className="content">
@@ -82,13 +103,11 @@ const ListProperties = () => {
                   <div className="property-body-content">
                     <div className="property-header">
                       <h3>{property.title}</h3>
-
-                      <div className="property-price">
-                        <span>{ property.price }</span> <span>€/mes</span>
-                      </div>
+                      <p>{property.description}</p>
                     </div>
-                    
-                    <p>{property.description}</p>
+                    <div className="property-price">
+                        <span>{ property.price }</span> <span>€/mes</span>
+                    </div>
                   </div>
     
                   <div className="property-meta">
