@@ -6,7 +6,7 @@ kind: Deployment
 metadata:
   name: react-dev-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       component: react-dev
