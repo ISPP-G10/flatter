@@ -1,0 +1,812 @@
+[
+  {
+    "model": "authentication.flatteruser",
+    "pk": 1,
+    "fields": {
+      "username": "josperdom",
+      "first_name": "José Luis",
+      "last_name": "Pérez Dominguez",
+      "email": "jlpd1971@hotmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$njIJlRZBspyVNRHL5QVzXL$F04QQ8LVTVHmhMkYJmXs+LuzKAQhtAfecf+bnUX5fmM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 2,
+    "fields": {
+      "username": "albherolm",
+      "first_name": "Alba",
+      "last_name": "Herrera Olmedo",
+      "email": "albaherreraolmedo@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$qtyn8kXKbyx3iw7VleqqGI$THDY0b/foZvDez4tPXpfNGMfjwMHUSHrvZedwKY18qM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 3,
+    "fields": {
+      "username": "frabartre",
+      "first_name": "Francisco Javier",
+      "last_name": "Barba Trejo",
+      "email": "barbatrejofco@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$CyKLwUonNO3b6nyc6a4DTD$OHufafDMb5qbDTSvtsPIoHodY7ku1SsNG4VKR+sFtO4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 4,
+    "fields": {
+      "username": "angbermar",
+      "first_name": "Ángela",
+      "last_name": "Bernal Martín",
+      "email": "abernalmar@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$fWXjg6m1WXrMCJX6uEpGvi$R8Q+c6n45yC58gcJFwWTmsf5oos5ce+4KSU57ANjSE8="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 5,
+    "fields": {
+      "username": "carcangom",
+      "first_name": "Carlos",
+      "last_name": "Cano Gómez",
+      "email": "carloscanogomez@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$5yLaE9d0XqPStwteJrQGo3$iqQQHyyIaX6YICMFDrDFIVSGfLbB2szKUGwCJiGPC/U="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 6,
+    "fields": {
+      "username": "alecarnun",
+      "first_name": "Alejandro",
+      "last_name": "Carrasco Nuñez",
+      "email": "alejcn01@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$CoXsARzc5EufIHlfna9Wex$NfYe2GOR5bj/t6X3jjDN2pNxjkNTiDrUYkY2WnuvEno="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 7,
+    "fields": {
+      "username": "josecasvaz",
+      "first_name": "Jose Ignacio",
+      "last_name": "Castro Vázquez",
+      "email": "jjcastrotic99@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$SHp35IRJCTQlPKMULdiITH$LvT9deT9qfg1usxgtbCowO1KINnZDqCfcKDdtDuMdU8="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 8,
+    "fields": {
+      "username": "anadurlen",
+      "first_name": "Ana Lucía",
+      "last_name": "Durán Lengo",
+      "email": "analuciaduranlengo@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ieL4ZqD9YCbbR88oMvo4u4$aMGUrH4GghMAz8dF7EianW58R7itQgveP4bCSEzGFFk="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 9,
+    "fields": {
+      "username": "manferrod",
+      "first_name": "Manuel",
+      "last_name": "Fernández Rodríguez",
+      "email": "manuelfedez5@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$aaftzLcbYvpmXr5emPEaQP$bbMxJWYTtwGc/buSRCL+vZ9+Qu2mRrfpGK2q+tqQG6o="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 10,
+    "fields": {
+      "username": "memiglmar",
+      "first_name": "Mercedes",
+      "last_name": "Iglesias Martin",
+      "email": "memeiglesias@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ePyx1j2dwh81GK3AKlvCAK$2lJfAIFlBqdDheXJcqaY/OrJOfbohE/GP+3s04+Va+M="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 11,
+    "fields": {
+      "username": "jualopqui",
+      "first_name": "Juan",
+      "last_name": "López Quiros",
+      "email": "juanquiroslopez@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$6vV7GDDWs0PUhzrkPoK1Rg$4vuX5CALpb9AVP7nU75NplTCRJhAO/JKOOVmKPpw1L0="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 12,
+    "fields": {
+      "username": "angmarnuñ",
+      "first_name": "Ángela",
+      "last_name": "Martín Nuñez",
+      "email": "angmarnun1@alum.us.es",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$yOgPk1sZX5nfa2bQatNFna$LHoILdkqHS3JEjEixLJz+qBgSRzm989dkqNpVnpHzws="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 13,
+    "fields": {
+      "username": "paomarsan",
+      "first_name": "Paola",
+      "last_name": "Martín Sanchez",
+      "email": "paomarsan@alum.us.es",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$vgHAZu0HBoP5meWBGfD0mq$X6lSjmmED4T2JYQ4O5N1qkRvVeMQ60NiLdrbLUbI4aE="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 14,
+    "fields": {
+      "username": "ginpasfer",
+      "first_name": "Ginés",
+      "last_name": "Pastor Fernández",
+      "email": "ginpasfer@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$pO4U0v4sFMMHMV1gfYfmXN$4/pbmUUWOlohKw3xNdzhabAA4a8hvpxfVFlkUjL/g+w="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 15,
+    "fields": {
+      "username": "robertopaz",
+      "first_name": "Roberto",
+      "last_name": "Paz Ribera",
+      "email": "robertopazrivera00@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$wx2YrfWPjyeDyjsf5MW1Nd$uo1mqWmD1Y+1NT7VzajXYzG0FDrNjO6tSWY6S78ESdo="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 16,
+    "fields": {
+      "username": "fracrey",
+      "first_name": "Francisco",
+      "last_name": "Reyes Madrid",
+      "email": "pacoreyesmadrid@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$cGce0SjR0W0QfnbMxA5vMu$4uJHwR9U8Wfd4bnm4erikaw21Ri97kdBE8Q47AaIktE="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 17,
+    "fields": {
+      "username": "jorsilman",
+      "first_name": "Jorge",
+      "last_name": "Sillero Manchon",
+      "email": "jorgesilleromanchon@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$7hVAZNVyR5FoNOZY38aJIC$O9KYtPuNXcsGLkEKb/xhKHgvM7/eEiVR2YMFI5GdelM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 18,
+    "fields": {
+      "username": "marqui",
+      "first_name": "Marina",
+      "last_name": "Quintero Flores",
+      "email": "marinaqf58@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$tN5er90e8iMAUApL36IKPk$h7XI2jGsmj2c8pYTEjqdfHK4exBLymiXECnElBOWMdM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 19,
+    "fields": {
+      "username": "jacmarpen",
+      "first_name": "Jacinto",
+      "last_name": "Martínez Penago",
+      "email": "jacintomartinez0909@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$DZUls7JKH1vVYO9K0TKAsn$cnmip9yRrN3zisJ3mK0DTjnVGykdTyiuo/rYyPddLBo="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 20,
+    "fields": {
+      "username": "rocestorn",
+      "first_name": "Rocío",
+      "last_name": "Estrada Ornedo",
+      "email": "estrada.rorara@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$l0ajeswi16ly8P0Spl0ewN$4QnU0D+K5b7CBL+A8nExDIxKUUKJ6KQJmB9pFKhbpSE="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 21,
+    "fields": {
+      "username": "marcabtej",
+      "first_name": "María",
+      "last_name": "Cabello Tejero",
+      "email": "mariacabello625@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$MukE7WiSsjU0PImcSBJFor$Hiy6awqcvZa5CkxquWn/Ev+euaEdgmpgIm6hH0ezAuM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 22,
+    "fields": {
+      "username": "ismgarmar",
+      "first_name": "Ismael",
+      "last_name": "García Marín",
+      "email": "ismaelgarciamarin111@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$7VZXUNIpEQnXzyb8Nw4D9J$bPaiwI56MgYDdiD6bWD9N4nqODbllYo43uBhwvxVOB8="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 23,
+    "fields": {
+      "username": "olghidnie",
+      "first_name": "Olga",
+      "last_name": "Hidalgo Nieto",
+      "email": "olgahn2001@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$E1PZnKE80nLfNrMk8pz6Ef$+QgInsJXkxv1vYlfOBBX54MMALGjy3Mq7Edc5EA9to4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 24,
+    "fields": {
+      "username": "sormacdia",
+      "first_name": "Soraya",
+      "last_name": "Macías Díaz",
+      "email": "soraya.md225@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$g4ZQ9kw6qMP1fzF8EB8XHh$0IFn7rgfIsoN3j9ZPPyJ9ciCkL/iiWsirYnyd9fjBfE="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 25,
+    "fields": {
+      "username": "elacamtoc",
+      "first_name": "Elena",
+      "last_name": "Cambrón Tocados",
+      "email": "cambrontocadoselena@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$4I3RcjWYIZFAqsGMuZfK8J$YWsudgYZ2hTqbwFlLQpjiMB/3Uw0q0/d7fTMEEfsfp4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 26,
+    "fields": {
+      "username": "marsansan",
+      "first_name": "Marina",
+      "last_name": "Sánchez Sánchez",
+      "email": "marinitaaa123456789@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ajeC6pmgdDER49cFwLWnxV$rfdoEoBZRKlKGiLg5FnVTgX2Fj3scGmiyLhrU6JIK7k="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 27,
+    "fields": {
+      "username": "cargarmun",
+      "first_name": "Carmen",
+      "last_name": "García Muñoz",
+      "email": "rsof5a.cgarcia@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$IZcgGey6FsUX3TlurikbP4$jHeIzaMSLSHx0Lun5nR9uTJRSb699D8bk1ayWlaD84s="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 28,
+    "fields": {
+      "username": "cargatmas",
+      "first_name": "Carlos",
+      "last_name": "Gata Masero",
+      "email": "carlosgm46@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ZtSxoYPzpVd9osQ4lHM3u7$O7ZG6AEoR5cjPg6nIKjOLM2Eek0jtpDEUJY+BwlCnw0="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 29,
+    "fields": {
+      "username": "aurtinmar",
+      "first_name": "Aurelio",
+      "last_name": "Tinajero Márquez",
+      "email": "aureliotinajero@hotmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$UuHLzNZT2lWcgRnkSXLuC8$xrR0+I1DXNH083Zz8a6n2nMrj/lQ2/tys0BQyGCqf4o="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 30,
+    "fields": {
+      "username": "martinaher",
+      "first_name": "Marta",
+      "last_name": "Tinajero Herrera",
+      "email": "mtinajeroherrera@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$hbsjH76WdKbh8jUQ9K1Hsf$4pPahVVyNOGKxjI5ZnoDp9+w/RgT+G2lGoikczvAjAU="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 31,
+    "fields": {
+      "username": "margarpa",
+      "first_name": "María",
+      "last_name": "García Pastrana",
+      "email": "maria.garcia.pastrana@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$I9FzyAYA5upm7mOHHIz1NU$U/ANp0LkNE3QfPHK5iupDvOGjS3rRmHzkFSXnT5KoWo="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 32,
+    "fields": {
+      "username": "mariapmed",
+      "first_name": "María Rosario",
+      "last_name": "Pastrana Medina",
+      "email": "Carmengpastrana@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$3ek45QaLeD7SAyJDlhubMV$bhCfPzad7FOvEAZWfCQg9t5JR2v2dKrEbChbfb5aOOM="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 33,
+    "fields": {
+      "username": "sarodrigam",
+      "first_name": "Sara del Carmen",
+      "last_name": "Rodríguez Gamal",
+      "email": "sararodrig.20@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$KHV6xlVl8W93Vfom6bk12b$bFmwoi7e4VjZLYvQ2p2QFW4q2O9oURxLfRX6lrSR52g="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 34,
+    "fields": {
+      "username": "lorebeg",
+      "first_name": "Lorena",
+      "last_name": "Begines Jiménez",
+      "email": "lorenabegines13@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ifaxyIKD3eB7oyxCg7caeL$uVU1hT9sP1YOxxCiuwhFbEolOXFeIPo5CUHhuq9nRiw="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 35,
+    "fields": {
+      "username": "josavicav",
+      "first_name": "José Antonio",
+      "last_name": "Cavero",
+      "email": "jacavir@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$6fHshdKvc7dXCrXLWAD9ND$aStEZbCN+dzbpIn9ssXGbuUoA1XtuO9rfZWwN0pr+Og="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 36,
+    "fields": {
+      "username": "milopecav",
+      "first_name": "María",
+      "last_name": "Inmaculada López",
+      "email": "milopde@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$4UcHkkVvI8CLzVuURw49LZ$xXtdfLyT4ulucGc51eP2/iQj+VWBPbtuTVVEBsl8T+4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 37,
+    "fields": {
+      "username": "evabsa",
+      "first_name": "Eva María",
+      "last_name": "Bolaños Sales",
+      "email": "evabolan@movistar.es",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$DuuwmVdRrLM48yE2VctjlK$LdSps7djj2hhooAM392Mu1tqNzS1ULbqyHhYOzIn/bc="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 38,
+    "fields": {
+      "username": "launucbol",
+      "first_name": "Laura",
+      "last_name": "Nuchera Bolaños",
+      "email": "lauranuchera@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$4LD9N4Wu7VJZncfP7EwSkL$yGtlGrs/IdzpXhwweCZcwEdwgHZ/kRnLTznbMJkrVd4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 39,
+    "fields": {
+      "username": "joscortri",
+      "first_name": "Jose Manuel",
+      "last_name": "Corral Trigo",
+      "email": "joscortri@alum.us.es",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$dTcJHX35RTfrmDIMQRuBag$bWo0WUMqexgU+KvJoo2b0zoSlJ9B1p3pg1iiIbMq8nA="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 40,
+    "fields": {
+      "username": "marruissoj",
+      "first_name": "María",
+      "last_name": "Ruiz Sojo",
+      "email": "mariiaruizsj@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$PxdrqeomY7jlkxU9XHv8qU$6RktkYBJKlrjGvsNOE3lQZWWfc+wuG3VDln2J9H/RD4="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 41,
+    "fields": {
+      "username": "fraanapal",
+      "first_name": "Francisco",
+      "last_name": "Anaya Palacios",
+      "email": "Pacoteba@yahoo.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$ZFtUExDRhIEJEguWsDtacu$dcTYHfnuRMi0JMpLjY4tU6xhWAsi7I30SwZGL7KFSuc="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 42,
+    "fields": {
+      "username": "marbesmor",
+      "first_name": "María Bernadette",
+      "last_name": "Espinar Mora",
+      "email": "espinarmora@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$tqWjfA3Z8Dn72FJ55zwE3v$eXuqyH41Ey/oXAz/j/fxtOW/laDr+siY+j8IDb4IhLY="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 43,
+    "fields": {
+      "username": "elomferlaf",
+      "first_name": "Eloisa María",
+      "last_name": "Fernández Lafuente",
+      "email": "maryfl@gmail.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$IbuoFjswhv6wjtIWiDHBG9$coOhg0To+40daobunYsCDg1lWb8rQCy4Fu+sEEQ9H2Q="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 44,
+    "fields": {
+      "username": "alecorgon",
+      "first_name": "Alejandro",
+      "last_name": "Corral González",
+      "email": "alex.brazzers98@hotmail.es",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$jWYbuPfTgLwCI5pJpiRpob$+D2lzuSgh7OKvBy0NwlE/CKq29gb7BeoG7lR82qVpiE="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 45,
+    "fields": {
+      "username": "luibelzan",
+      "first_name": "Luis Miguel",
+      "last_name": "Bellido Zancarron",
+      "email": "luisbelzan@outlook.com",
+      "phone_number": "",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "",
+      "flatter_coins": 2000,
+      "roles": [1, 2],
+      "tags": [],
+      "password": "pbkdf2_sha256$390000$UXbMPsffnpb8c53zZR48bV$PlihLV4lD730SKjfhd+ZNS5mEsLSmbvGCSY/1p4M2As="
+    }
+  }
+]
