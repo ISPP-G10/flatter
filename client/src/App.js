@@ -7,10 +7,10 @@ import LandingPage from './pages/landingPage';
 import Error from './pages/error';
 import PropertyDetails from './pages/propertyDetails';
 import MainPage from './pages/mainPage';
-import SearchProperties from './pages/searchProperties';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
 import FileUploadTest from './pages/fileUploadTest';
+import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 
@@ -22,7 +22,7 @@ function App() {
         <Route exact path="/main" element={<MainPage/>}/>
         <Route path="/privacy" element={<PrivacyPage/>}/>
         <Route path="/properties" element={<OwnerProperties />}/>
-        <Route path="/searchProperties" element={<SearchProperties/>}/>
+        <Route path="/search" element={<ListProperties/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/test' element={ <FileUploadTest/> }/>

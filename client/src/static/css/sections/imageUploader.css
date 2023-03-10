@@ -67,13 +67,14 @@
 }
   
 .thumbnail-container {
-  display: flex;
   flex: 1;
-  flex-direction: column;
 }
 
 .thumbnail-container > div {
   position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 75px;
 }
 
 .thumbnail-container > div > button {

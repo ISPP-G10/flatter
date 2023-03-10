@@ -1,6 +1,32 @@
+.formed {
+    padding-top: 20px;
+}
+
+.formed .form-group > div {
+    padding-right: 20px;
+    flex: 1;
+    margin-top: initial !important;
+}
+
+.formed .class-form-group {
+    width: 100%;
+}
+
+.formed .form-group > div:last-child, .formed .form-group-parent > div:last-child {
+    padding-right: 0;
+}
+
 .form-group {
     display: flex;
-    margin-bottom: 10px !important;
+    margin-bottom: 35px !important;
+}
+
+.formed .form-group-parent > div {
+    flex: 1;
+}
+
+.formed .form-group-parent > div {
+    padding-right: 20px;
 }
 
 .form-group label *:not(div, span, [type="checkbox"], [type="file"]) {

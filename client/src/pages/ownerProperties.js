@@ -1,113 +1,170 @@
 import "../static/css/pages/ownerProperties.css";
 import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
-
-import { useParams } from "react-router-dom";
-
-import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
-import MultiRangeSlider from "../components/inputs/multiRangeSlider";
+import SolidButton from "../sections/solidButton";
+import {useApolloClient} from '@apollo/client';
+import {useNavigate} from 'react-router-dom';
 
-const OwnerProperties = () => {
+import FlatterModal from "../components/flatterModal";
+import FormProperty from "../components/forms/formProperty";
 
-    const exampleProperty = {
-        id: 1,
-        title: "Elegante y magífica chavola",
-        description: `¿Estás buscando un lugar acogedor y espacioso para vivir? ¡No busques más! Tenemos la solución perfecta para ti. En nuestra comunidad de apartamentos, estamos ofreciendo una habitación en un piso de 100m2`,
-        gallery: [
-            'https://images.unsplash.com/photo-1597047084897-51e81819a499?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80',
-            'https://images.unsplash.com/photo-1464890100898-a385f744067f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1529408632839-a54952c491e5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1531383339897-f369f6422e40?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
-            'https://images.unsplash.com/photo-1548777137-2235b9fd3222?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80',
+import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
 
-        ],
-        tags: [
-            {
-                title: "Elegante",
-                color: "#f44336"
-            },
-            {
-                title: "Social",
-                color: "purple"
-            }
-        ]
+import propertiesAPI from '../api/propertiesAPI';
+//import usersAPI from '../api/usersAPI';
+
+import { useState, useEffect, useRef } from 'react';
+
+
+const OwnerProperties = ({}) => {
+
+  const [ property, setProperty ] = useState({});
+
+  const addPropertyModalRef = useRef(null);
+  const editPropertyModalRef = useRef(null);
+
+    const client = useApolloClient();
+    const navigator = useNavigate();
+
+    function deleteProperty(id){
+
+          client.mutate({
+              mutation: propertiesAPI.deletePropertyById,
+              variables: {
+                  propertyId: parseInt(id),
+              }
+          }).then((response) => {
+
+              navigator('/properties');
+          }).catch((error) => {
+              console.log(error);
+          });
+      
     }
 
-const { page } = useParams();
+    function standOutProperty(idPiso, idPropietario){
 
-// TODO si no se encuentra el id o ha sido proporcionado algo diferente
-// a un integer mayor que 0, se devuelve false y redirección a 404
-const getProperties = (page) => {
-    return [exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty, exampleProperty];
+      client.mutate({
+          mutation: propertiesAPI.outStandPropertyById,
+          variables: {
+              propertyId: parseInt(idPiso),
+              ownerId: parseInt(idPropietario)
+          }
+      }).then((response) => {
+
+          navigator('/properties');
+      }).catch((error) => {
+          console.log(error);
+      });
+  
 }
 
-const properties = getProperties(page);
+    const usern = localStorage.getItem('user','');
 
-return (
+    const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
+      username: usern
+    }});
+
+    if (loading) return <p>Loading...</p>
+    // if (loading2) return <p>Loading2...</p>
+
+  return(
     <FlatterPage withBackground userLogged>
       <div>
-        <h1 className="properties-title">Todas tus propiedades</h1>
+        <h1 className="properties-title">Tus Propiedades</h1>
       </div>
-  
-      <section className="site-content-sidebar properties">
-        <div className="sidebar">
-          <div className="card">
-            <h3>Filtrar por</h3>
-  
-            <label>
-              Ciudad
-              <input type="text" name="province" placeholder="Selecciona ciudad" />
-            </label>
-  
-            <label>
-              Precio
-              <MultiRangeSlider min="5" max="2000" onChange={({min, max}) => {}}/>
-            </label>
-  
-            <label>
-              <SolidButton text="Buscar" />
-            </label>
+      <section id="searchView">
+        <div className="filterview">
+          <div className="filterview-content">
+            <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
+                addPropertyModalRef.current.open();
+            } } />
           </div>
+
+          
+           
         </div>
-  
-        <div className="content">
-          {properties.map((property) => (
-            <article key={property.id} className="property-card card">
-              <div className="property-gallery">
+        
+        <div className="listview">
+          <section id="informationView">
+          {
+          data && 
+            (
+              data.getPropertiesByOwner.map ((prop) => { 
+                return(
+            <div className="listview">
+              <div className="listview-header">
+                <h3>{prop.title}</h3>
+              </div>
+              <div>
+                <div className="attrcontainer"> 
+                  <div className="attrindv">
+                    <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
+                    <p className = "location">{prop.province}</p>  
+                  </div>
+                  <div className="attrindvder">
+                    <p className = "team">{prop.price}</p>
+                    <img className="small-picture-back" src={require('../static/files/icons/flattercoins-icon.png')} alt='Precio'/>
+                  </div>
+                </div>
+              </div>
+
+              <div className="listview-content">
+
                 <Slider>
+
                 </Slider>
               </div>
-              <div className="property-body">
-                <div className="property-body-content">
-                  <h3>{property.title}</h3>
-                  <p>{property.description}</p>
-                </div>
-  
-                <div className="property-meta">
-                  <div className="meta-right">
-                    {property.tags.map((tag) => (
-                      <Tag name={tag.title} color={tag.color}></Tag>
-                    ))}
-                  </div>
-  
-                  <div className="meta-left">
-                    <div className="meta-location">{ property.province }</div>
-  
-                    <div className="meta-flatmates">2/4</div>
-                  </div>
-                </div>
-  
-                <footer className="property-footer">
-                  <SolidButton text="Destacar" />
-                  <SolidButton text="Editar" />
-                  <SolidButton text="Borrar" />
-                </footer>
+              <div className="etiquetacontainer">
+                {prop && prop.tags.map((tag,index) => {
+                  <div className="etiquetaindv">
+                  <Tag name={tag.title} color={tag.color} key={index}/>
+                  </div>  
+                })
+              }
+                
               </div>
-            </article>
-          ))}
+
+
+              <div className="listview-content">
+ 
+                <p className="small-size">{prop.description}</p>
+              </div>
+              
+                <div className="btncontainer">
+                    <div className="btnindv">
+                      <button className="styled-info-button" onClick={ () => {
+                        
+                        setProperty(prop);
+                        editPropertyModalRef.current.open();
+                      } }>Editar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
+                    </div>
+                    <div className="btnindv">
+                      {/* hay que sustituir ese 1 por el id del propietario. todavia no se como se consigue */}
+                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id,1)}}>Destacar Piso</button>
+                    </div>
+
+                  </div>
+                  
+              </div>
+          );}))}
+
+          </section>
         </div>
+           
       </section>
+
+      <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
+        <FormProperty property={{}} />
+      </FlatterModal>
+
+      <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
+        <FormProperty property={property} />
+      </FlatterModal>
     </FlatterPage>
   );
 };

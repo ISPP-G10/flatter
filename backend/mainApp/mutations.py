@@ -1,19 +1,19 @@
-from .models import Tag, Property
-from authentication.models import FlatterUser, Role
+
+import graphene, graphql_jwt, json
+from .models import FlatterUser, Property
+import os
+from .models import Tag
+import graphene, graphql_jwt
+from authentication.models import FlatterUser
 from mainApp.models import Image
-from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
-import base64
-import random
-import string
-import os
-import graphene
+import base64, random, string, os, graphene
 
 
-class DeleteImageFromProperty(graphene.Mutation):
+class DeleteImageToProperty(graphene.Mutation):
     class Input:
-        property_id = graphene.Int(required=True)
+        property_title = graphene.String(required=True)
         image = graphene.String(required=True)
 
     property = graphene.Field(PropertyType)
@@ -21,16 +21,55 @@ class DeleteImageFromProperty(graphene.Mutation):
     @staticmethod
     def mutate(self, info, **kwargs):
 
-        property_id = kwargs.get('property_id', '').strip()
+        property_title = kwargs.get('property_title', '').strip()
         image = kwargs.get('image', '')
 
         os.remove(f"media/{image}")
-
+        
         property = Property.objects.get(pk=property_id)
         image = Image.objects.get(image=image)
         property.images.remove(image)
+        property.save()
 
-        return DeleteImageFromProperty(property=property)
+        return DeleteImageToProperty(property=property)
+
+class StandOutProperty(graphene.Mutation):
+    class Input:
+        id_property=graphene.Int(required=True)
+        is_outstanding=graphene.Boolean(required=False)
+        owner_id=graphene.Int(required=True)
+    
+    property=graphene.Field(PropertyType)    
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        id_property = kwargs.get('id_property', '')
+        owner_id = kwargs.get("owner_id", "")
+    
+        owner=FlatterUser.objects.get(pk=owner_id)
+        property=Property.objects.get(pk=id_property)
+        
+        if not owner.roles.filter(role="OWNER").exists():
+          
+          raise ValueError(_("Sólo los propietarios pueden destacar inmuebles"))
+       
+        
+        if  property.is_outstanding==True:
+          
+          raise ValueError(_("El inmueble ya está destacado"))
+        
+        if owner.flatter_coins<=0:
+          raise ValueError(_("Necesitas más flatter coins para destacar un inmueble"))
+        
+        else:
+          property.is_outstanding=True
+          property.save()
+        
+        return StandOutProperty(property=property)
+        
+class PropertyMutation(graphene.ObjectType):
+  
+    standOut_property= StandOutProperty.Field()
 
 
 class AddTagToProperty(graphene.Mutation):
@@ -274,7 +313,6 @@ class UpdatePropertyMutation(graphene.Mutation):
 
         # Devolver la propiedad actualizada
         return UpdatePropertyMutation(property=property_edit)
-
 
 class MakePropertyOutstandingMutation(graphene.Mutation):
     class Input:
