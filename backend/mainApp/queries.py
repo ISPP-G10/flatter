@@ -1,11 +1,10 @@
 import graphene
-from authentication.models import Tag
+from authentication.models import Tag, FlatterUser
 from .types import PropertyType
 from authentication.types import TagType
 from .models import Property
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
-from datetime import datetime
 from django.utils import timezone
 
 class MainAppQuery(object):
@@ -36,7 +35,7 @@ class MainAppQuery(object):
 
     def resolve_get_filtered_properties_by_price_and_city(self,info,max_price=None,min_price=None,city=None):
             q = Q()
-            if max_price<min_price:
+            if min_price and max_price and max_price<min_price:
                 raise ValueError(_("El precio máximo introducido es menor al mínimo"))
             if max_price:
                 q &= Q(price__lte = max_price)
@@ -45,6 +44,7 @@ class MainAppQuery(object):
             if city:
                 q&= Q(province__icontains = city)
             properties = Property.objects.filter(q)
+                
             return properties
     
     def resolve_get_properties_by_owner(self,info,username):

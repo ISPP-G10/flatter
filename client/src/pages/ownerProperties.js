@@ -35,39 +35,33 @@ const OwnerProperties = ({}) => {
                   propertyId: parseInt(id),
               }
           }).then((response) => {
-
-              navigator('/properties');
+            window.location.reload();
           }).catch((error) => {
               console.log(error);
           });
       
     }
 
-    function standOutProperty(idPiso, idPropietario){
+    function standOutProperty(idPiso){
 
       client.mutate({
-          mutation: propertiesAPI.outStandPropertyById,
+          mutation: propertiesAPI.outstandPropertyById,
           variables: {
               propertyId: parseInt(idPiso),
-              ownerId: parseInt(idPropietario)
           }
       }).then((response) => {
-
-          navigator('/properties');
+          window.location.reload();
       }).catch((error) => {
-          console.log(error);
+          alert(error.message);
       });
   
 }
 
-    const usern = localStorage.getItem('user','');
-
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
-      username: usern
+      username: localStorage.getItem('user','')
     }});
 
     if (loading) return <p>Loading...</p>
-    // if (loading2) return <p>Loading2...</p>
 
   return(
     <FlatterPage withBackground userLogged>
@@ -91,36 +85,42 @@ const OwnerProperties = ({}) => {
           {
           data && 
             (
-              data.getPropertiesByOwner.map ((prop) => { 
+              data.getPropertiesByOwner.map ((prop, index) => { 
                 return(
-            <div className="listview">
+            <div className="listview" key={ index }>
               <div className="listview-header">
+                {
+                  prop.isOutstanding ? 
+                    <img src={require('../static/files/icons/yellow-star.png')} className="outstanding-icon"></img>
+                    :
+                    <div className="outstanding-icon" style={{marginTop: '50px'}}></div>
+                }
                 <h3>{prop.title}</h3>
               </div>
-              <div>
-                <div className="attrcontainer"> 
-                  <div className="attrindv">
-                    <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                    <p className = "location">{prop.province}</p>  
-                  </div>
-                  <div className="attrindvder">
-                    <p className = "team">{prop.price}</p>
-                    <img className="small-picture-back" src={require('../static/files/icons/flattercoins-icon.png')} alt='Precio'/>
-                  </div>
+              
+              <div className="attrcontainer"> 
+                <div className="attrindv">
+                  <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
+                  <p className = "location">{prop.province}</p>  
+                </div>
+                <div className="attrindv">
+                  <p className = "team">{prop.price} €/mes</p>
                 </div>
               </div>
+              
 
               <div className="listview-content">
 
-                <Slider>
+                <Slider images={prop.images.map((image) => image.image)}/>
 
-                </Slider>
               </div>
               <div className="etiquetacontainer">
                 {prop && prop.tags.map((tag,index) => {
-                  <div className="etiquetaindv">
-                  <Tag name={tag.title} color={tag.color} key={index}/>
-                  </div>  
+                  return(
+                    <div className="etiquetaindv" key={index}>
+                      <Tag name={tag.name} color={tag.color}/>
+                    </div> 
+                  ); 
                 })
               }
                 
@@ -144,8 +144,7 @@ const OwnerProperties = ({}) => {
                       <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
                     </div>
                     <div className="btnindv">
-                      {/* hay que sustituir ese 1 por el id del propietario. todavia no se como se consigue */}
-                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id,1)}}>Destacar Piso</button>
+                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id)}}>Destacar Piso</button>
                     </div>
 
                   </div>

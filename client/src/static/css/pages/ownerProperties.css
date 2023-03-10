@@ -1,10 +1,15 @@
 .properties-title{
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  padding: 40px 40px 80px;
-  color: #000000;
+  width: 50%;
+  margin-top: 40px;
   text-align: center;  
+  font-size: 1.5rem;
+  font-weight: bolder;
+  text-transform: uppercase;
+  color: rgb(0, 57, 85);
+  border-radius: 25px;
+  padding: 20px 40px;
+  background-color: rgba(0, 168, 255, 0.8);
+  border: 2px solid rgb(0, 57, 85);
 }
 /* SEARCHVIEW SECTION */
 #searchView {
@@ -137,16 +142,25 @@
 
 #informationView > .listview {
       width: 360px;
-      height: 485px;
       background: #fff;
       box-shadow: 0px 4px 12px #00000045;
       border-radius: 20px;
       margin: 10px 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
 }
     
 #informationView > .listview > .listview-header {
       display: flex;
-      align-items: flex-end;
+      flex-direction: column;
+      justify-content: center;
+}
+
+#informationView > .listview > .listview-header > .outstanding-icon{
+  margin-top: 20px;
+  height: 30px;
+  width: 30px;
 }
     
 #informationView > .listview > .listview-header > div {
@@ -155,16 +169,15 @@
       padding-left: 10px;
 }
   
-
-  
 #informationView > .listview > .listview-content {
       text-align: center;
       padding: 10px;
+      width: 100%;
 }
   
 #informationView > .listview > .listview-header > h3 {
-  color: #000000;
-  padding: 1px 5px 2px 20px;
+  text-transform: uppercase;
+  font-weight: bolder;
 }
 
 .small-picture {
@@ -175,40 +188,11 @@
   float:left
 }
 .small-picture-back {
-  width: 35px !important;
-  height: 35px;
+  width: 20px !important;
+  height: 25px;
   padding-top: 5px;
   margin-left: 3px;
   float:left
-}
-.location{
-  padding-top:20px;
-  padding-left: 10px;
-}
-.team{
-  padding-top:15px;
-  padding-left: 20px;
-  padding-rIght: 5px;
-}
-.prueba{
-  float:left;
-  padding-left: 20px;
-  width:fit-content;
-}
-
-.pruebaetiqueta{
-  width: 200px;
-  float:left;
-  padding-left: 20px;
-}
-
-.prueba-price{
-  width: 75px;
-}
-
-.prueba2{
-  width: 170px;
-  float:left;
 }
 
 .small-size{
@@ -241,41 +225,6 @@
   padding: 20px;
   background-color: #feba00;
   transition: 0.7s;
-  }
-
-.etiqueta1{
-      background-color: #ab00fa;
-      border: none;
-      color: white;
-      padding: 10px 10px 10px 10px;
-      text-align: center;
-      justify-content: center;
-      align-items: flex-end;
-      text-decoration: none;
-      display: flex;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      width:fit-content;
-      border-radius: 30px;
-      
-  }
-.etiqueta2{
-      background-color: #04c4ff;
-      border: none;
-      color: white;
-      padding: 10px 10px 10px 10px;
-      text-align: center;
-      justify-content: center;
-      align-items: flex-end;
-      text-decoration: none;
-      display: flex;
-      font-size: 16px;
-      margin: 4px 2px;
-      cursor: pointer;
-      width:fit-content;
-      border-radius: 30px;
-      
   }
 
 .styled-info-button{
@@ -331,8 +280,12 @@
   height: 50px;
   overflow-x: scroll;
   padding-left: 10px;
-
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 10px;
 }
+
 .etiquetaindv{
   width:fit-content;
   height:fit-content;
@@ -342,27 +295,28 @@
 
 .attrcontainer{
   height: 60px;
-  padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
 }
 .attrindv{
-  width:fit-content;
-  height:fit-content;
-  display: inline-flex;
-
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0 10px;
 }
-.attrindvder{
-  width:fit-content;
-  height:fit-content;
-  display: inline-flex;
-  float:right;
-  padding-right: 10px;
 
+.team{
+  font-weight: bolder;
+  color: var(--flatter-blue-color);
 }
 
 .btncontainer{
   height: 60px;
-  padding-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
 }
 .btnindv{
@@ -378,4 +332,12 @@
   float:right;
   padding-right: 10px;
 
+}
+
+@media screen and (max-width: 500px) {
+  .properties-title{
+    width: 90%;
+    margin-top: 40px;
+    font-size: 1.2rem;
+  }
 }

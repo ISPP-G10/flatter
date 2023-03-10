@@ -29,6 +29,11 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
             }
         })
         .then((response) => {
+
+            let roles = response.data.editUser.user.roles.map((role) => role.role);
+
+            localStorage.setItem('roles', roles);
+
             window.location.reload();
         })
         .catch((error) => alert(error.message));

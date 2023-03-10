@@ -90,7 +90,7 @@ const FlatterForm = forwardRef((props, ref) => {
                 :
                 (
                     <div style={{marginTop: '40px'}}>
-                        <SolidButton text={props.buttonText} type="featured" onClick={props.onSubmit}/>
+                        <SolidButton text={props.buttonText} type="featured" onClick={handleSubmit}/>
                     </div>
                 )
             }

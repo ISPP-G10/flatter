@@ -4,11 +4,8 @@ from mainApp.models import Image
 from .models import Property
 from .types import PropertyType
 from django.utils.translation import gettext_lazy as _
-import base64
-import random
-import string
-import os
-import graphene
+from django.utils import timezone
+import base64, random, string, os, graphene
 
 class DeleteImageFromProperty(graphene.Mutation):
     class Input:
@@ -69,7 +66,7 @@ class CreatePropertyMutation(graphene.Mutation):
         location = graphene.String(required=True)
         province = graphene.String(required=True)
         dimensions = graphene.Int(required=True)
-        owner_id = graphene.Int(required=True)
+        owner_username = graphene.String(required=True)
         images = graphene.List(graphene.String, required=False)
 
     property = graphene.Field(PropertyType)
@@ -84,7 +81,7 @@ class CreatePropertyMutation(graphene.Mutation):
         location = kwargs.get("location", "").strip()
         province = kwargs.get("province", "").strip()
         dimensions = kwargs.get("dimensions", "")
-        owner_id = kwargs.get("owner_id", "")
+        owner_username = kwargs.get("owner_username", "")
 
         if not title or len(title) < 4 or len(title) > 25:
             raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -118,7 +115,7 @@ class CreatePropertyMutation(graphene.Mutation):
         if title and Property.objects.filter(title=title).exists():
             raise ValueError(_("Ya existe un inmueble con ese título"))
 
-        owner = FlatterUser.objects.get(pk=owner_id)
+        owner = FlatterUser.objects.get(username=owner_username)
 
         if not owner.roles.contains(Role.objects.get(role="OWNER")):
             raise ValueError(_("El usuario debe ser propietario"))
@@ -252,24 +249,25 @@ class UpdatePropertyMutation(graphene.Mutation):
 
         if dimensions and dimensions != property_edit.dimensions:
             property_edit.dimensions = dimensions
-
-        images_to_add = []
+            
+        property_edit.save()
+        print(images)
 
         if images:
+            
+            images_to_add = []
+            
             for image in images:
                 imgdata = base64.b64decode(image.split(',')[1])
-                name = random_string(title) + '.png'
+                name = random_string(property_edit.title) + '.png'
                 filename = os.path.join('media', 'properties', 'images', name)
                 with open(filename, 'wb') as f:
                     f.write(imgdata)
 
-                property = Property.objects.get(pk=property_id)
                 image = Image.objects.create(image="properties/images/" + name)
                 images_to_add.append(image)
 
-        property.images.add(*images_to_add)
-
-        property_edit.save()
+            property_edit.images.add(*images_to_add)
 
         # Devolver la propiedad actualizada
         return UpdatePropertyMutation(property=property_edit)
@@ -295,10 +293,11 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         
         outstanding_properties = Property.objects.filter(is_outstanding=True)
         
-        if outstanding_properties.count() > 5:
+        if outstanding_properties.count() >= 5:
             raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
         
         selected_property.is_outstanding = True
+        selected_property.outstanding_start_date = timezone.now()
         selected_property.save()
 
         return MakePropertyOutstandingMutation(property=selected_property)

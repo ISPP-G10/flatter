@@ -6,11 +6,9 @@ export const filterInputs = [
         name: "province",
         type: "text",
         defaultValue: "",
-        isRequired: true,
+        isRequired: false,
         validators: [
-            registerValidators.notEmptyValidator,
             registerValidators.noNumbersValidator,
-            registerValidators.namesLengthValidator
         ]
     },
     {
@@ -20,7 +18,7 @@ export const filterInputs = [
         min: 0,
         max: 2000,
         defaultValue: "",
-        isRequired: true,
+        isRequired: false,
         validators: [
         ]
     }

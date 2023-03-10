@@ -8,8 +8,6 @@ import FormInput from './formInput';
 
 const FormBuilder = ({ inputs, values, onSubmit }) => {
 
-  console.log(values);
-
     const schema = {};
 
     const recursiveRender = (group) => {

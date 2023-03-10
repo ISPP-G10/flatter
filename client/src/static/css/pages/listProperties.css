@@ -1,12 +1,3 @@
-.properties-title{
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding: 65px 40px 0px;
-    color: #000000;
-    text-align: center;
-}
-
 .site-content-sidebar {
     display: flex;
     max-width: 1200px;
@@ -83,15 +74,6 @@
 
 .properties .property-body-content .property-header {
     display: flex;
-}
-
-.properties .property-body-content .property-header > .property-price {
-    display: flex;
-    align-items: center;
-}
-
-.properties .property-body-content .property-header > .property-price > img {
-    margin-right: 6px !important;
 }
 
 .properties .property-body-content h3 {

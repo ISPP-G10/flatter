@@ -44,7 +44,7 @@ const propertiesAPI = {
         }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float!, $maxPrice: Float!, $city: String!){
+        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String){
             getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, city: $city){
                 id
                 title
@@ -60,6 +60,14 @@ const propertiesAPI = {
                 province
                 price
                 isOutstanding
+                maxFlatmates
+                images{
+                    image
+                }
+                flatmates{
+                    firstName
+                    lastName
+                }
             }
         }
     `,
@@ -80,6 +88,9 @@ const propertiesAPI = {
                 dimensions
                 bedroomsNumber
                 bathroomsNumber
+                images{
+                    image
+                }
             }
         }
     `,
@@ -93,15 +104,13 @@ const propertiesAPI = {
             }
         }
     `,
-    outStandPropertyById: gql`
-        mutation outStandPropertyById($propertyId: Int!, $ownerId: Int!){
-            standOutProperty(
-            propertyId:$propertyId,
-                ownerId:$ownerId){
-            property{
-                isOutstanding,
-                title
-            }
+    outstandPropertyById: gql`
+        mutation makePropertyOutstanding($propertyId: Int!){
+            makePropertyOutstanding(propertyId: $propertyId){
+                property{
+                    isOutstanding,
+                    title
+                }
             }
         }
 

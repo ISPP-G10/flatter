@@ -13,15 +13,12 @@ const FormProperty = ({ property }) => {
   return (
     <FormBuilder inputs={ propertyInputs } values={ property } onSubmit={ ({values}) => {
 
-
       console.log(values);
 
       let username = localStorage.getItem("user") ?? false;
 
       if(username) {
         values['ownerUsername'] = localStorage.getItem('user');
-
-        console.log(values);
 
         client.mutate({
           mutation: isSet ? propertiesAPI.updateProperty : propertiesAPI.createProperty,
@@ -32,7 +29,6 @@ const FormProperty = ({ property }) => {
             ...values
           }
         }).catch(e => {
-          
           console.log('Error validación backend: '+ e);
         });
       }

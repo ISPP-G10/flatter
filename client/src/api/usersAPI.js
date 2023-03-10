@@ -22,6 +22,9 @@ const usersAPI = {
                     editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, phone: $phoneNumber, profilePicture: $profilePicture, biography: $biography, profession: $profession){
                         user{
                             username
+                            roles{
+                                role
+                            }
                         }
                     }
                 }
@@ -32,6 +35,9 @@ const usersAPI = {
                         token
                         user{
                           username
+                          roles{
+                            role
+                          }
                         }
                       }
                 }
