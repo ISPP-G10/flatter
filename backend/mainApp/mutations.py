@@ -132,8 +132,12 @@ class CreatePropertyMutation(graphene.Mutation):
             owner=owner
         )
 
-        images = kwargs.get('images', )
+        images = kwargs.get('images', [])
         images_to_add = []
+
+        print(images)
+        print(len(images))
+
         if images:
             for image in images:
                 imgdata = base64.b64decode(image.split(',')[1])

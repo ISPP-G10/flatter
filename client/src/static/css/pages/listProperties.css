@@ -22,8 +22,11 @@
 }
 
 .properties > .content {
-    display: grid;
-    grid-template-columns: 1fr;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 20px;
     padding-left: 25px;
 }
 

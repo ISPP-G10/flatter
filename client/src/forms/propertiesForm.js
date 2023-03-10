@@ -113,7 +113,10 @@ export const propertyInputs = [
       },
     },
     {
-      
+      max_flatmates: {
+        label: 'Capacidad',
+        type: 'number'
+      },
       submit: {
         type: 'submit',
         text: 'Guardar'

@@ -131,12 +131,18 @@ const Header = ({scrollY, userLogged}) => {
                             <div className="wrapper-header-icon--close" ref={headerToggler} onClick={toggleMenu}></div>
                         </div>
                         <div>
-                            <li><Link to="/main">Inicio</Link></li>
-                            <li><Link to="/search">Buscador de viviendas</Link></li>
-                            <li><Link to="/users">Buscador de compañeros</Link></li>
                             {
-                                localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
-                                <li><Link to="/properties">Mis viviendas</Link></li>
+                                userLogged && 
+                                <>
+                                    <li><Link to="/main">Inicio</Link></li>
+                                    <li><Link to="/search">Buscador de viviendas</Link></li>
+                                    <li><Link to="/users?owner=false">Buscador de compañeros</Link></li>
+                                    <li><Link to="/users?owner=true">Buscador de propietarios</Link></li>
+                                    {
+                                        localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
+                                        <li><Link to="/properties">Mis viviendas</Link></li>
+                                    }
+                                </>
                             }
                         </div>
                         {

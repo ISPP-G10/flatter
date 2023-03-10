@@ -3,13 +3,15 @@ import '../static/css/pages/settings.css';
 import FlatterPage from "../sections/flatterPage";
 import usersAPI from '../api/usersAPI';
 import FlatterModal from '../components/flatterModal';
-import AccountSettingsForm from '../components/user-settings/accountSettingsForm';
+import AccountSettingsForm from '../components/userSettings/accountSettingsForm';
 
 import { useEffect, useRef, useState } from "react";
 import { accountInputs } from "../forms/accountForm";
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import PasswordSettingForm from '../components/user-settings/passwordSettingForm';
+import PasswordSettingForm from '../components/userSettings/passwordSettingForm';
+import Incidence from '../components/userSettings/incidence';
+import Request from '../components/userSettings/request';
 
 const AccountSettings = () => {
 
@@ -81,6 +83,12 @@ const AccountSettings = () => {
                         <div className='settings-section' onClick={() => setSetting('password')} style={setting === 'password' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
                             <h4>Cambiar contraseña</h4>
                         </div>
+                        <div className='settings-section' onClick={() => setSetting('incidence')} style={setting === 'incidence' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Abrir incidencia</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('request')} style={setting === 'request' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Sugerir cambios</h4>
+                        </div>
                         <div className='settings-section' onClick={() => navigator(`/profile/${localStorage.getItem("user", "")}`)}>
                             <h4>Ver mi perfil público</h4>
                         </div>
@@ -100,7 +108,13 @@ const AccountSettings = () => {
                                         setting === 'password' ?
                                             <PasswordSettingForm correctModalRef={correctModalRef}/>
                                         :
-                                            <></>
+                                            setting === 'incidence' ?
+                                                <Incidence />
+                                            :
+                                                setting === 'request' ?
+                                                    <Request />
+                                                :
+                                                    <></>
 
                             }
                         </div>

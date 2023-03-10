@@ -142,6 +142,24 @@ const usersAPI = {
             }
         }
     `,
+    createIncident: gql`
+        mutation createIncident($command: String!){
+            createIncident(command: $command){
+                incident{
+                    command
+                }
+            }
+        }
+    `,
+    createRequest: gql`
+    mutation createRequest($command: String!){
+        createRequest(command: $command){
+            request{
+                command
+            }
+        }
+    }
+`,
 
 }
 

@@ -27,6 +27,7 @@ const PublicProfile = () => {
         if (!loading){
             setAverageRating(profile.averageRating);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data])
 
     function getTotalRatings(reviews){
@@ -40,7 +41,7 @@ const PublicProfile = () => {
     }
 
     if(loading) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
-    
+
     const profile = data.getUserByUsername;
 
     let roles = profile.roles.map((role) => role.role);

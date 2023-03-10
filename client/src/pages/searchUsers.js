@@ -3,7 +3,7 @@ import "../static/css/pages/listProperties.css";
 import FlatterPage from "../sections/flatterPage";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
-import { filterInputs } from "../forms/filterPropertiesForm";
+import { filterInputs } from "../forms/filterUsersForm";
 import {useNavigate} from 'react-router-dom';
 import {useApolloClient} from '@apollo/client';
 import usersAPI from "../api/usersAPI";
@@ -42,7 +42,7 @@ const SearchUsers = () => {
 
   useEffect(() => {
 
-    filterInputs.map((input) => {
+    filterInputs.forEach((input) => {
         if(input.name === 'price'){
             input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
             input.max = isNaN(filterValues.max) ? 5 : filterValues.max;
@@ -59,11 +59,12 @@ const SearchUsers = () => {
     })
     .then((response) => {
         let responseUsers = response.data.getFilteredUsersByTagAndReview;
-
-        setUsers(responseUsers.filter((user) => user.averageRating >= filterValues.min && user.averageRating <= filterValues.max))
+        let minValue = isNaN(filterValues.min) ? 0 : filterValues.min;
+        let maxValue = isNaN(filterValues.max) ? 5 : filterValues.max;
+        setUsers(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
     })
     .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
-
+    //eslint-disable-next-line
   }, [filterValues]);
 
 
@@ -84,7 +85,7 @@ const SearchUsers = () => {
             </div>
             <div style={{marginTop: '20px'}}>
                 <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
-                navigator('/search')
+                navigator('/users?' + filterValues.owner)
                 setFilterValues({
                     min: 0,
                     max: 5,

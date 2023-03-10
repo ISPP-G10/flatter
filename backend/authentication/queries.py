@@ -20,9 +20,9 @@ class AuthenticationQuery(object):
       q &= Q(tags__icontains = tag)
       
     if owner:
-      q &= Q(roles__role = "OWNER")
+      q &= Q(roles__in = [Role.objects.get(role="OWNER").pk])
     else:
-      q &= Q(roles__role = "RENTER")
+      q &= Q(roles__in = [Role.objects.get(role="RENTER").pk])
       
     return FlatterUser.objects.filter(q)
   

@@ -1,13 +1,11 @@
-import React, { useState } from "react";
 import "../static/css/sections/imageUploader.css";
 
-import PropTypes from "prop-types";
-
-import DOMPurify from "dompurify";
+import React, { useState } from "react";
 
 function ImageUploader({ name }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  //eslint-disable-next-line
   const [mainImageIndex, setMainImageIndex] = useState(0);
 
   const handleImageChange = (event) => {
@@ -18,9 +16,14 @@ function ImageUploader({ name }) {
       Promise.all(fileArray.map((file) => blobToBase64(file)))
         .then((base64Array) => {
           setImagePreviews(base64Array);
-          document.getElementById("image-urls").value = JSON.stringify(
-            base64Array
-          );
+
+          let strArray = `[${base64Array.join('||')}]`;
+
+          console.log(base64Array);
+
+          console.log(strArray);
+
+          document.querySelector(`input[type="hidden"][name="${name}"]`).value = base64Array.map(x=>escape(x));
         })
         .catch((error) => console.log(error));
     }
