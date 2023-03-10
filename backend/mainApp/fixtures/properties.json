@@ -1,6 +1,4 @@
 [
-  { "model": "authentication.role", "pk": 1, "fields": { "role": "OWNER" } },
-  { "model": "authentication.role", "pk": 2, "fields": { "role": "RENTER" } },
   {
     "model": "authentication.tag",
     "pk": 78,
