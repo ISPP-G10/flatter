@@ -1,10 +1,10 @@
-import base64, os, re
+import base64, os
 
 import graphene
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
-from mainApp.models import Review, Property
+from mainApp.models import Review
 from social.types import ReviewType
 from datetime import datetime
 
@@ -15,7 +15,7 @@ class EditUserMutation(graphene.Mutation):
         first_name = graphene.String(required=False)
         last_name = graphene.String(required=False)
         email = graphene.String(required=False)
-        bibliography = graphene.String(required=False)
+        biography = graphene.String(required=False)
         phone = graphene.String(required=False)
         profile_picture = graphene.String(required=False)
         profession = graphene.String(required=False)
@@ -32,7 +32,7 @@ class EditUserMutation(graphene.Mutation):
         first_name = kwargs.get('first_name', '').strip()
         last_name = kwargs.get('last_name', '').strip()
         email = kwargs.get('email', '').strip()
-        bibliography = kwargs.get('bibliography', '').strip()
+        biography = kwargs.get('biography', '').strip()
         phone = kwargs.get('phone', '').strip()
         profile_picture = kwargs.get('profile_picture', '')
         profession = kwargs.get('profession', '').strip()
@@ -76,8 +76,8 @@ class EditUserMutation(graphene.Mutation):
                 raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
             else:
                 user_selected.email = email    
-        if bibliography and user_selected.bibliography != bibliography:
-            user_selected.bibliography = bibliography
+        if biography and user_selected.biography != biography:
+            user_selected.biography = biography
         print(phone)
         if phone and user_selected.phone_number != phone:
             user_selected.phone_number = phone

@@ -78,6 +78,10 @@
 	transition: .5s ease-in-out;
 }
 
+.no-comments-btn{
+    display: none;
+}
+
 @media screen and (max-width: 1319px) {
     .comments-box {
         margin-right: 10%;

@@ -51,7 +51,7 @@ const usersAPI = {
                     firstName
                     lastName
                     profilePicture
-                    bibliography
+                    biography
                     profession
                     birthday
                     averageRating
@@ -88,6 +88,9 @@ const usersAPI = {
                         lastName
                         profilePicture
                         genre
+                    }
+                    valuedUser{
+                        averageRating
                     }
                     rating
                     relationship

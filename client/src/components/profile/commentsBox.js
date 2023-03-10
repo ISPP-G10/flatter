@@ -47,14 +47,14 @@ const CommentsBox = (props) => {
 
     const commentsModalRef = useRef(null)
     const commentsFormRef = useRef(null);
-    const [rating, setRating] = useState(null);
-    const [comments, setComments] = useState(props.comments)
+    let [rating, setRating] = useState(null);
+    let [comments, setComments] = useState(props.comments)
     const client = useApolloClient();
  
     const ratingChanged = (newRating) => {
-        if (rating === null || rating === undefined || rating === 0) {
+        if (newRating === null || newRating === undefined || newRating === 0) {
             setRating(null)
-        } else if (rating < 1 && rating > 5){
+        } else if (newRating < 1 && newRating > 5){
             alert("La valoración debe estar entre 1 y 5");
         } else{
             setRating(newRating)
@@ -64,6 +64,10 @@ const CommentsBox = (props) => {
     function handleCommentsButtonClick(){
         commentsModalRef.current.open();
     }
+
+    useEffect (() => {
+        props.setTotalRatings(props.getTotalRatings(comments))
+    }, [comments])
 
     function handleRegisterSubmit({values}){
 
@@ -79,19 +83,17 @@ const CommentsBox = (props) => {
                 relationship: values.relationship
             }
         }).then((response) => {
+            commentsModalRef.current.close();
             setComments([
                     response.data.createReview.review,
                     ...comments
                 ]);
+            props.setAverageRating(response.data.createReview.review.valuedUser.averageRating);
         }).catch((error) => {
             alert(error.message.split("\n")[0]);
         });
         
     }
-
-    useEffect(() => {
-
-    }, [comments]);
 
     return(
         <>
@@ -101,7 +103,7 @@ const CommentsBox = (props) => {
                         <img className="comments-box-star" src={require("../../static/files/icons/star.png")} alt="Icono estrella"></img>
                         <h3 className='comments-box-title'>Reseñas</h3>
                     </div>
-                    <button className="comments-btn" title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
+                    <button className={`comments-btn ${props.username===localStorage.getItem("user") ? 'no-comments-btn' : ''}`} title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
                         <span className="comments-btn-text">Escribe tu reseña...</span>
                     </button>
                 </div>
@@ -144,12 +146,15 @@ const CommentsBox = (props) => {
 
 CommentsBox.propTypes = {
     comments: PropTypes.array,
-    username: PropTypes.string
+    username: PropTypes.string,
+    setAverageRating: PropTypes.func,
+    setTotalRatings: PropTypes.func,
+    getTotalRatings: PropTypes.func,
 }
 
 CommentsBox.defaultProps = {
     comments: [],
-    username: ""
+    username: "",
 }
 
 export default CommentsBox;

@@ -43,6 +43,7 @@ class Review(models.Model):
         constraints = [
             models.UniqueConstraint(fields=["valued_user", "evaluator_user"], name='Review must be unique'),
         ]
+        ordering = ['-creation_date']
 
 class Type(models.Model):
     name = models.CharField(max_length=30)

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const PublicProfileCard = (props) => {
     return (
-        <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isTenant ? 'profile-card-tenant' : 'profile-card-propietary'}`}>
+        <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
                 <div className="profile-card-data">
                     <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
@@ -47,7 +47,7 @@ PublicProfileCard.propTypes = {
     age: PropTypes.number,
     bio: PropTypes.string,
     isMe: PropTypes.bool,
-    isTenant: PropTypes.bool,
+    isPropietary: PropTypes.bool,
     tags: PropTypes.array,
     pic: PropTypes.string
 }
@@ -58,7 +58,7 @@ PublicProfileCard.defaultProps = {
     age: 0,
     bio: "",
     isMe: false,
-    isTenant: true,
+    isPropietary: false,
     tags: [],
     pic: ""
 }
