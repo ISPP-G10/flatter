@@ -19,13 +19,7 @@ function ImageUploader({ name }) {
         .then((base64Array) => {
           setImagePreviews(base64Array);
 
-          let strArray = `[${base64Array.join('||')}]`;
-
-          console.log(base64Array);
-
-          console.log(strArray);
-
-          document.querySelector(`input[type="hidden"][name="${name}"]`).value = base64Array.map(x=>escape(x));
+          document.querySelector(`input[type="hidden"][name="${name}"]`).value = base64Array;
         })
         .catch((error) => console.log(error));
     }
