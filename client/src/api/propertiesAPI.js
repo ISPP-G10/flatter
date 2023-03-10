@@ -20,6 +20,41 @@ const propertiesAPI = {
     
     `,
 
+    getPropertyById: gql`
+    query getPropertyById($id: Int!){
+      getPropertyById(id: $id) {
+        title
+        location
+        province
+        description
+        price
+        owner {
+          username
+          firstName
+          lastName
+          profilePicture
+          profession
+          averageRating
+        }
+        images {
+            image
+        }
+        tags {
+          name
+          color
+        }
+        flatmates {
+          username
+          firstName
+          lastName
+          profilePicture
+          profession
+          averageRating
+        }
+      }
+    }
+    `,
+
 }
 
 export default propertiesAPI;
