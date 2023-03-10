@@ -18,9 +18,14 @@ function ImageUploader({ name }) {
       Promise.all(fileArray.map((file) => blobToBase64(file)))
         .then((base64Array) => {
           setImagePreviews(base64Array);
-          document.getElementById("image-urls").value = JSON.stringify(
-            base64Array
-          );
+
+          let strArray = `[${base64Array.join('||')}]`;
+
+          console.log(base64Array);
+
+          console.log(strArray);
+
+          document.querySelector(`input[type="hidden"][name="${name}"]`).value = base64Array.map(x=>escape(x));
         })
         .catch((error) => console.log(error));
     }
