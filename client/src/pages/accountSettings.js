@@ -1,87 +1,68 @@
 import '../static/css/pages/settings.css';
 
 import FlatterPage from "../sections/flatterPage";
-import FlatterForm from "../components/forms/flatterForm";
 import usersAPI from '../api/usersAPI';
+import FlatterModal from '../components/flatterModal';
+import AccountSettingsForm from '../components/user-settings/accountSettingsForm';
 
 import { useEffect, useRef, useState } from "react";
 import { accountInputs } from "../forms/accountForm";
-import { useQuery, useApolloClient } from '@apollo/client';
-import * as settings from '../settings';
-import FlatterModal from '../components/flatterModal';
-import { removeFragmentSpreadFromDocument } from '@apollo/client/utilities';
+import { useQuery } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
+import PasswordSettingForm from '../components/user-settings/passwordSettingForm';
 
 const AccountSettings = () => {
 
-    let [userImage, setUserImage] = useState(null);
-
-    const accountFormRef = useRef(null);
-    const userImageField = useRef(null);
+    let [setting, setSetting] = useState('account');
+    
+    const navigator = useNavigate();
     const correctModalRef = useRef(null);
-    const client = useApolloClient();
 
-    const { loading, error, data } = useQuery(usersAPI.getUserByUsernameSettings, {
+    const { loading, data } = useQuery(usersAPI.getUserByUsernameSettings, {
         variables: {username: localStorage.getItem('user', '')}
     });
 
-    function handleFormSubmit({values}){
-
-        if(!accountFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-            
-            return;
-        }
-
-        var reader = new FileReader();
-        reader.readAsDataURL(userImage);
-
-        reader.onload = function () {
-            client.mutate({
-                mutation: usersAPI.updateUser,
-                variables: {
-                    username: localStorage.getItem('user', ''),
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    email: values.email,
-                    genre: values.genre,
-                    role: values.role,
-                    profilePicture: reader.result,
-                    phoneNumber: values.phoneNumber,
-                }
-            })
-            .then((response) => {
-                correctModalRef.current.open();
-            })
-            .catch((error) => alert(error.message.split("\n")[1]));
-        };
-
-    }
-
-    function changeImage(e){
-
-        let file = e.target.files[0];
-
-        userImageField.current.src = URL.createObjectURL(file);
-
-        setUserImage(file);
+    function logout(){
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = "/";
     }
 
     useEffect(() => {
-        if(!loading){
+        if(!loading && setting === 'account'){
+            //eslint-disable-next-line
             accountInputs.map((input) => {
                 if(input.name === 'role'){
                     if(data.getUserByUsername[input.name + 's'].length > 1){
                         input.defaultValue = 'Ambos';
                     }else{
-                        input.defaultValue = data.getUserByUsername[input.name + 's'][0].role;
+                        let currentBackendRole = data.getUserByUsername[input.name + 's'][0].role;
+                        if(currentBackendRole === 'OWNER'){
+                            input.defaultValue = 'Propietario';
+                        }else{
+                            input.defaultValue = 'Inquilino';
+                        }            
+                    }
+                }else if(input.name === 'genre'){
+                    switch(data.getUserByUsername[input.name]){
+                        case 'H':
+                            input.defaultValue = 'Hombre';
+                            break;
+                        case 'M':
+                            input.defaultValue = 'Mujer';
+                            break;
+                        case 'NB':
+                            input.defaultValue = 'No Binario';
+                            break;
+                        default:
+                            input.defaultValue = 'Otro';
                     }
                 }else{
                     input.defaultValue = data.getUserByUsername[input.name];
                 }
             });
         }
-    }, [data]);
+    }, [data, loading, setting]);
 
     return(
         <FlatterPage withBackground userLogged>
@@ -92,11 +73,17 @@ const AccountSettings = () => {
                 <div className='settings-content'>
                     <div className='settings-sections'>
                         <h2 className='settings-sections-title'>Opciones</h2>
-                        <div className='settings-section'>
+                        <div className='settings-section' onClick={() => setSetting('account')} style={setting === 'account' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
                             <h4>Mi cuenta</h4>
                         </div>
-                        <div className='settings-section'>
+                        <div className='settings-section' onClick={() => setSetting('password')} style={setting === 'password' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
                             <h4>Cambiar contraseña</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => navigator(`/profile/${localStorage.getItem("user", "")}`)}>
+                            <h4>Ver mi perfil público</h4>
+                        </div>
+                        <div className='settings-section' onClick={logout}>
+                            <h4>Cerrar sesión</h4>
                         </div>
                     </div>
                     <div className='setting-body'>
@@ -105,32 +92,20 @@ const AccountSettings = () => {
                                 loading ? 
                                     <h1>Loading...</h1>
                                 :
-                                    <>
-                                    <h2 className='section-title'>Mi cuenta</h2>
-                                    <FlatterForm
-                                    ref={accountFormRef}
-                                    inputs={accountInputs}
-                                    numberOfColumns={2}
-                                    buttonText='Guardar cambios'
-                                    onSubmit={handleFormSubmit}
-                                    showSuperAnimatedButton
-                                    >
-                                        <div className="setting-profile-pic">
-                                            <label className="-label" htmlFor="file">
-                                                <img src={require('../static/files/icons/camera.png')} alt="camara" className="camera-icon"/>
-                                                <span style={{margin: '0'}}>Cambiar</span>
-                                            </label>
-                                            <input id="file" type="file" onChange={changeImage}/>
-                                            <img ref={userImageField} className="user-img" src={settings.API_SERVER_MEDIA + data.getUserByUsername.profilePicture} id="output" width="200" />
-                                        </div>
-                                    </FlatterForm>   
-                                    </>
+                                    setting === 'account' ?
+                                        <AccountSettingsForm inputs={accountInputs} data={data} correctModalRef={correctModalRef}/>
+                                    :
+                                        setting === 'password' ?
+                                            <PasswordSettingForm correctModalRef={correctModalRef}/>
+                                        :
+                                            <></>
+
                             }
                         </div>
                     </div>
                 </div>
             </div>
-            <FlatterModal ref={correctModalRef} maxHeight={300}>
+            <FlatterModal ref={correctModalRef} maxHeight={200}>
                 <span className='everithing-fine-text'>¡Datos actualizados correctamente!</span>
             </FlatterModal>
         </FlatterPage>

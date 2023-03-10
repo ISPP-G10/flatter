@@ -61,6 +61,15 @@ const usersAPI = {
                 }
             }
     `,
+    changeUserPassword: gql`
+        mutation changePassword($username: String!, $newPassword: String!, $oldPassword: String!){
+            changeUserPassword(username: $username, newPassword: $newPassword, oldPassword: $oldPassword){
+                user{
+                    username
+                }
+            }
+        }
+    `
 
 }
 

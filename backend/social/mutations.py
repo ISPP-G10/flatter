@@ -1,7 +1,6 @@
 import base64, os, re
 
 import graphene
-from graphql_jwt.decorators import login_required
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
@@ -116,6 +115,32 @@ class EditUserMutation(graphene.Mutation):
 
         return EditUserMutation(user=user_selected)
 
+class ChangePasswordMutation(graphene.Mutation):
+    class Input:
+        username = graphene.String(required=True)
+        old_password = graphene.String(required=True)
+        new_password = graphene.String(required=True)
+
+    user = graphene.Field(FlatterUserType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+
+            username = kwargs.get('username', '').strip()
+            old_password = kwargs.get('old_password', '').strip()
+            new_password = kwargs.get('new_password', '').strip()
+
+            user_selected = FlatterUser.objects.get(username=username)
+
+            if not user_selected.check_password(old_password):
+                raise ValueError(_("La contraseña actual no es correcta"))
+            
+            if old_password != new_password:
+                user_selected.set_password(new_password)
+                user_selected.save()
+
+            return ChangePasswordMutation(user=user_selected)
+
 class DeleteTagToUserMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
@@ -124,7 +149,6 @@ class DeleteTagToUserMutation(graphene.Mutation):
     user = graphene.Field(FlatterUserType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
 
             username = kwargs.get('username', '').strip()
@@ -145,7 +169,6 @@ class AddRoleToUserMutation(graphene.Mutation):
     user = graphene.Field(FlatterUserType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
         
             username = kwargs.get('username', '').strip()
@@ -176,7 +199,6 @@ class DeleteRoleToUserMutation(graphene.Mutation):
     user = graphene.Field(FlatterUserType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
 
             username = kwargs.get('username', '').strip()
@@ -208,7 +230,6 @@ class CreateReview(graphene.Mutation):
     review = graphene.Field(ReviewType)
 
     @staticmethod
-    @login_required
     def mutate(root, info, **kwargs):
 
             assessment = kwargs.get('assessment', '')
@@ -262,6 +283,7 @@ class SocialMutation(graphene.ObjectType):
     delete_tag_to_user = DeleteTagToUserMutation.Field()
     add_role_to_user = AddRoleToUserMutation.Field()
     delete_role_to_user = DeleteRoleToUserMutation.Field()
+    change_user_password = ChangePasswordMutation.Field()
     create_review = CreateReview.Field()
 
 

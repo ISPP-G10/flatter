@@ -143,3 +143,45 @@
     margin: 0;
     margin-right: 10px;
 }
+
+@media screen and (max-width: 1000px) {
+    .settings-content{
+        flex-direction: column;
+    }
+
+    .settings-sections{
+        width: 100%;
+    }
+
+    .setting-form-container{
+        width: 100%;
+        margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .settings-title{
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .settings-title{
+        font-size: 0.6rem;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    .settings-title{
+        padding: 10px;
+    }
+
+    .settings-sections-title{
+        padding: 0;
+    }
+
+    .section-title{
+        padding: 0;
+        margin-bottom: 20px;
+    }
+}

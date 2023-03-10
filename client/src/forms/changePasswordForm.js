@@ -1,9 +1,10 @@
 import { registerValidators } from "../libs/validators/registerValidators"
+import { changePasswordValidators } from "../libs/validators/changePasswordValidators"
 
 export const changePasswordInputs = [
     {
         tag: "Contraseña actual",
-        name: "newPassword",
+        name: "oldPassword",
         type: "password",
         defaultValue: "",
         isRequired: true,
@@ -20,18 +21,20 @@ export const changePasswordInputs = [
         isRequired: true,
         validators: [
             registerValidators.notEmptyValidator,
-            registerValidators.passwordLengthValidator
+            registerValidators.passwordLengthValidator,
+            changePasswordValidators.notSameAsOldPassword
         ]
     },
     {
         tag: "Repite Contraseña",
-        name: "newPassword2",
+        name: "newPasswordConfirm",
         type: "password",
         defaultValue: "",
         isRequired: true,
         validators: [
             registerValidators.notEmptyValidator,
-            registerValidators.passwordLengthValidator
+            registerValidators.passwordLengthValidator,
+            changePasswordValidators.samePassword
         ]
     }
 ]

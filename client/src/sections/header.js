@@ -1,7 +1,7 @@
 import "../static/css/sections/header.css";
 
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { loginInputs } from "../forms/loginForm";
 import { registerInputs } from "../forms/registerForm";
 import { useApolloClient } from "@apollo/client";
@@ -127,9 +127,9 @@ const Header = ({scrollY, userLogged}) => {
                             <div className="wrapper-header-icon--close" ref={headerToggler} onClick={toggleMenu}></div>
                         </div>
                         <div>
-                            <li><a href="/">Inicio</a></li>
-                            <li><a href="/">Buscador de viviendas</a></li>
-                            <li><a href="/">Buscador de compañeros</a></li>
+                            <li><Link to="/main">Inicio</Link></li>
+                            <li><Link to="/">Buscador de viviendas</Link></li>
+                            <li><Link to="/">Buscador de compañeros</Link></li>
                         </div>
                         {
                             user ?
