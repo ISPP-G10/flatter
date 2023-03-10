@@ -5,7 +5,8 @@ from authentication.types import TagType
 from .models import Property
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-
+from datetime import datetime
+from django.utils import timezone
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
@@ -47,6 +48,14 @@ class MainAppQuery(object):
             return properties
         
     def resolve_get_outstanding_properties(self, info):
+        
+        outstanding_properties = Property.objects.filter(is_outstanding = True)
+        
+        for property in outstanding_properties:
+            if (timezone.now() - property.outstanding_start_date).days > 7:
+                property.is_outstanding = False
+                property.save()
+        
         return Property.objects.filter(is_outstanding = True)
   
 

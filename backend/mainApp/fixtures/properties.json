@@ -236,6 +236,7 @@
     "pk": 2,
     "fields": {
       "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
       "title": "Casa con piscina",
       "description": "Una hermosa casa con piscina en el jardín",
       "visits_counter": 50,
@@ -280,6 +281,7 @@
     "pk": 4,
     "fields": {
       "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
       "title": "Casa de campo",
       "description": "Una hermosa casa de campo rodeada de naturaleza",
       "visits_counter": 100,
@@ -346,6 +348,7 @@
     "pk": 7,
     "fields": {
       "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
       "title": "Casa moderna",
       "description": "Una casa moderna y elegante en el centro de la ciudad",
       "visits_counter": 25,
@@ -390,6 +393,7 @@
     "pk": 9,
     "fields": {
       "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
       "title": "Penthouse con vista al mar",
       "description": "Un espectacular penthouse con vista al mar en la costa del Pacífico",
       "visits_counter": 50,

@@ -30,6 +30,8 @@ const Header = ({scrollY, userLogged}) => {
     const registerFormRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     let [user, setUser] = useState(null);
+    // TODO: USAR TOKEN PARA VERIFICAR SI EL USUARIO ESTA LOGUEADO Y TIENE PERMISOS
+    //eslint-disable-next-line
     let [token, setToken] = useState(null);
 
     function toggleMenu(){
