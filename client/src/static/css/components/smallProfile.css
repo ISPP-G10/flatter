@@ -10,6 +10,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  cursor: pointer;
 }
 
 .small-profile img {
@@ -21,6 +22,7 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1em;
+  border: 1px solid black;
 }
 
 .small-profile h2 {

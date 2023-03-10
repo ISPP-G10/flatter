@@ -1,6 +1,7 @@
 import "../../static/css/components/comment.css"
 import PropTypes from 'prop-types';
 import Tag from "../tag";
+import { Link } from "react-router-dom";
 
 const Comment = (props) => {
 
@@ -18,10 +19,10 @@ const Comment = (props) => {
         !isEmptyComment(props, Comment.defaultProps) ?
         (
         <div className="comment">
-            <img className="comment-pic ml-2" src={props.pic} alt="Profile pic"></img>
+            <Link to={"/profile/"+props.username} className="comment-link-img"><img className="comment-pic ml-2" src={props.pic} alt="Profile pic"></img></Link>
             <div className="comment-content ml-3 mr-2">
                 <div className="comment-header">
-                    <h4 className="comment-name mr-1">{props.name}</h4>
+                    <Link to={"/profile/"+props.username} className="comment-link"><h4 className="comment-name mr-1">{props.name}</h4></Link>
                     <div className="comment-tag ml-1">
                         <Tag name={props.tagName} color={props.tagColor}/>
                     </div>
@@ -44,7 +45,8 @@ Comment.propTypes = {
     pic: PropTypes.string,
     tagName: PropTypes.string,
     tagColor: PropTypes.string,
-    text: PropTypes.string
+    text: PropTypes.string,
+    username: PropTypes.string
 }
 
 Comment.defaultProps = {
@@ -52,7 +54,9 @@ Comment.defaultProps = {
     pic: "",
     tagName: "",
     tagColor: "",
-    text: ""
+    text: "",
+    username: ""
+
 }
 
 export default Comment

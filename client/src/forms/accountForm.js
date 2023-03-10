@@ -3,7 +3,7 @@ import { registerValidators } from "../libs/validators/registerValidators"
 export const accountInputs = [
     {
         tag: "Nombre",
-        name: "first_name",
+        name: "firstName",
         type: "text",
         defaultValue: "",
         isRequired: true,
@@ -15,7 +15,7 @@ export const accountInputs = [
     },
     {
         tag: "Apellidos",
-        name: "last_name",
+        name: "lastName",
         type: "text",
         defaultValue: "",
         isRequired: true,
@@ -51,8 +51,8 @@ export const accountInputs = [
     },
     {
         tag: "Número de teléfono",
-        name: "phone_number",
-        type: "tel",
+        name: "phoneNumber",
+        type: "text",
         defaultValue: "",
         isRequired: false,
         validators: [

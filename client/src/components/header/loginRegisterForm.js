@@ -52,7 +52,7 @@ const LoginRegisterForm = forwardRef((props, ref) => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('user', username);
 
-                navigator('/main-page');
+                navigator('/main');
             }).catch((error) => {
                 console.log(error);
             });

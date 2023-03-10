@@ -1,0 +1,187 @@
+.settings-page-container{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+}
+
+.settings-title{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+    color: rgb(0, 57, 85);
+    border-radius: 25px;
+    padding: 20px 40px;
+    background-color: rgba(0, 168, 255, 0.8);
+}
+
+.settings-content{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2vh;
+}
+
+.settings-sections{
+    width: 30%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+    border: 1px solid rgb(0, 57, 85);
+    border-radius: 15px;
+    overflow-y: scroll;
+}
+
+.settings-sections-title{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    text-decoration: underline;
+    text-transform: uppercase;
+    color: rgb(0, 57, 85);
+    padding: 20px 40px;
+}
+
+.settings-section{
+    width: 90%;
+    padding: 5px 30px;
+    text-align: center;
+    border: 1px solid rgb(0, 57, 85);
+    border-radius: 15px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.settings-section:hover{
+    color: white;
+    background-color: rgba(0, 168, 255, 0.8);
+}
+
+.setting-body{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-title{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+    color: rgb(0, 57, 85);
+    padding: 40px 40px;
+}
+
+.setting-form-container{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid rgb(0, 57, 85);
+}
+
+/* PROFILE PICTURE INPUT DESIGN */
+
+.setting-profile-pic {
+    color: transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+    margin: 0 40%;
+}
+.setting-profile-pic input {
+    display: none;
+}
+.setting-profile-pic .user-img {
+    position: absolute;
+    object-fit: cover;
+    width: 165px;
+    height: 165px;
+    box-shadow: 0 0 10px 0 rgba(255, 255, 255, .35);
+    border-radius: 100px;
+    z-index: 0;
+    border: 1px solid black;
+}
+.setting-profile-pic .-label {
+    cursor: pointer;
+    height: 165px;
+    width: 165px;
+    margin: 0;
+}
+.setting-profile-pic:hover .-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 10000;
+    color: #fafafa;
+    transition: background-color 0.2s ease-in-out;
+    border-radius: 100px;
+    margin-bottom: 0;
+}
+
+.setting-profile-pic .camera-icon{
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    padding: 0.2em;
+    margin: 0;
+    margin-right: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+    .settings-content{
+        flex-direction: column;
+    }
+
+    .settings-sections{
+        width: 100%;
+    }
+
+    .setting-form-container{
+        width: 100%;
+        margin-top: 40px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .settings-title{
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .settings-title{
+        font-size: 0.6rem;
+    }
+}
+
+@media screen and (max-width: 300px) {
+    .settings-title{
+        padding: 10px;
+    }
+
+    .settings-sections-title{
+        padding: 0;
+    }
+
+    .section-title{
+        padding: 0;
+        margin-bottom: 20px;
+    }
+}

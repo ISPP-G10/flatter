@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 const ReviewsBox = (props) => {
 
     return (
-        <div class="reviews-box-container">
+        <div className="reviews-box-container">
             <h3 className="reviews-box-title">Puntuación</h3>
-            <div class="reviews-box-stars">
+            <div className="reviews-box-stars">
                 <img className="reviews-box-img" src={require("../../static/files/icons/yellow-star.png")} alt="Icono estrella"></img>
                 <p className="reviews-box-average">{`${props.total > 0 ? parseFloat(props.average).toFixed(2) + ' / 5.00' : '- / -'}`}</p>
             </div>

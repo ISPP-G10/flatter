@@ -117,6 +117,7 @@ select.class-form-input {
 @media screen and (max-width: 450px) {
     .class-form-group{
         width: 90% !important;
+        margin-top: 20px;
     }
   }
 

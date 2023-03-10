@@ -1,6 +1,7 @@
 from django.db import models
 from authentication.models import FlatterUser, Tag
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 
 # Create your models here.
 
@@ -10,6 +11,7 @@ class Image(models.Model):
 
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
+    outstanding_start_date = models.DateTimeField(blank=True, null=True)
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=250, default="")
     visits_counter = models.IntegerField(default=0)
@@ -25,18 +27,23 @@ class Property(models.Model):
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
     images = models.ManyToManyField(Image, related_name=_('property_images'))
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
+    flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
 
 class Review(models.Model):
 
-    choices_entity = (('A', 'Amigos'), ('C', 'Compañeros'), ('E', 'Excompañeros'), ('P', 'Propietario'))
+    choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'))
 
-    assessment = models.IntegerField()
-    text = models.TextField()
+    rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True)
+    text = models.TextField(validators=[MinLengthValidator(2)], max_length=256)
     creation_date = models.DateTimeField(auto_now_add=True)
-    valued_user = models.ForeignKey(FlatterUser, blank=True, null=True, on_delete=models.CASCADE, related_name='valued_reviews')
-    evaluator_user = models.ForeignKey(FlatterUser, blank=True, null=True, on_delete=models.CASCADE, related_name='evaluator_reviews')
-    property = models.ForeignKey(Property, blank=True, null=True, on_delete=models.CASCADE)
+    valued_user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE, related_name='valued_reviews')
+    evaluator_user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE, related_name='evaluator_reviews')
     relationship = models.CharField(choices=choices_entity, max_length=1)
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["valued_user", "evaluator_user"], name='Review must be unique'),
+        ]
+        ordering = ['-creation_date']
 
 class Type(models.Model):
     name = models.CharField(max_length=30)
