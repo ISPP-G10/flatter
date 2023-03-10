@@ -1,0 +1,344 @@
+.properties-title{
+  width: 50%;
+  margin-top: 40px;
+  text-align: center;  
+  font-size: 1.5rem;
+  font-weight: bolder;
+  text-transform: uppercase;
+  color: rgb(0, 57, 85);
+  border-radius: 25px;
+  padding: 20px 40px;
+  background-color: rgba(0, 168, 255, 0.8);
+  border: 2px solid rgb(0, 57, 85);
+}
+/* SEARCHVIEW SECTION */
+#searchView {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  padding: 90px 0 30px;
+}
+/*filterview (left side) */
+#searchView > .filterview {
+  max-width: 500px;
+  max-height: 80px;
+  background: #fff;
+  box-shadow: 0px 4px 12px #00000045;
+  border-radius: 20px;
+  margin: 0 20px;
+}
+
+#searchView > .filterview > .filterview-header {
+  display: flex;
+  align-items: flex-end;
+}
+
+#searchView > .filterview > .filterview-header > div {
+  position: relative;
+  flex: 1;
+  padding-left: 10px;
+}
+
+#searchView > .filterview:hover > .filterview-header > div > img {
+  bottom: 10px;
+}
+
+#searchView > .filterview > .filterview-header > div > img {
+  position: absolute;
+  bottom: 0px;
+  transition: all ease 0.5s;
+  max-width: 100%;
+  height: 115px;
+  width: 115px;
+}
+
+#searchView > .filterview > .filterview-content {
+  padding: 20px;
+}
+
+#searchView > .filterview > .filterview-content > div {
+  padding-bottom: 10px;
+}
+
+#searchView > .filterview > .filterview-header > h3 {
+  flex: 2;
+  padding: 14px 10px 2px 10px;
+  color: #000000;
+  text-shadow: 0px 2px 2px rgba(175, 175, 175, 0.40);
+}
+
+/*listview (right side) */
+#searchView > .listview {
+  width: 900px;
+  background: #fff;
+  box-shadow: 0px 4px 12px #00000045;
+  border-radius: 20px;
+  margin: 0 20px;
+  margin-top: 3px;
+}
+
+#searchView > .listview > .listview-header {
+  display: flex;
+  align-items: flex-end;
+}
+
+#searchView > .listview > .listview-header > div {
+  position: relative;
+  flex: 1;
+  padding-left: 10px;
+}
+
+#searchView > .listview:hover > .listview-header > div > img {
+  bottom: 10px;
+}
+
+#searchView > .listview > .listview-content {
+  text-align: center;
+  padding: 20px;
+}
+
+#searchView > .listview > .listview-header > h3 {
+  flex: 2;
+  padding: 14px 10px 2px 0px;
+  color: var(--flatter-blue-color);
+  text-shadow: 0px 2px 2px rgba(175, 175, 175, 0.40);
+}
+
+.email-text{
+  display: block;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 20px !important;
+}
+
+.mc-field-group{
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 0 !important;
+}
+
+.text-input{
+  height: 100%;
+  max-height: 50px;
+  border-radius: 25px !important;
+  margin-bottom: 0 !important;
+}
+
+.text-input > .placeholder{
+  padding-left: 10px;
+}
+
+  /*subsections (right) */
+  
+#informationView {
+      display: flex;
+      justify-content: space-evenly;
+      flex-wrap: wrap;
+      padding: 20px 0 20px 0;
+}
+
+#informationView > .listview {
+      width: 360px;
+      background: #fff;
+      box-shadow: 0px 4px 12px #00000045;
+      border-radius: 20px;
+      margin: 10px 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+}
+    
+#informationView > .listview > .listview-header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+}
+
+#informationView > .listview > .listview-header > .outstanding-icon{
+  margin-top: 20px;
+  height: 30px;
+  width: 30px;
+}
+    
+#informationView > .listview > .listview-header > div {
+      position: relative;
+      flex: 1;
+      padding-left: 10px;
+}
+  
+#informationView > .listview > .listview-content {
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+}
+  
+#informationView > .listview > .listview-header > h3 {
+  text-transform: uppercase;
+  font-weight: bolder;
+}
+
+.small-picture {
+  width: 35px !important;
+  height: 35px;
+  padding-top: 5px;
+  padding-left: 10px;
+  float:left
+}
+.small-picture-back {
+  width: 20px !important;
+  height: 25px;
+  padding-top: 5px;
+  margin-left: 3px;
+  float:left
+}
+
+.small-size{
+  font-size: small;
+  overflow: scroll;
+  text-align: justify;
+  text-justify: inter-word;
+  height: 55px;
+}
+
+.styled-button{
+  background-color: #ffda07;
+  border: none;
+  color: white;
+  padding: 15px 32px 15px 32px;
+  text-align: center;
+  text-align: center;
+  justify-content: center;
+  align-items: flex-end;
+  text-decoration: none;
+  display: flex;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 12px;
+  width: 325px;
+}
+
+.styled-button:hover {
+  padding: 20px;
+  background-color: #feba00;
+  transition: 0.7s;
+  }
+
+.styled-info-button{
+      background-color: #ffda07;
+      border: none;
+      color: white;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-align: center;
+      text-align: center;
+      justify-content: center;
+      align-items: flex-end;
+      text-decoration: none;
+      display: flex;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      width: 105px;
+  }
+  
+.styled-red-info-button{
+    background-color: #ffda07;
+    border: none;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    text-align: center;
+    justify-content: center;
+    align-items: flex-end;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    width: 105px;
+}
+  
+.styled-info-button:hover {
+      padding-bottom: 15px;
+      padding-top: 15px;
+      background-color: #feba00;
+      transition: 0.7s;
+      }
+.styled-red-info-button:hover {
+        padding-bottom: 15px;
+        padding-top: 15px;
+        background-color: #c60909;
+        transition: 0.7s;
+  }
+
+.etiquetacontainer{
+  height: 50px;
+  overflow-x: scroll;
+  padding-left: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.etiquetaindv{
+  width:fit-content;
+  height:fit-content;
+  display: inline-flex;
+
+}
+
+.attrcontainer{
+  height: 60px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.attrindv{
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0 10px;
+}
+
+.team{
+  font-weight: bolder;
+  color: var(--flatter-blue-color);
+}
+
+.btncontainer{
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.btnindv{
+  width:fit-content;
+  height:fit-content;
+  display: inline-flex;
+
+}
+.attrindvder{
+  width:fit-content;
+  height:fit-content;
+  display: inline-flex;
+  float:right;
+  padding-right: 10px;
+
+}
+
+@media screen and (max-width: 500px) {
+  .properties-title{
+    width: 90%;
+    margin-top: 40px;
+    font-size: 1.2rem;
+  }
+}

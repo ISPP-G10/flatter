@@ -1,0 +1,412 @@
+[
+  {
+    "model": "authentication.tag",
+    "pk": 78,
+    "fields": {
+      "name": "Terraza",
+      "entity": "P",
+      "color": "#00BCD4"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 79,
+    "fields": {
+      "name": "Sala de estar",
+      "entity": "P",
+      "color": "#795548"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 80,
+    "fields": {
+      "name": "Estudio",
+      "entity": "P",
+      "color": "#CDDC39"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 81,
+    "fields": {
+      "name": "Invitados",
+      "entity": "P",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 82,
+    "fields": {
+      "name": "Lavandería",
+      "entity": "P",
+      "color": "#673AB7"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 83,
+    "fields": {
+      "name": "Despensa",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 84,
+    "fields": {
+      "name": "Comedor",
+      "entity": "P",
+      "color": "#3F51B5"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 85,
+    "fields": {
+      "name": "Jardín",
+      "entity": "P",
+      "color": "#8BC34A"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 86,
+    "fields": {
+      "name": "Habitación principal",
+      "entity": "P",
+      "color": "#E91E63"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 87,
+    "fields": {
+      "name": "Balcón",
+      "entity": "P",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 1,
+    "fields": {
+      "username": "johndoe",
+      "first_name": "John",
+      "last_name": "Doe",
+      "email": "johndoe@example.com",
+      "phone_number": "954551234",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "Lorem ipsum dolor sit amet",
+      "flatter_coins": 10,
+      "roles": [1, 2],
+      "tags": [1],
+      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 2,
+    "fields": {
+      "username": "janedoe",
+      "first_name": "Jane",
+      "last_name": "Doe",
+      "email": "janedoe@example.com",
+      "phone_number": "954552345",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "Consectetur adipiscing elit",
+      "flatter_coins": 15,
+      "roles": [2],
+      "tags": [2, 3],
+      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 3,
+    "fields": {
+      "username": "marysmith",
+      "first_name": "Mary",
+      "last_name": "Smith",
+      "email": "marysmith@example.com",
+      "phone_number": "954553456",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
+      "flatter_coins": 20,
+      "roles": [2],
+      "tags": [2],
+      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 4,
+    "fields": {
+      "username": "peterparker",
+      "first_name": "Peter",
+      "last_name": "Parker",
+      "email": "peterparker@example.com",
+      "phone_number": "954554567",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "H",
+      "biography": "With great power comes great responsibility",
+      "flatter_coins": 8,
+      "roles": [2],
+      "tags": [7, 3],
+      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 5,
+    "fields": {
+      "username": "lisasimpson",
+      "first_name": "Lisa",
+      "last_name": "Simpson",
+      "email": "lisasimpson@example.com",
+      "phone_number": "954555678",
+      "profile_picture": "users/images/default.jpg",
+      "genre": "M",
+      "biography": "I am a level-5 vegan",
+      "flatter_coins": 25,
+      "roles": [1],
+      "tags": [1, 2],
+      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 1,
+    "fields": {
+      "image": "properties/images/1.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 2,
+    "fields": {
+      "image": "properties/images/2.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 3,
+    "fields": {
+      "image": "properties/images/3.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 4,
+    "fields": {
+      "image": "properties/images/4.jpg"
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 1,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Mi propiedad",
+      "description": "Una hermosa propiedad en la playa",
+      "visits_counter": 10,
+      "bedrooms_number": 3,
+      "bathrooms_number": 2,
+      "price": 150,
+      "location": "Playa del Carmen",
+      "province": "Quintana Roo",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 300,
+      "tags": [78, 79],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 2,
+    "fields": {
+      "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "title": "Casa con piscina",
+      "description": "Una hermosa casa con piscina en el jardín",
+      "visits_counter": 50,
+      "bedrooms_number": 4,
+      "bathrooms_number": 3,
+      "price": 300,
+      "location": "Ciudad de México",
+      "province": "Distrito Federal",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 500,
+      "tags": [85, 86, 83],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 3,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento en la ciudad",
+      "description": "Un acogedor apartamento en el centro de la ciudad",
+      "visits_counter": 20,
+      "bedrooms_number": 1,
+      "bathrooms_number": 1,
+      "price": 800,
+      "location": "Guadalajara",
+      "province": "Jalisco",
+      "is_in_offer": true,
+      "max_flatmates": 4,
+      "dimensions": 100,
+      "tags": [81, 80, 84],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 4,
+    "fields": {
+      "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "title": "Casa de campo",
+      "description": "Una hermosa casa de campo rodeada de naturaleza",
+      "visits_counter": 100,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 500,
+      "location": "San Miguel de Allende",
+      "province": "Guanajuato",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 800,
+      "tags": [79, 86, 85],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 5,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento en la playa",
+      "description": "Un cómodo apartamento frente al mar",
+      "visits_counter": 30,
+      "bedrooms_number": 2,
+      "bathrooms_number": 1,
+      "price": 200,
+      "location": "Puerto Vallarta",
+      "province": "Jalisco",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 150,
+      "tags": [87, 79, 80],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 6,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Apartamento normalito",
+      "description": "Una casa normal",
+      "visits_counter": 45,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 120,
+      "location": "La casa de Vallarta",
+      "province": "Sevilla",
+      "is_in_offer": true,
+      "max_flatmates": 4,
+      "dimensions": 198,
+      "tags": [82, 83, 84],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 7,
+    "fields": {
+      "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "title": "Casa moderna",
+      "description": "Una casa moderna y elegante en el centro de la ciudad",
+      "visits_counter": 25,
+      "bedrooms_number": 4,
+      "bathrooms_number": 3,
+      "price": 450,
+      "location": "Ciudad de México",
+      "province": "Ciudad de México",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 400,
+      "tags": [85, 86, 87],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 8,
+    "fields": {
+      "is_outstanding": false,
+      "title": "Departamento en renta",
+      "description": "Un departamento céntrico en renta por temporada",
+      "visits_counter": 15,
+      "bedrooms_number": 2,
+      "bathrooms_number": 1,
+      "price": 200,
+      "location": "Guadalajara",
+      "province": "Jalisco",
+      "is_in_offer": true,
+      "max_flatmates": 4,
+      "dimensions": 150,
+      "tags": [80, 81, 82],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 4, 5]
+    }
+  },
+  {
+    "model": "mainApp.property",
+    "pk": 9,
+    "fields": {
+      "is_outstanding": true,
+      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "title": "Penthouse con vista al mar",
+      "description": "Un espectacular penthouse con vista al mar en la costa del Pacífico",
+      "visits_counter": 50,
+      "bedrooms_number": 5,
+      "bathrooms_number": 4,
+      "price": 800,
+      "location": "Puerto Vallarta",
+      "province": "Jalisco",
+      "is_in_offer": false,
+      "max_flatmates": 4,
+      "dimensions": 700,
+      "tags": [83, 85],
+      "images": [1, 2, 3, 4],
+      "owner": 1,
+      "flatmates": [2, 3, 5]
+    }
+  }
+]
