@@ -1,0 +1,111 @@
+import "../static/css/pages/listProperties.css";
+
+import FlatterPage from "../sections/flatterPage";
+import useURLQuery from "../hooks/useURLQuery";
+import { useState, useEffect, useRef } from "react";
+import { filterInputs } from "../forms/filterPropertiesForm";
+import {useNavigate} from 'react-router-dom';
+import {useApolloClient} from '@apollo/client';
+import usersAPI from "../api/usersAPI";
+import UserCard from "../components/users/userCards";
+import FlatterForm from "../components/forms/flatterForm";
+import SolidButton from "../sections/solidButton";
+
+const SearchUsers = () => {
+
+  const query = useURLQuery();
+  const navigator = useNavigate();
+  const client = useApolloClient();
+  const filterFormRef = useRef(null);
+
+  let [filterValues, setFilterValues] = useState({
+    min: parseInt(query.get("min")),
+    max: parseInt(query.get("max")),
+    tag: query.get("tag") ?? '',
+    owner: query.get("owner") === 'true' ? true : false,
+  });
+
+  let [users, setUsers] = useState([]);
+
+  function handleFilterForm({values}) {
+
+    if(!filterFormRef.current.validate()) return;
+
+    setFilterValues({
+        min: values.min_rating,
+        max: values.max_rating,
+        tag: values.province,
+        owner: filterValues.owner
+    })
+
+  }
+
+  useEffect(() => {
+
+    filterInputs.map((input) => {
+        if(input.name === 'price'){
+            input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+            input.max = isNaN(filterValues.max) ? 5 : filterValues.max;
+        }
+        if(input.name === 'tag') input.defaultValue = filterValues.tag ?? '';
+    })
+
+    client.query({
+      query: usersAPI.filteredUsersByTagAndReview,
+      variables: {
+        tag: filterValues.tag,
+        owner: filterValues.owner
+      }
+    })
+    .then((response) => {
+        let responseUsers = response.data.getFilteredUsersByTagAndReview;
+
+        setUsers(responseUsers.filter((user) => user.averageRating >= filterValues.min && user.averageRating <= filterValues.max))
+    })
+    .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+
+  }, [filterValues]);
+
+
+
+  return (
+    <FlatterPage withBackground userLogged>
+      <div>
+        <h1 className="properties-title">Buscar a otros usuarios</h1>
+      </div>
+      <section className="site-content-sidebar properties">
+        <div className="sidebar">
+            <div className="card">
+                <div className="filters">
+                <h3>Filtrar por:</h3>
+
+                <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
+                </div>
+            </div>
+            <div style={{marginTop: '20px'}}>
+                <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
+                navigator('/search')
+                setFilterValues({
+                    min: 0,
+                    max: 5,
+                    tag: '',
+                })
+                }}/>
+            </div>
+        </div>
+        <div className="content">
+            {
+                users.length >0 && users.map((user) => {
+                    return(
+                        <UserCard user={user} key={user.id}/>
+                    );
+                })
+            }
+        </div>
+      </section>
+          
+    </FlatterPage>
+  );
+};
+
+export default SearchUsers;

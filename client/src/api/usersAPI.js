@@ -128,7 +128,20 @@ const usersAPI = {
                 }
             }
         }
-    `
+    `,
+    filteredUsersByTagAndReview: gql`
+        query getFilteredUsersByTagAndReview($tag: String){
+            getFilteredUsersByTagAndReview(tag: $tag){
+            id
+            firstName
+            lastName
+            username
+            profilePicture
+            profession
+            averageRating
+            }
+        }
+    `,
 
 }
 

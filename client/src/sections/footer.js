@@ -27,11 +27,13 @@ const Footer = () => {
                     </a></li>
             </ul>
             <ul className="menu">
-                <li className="menu-item"><Link className="menu-link" to="/">Viviendas en alquiler</Link></li>
-                <li className="menu-item"><Link className="menu-link" to="/">Alquilar habitación</Link></li>
-                <li className="menu-item"><Link className="menu-link" to="/">Publicar mi inmueble</Link></li>
-                <li className="menu-item"><Link className="menu-link" to="/">Encontrar compañeros</Link></li>
-                <li className="menu-item"><Link className="menu-link" to="/privacy">Políticas de privacidad</Link></li>
+                <li><Link to="/main">Inicio</Link></li>
+                <li><Link to="/search">Buscador de viviendas</Link></li>
+                <li><Link to="/users">Buscador de compañeros</Link></li>
+                {
+                    localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
+                    <li><Link to="/properties">Mis viviendas</Link></li>
+                }
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>
