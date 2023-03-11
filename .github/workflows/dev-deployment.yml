@@ -68,7 +68,6 @@ jobs:
         kubectl apply -f ./k8s/development/app_variables.yaml
         kubectl apply -f ./k8s/development/component_postgres.yaml
         kubectl apply -f ./k8s/development/job_django.yaml
-        kubectl apply -f ./k8s/development/component_static_assets.yaml
         kubectl apply -f ./k8s/development/component_django.yaml
         kubectl apply -f ./k8s/development/component_react.yaml
         kubectl apply -f ./k8s/development/ingress_service.yaml
