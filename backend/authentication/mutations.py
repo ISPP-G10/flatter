@@ -1,8 +1,10 @@
-import graphene, graphql_jwt, json
+import graphene, graphql_jwt, json, base64, os
 from .models import FlatterUser, Role
 from .models import Tag
 from .types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
+from graphene_file_upload.scalars import Upload
+from django.core.files.storage import default_storage
 
 class CreateUserMutation(graphene.Mutation):
 

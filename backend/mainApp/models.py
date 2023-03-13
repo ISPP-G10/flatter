@@ -23,7 +23,7 @@ class Property(models.Model):
     location = models.CharField(max_length=50)
     province = models.CharField(max_length=50)
     is_in_offer = models.BooleanField(default=False)
-    max_flatmates = models.IntegerField(default=1)
+    max_capacity = models.IntegerField(default=1)
     dimensions = models.IntegerField()
     tags = models.ManyToManyField(Tag, related_name=_('property_tags'))
     images = models.ManyToManyField(Image, related_name=_('property_images'))

@@ -59,7 +59,7 @@ class CreatePropertyMutation(graphene.Mutation):
 
     class Input:
         title = graphene.String(required=True)
-        description = graphene.String(required=True)
+        description = graphene.String(required=False)
         bedrooms_number = graphene.Int(required=True)
         bathrooms_number = graphene.Int(required=True)
         price = graphene.Float(required=True)
@@ -68,6 +68,7 @@ class CreatePropertyMutation(graphene.Mutation):
         dimensions = graphene.Int(required=True)
         owner_username = graphene.String(required=True)
         images = graphene.List(graphene.String, required=False)
+        max_capacity = graphene.Int(required=True)
 
     property = graphene.Field(PropertyType)
 
@@ -82,6 +83,7 @@ class CreatePropertyMutation(graphene.Mutation):
         province = kwargs.get("province", "").strip()
         dimensions = kwargs.get("dimensions", "")
         owner_username = kwargs.get("owner_username", "")
+        max_capacity = kwargs.get("max_capacity", "")
 
         if not title or len(title) < 4 or len(title) > 25:
             raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -112,8 +114,8 @@ class CreatePropertyMutation(graphene.Mutation):
             raise ValueError(
                 _("Las dimensiones deben poseer un valor positivo"))
 
-        if title and Property.objects.filter(title=title).exists():
-            raise ValueError(_("Ya existe un inmueble con ese título"))
+        if not max_capacity or max_capacity < 1:
+            raise ValueError("La capacidad máxima debe ser positiva")
 
         owner = FlatterUser.objects.get(username=owner_username)
 
@@ -129,18 +131,17 @@ class CreatePropertyMutation(graphene.Mutation):
             location=location,
             province=province,
             dimensions=dimensions,
-            owner=owner
+            owner=owner,
+            max_capacity=max_capacity,
         )
 
         images = kwargs.get('images', [])
-        images_to_add = []
-
-        print(images)
         print(len(images))
+        images_to_add = []
 
         if images:
             for image in images:
-                imgdata = base64.b64decode(image.split(',')[1])
+                imgdata = base64.b64decode(image + "===")
                 name = random_string(title) + '.png'
                 filename = os.path.join('media', 'properties', 'images', name)
                 with open(filename, 'wb') as f:
@@ -183,6 +184,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         province = graphene.String(required=False)
         dimensions = graphene.Int(required=False)
         images = graphene.List(graphene.String, required=False)
+        max_capacity = graphene.Int(required=False)
 
     property = graphene.Field(PropertyType)
 
@@ -198,6 +200,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         dimensions = kwargs.get("dimensions", "")
         property_id = kwargs.get("property_id", 0)
         images = kwargs.get('images', [])
+        max_capacity = kwargs.get("max_capacity", "")
 
         if title and (len(title) < 4 or len(title) > 25):
             raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
@@ -227,6 +230,9 @@ class UpdatePropertyMutation(graphene.Mutation):
         if dimensions and dimensions < 1:
             raise ValueError(
                 _("Las dimensiones deben poseer un valor positivo"))
+        
+        if max_capacity and max_capacity < 1:
+            raise ValueError("La capacidad máxima debe ser positiva")
 
         property_edit = Property.objects.get(pk=property_id)
 
@@ -254,15 +260,19 @@ class UpdatePropertyMutation(graphene.Mutation):
         if dimensions and dimensions != property_edit.dimensions:
             property_edit.dimensions = dimensions
             
+        if max_capacity and max_capacity != property_edit.max_capacity:
+            property_edit.max_capacity = max_capacity
+            
         property_edit.save()
-        print(images)
 
         if images:
             
             images_to_add = []
             
+            property_edit.images.clear()
+            
             for image in images:
-                imgdata = base64.b64decode(image.split(',')[1])
+                imgdata = base64.b64decode(image + "===")
                 name = random_string(property_edit.title) + '.png'
                 filename = os.path.join('media', 'properties', 'images', name)
                 with open(filename, 'wb') as f:
