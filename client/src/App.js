@@ -9,7 +9,6 @@ import PropertyDetails from './pages/propertyDetails';
 import MainPage from './pages/mainPage';
 import OwnerProperties from './pages/ownerProperties';
 import PublicProfile from './pages/publicProfile';
-import FileUploadTest from './pages/fileUploadTest';
 import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
@@ -27,7 +26,6 @@ function App() {
         <Route path="/users" element={<SearchUsers/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
-        <Route path='/test' element={ <FileUploadTest/> }/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
         <Route path="*" element={<Error/>}/>

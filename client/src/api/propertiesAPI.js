@@ -3,7 +3,7 @@ import {gql} from 'apollo-boost';
 const propertiesAPI = {
     createProperty: gql`
         mutation createProperty($title: String!, $description: String!, $province: String!, $bathroomsNumber: Int!, 
-            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerUsername: String!, $price: Float!, $images: [String!]) {
+            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerUsername: String!, $price: Float!, $images: [String], $maxCapacity: Int!) {
                 createProperty(
                     title: $title, 
                     description: $description, 
@@ -13,8 +13,9 @@ const propertiesAPI = {
                     bedroomsNumber: $bedroomsNumber,
                     bathroomsNumber: $bathroomsNumber, 
                     province: $province, 
-                    price: $price
-                    images: $images
+                    price: $price,
+                    images: $images,
+                    maxCapacity: $maxCapacity
                 ) {
                 property {
                     title
@@ -90,6 +91,7 @@ const propertiesAPI = {
                 dimensions
                 bedroomsNumber
                 bathroomsNumber
+                maxCapacity
                 images{
                     image
                 }
@@ -152,6 +154,7 @@ const propertiesAPI = {
           profession
           averageRating
         }
+        maxCapacity
         images {
             image
         }

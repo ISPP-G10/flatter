@@ -19,7 +19,7 @@
 }
 
 .class-form > * {
-  width: 90%;
+  width: 100%;
   margin-top: 5%;
 }
 
@@ -74,7 +74,8 @@ textarea.class-form-input {
 
 .class-form-input:focus + .class-form-label,
 .class-form-input:not(:placeholder-shown) + .class-form-label,
-.interval-group > label {
+.interval-group > label,
+.files-group > label {
   transform: translateY(-15px) scale(0.7);
   transform-origin: top left;
   color: var(--main-button-hover-dark-color);

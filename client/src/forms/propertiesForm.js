@@ -2,124 +2,105 @@ import { propertyValidators } from "../libs/validators/propertyValidation"
 
 export const propertyInputs = [
     {
-      title: {
-          label: 'Título de la propiedad',
-          placeholder: 'Introduce un título para tu propiedad',
-          type: 'text',
-          flex: 3,
-          validators: [
-            propertyValidators.notEmptyValidator,
-            propertyValidators.noNumbersValidator,
-            propertyValidators.namesLengthValidator
-          ]
-      },
-      price: {
-          label: 'Precio',
-          placeholder: '50',
-          type: 'number',
-          flex: 1,
-          validators: [
-            propertyValidators.minPrice,
-            propertyValidators.maxPrice
-          ]
-      }
+      tag: 'Título de la propiedad',
+      name: 'title',
+      type: 'text',
+      defaultValue: "",
+      isRequired: true,
+      validators: [
+        propertyValidators.notEmptyValidator,
+        propertyValidators.namesLengthValidator
+      ]
     },
     {
-      province: {
-          label: 'Provincia',
-          type: 'text',
-          flex: 1,
-          validators: [
-            propertyValidators.notEmptyValidator
-          ]
-      },
-      location: {
-          label: 'Municipio',
-          placeholder: 'Introduce el municipio de tu propiedad',
-          type: 'text',
-          flex: 1,
-          validators: [
-            propertyValidators.notEmptyValidator
-          ]
-      },
-      dimensions: {
-        label: 'Dimensiones en m2',
-        placeholder: '100',
-        default: "0",
-        type: 'number',
-        flex: 1,
-        validators: [
-          propertyValidators.minDimensions,
-          propertyValidators.maxDimensions
-        ]
-      }
+      tag: 'Precio',
+      name: 'price',
+      type: 'number',
+      defaultValue: "",
+      isRequired: true,
+      validators: [
+        propertyValidators.minPrice,
+        propertyValidators.maxPrice
+      ]
     },
     {
-      description: {
-          label: 'Descripción',
-          placeholder: 'Descripción de tu propiedad',
-          type: 'textarea',
-          flex: 4,
-          validators: [
-            propertyValidators.notEmptyValidator
-          ]
-      }
+      tag: 'Provincia',
+      name: 'province',
+      type: 'text',
+      defaultValue: "",
+      isRequired: true,
+      validators: [
+        propertyValidators.notEmptyValidator
+      ]
     },
     {
-      images: {
-        label: 'Galería',
-        type: 'imageUploader',
-        flex: 1
-      }
+      tag: 'Municipio',
+      name: 'location',
+      type: 'text',
+      defaultValue: "",
+      isRequired: true,
+      validators: [
+        propertyValidators.notEmptyValidator
+      ]
     },
     {
-      group: {
-        flex: 1,
-        type: 'group',
-        flexType: 'vertical',
-        children: 
-          {
-            bedroomsNumber: {
-                label: 'Habitaciones',
-                placeholder: '3',
-                default: "",
-                type: 'number',
-                flex: 1,
-                validators: [
-                  propertyValidators.minRooms,
-                  propertyValidators.maxRooms
-                ]
-            },
-            bathroomsNumber: {
-                label: 'Baños',
-                placeholder: '2',
-                default: "",
-                type: 'number',
-                flex: 1,
-                validators: [
-                  propertyValidators.minBaths,
-                  propertyValidators.maxBaths
-                ]
-            }
-          }
-        
-      },
-      // tags: {
-      //     label: 'Etiquetas',
-      //     placeholder: 'Selecciona hasta 8 etiquetas',
-      //     default: "",
-      //     type: 'textarea',
-      //     flex: 1
-      // },
+      tag: 'Dimensiones (m2)',
+      name: 'dimensions',
+      type: 'number',
+      defaultValue: "5",
+      isRequired: true,
+      validators: [
+        propertyValidators.minDimensions,
+        propertyValidators.maxDimensions
+      ]
     },
     {
-      max_flatmates: {
-        label: 'Capacidad',
-        type: 'number'
-      },
-      submit: {
-        type: 'submit',
-        text: 'Guardar'
-      }
+      tag: 'Descripción',
+      name: 'description',
+      type: 'textarea',
+      defaultValue: "",
+      isRequired: false,
+      validators: [] 
+    },
+    {
+      tag: 'Imágenes de la propiedad',
+      name: 'images',
+      type: 'files',
+      defaultValue: "",
+      isRequired: false,
+      validators: [] 
+    },
+    {
+      tag: 'Habitaciones',
+      name: 'bedroomsNumber',
+      type: 'number',
+      defaultValue: "1",
+      isRequired: true,
+      validators: [
+        propertyValidators.minRooms,
+        propertyValidators.maxRooms
+      ]
+    },
+    {
+      tag: 'Baños',
+      name: 'bathroomsNumber',
+      type: 'number',
+      defaultValue: "1",
+      isRequired: true,
+      validators: [
+        propertyValidators.minBaths,
+        propertyValidators.maxBaths
+      ]
+    },
+    {
+      tag: 'Capacidad',
+      name: 'maxCapacity',
+      type: 'number',
+      defaultValue: "1",
+      isRequired: true,
+      validators: [
+        propertyValidators.minCapacity,
+        propertyValidators.maxCapacity
+      ]
     }
 ]

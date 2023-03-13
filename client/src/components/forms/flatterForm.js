@@ -1,8 +1,11 @@
 import '../../static/css/components/flatterForm.css'
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
 
 import SuperAnimatedButton from "../superAnimatedButton/superAnimatedButton";
 
-import {useState, useImperativeHandle, forwardRef, useEffect} from 'react';
+import {useState, useImperativeHandle, forwardRef, useEffect, useRef} from 'react';
 
 import PropTypes from 'prop-types';
 import FormInput from './formInput';
@@ -11,6 +14,8 @@ import SolidButton from '../../sections/solidButton';
 const FlatterForm = forwardRef((props, ref) => {
 
     const [formValues, setFormValues] = useState({});
+
+    let formElement = useRef(null);
 
     useImperativeHandle(ref, () => {
         return{
@@ -24,7 +29,7 @@ const FlatterForm = forwardRef((props, ref) => {
                 }
 
                 return true;
-            }
+            },
         }
     });
 
@@ -53,12 +58,18 @@ const FlatterForm = forwardRef((props, ref) => {
 
             setFormValues(newFormValues);
         }
+
+        if(props.scrollable){
+            
+            formElement.current.style.overflow = 'scroll';
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formValues]);
 
     return (
         <div className="class-profile-form">
-            <form className="class-form" style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
+            <form className="class-form" ref={formElement} style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
                     {props.children}
                     { 
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {

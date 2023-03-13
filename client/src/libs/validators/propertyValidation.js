@@ -13,13 +13,13 @@ export const propertyValidators = {
     },
 
     minDimensions: {
-        validate: (value) => parseInt(value)>0,
-        message: "El valor debe ser mayor de 0"
+        validate: (value) => parseInt(value)>=5,
+        message: "El valor debe ser mayor o igual a 5"
     },
 
     maxDimensions: {
         validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 5000"
+        message: "El valor debe ser menor de 320"
     },
 
     minRooms: {
@@ -29,7 +29,7 @@ export const propertyValidators = {
 
     maxRooms: {
         validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 30"
+        message: "El valor debe ser menor de 320"
     },
 
     minBaths: {
@@ -39,7 +39,17 @@ export const propertyValidators = {
 
     maxBaths: {
         validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 8"
+        message: "El valor debe ser menor de 320"
+    },
+
+    minCapacity: {
+        validate: (value) => parseInt(value)>0,
+        message: "El valor debe ser mayor de 0"
+    },
+
+    maxCapacity: {
+        validate: (value) => parseInt(value)<=20,
+        message: "El valor debe ser menor de 20"
     },
 
     notEmptyValidator: {

@@ -5,10 +5,11 @@ import './static/css/index.css';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import * as settings from './settings';
+import { createUploadLink } from 'apollo-upload-client';
 
 const client = new ApolloClient({
   uri: `${settings.API_SERVER}graphql/`,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

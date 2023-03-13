@@ -4,28 +4,26 @@ import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
 import {useApolloClient} from '@apollo/client';
-import {useNavigate} from 'react-router-dom';
 
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 
-import {useQuery, gql, useMutation, useLazyQuery} from '@apollo/client';
+import {useQuery} from '@apollo/client';
 
 import propertiesAPI from '../api/propertiesAPI';
 //import usersAPI from '../api/usersAPI';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 
 const OwnerProperties = ({}) => {
 
-  const [ property, setProperty ] = useState({});
+  let [ property, setProperty ] = useState({});
 
   const addPropertyModalRef = useRef(null);
   const editPropertyModalRef = useRef(null);
 
     const client = useApolloClient();
-    const navigator = useNavigate();
 
     function deleteProperty(id){
 
@@ -55,7 +53,7 @@ const OwnerProperties = ({}) => {
           alert(error.message);
       });
   
-}
+    }
 
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
       username: localStorage.getItem('user','')
