@@ -1,0 +1,136 @@
+.comments-box {
+    background-color: rgb(243, 185, 24);
+    display: flex;
+    position: relative;
+    margin-left: 10%;
+    border-radius: 20px;
+    padding: 10px;
+    flex-direction: column;
+    width: 75%;
+}
+.comments-box-header {
+    margin: 0;
+}
+
+.comments-box-header > * {
+    margin: 0;
+}
+
+.comments-box-scollable{
+    overflow-y: scroll;
+    width: 90%;
+    max-height: 500px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.comments-btn{
+    display: flex;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    min-width: 100px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    font-size: 15px;
+    background-color: black;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+.comments-btn:hover{
+    border: none;
+    outline: none;
+}
+
+.comments-box-star{
+    width: 25px;
+    height: 25px;
+}
+
+.profile-grid{
+    display: grid;
+    grid-template-columns: 75% 25%;
+    row-gap: 50px;
+    margin-top: 3em;
+}
+
+.comments-box-title{
+    margin-left: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.comments-form-title{
+	width: 100%;
+	color: #573b8a;
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+	margin-top: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+
+.no-comments-btn{
+    display: none;
+}
+
+@media screen and (max-width: 1319px) {
+    .comments-box {
+        margin-right: 10%;
+        margin-left: 10%;
+    }
+
+    .profile-grid{
+        grid-template-columns: 65% 35%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .profile-grid{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .comments-form-title{
+        justify-content: center;
+        text-align: center;
+    }
+
+    .comments-box {
+        flex-direction: column;
+        margin: 0%;
+        width: 90%;
+    }
+
+    .comments-btn-text{
+        display: none;
+    }
+
+    .comments-btn{
+        background-image: url("../../files/icons/add-comment.png");
+        background-repeat: no-repeat;
+        background-size: 75%;
+        background-position: center;
+        min-width: 50px;
+        min-height: 50px;
+    }
+}
+
+@media screen and (max-width: 310px) {
+    .comments-box-title{
+        margin-left: 0 !important;
+    }
+    .comments-box-star{
+        display: none;
+    }
+}

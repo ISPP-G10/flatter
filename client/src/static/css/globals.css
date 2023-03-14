@@ -1,39 +1,105 @@
-:root{
-    --flatter-red-color: #ed3f79;
-    --flatter-purple-color: #92278f;
-    --flatter-yellow-color: #fecb35;
-    --flatter-blue-color: #00A8FF;
-    --flatter-orange-color: #FAB315;
+:root {
+  --flatter-red-color: #ed3f79;
+  --flatter-purple-color: #92278f;
+  --flatter-yellow-color: #fecb35;
+  --flatter-blue-color: #00a8ff;
+  --flatter-orange-color: #fab315;
+
+  /* Main Page Form */
+
+  --main-page-properties-form-bg-color: var(--flatter-blue-color);
+  --main-page-partners-form-bg-color: var(--flatter-orange-color);
+  --main-page-owners-form-bg-color: rgb(45, 45, 45);
+
+  /* Inputs */
+
+  --price-range-slider-color: var(--flatter-purple-color);
+  --price-range-slider-track-color: #ced4da;
+  --price-range-slider-text-color: black;
+  --checker-button-color: rgb(158, 158, 158);
+  --checker-track-color: rgb(217, 217, 217);
+
+  /* Buttons */
+
+  --featured-button-background: conic-gradient(
+    from 180deg at 50% 50%,
+    #bb5799 0deg,
+    rgba(255, 0, 245, 0.75) 18.75deg,
+    #8d8eff 86.25deg,
+    rgba(66, 0, 255, 0.67) 144deg,
+    rgba(255, 0, 8, 0.815588) 216deg,
+    #ff8a00 288deg,
+    #bb5799 360deg
+  );
+
+  /* Form generator colors */
+
+  --color-input: #303030;
+  --color-label: #5e5e5e;
+  --color-btn-disabled: #5757577e;
+  --color-error: #cc0033;
+  --color-error-background: #fce4e4;
+  --color-border-disabled: #706c6c;
+  --main-button-hover-dark-color: var(--flatter-purple-color);
+  --main-button-hover-light-color: var(var(--flatter-purple-color););
+  --main-button-shadow-hover-color: rgba(0,0,0,0.4);
+  --main-black: #111;
 }
 
-*{
-    margin: 0 auto;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-    background-color: #f5f5f5;
-    font-family: 'Franklin Gothic Medium', sans-serif;
-    font-size: 16px;
-    color: #333;
+body {
+  background-color: #f5f5f5;
+  font-family: "Poppins";
+  font-size: 16px;
+  color: #333;
 }
 
-section{
-    width: 100%;
-    overflow-x: hidden;
+section {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.site-content {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 70px;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.5)
+    ),
+    url("../files/images/flatter-bg.jpg");
+  background-size: cover;
+  overflow-y: scroll;
 }
 
 .glass {
-    background: rgba(0, 0, 0, 0.21);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5.3px);
-    -webkit-backdrop-filter: blur(5.3px);
+  background: rgba(0, 0, 0, 0.21);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.3px);
+  -webkit-backdrop-filter: blur(5.3px);
 }
 
 .card {
-    background: #fff;
-    box-shadow: 0px 4px 12px #00000045;
-    border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 12px #00000045;
+  border-radius: 8px;
+}
+
+.flatter-coins-row {
+  display: flex;
+  align-items: center;
+}
+
+.flatter-coins-row > div {
+  margin: 0;
+}
+
+.flatter-coins-row > span {
+  margin: 0 10px;
 }

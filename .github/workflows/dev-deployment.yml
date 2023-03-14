@@ -50,14 +50,6 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-client-dev:latest
 
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        context: ./nginx
-        file: ./nginx/Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/flatter-nginx-dev:latest
-
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
@@ -76,7 +68,7 @@ jobs:
         kubectl apply -f ./k8s/development/app_variables.yaml
         kubectl apply -f ./k8s/development/component_postgres.yaml
         kubectl apply -f ./k8s/development/job_django.yaml
-        kubectl apply -f ./k8s/development/component_static_assets.yaml
+        kubectl apply -f ./k8s/development/component_static_assets.yml
         kubectl apply -f ./k8s/development/component_django.yaml
         kubectl apply -f ./k8s/development/component_react.yaml
         kubectl apply -f ./k8s/development/ingress_service.yaml

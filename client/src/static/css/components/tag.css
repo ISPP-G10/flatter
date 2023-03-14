@@ -1,0 +1,19 @@
+.tag{
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 25px;
+    min-width: 100px;
+    align-items: center;
+    justify-content: center;
+}
+
+.tag-name{
+    font-weight: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    font-size: 15px;
+    text-align: center;
+}

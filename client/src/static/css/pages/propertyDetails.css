@@ -1,0 +1,217 @@
+/* ----- General ----- */
+.property-img {
+  max-width: 100%;
+}
+
+.property-housing-page {
+  padding: 3.5%;
+}
+
+/* ----- Housing Section ----- */
+.property-housing {
+  width: 100%;
+  display: flex;
+  gap: 0.7em;
+}
+
+@media screen and (max-width: 1200px) {
+  .property-housing {
+    flex-direction: column;
+    padding: 10px;
+  }
+}
+
+/* ----- Photo Section ----- */
+.property-housing__photo {
+  width: 140%;
+  min-width: 550px;
+}
+
+@media screen and (max-width: 1200px) {
+  .property-housing__photo {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.property-photo-container {
+  left: -2.5em;
+  display: grid;
+  width: 100%;
+  height: 100%;
+}
+
+/* ----- Info Section ----- */
+.property-housing__info {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  border: 3px solid #e2dfdf;
+  width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  .property-housing__info {
+    text-align: center;
+  }
+
+  .property-btn__container {
+    justify-content: center;
+    display: flex;
+    gap: 1em;
+  }
+}
+
+.property-title h1 {
+  margin-bottom: 0.1em;
+  color: #4c4c4c;
+  font-size: 1.5em;
+  font-weight: 900;
+}
+
+.property-title span {
+  font-size: 0.7em;
+  color: #a6a6a6;
+}
+
+.property-price {
+  margin: 1.5em 0;
+  color: #00a8ff;
+  font-size: 1.2em;
+  font-weight: bolder;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.property-price span {
+  margin: 0;
+}
+
+.property-price span:nth-child(1) {
+  padding-left: 0.15em;
+  font-size: 2.5em;
+}
+
+.property-price span:nth-child(2) {
+  padding-left: 0.3em;
+}
+
+.property-description {
+  clear: left;
+  margin: 2em 0;
+  text-align: justify;
+}
+.property-description h3 {
+  margin-bottom: 1em;
+}
+
+.property-tags-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 1em;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.property-btn__container{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.property-btn {
+  padding: 1.5em 1.5em;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.8em;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  color: #fff;
+  background-color: #00a8ff;
+  box-shadow: 2px 2px 25px -7px #4c4c4c;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  float: left;
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+.property-btn img {
+  margin-right: 0.5em;
+}
+
+.property-btn:active {
+  transform: scale(0.97);
+}
+
+/* ----- People Section ----- */
+.property-people {
+  display: flex;
+}
+
+@media screen and (max-width: 900px) {
+  .property-people {
+    flex-direction: column;
+  }
+
+  .property-tags-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- Flatmates Section ----- */
+.property-flatmates {
+  padding: 10px;
+  background-color: #f9be46;
+  border-radius: 20px;
+  margin: 10px;
+  width: auto;
+}
+
+.property-flatmates__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+@media screen and (max-width: 450px) {
+  
+  .property-tags-row {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .property-flatmates__container {
+    flex-direction: column;
+  }
+}
+
+/* ----- Container Title ----- */
+.property-container__title {
+  display: flex;
+  align-items: center;
+}
+
+.property-container__title h1 {
+  margin-left: 0;
+}
+
+.property-container__title img {
+  margin-right: 1.2em;
+  margin-left: 1.4em;
+}
+
+/* ----- Owner Section ----- */
+
+.property-owner {
+  padding: 10px;
+  background-color: #464b4f;
+  border-radius: 20px;
+  margin: 10px;
+  width: auto;
+}
+
+.property-owner h1 {
+  color: #fff;
+}
