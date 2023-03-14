@@ -63,7 +63,7 @@ const propertiesAPI = {
                 province
                 price
                 isOutstanding
-                maxFlatmates
+                maxCapacity
                 images{
                     image
                 }
