@@ -20,7 +20,7 @@ WORKDIR /usr/src/app/flatter-backend
 
 COPY ./backend .
 
-ENV DJANGO_ENV='production'
+ENV DJANGO_ENV=${DJANGO_ENV}
 RUN pip install -U pip
 RUN pip install -r requirements.txt
 RUN chmod +x /usr/src/app/flatter-backend/entrypoint.sh
