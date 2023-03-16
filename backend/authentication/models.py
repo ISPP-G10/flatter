@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
@@ -62,16 +63,20 @@ class Plan(models.Model):
     user = models.ForeignKey(FlatterUser, on_delete=models.DO_NOTHING)
     
 class UserPreferences(models.Model):
-    public = models.BooleanField()
-    online = models.BooleanField()
-    bad_words = models.BooleanField()
-    user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
+    public = models.BooleanField(default=True)
+    add_group = models.BooleanField(default=True)
+    user = models.OneToOneField(FlatterUser, on_delete=models.CASCADE)
     
 def add_roles(sender=None, **kwargs):
     for role in RoleType:
         Role.objects.get_or_create(role=role)
 
 signals.post_migrate.connect(add_roles)
+
+@receiver(signals.post_save, sender=FlatterUser)
+def create_user_preferences(sender, instance, created, **kwargs):
+    if created:
+        UserPreferences.objects.create(user=instance)
 
 
 
