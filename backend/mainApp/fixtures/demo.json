@@ -98,13 +98,13 @@
       "last_name": "Doe",
       "email": "johndoe@example.com",
       "phone_number": "954551234",
-      "profile_picture": "users/images/default.jpg",
+      "profile_picture": "users/images/jhon.jpeg",
       "genre": "H",
       "biography": "Lorem ipsum dolor sit amet",
       "flatter_coins": 10,
       "roles": [1, 2],
       "tags": [1],
-      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
     }
   },
   {
@@ -116,13 +116,13 @@
       "last_name": "Doe",
       "email": "janedoe@example.com",
       "phone_number": "954552345",
-      "profile_picture": "users/images/default.jpg",
+      "profile_picture": "users/images/chica2.jpeg",
       "genre": "M",
       "biography": "Consectetur adipiscing elit",
       "flatter_coins": 15,
       "roles": [2],
       "tags": [2, 3],
-      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
     }
   },
   {
@@ -134,13 +134,13 @@
       "last_name": "Smith",
       "email": "marysmith@example.com",
       "phone_number": "954553456",
-      "profile_picture": "users/images/default.jpg",
+      "profile_picture": "users/images/chica.png",
       "genre": "M",
       "biography": "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
       "flatter_coins": 20,
       "roles": [2],
       "tags": [2],
-      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
     }
   },
   {
@@ -152,13 +152,13 @@
       "last_name": "Parker",
       "email": "peterparker@example.com",
       "phone_number": "954554567",
-      "profile_picture": "users/images/default.jpg",
+      "profile_picture": "users/images/peterParquer.jpeg",
       "genre": "H",
       "biography": "With great power comes great responsibility",
       "flatter_coins": 8,
       "roles": [2],
       "tags": [7, 3],
-      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
     }
   },
   {
@@ -170,13 +170,85 @@
       "last_name": "Simpson",
       "email": "lisasimpson@example.com",
       "phone_number": "954555678",
-      "profile_picture": "users/images/default.jpg",
+      "profile_picture": "users/images/lisa.jpg",
       "genre": "M",
       "biography": "I am a level-5 vegan",
       "flatter_coins": 25,
       "roles": [1],
       "tags": [1, 2],
-      "password": "pbkdf2_sha256$390000$1Am9gFyAtSCfN1LDZtvbME$2mScBtazayeuGzxRMzG+3Pn9YKmds/eZHIv0WCzeGDA="
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 6,
+    "fields": {
+      "username": "profesores.ispp",
+      "first_name": "Profesores",
+      "last_name": "ISPP",
+      "email": "profesores.ispp@us.es",
+      "phone_number": "600600600",
+      "profile_picture": "users/images/Gigachad.jpg",
+      "genre": "O",
+      "biography": "Somos profesores de ISPP de la us",
+      "flatter_coins": 2500,
+      "roles": [1, 2],
+      "tags": [20, 2, 13],
+      "password": "pbkdf2_sha256$390000$BeRsXwzce8qEVIO7rNkD3U$0TbaQyqSZNYwACfh7cvIGO6hcVtDjGDxJgqnOGQZ/1c="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 7,
+    "fields": {
+      "username": "homersimpson",
+      "first_name": "Homer",
+      "last_name": "Simpson",
+      "email": "homersimpson@example.com",
+      "phone_number": "934000981",
+      "profile_picture": "users/images/homer.jpeg",
+      "genre": "H",
+      "biography": "Me gustan las rosquillas",
+      "flatter_coins": 200,
+      "roles": [1],
+      "tags": [34, 5],
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 8,
+    "fields": {
+      "username": "bartsimpson",
+      "first_name": "Bart",
+      "last_name": "Simpson",
+      "email": "bartskater@example.com",
+      "phone_number": "954555678",
+      "profile_picture": "users/images/bart.jpeg",
+      "genre": "H",
+      "biography": "Me acabo de sacar un backflip y voy a alquilar mi primer piso",
+      "flatter_coins": 135,
+      "roles": [1],
+      "tags": [3, 4, 27],
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 9,
+    "fields": {
+      "username": "petergrifin",
+      "first_name": "Peter",
+      "last_name": "Griffin",
+      "email": "petercervecero@hotmail.nu",
+      "phone_number": "607896724",
+      "profile_picture": "users/images/peter.jpeg",
+      "genre": "H",
+      "biography": "Donde estoy?",
+      "flatter_coins": 230,
+      "roles": [1],
+      "tags": [1, 2, 9],
+      "password": "pbkdf2_sha256$390000$oQTetoRDWmig7cqmVkjGWx$n3BfjyIv+5N0GpaJ5o/KQY4JpsFXd7wkVJMuVHAVNj0="
     }
   },
   {
@@ -208,6 +280,181 @@
     }
   },
   {
+    "model": "mainApp.Image",
+    "pk": 5,
+    "fields": {
+      "image": "properties/images/5.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 6,
+    "fields": {
+      "image": "properties/images/6.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 7,
+    "fields": {
+      "image": "properties/images/7.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 8,
+    "fields": {
+      "image": "properties/images/8.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 9,
+    "fields": {
+      "image": "properties/images/9.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 10,
+    "fields": {
+      "image": "properties/images/10.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 11,
+    "fields": {
+      "image": "properties/images/11.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 12,
+    "fields": {
+      "image": "properties/images/12.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 13,
+    "fields": {
+      "image": "properties/images/13.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 14,
+    "fields": {
+      "image": "properties/images/14.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 15,
+    "fields": {
+      "image": "properties/images/15.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 16,
+    "fields": {
+      "image": "properties/images/16.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 17,
+    "fields": {
+      "image": "properties/images/17.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 18,
+    "fields": {
+      "image": "properties/images/18.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 19,
+    "fields": {
+      "image": "properties/images/19.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 20,
+    "fields": {
+      "image": "properties/images/20.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 21,
+    "fields": {
+      "image": "properties/images/21.jpeg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 22,
+    "fields": {
+      "image": "properties/images/22.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 23,
+    "fields": {
+      "image": "properties/images/23.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 24,
+    "fields": {
+      "image": "properties/images/24.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 25,
+    "fields": {
+      "image": "properties/images/25.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 26,
+    "fields": {
+      "image": "properties/images/26.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 27,
+    "fields": {
+      "image": "properties/images/27.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 28,
+    "fields": {
+      "image": "properties/images/28.jpg"
+    }
+  },
+  {
+    "model": "mainApp.Image",
+    "pk": 29,
+    "fields": {
+      "image": "properties/images/29.png"
+    }
+  },
+  {
     "model": "mainApp.property",
     "pk": 1,
     "fields": {
@@ -224,7 +471,7 @@
       "max_capacity": 4,
       "dimensions": 300,
       "tags": [78, 79],
-      "images": [1, 2, 3, 4],
+      "images": [1, 2, 4, 27],
       "owner": 1,
       "flatmates": [2, 3]
     }
@@ -247,9 +494,9 @@
       "max_capacity": 4,
       "dimensions": 500,
       "tags": [85, 86, 83],
-      "images": [1, 2, 3, 4],
+      "images": [15, 5, 29],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4]
     }
   },
   {
@@ -269,9 +516,9 @@
       "max_capacity": 4,
       "dimensions": 100,
       "tags": [81, 80, 84],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "images": [8, 12, 28],
+      "owner": 2,
+      "flatmates": [1, 3, 4]
     }
   },
   {
@@ -292,8 +539,8 @@
       "max_capacity": 4,
       "dimensions": 800,
       "tags": [79, 86, 85],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
+      "images": [18, 17, 16],
+      "owner": 2,
       "flatmates": [2, 3, 4]
     }
   },
@@ -314,9 +561,9 @@
       "max_capacity": 4,
       "dimensions": 150,
       "tags": [87, 79, 80],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "images": [14, 6, 3, 26],
+      "owner": 3,
+      "flatmates": [2, 4]
     }
   },
   {
@@ -336,9 +583,9 @@
       "max_capacity": 4,
       "dimensions": 198,
       "tags": [82, 83, 84],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "images": [9, 10, 25],
+      "owner": 4,
+      "flatmates": [2, 3]
     }
   },
   {
@@ -359,9 +606,9 @@
       "max_capacity": 4,
       "dimensions": 400,
       "tags": [85, 86, 87],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [4, 5]
+      "images": [11, 7, 24],
+      "owner": 4,
+      "flatmates": [2]
     }
   },
   {
@@ -381,9 +628,9 @@
       "max_capacity": 4,
       "dimensions": 150,
       "tags": [80, 81, 82],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "images": [13, 21, 22],
+      "owner": 5,
+      "flatmates": [2, 3, 4]
     }
   },
   {
@@ -404,9 +651,93 @@
       "max_capacity": 4,
       "dimensions": 700,
       "tags": [83, 85],
-      "images": [1, 2, 3, 4],
-      "owner": 1,
-      "flatmates": [2, 3, 5]
+      "images": [19, 20, 23],
+      "owner": 5,
+      "flatmates": [1, 2, 3, 4]
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 1,
+    "fields": {
+      "rating": 5,
+      "text": "Excelente persona y cumple con lo que ofrece. El apartamento es fantástico.",
+      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "valued_user": 1,
+      "evaluator_user": 2,
+      "relationship": "I"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 2,
+    "fields": {
+      "rating": 4,
+      "text": "La cocina un poco perqueña pero por lo demás genial",
+      "creation_date": "2023-02-13 20:20:00.00 +0100",
+      "valued_user": 1,
+      "evaluator_user": 3,
+      "relationship": "I"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 3,
+    "fields": {
+      "rating": 4,
+      "text": "Excelente persona y excelente compañero de piso.",
+      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "valued_user": 3,
+      "evaluator_user": 2,
+      "relationship": "C"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 4,
+    "fields": {
+      "rating": 2,
+      "text": "Lo he tenido en otros pisos y huele mal.",
+      "creation_date": "2022-01-26 13:10:00.00 +0100",
+      "valued_user": 2,
+      "evaluator_user": 3,
+      "relationship": "C"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 5,
+    "fields": {
+      "rating": 4,
+      "text": "El mejor compañero que he tenido nunca.",
+      "creation_date": "2023-02-22 21:00:00.00 +0100",
+      "valued_user": 3,
+      "evaluator_user": 4,
+      "relationship": "E"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 6,
+    "fields": {
+      "rating": 5,
+      "text": "Es el mejor.",
+      "creation_date": "2023-03-14 09:30:00.00 +0100",
+      "valued_user": 3,
+      "evaluator_user": 5,
+      "relationship": "A"
+    }
+  },
+  {
+    "model": "mainApp.review",
+    "pk": 7,
+    "fields": {
+      "rating": 1,
+      "text": "Se ha peleado con su compañero de piso",
+      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "valued_user": 3,
+      "evaluator_user": 1,
+      "relationship": "P"
     }
   }
 ]
