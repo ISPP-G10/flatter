@@ -1,7 +1,5 @@
 version: '3'
 
-name: flatter
-
 services:
   db:
     restart: always
