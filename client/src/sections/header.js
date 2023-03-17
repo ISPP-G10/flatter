@@ -61,7 +61,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
 
-            navigator('/main');
+            navigator(0);
 
         }).catch((error) => {
             alert(['Usuario o contraseña incorrectos']);
@@ -96,7 +96,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
 
-            navigator('/main');
+            navigator(0);
         }).catch((error) => {
             alert(error.message.split("\n")[0]);
         });
@@ -114,7 +114,7 @@ const Header = ({scrollY, userLogged}) => {
     useEffect(() => {
         if(userLogged){
             localStorage.getItem("user") ? setUser(localStorage.getItem("user")) : navigator("/");
-            localStorage.getItem("token") ? setToken(localStorage.getItem("token")) : setToken("");
+            localStorage.getItem("token") ? setToken(localStorage.getItem("token")) : navigator("/");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
