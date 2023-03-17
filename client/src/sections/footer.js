@@ -31,11 +31,11 @@ const Footer = () => {
                 <li className='menu-item'><Link className='menu-link' to="/search">Buscador de viviendas</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/users?owner=false">Buscador de compañeros</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/users?owner=true">Buscador de propietarios</Link></li>
-                <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>
                 {
                     localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
-                    <li><Link to="/properties">Mis viviendas</Link></li>
+                    <li className='menu-item'><Link className='menu-link' to="/properties">Mis viviendas</Link></li>
                 }
+                <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>       
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>
