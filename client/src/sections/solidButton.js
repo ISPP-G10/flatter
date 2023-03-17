@@ -2,9 +2,11 @@ import '../static/css/sections/button.css';
 
 import PropTypes from "prop-types";
 
-const SolidButton = ({text, type, onClick}) => {
+const SolidButton = ({text, type, onClick, className}) => {
 
-    let classes = 'button';
+    className = className.length ? ` ${className}` : '';
+    
+    let classes = `button${className}`;
     classes += type.length>0 ? ` ${type}` : '';
 
     const isOutlined = type==="outlined";

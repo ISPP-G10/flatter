@@ -13,6 +13,7 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
+import PropertyRequests from './pages/propertyRequests';
 
 function App() {
   return (
@@ -21,10 +22,11 @@ function App() {
         <Route exact path="/" element={<LandingPage/>}/>
         <Route exact path="/main" element={<MainPage/>}/>
         <Route path="/privacy" element={<PrivacyPage/>}/>
-        <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/search" element={<ListProperties/>}/>
         <Route path="/users" element={<SearchUsers/>}/>
+        <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
+        <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>

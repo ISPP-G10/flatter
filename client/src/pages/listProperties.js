@@ -1,4 +1,5 @@
 import "../static/css/pages/listProperties.css";
+import "../static/css/pages/propertyRequests.css";
 
 import FlatterPage from "../sections/flatterPage";
 import Slider from "../components/slider/slider";
