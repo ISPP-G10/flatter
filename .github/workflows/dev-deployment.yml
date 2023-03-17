@@ -41,6 +41,7 @@ jobs:
         cd flatter/docker
         git checkout develop
         git pull
+        sudo rm .env
         touch .env
         echo 'POSTGRES_DB="${{ secrets.POSTGRES_DB }}"' >> .env
         echo 'POSTGRES_USER="${{ secrets.POSTGRES_USER }}"' >> .env
