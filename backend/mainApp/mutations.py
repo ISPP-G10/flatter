@@ -1,11 +1,13 @@
-from .models import Tag, Property
+from graphql import GraphQLError
+from .models import Request, Tag, Property
 from authentication.models import FlatterUser, Role
 from mainApp.models import Image
 from .models import Property
-from .types import PropertyType
+from .types import PropertyType, RequestType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene
+
 
 class DeleteImageFromProperty(graphene.Mutation):
     class Input:
@@ -170,8 +172,58 @@ class DeletePropertyMutation(graphene.Mutation):
         property = Property.objects.get(pk=property_id)
         property.delete()
         return DeletePropertyMutation(property=property)
+    
 
 
+class CreateRequestToPropertyMutation(graphene.Mutation):
+    class Input:
+        message = graphene.String(required=True)
+        property = graphene.Int(required=True)
+        request= graphene.String(required=True)
+        status = graphene.String(required=True)
+
+    request = graphene.Field(RequestType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        message = kwargs.get('message', '').strip()
+        property = kwargs.get('property', '')
+        request = kwargs.get("username", "").strip()
+        status = kwargs.get("status", "").strip()
+        obj = Request.objects.create(
+            message=message,
+            property=property,
+            request=request,
+            status=status,
+        )
+        return CreateRequestToPropertyMutation(request=obj)
+      
+class AcceptedDeniedRequestMutation(graphene.Mutation):
+    class Input:
+        request_id = graphene.Int(required=True)
+        status_request = graphene.Boolean(required=True)
+
+    request = graphene.Field(RequestType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        request_id = kwargs.get('request_id', '')
+        status_request = kwargs.get('status_request', False)
+        try:
+            request = Request.objects.get(id=request_id)
+        except Request.DoesNotExist:
+            raise GraphQLError(f"Solicitud con ID {request_id} no existe")
+
+        if request.status != "pending":
+            raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
+
+        if status_request:
+            request.status = "accept"
+        else:
+            request.status = "denied"
+        request.save()
+        return AcceptedDeniedRequestMutation(request=request)
+      
 class UpdatePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
@@ -325,6 +377,8 @@ class PropertyMutation(graphene.ObjectType):
     delete_image_to_property = DeleteImageFromProperty.Field()
     delete_property = DeletePropertyMutation.Field()
     make_property_outstanding = MakePropertyOutstandingMutation.Field()
+    create_request_to_property = CreateRequestToPropertyMutation.Field()
+    accept_denied_request=AcceptedDeniedRequestMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

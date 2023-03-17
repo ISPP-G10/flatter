@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db.models import signals
 
+
 # Create your models here.
 
 class Image(models.Model):
@@ -56,6 +57,18 @@ class Application(models.Model):
     property = models.ForeignKey(Property,on_delete=models.CASCADE)
     user = models.ManyToManyField(FlatterUser)
     type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
+    
+class Request(models.Model):   
+    message = models.TextField(null=True, blank=True)
+    creation_at = models.DateTimeField(auto_now_add=True)
+    property = models.ForeignKey(Property,on_delete=models.CASCADE)
+    request = models.ForeignKey(FlatterUser,on_delete=models.CASCADE)
+    status_choices = (
+        ('A','Accepted'),
+        ('P','Pending'),
+        ('D', 'Denied')
+    )
+    status = models.CharField(max_length=1,choices=status_choices)
     
 def add_default_img(sender=None, **kwargs):
     Image.objects.get_or_create(image='properties/images/default.png')

@@ -1,8 +1,8 @@
 import graphene
 from authentication.models import Tag, FlatterUser
-from .types import PropertyType
+from .types import PropertyType, RequestType
 from authentication.types import TagType
-from .models import Property
+from .models import Property, Request
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from django.utils import timezone
@@ -16,6 +16,7 @@ class MainAppQuery(object):
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
+    get_request_by_username = graphene.List(RequestType)
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
@@ -68,6 +69,14 @@ class MainAppQuery(object):
                 property.save()
         
         return Property.objects.filter(is_outstanding = True)
+    
+
+
+    def resolve_get_request_by_username(self, info, username):
+        return Request.objects.get(username=username)
+
+
+
   
 
 
