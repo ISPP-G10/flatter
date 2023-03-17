@@ -39,6 +39,8 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         git clone ${{ github.event.repository.clone_url }}
         cd flatter/docker
+        git checkout develop
+        git pull
         touch .env
         echo 'POSTGRES_DB="${{ secrets.POSTGRES_DB }}"' >> .env
         echo 'POSTGRES_USER="${{ secrets.POSTGRES_USER }}"' >> .env
