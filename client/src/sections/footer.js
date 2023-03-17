@@ -27,10 +27,11 @@ const Footer = () => {
                     </a></li>
             </ul>
             <ul className="menu">
-                <li><Link to="/main">Inicio</Link></li>
-                <li><Link to="/search">Buscador de viviendas</Link></li>
-                <li><Link to="/users?owner=false">Buscador de compañeros</Link></li>
-                <li><Link to="/users?owner=true">Buscador de propietarios</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/main">Inicio</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/search">Buscador de viviendas</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/users?owner=false">Buscador de compañeros</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/users?owner=true">Buscador de propietarios</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>
                 {
                     localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
                     <li><Link to="/properties">Mis viviendas</Link></li>
