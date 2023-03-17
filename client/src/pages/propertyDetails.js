@@ -3,6 +3,8 @@ import "../static/css/pages/propertyDetails.css";
 import SlideShow from "../components/slider/slideShow";
 import SmallProfile from "../components/profile/smallProfile";
 import FlatterPage from "../sections/flatterPage";
+import FlatterModal from "../components/flatterModal";
+import FormProperty from "../components/forms/formProperty";
 import Tag from "../components/tag";
 
 import { useParams } from "react-router-dom";
@@ -11,13 +13,16 @@ import { useQuery } from "@apollo/client";
 import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
 
+import { useState, useRef } from "react";
+
 const PropertyDetails = () => {
+  let [ property, setProperty ] = useState({});
+  const editPropertyModalRef = useRef(null);
+
   const { id } = useParams();
 
-  console.log(parseInt(id));
-
   const { loading, data } = useQuery(propertiesAPI.getPropertyById, {
-    variables: { 
+    variables: {
       id: parseInt(id),
     },
   });
@@ -40,7 +45,10 @@ const PropertyDetails = () => {
           <div className="property-housing__info">
             <div className="property-title">
               <h1>{data.getPropertyById.title}</h1>
-              <span>LOCALIZACIÓN: {data.getPropertyById.province}, {data.getPropertyById.location}</span>
+              <span>
+                LOCALIZACIÓN: {data.getPropertyById.province},{" "}
+                {data.getPropertyById.location}
+              </span>
             </div>
             <div className="property-price">
               <span>{data.getPropertyById.price}</span> <span>€/mes</span>
@@ -55,28 +63,32 @@ const PropertyDetails = () => {
               ))}
             </div>
             <div className="property-btn__container">
-              <button className="property-btn">
-                {localStorage.getItem("user") ===
-                data.getPropertyById.owner.username ? (
-                  <>
-                    <img
-                      className="property-img"
-                      src={require("../static/files/icons/lapiz.png")}
-                      alt="lapiz icon"
-                    />
-                    EDITAR
-                  </>
-                ) : (
-                  <>
-                    <img
-                      className="property-img"
-                      src={require("../static/files/icons/chat-icon.png")}
-                      alt="chat icon"
-                    />
-                    CONTACTAR
-                  </>
-                )}
-              </button>
+              {localStorage.getItem("user") ===
+              data.getPropertyById.owner.username ? (
+                <button
+                  className="property-btn"
+                  onClick={() => {
+                    setProperty(data.getPropertyById);
+                    editPropertyModalRef.current.open();
+                  }}
+                >
+                  <img
+                    className="property-img"
+                    src={require("../static/files/icons/lapiz.png")}
+                    alt="lapiz icon"
+                  />
+                  EDITAR
+                </button>
+              ) : (
+                <button className="property-btn">
+                  <img
+                    className="property-img"
+                    src={require("../static/files/icons/chat-icon.png")}
+                    alt="chat icon"
+                  />
+                  CONTACTAR
+                </button>
+              )}
             </div>
           </div>
         </section>
@@ -112,6 +124,9 @@ const PropertyDetails = () => {
           </section>
         </section>
       </div>
+      <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
+        <FormProperty property={property} />
+      </FlatterModal>
     </FlatterPage>
   );
 };
