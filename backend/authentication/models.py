@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 
 class RoleType(models.TextChoices):
@@ -35,7 +35,7 @@ class FlatterUser(AbstractUser):
                      ('NB','No Binario'),
                      ('O', 'Otro'))
     email = models.EmailField(_("email_address"), unique=True)
-    phone_number = models.CharField(_("phone_number"), max_length=20, null=True)
+    phone_number = models.CharField(_("phone_number"), max_length=9, null=True)
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', blank=True, null=True)
     roles = models.ManyToManyField(Role, related_name=_('roles'))
     genre = models.CharField(choices=choices_genre, max_length=2)
@@ -44,6 +44,28 @@ class FlatterUser(AbstractUser):
     profession = models.CharField(max_length=100, blank=True, null=True)
     birthday = models.DateField(_("birthday"), blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name=_('user_tags'))
+    username = models.CharField(
+        _('username'),
+        max_length=25,
+        unique=True,
+        validators=[MinLengthValidator(6)]
+    )
+    password = models.CharField(
+        _('password'),
+        max_length=128,
+        validators=[MinLengthValidator(6)]
+    )
+    first_name = models.CharField(
+        _('first name'),
+        max_length=50,
+        validators=[MinLengthValidator(3)]
+    )
+
+    last_name = models.CharField(
+        _('last name'),
+        max_length=50,
+        validators=[MinLengthValidator(3)]
+    )
     
     
     def __str__(self):
