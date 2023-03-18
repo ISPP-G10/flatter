@@ -57,6 +57,7 @@ class EditUserMutation(graphene.Mutation):
         birthday = graphene.String(required=False)
         role = graphene.String(required=False)
         genre = graphene.String(required=False)
+        tags = graphene.List(graphene.String, required=True)
 
     user = graphene.Field(FlatterUserType)
 
@@ -74,6 +75,7 @@ class EditUserMutation(graphene.Mutation):
         birthday = kwargs.get('birthday', '').strip()
         genre = kwargs.get('genre', '').strip()
         role = kwargs.get('role', '').strip()
+        tags = kwargs.get('tags', [])
 
         if first_name and (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
@@ -152,6 +154,19 @@ class EditUserMutation(graphene.Mutation):
             user_selected.roles.clear()
             user_selected.roles.add(*roles)
 
+
+
+        if len(tags) > 8:
+            raise ValueError(_("No se pueden añadir más de 8 tags"))
+
+        user_tags = []
+        for tag in tags:
+            if not _exists_tag(tag):
+                raise ValueError(_(f"La etiqueta {tag} no existe"))
+            user_tags.append(Tag.objects.get(name=tag))
+
+        user_selected.tags.set(user_tags)
+
         return EditUserMutation(user=user_selected)
 
 class ChangePasswordMutation(graphene.Mutation):
@@ -180,25 +195,7 @@ class ChangePasswordMutation(graphene.Mutation):
 
             return ChangePasswordMutation(user=user_selected)
 
-class DeleteTagFromUserMutation(graphene.Mutation):
-    class Input:
-        username = graphene.String(required=True)
-        tag_name = graphene.String(required=True)
 
-    user = graphene.Field(FlatterUserType)
-
-    @staticmethod
-    def mutate(root, info, **kwargs):
-
-            username = kwargs.get('username', '').strip()
-            tag_name = kwargs.get('tag_name', '').strip()
-
-            user_selected = FlatterUser.objects.get(username=username)
-
-            tag = Tag.objects.get(name=tag_name)
-            user_selected.tags.remove(tag)
-
-            return DeleteTagFromUserMutation(user=user_selected)
 
 class AddRoleToUserMutation(graphene.Mutation):
     class Input:
@@ -313,7 +310,6 @@ class CreateReview(graphene.Mutation):
 
 class SocialMutation(graphene.ObjectType):
     edit_user = EditUserMutation.Field()
-    delete_tag_to_user = DeleteTagFromUserMutation.Field()
     add_role_to_user = AddRoleToUserMutation.Field()
     delete_role_to_user = DeleteRoleFromUserMutation.Field()
     change_user_password = ChangePasswordMutation.Field()
@@ -370,3 +366,7 @@ def parse_roles(roles):
     return [Role.objects.get(role='RENTER')]
   else:
     return list(Role.objects.all())
+
+
+def _exists_tag(tag):
+    return Tag.objects.filter(name=tag).exists()
