@@ -1,10 +1,7 @@
 import graphene, graphql_jwt, json, base64, os
 from .models import FlatterUser, Role
-from .models import Tag
 from .types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
-from graphene_file_upload.scalars import Upload
-from django.core.files.storage import default_storage
 
 class CreateUserMutation(graphene.Mutation):
 
@@ -104,35 +101,6 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
         return cls(user=info.context.user)
 
 
-class AddTagsToUser(graphene.Mutation):
-  class Input:
-    username = graphene.String(required=True)
-    tags = graphene.List(graphene.String, required=True)
-
-  user = graphene.Field(FlatterUserType)
-
-  @staticmethod
-  def mutate(root, info, **kwargs):
-    username = kwargs.get('username', '').strip()
-    tags = kwargs.get('tags', [])
-
-    try:
-      selected_user = FlatterUser.objects.get(username=username)
-    except FlatterUser.DoesNotExist:
-      raise ValueError(_("El usuario no existe"))
-
-    if len(tags) > 8:
-      raise ValueError(_("No se pueden añadir más de 8 tags"))
-
-    user_tags = []
-    for tag in tags:
-      if not _exists_tag(tag):
-        raise ValueError(_(f"La etiqueta {tag} no existe"))
-      user_tags.append(Tag.objects.get(name=tag))
-
-    selected_user.tags.set(user_tags)
-
-    return AddTagsToUser(user=selected_user)
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
@@ -140,8 +108,7 @@ class AuthenticationMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_user = CreateUserMutation.Field()
   delete_user = DeleteUserMutation.Field()
-  add_tags_to_user = AddTagsToUser.Field()
-  
+
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
 def _exists_user(username):
@@ -182,6 +149,3 @@ def parse_roles(roles):
     return [Role.objects.get(role='RENTER')]
   else:
     return list(Role.objects.all())
-
-def _exists_tag(tag):
-    return Tag.objects.filter(name=tag).exists()
