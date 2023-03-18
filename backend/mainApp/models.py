@@ -1,13 +1,15 @@
-from django.db import models
-from authentication.models import FlatterUser, Tag
-from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
+from django.db import models
 from django.db.models import signals
+from django.utils.translation import gettext_lazy as _
+
+from authentication.models import FlatterUser, Tag
+
 
 # Create your models here.
 
 class Image(models.Model):
-    image = models.ImageField( upload_to='properties/images/', blank=True, null=True)
+    image = models.ImageField(upload_to='properties/images/', blank=True, null=True)
 
 
 class Property(models.Model):
@@ -19,7 +21,7 @@ class Property(models.Model):
     bedrooms_number = models.IntegerField()
     bathrooms_number = models.IntegerField()
     price = models.FloatField()
-    #LOCATION DEBERIA SER UN SELECT
+    # LOCATION DEBERIA SER UN SELECT
     location = models.CharField(max_length=50)
     province = models.CharField(max_length=50)
     is_in_offer = models.BooleanField(default=False)
@@ -30,8 +32,8 @@ class Property(models.Model):
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
     flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
 
-class Review(models.Model):
 
+class Review(models.Model):
     choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'))
 
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True)
@@ -40,24 +42,40 @@ class Review(models.Model):
     valued_user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE, related_name='valued_reviews')
     evaluator_user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE, related_name='evaluator_reviews')
     relationship = models.CharField(choices=choices_entity, max_length=1)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["valued_user", "evaluator_user"], name='Review must be unique'),
         ]
         ordering = ['-creation_date']
 
+
 class Type(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField()
 
+
 class Application(models.Model):
     message = models.TextField()
     creation_date = models.DateTimeField(auto_now_add=True)
-    property = models.ForeignKey(Property,on_delete=models.CASCADE)
+    property = models.ForeignKey(Property, on_delete=models.CASCADE)
     user = models.ManyToManyField(FlatterUser)
-    type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
-    
+    type = models.ForeignKey(Type, on_delete=models.DO_NOTHING)
+
+
+class Province(models.Model):
+    code = models.PositiveIntegerField(primary_key=True, auto_created=False)
+    name = models.CharField(max_length=30, blank=False, null=False)
+
+
+class Municipality(models.Model):
+    code = models.PositiveIntegerField(primary_key=True, auto_created=False)
+    name = models.CharField(max_length=100, blank=False, null=False)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE)
+
+
 def add_default_img(sender=None, **kwargs):
     Image.objects.get_or_create(image='properties/images/default.png')
+
 
 signals.post_migrate.connect(add_default_img)
