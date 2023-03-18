@@ -15,6 +15,8 @@ import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import TagSelector from './components/inputs/tagSelector';
 
+const val = [{ value: "1", label: "Amistoso", color: "#FFC107" }]
+
 function App() {
   return (
     <Router>
@@ -29,7 +31,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
-        <Route path='/prueba' element={<TagSelector/>}/>
+        <Route path='/prueba' element={<TagSelector initialOptions={val}/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
