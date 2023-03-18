@@ -47,13 +47,6 @@ class Review(models.Model):
 class Type(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField()
-
-class Application(models.Model):
-    message = models.TextField()
-    creation_date = models.DateTimeField(auto_now_add=True)
-    property = models.ForeignKey(Property,on_delete=models.CASCADE)
-    user = models.ManyToManyField(FlatterUser)
-    type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
     
 class Petition(models.Model):   
     message = models.TextField(null=True, blank=True, max_length=1000)
