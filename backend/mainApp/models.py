@@ -34,7 +34,8 @@ class Property(models.Model):
 
 
 class Review(models.Model):
-    choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'))
+
+    choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'), ('I', 'Inquilino'))
 
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=True)
     text = models.TextField(validators=[MinLengthValidator(2)], max_length=256)
