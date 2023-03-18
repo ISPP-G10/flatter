@@ -12,7 +12,9 @@ services:
     networks:
       - flatter
     environment:
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   backend:
     restart: always
@@ -21,15 +23,26 @@ services:
     build: 
       context: ..
       dockerfile: ./docker/backend/Dockerfile
-    command: bash -c "/usr/src/app/flatter-backend/entrypoint.sh && gunicorn -w 5 backend.wsgi:application --timeout=500 --bind 0.0.0.0:8080 -c gunicorn.conf.py"
+    command: bash -c "/usr/src/app/flatter-backend/entrypoint.sh && gunicorn -w 5 backend.wsgi:application --timeout=500 --bind 0.0.0.0:8000 -c gunicorn.conf.py"
     environment:
-      - DJANGO_ADMIN_USER= flatter_admin_user
-      - DJANGO_ADMIN_EMAIL= "flatter.ispp@gmail.com"
-      - DJANGO_ADMIN_PASSWORD= flatter_admin_password
-      - SECRET_KEY= secretkey
+      DEBUG: ${DEBUG}
+      DJANGO_ENV: ${DJANGO_ENV}
+      DJANGO_ADMIN_USER: ${DJANGO_ADMIN_USER}
+      DJANGO_ADMIN_EMAIL: ${DJANGO_ADMIN_EMAIL}
+      DJANGO_ADMIN_PASSWORD: ${DJANGO_ADMIN_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE: ${DATABASE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+
+    volumes:
+      - static:/usr/src/app/flatter-backend/static
+      - static:/usr/src/app/flatter-backend/media
     expose:
-      - 8080
+      - 8000
     depends_on:
+      - db
+    links:
       - db
     networks:
       - flatter
@@ -42,8 +55,11 @@ services:
       context: ..
       dockerfile: ./docker/client/Dockerfile
       args:
-        API_SERVER: "http://localhost/api/"
+        API_SERVER: ${API_SERVER_URL}
+        NODE_ENV: ${NODE_ENV}
     command: sh -c "serve -s build -l 3000 --no-clipboard"
+    depends_on:
+      - backend
     expose:
       - 3000
     networks:
@@ -57,9 +73,10 @@ services:
         context: ../nginx/local
         dockerfile: ./Dockerfile
     volumes:
-      - static:/usr/src/app/static
+      - static:/usr/src/app/flatter-backend/static
+      - static:/usr/src/app/flatter-backend/media
     ports:
-      - 80:8000
+      - 80:80
     depends_on:
       - backend
       - client
