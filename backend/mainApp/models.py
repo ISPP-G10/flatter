@@ -58,11 +58,11 @@ class Application(models.Model):
     user = models.ManyToManyField(FlatterUser)
     type = models.ForeignKey(Type, on_delete= models.DO_NOTHING)
     
-class Request(models.Model):   
+class Petition(models.Model):   
     message = models.TextField(null=True, blank=True)
     creation_at = models.DateTimeField(auto_now_add=True)
     property = models.ForeignKey(Property,on_delete=models.CASCADE)
-    request = models.ForeignKey(FlatterUser,on_delete=models.CASCADE)
+    requester = models.ForeignKey(FlatterUser,on_delete=models.CASCADE)
     status_choices = (
         ('A','Accepted'),
         ('P','Pending'),

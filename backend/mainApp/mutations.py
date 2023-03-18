@@ -1,5 +1,5 @@
 from graphql import GraphQLError
-from .models import Request, Tag, Property
+from .models import Petition, Tag, Property
 from authentication.models import FlatterUser, Role
 from mainApp.models import Image
 from .models import Property
@@ -175,30 +175,38 @@ class DeletePropertyMutation(graphene.Mutation):
     
 
 
-class CreateRequestToPropertyMutation(graphene.Mutation):
+class CreateRequestMutation(graphene.Mutation):
     class Input:
-        message = graphene.String(required=True)
-        property = graphene.Int(required=True)
-        request= graphene.String(required=True)
-        status = graphene.String(required=True)
+        message = graphene.String(required=False)
+        property_id = graphene.Int(required=True)
+        requester_username= graphene.String(required=True)
+        
 
     request = graphene.Field(RequestType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         message = kwargs.get('message', '').strip()
-        property = kwargs.get('property', '')
-        request = kwargs.get("username", "").strip()
-        status = kwargs.get("status", "").strip()
-        obj = Request.objects.create(
+        property_id = kwargs.get('property_id', '')
+        requester_username = kwargs.get("requester_username", "").strip()
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise ValueError(_("No se ha podido completar la solicitud debido a que el inmueble no existe"))
+        
+        requester = FlatterUser.objects.get(username = requester_username)
+        obj = Petition.objects.create(
             message=message,
             property=property,
-            request=request,
-            status=status,
+            requester=requester,
+            status='P',
         )
-        return CreateRequestToPropertyMutation(request=obj)
+        obj.save()
+        return CreateRequestMutation(request=obj)
       
-class AcceptedDeniedRequestMutation(graphene.Mutation):
+
+      
+class UpdateRequestStatus(graphene.Mutation):
     class Input:
         request_id = graphene.Int(required=True)
         status_request = graphene.Boolean(required=True)
@@ -210,19 +218,19 @@ class AcceptedDeniedRequestMutation(graphene.Mutation):
         request_id = kwargs.get('request_id', '')
         status_request = kwargs.get('status_request', False)
         try:
-            request = Request.objects.get(id=request_id)
-        except Request.DoesNotExist:
+            request = Petition.objects.get(id=request_id)
+        except Petition.DoesNotExist:
             raise GraphQLError(f"Solicitud con ID {request_id} no existe")
 
-        if request.status != "pending":
+        if request.status != "P":
             raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
 
         if status_request:
-            request.status = "accept"
+            request.status = "A"
         else:
-            request.status = "denied"
+            request.status = "D"
         request.save()
-        return AcceptedDeniedRequestMutation(request=request)
+        return UpdateRequestStatus(request=request)
       
 class UpdatePropertyMutation(graphene.Mutation):
     class Input:
@@ -377,8 +385,8 @@ class PropertyMutation(graphene.ObjectType):
     delete_image_to_property = DeleteImageFromProperty.Field()
     delete_property = DeletePropertyMutation.Field()
     make_property_outstanding = MakePropertyOutstandingMutation.Field()
-    create_request_to_property = CreateRequestToPropertyMutation.Field()
-    accept_denied_request=AcceptedDeniedRequestMutation.Field()
+    create_request_to_property = CreateRequestMutation.Field()
+    update_statuss_request=UpdateRequestStatus.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

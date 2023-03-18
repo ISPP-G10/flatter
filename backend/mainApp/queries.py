@@ -72,8 +72,7 @@ class MainAppQuery(object):
     
 
 
-    def resolve_get_request_by_username(self, info, username):
-        return Request.objects.get(username=username)
+    
 
 
 
