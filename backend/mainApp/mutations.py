@@ -119,7 +119,7 @@ class CreatePropertyMutation(graphene.Mutation):
 
         owner = FlatterUser.objects.get(username=owner_username)
 
-        if not owner.roles.contains(Role.objects.get(role="OWNER")):
+        if Role.objects.get(role="OWNER") not in owner.roles:
             raise ValueError(_("El usuario debe ser propietario"))
 
         obj = Property.objects.create(
