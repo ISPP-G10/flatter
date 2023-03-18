@@ -13,7 +13,7 @@ class MainAppQuery(object):
     get_property_by_title = graphene.Field(PropertyType, title=graphene.String())
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
     get_properties = graphene.List(PropertyType)
-    get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
+    get_filtered_properties_by_price_and_city_and_tags = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String(), tag = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
     
@@ -33,7 +33,7 @@ class MainAppQuery(object):
         property = Property.objects.get(id = property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self,info,max_price=None,min_price=None,city=None):
+    def resolve_get_filtered_properties_by_price_and_city_and_tags(self,info,max_price=None,min_price=None,city=None, tag=None):
             q = Q()
             if min_price and max_price and max_price<min_price:
                 raise ValueError(_("El precio máximo introducido es menor al mínimo"))
@@ -42,7 +42,13 @@ class MainAppQuery(object):
             if min_price:
                 q &= Q(price__gte = min_price )
             if city:
-                q&= Q(province__icontains = city)
+                q &= Q(province__icontains = city)
+            if tag:
+                try:
+                    tag = Tag.objects.get(name = tag)
+                except Tag.DoesNotExist:
+                        raise ValueError(_(f"No se ha podido completar la solicitud debido a que el tag {tag} no existe"))
+                q &= Q(tags = tag)
             properties = Property.objects.filter(q)
                 
             return properties
