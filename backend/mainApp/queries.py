@@ -1,11 +1,11 @@
 import graphene
 from authentication.models import Tag, FlatterUser
-from .types import PropertyType
+from .types import PropertyType, PetitionType
 from authentication.types import TagType
-from .models import Property
+from .models import Property,Petition
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
-from django.utils import timezone
+from datetime import datetime, timezone
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
@@ -16,7 +16,9 @@ class MainAppQuery(object):
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
-
+    get_petitions_by_status_and_username = graphene.List(PetitionType, username = graphene.String(), status = graphene.String())
+    get_filtered_petitions_by_date = graphene.List(PetitionType,start_date = graphene.String(), end_date = graphene.String(), username = graphene.String(), status = graphene.String())
+    get_petitions_by_requester = graphene.List(PetitionType, username = graphene.String())
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
 
@@ -68,6 +70,25 @@ class MainAppQuery(object):
                 property.save()
         
         return Property.objects.filter(is_outstanding = True)
-  
+    def resolve_get_petitions_by_status_and_username(self, info, username,status):
+        owner = FlatterUser.objects.get(username = username)
+        properties = Property.objects.filter(owner = owner)
+        petitions = Petition.objects.filter(property__in =properties, status = status)
+        return petitions
+    
+    def resolve_get_filtered_petitions_by_date(self,info,username, status,start_date,end_date):
+        start_date = datetime.strptime(start_date,"%Y-%m-%d")
+        end_date = datetime.strptime(end_date,"%Y-%m-%d")
+        start_date_with_tz = start_date.replace(tzinfo=timezone.utc)
+        end_date_with_tz = end_date.replace(tzinfo=timezone.utc)
+        owner = FlatterUser.objects.get(username = username)
+        properties = Property.objects.filter(owner = owner)
+        petitions = Petition.objects.filter(property__in =properties, status = status, creation_at__gte = start_date_with_tz, creation_at__lte = end_date_with_tz)
+        return petitions
+    
+    def resolve_get_petitions_by_requester(self,info,username):
+        requester = FlatterUser.objects.get(username = username)
+        petitions = Petition.objects.filter(requester = requester)
+        return petitions
 
 
