@@ -17,7 +17,6 @@ class MainAppQuery(object):
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
     
-
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
 
@@ -69,13 +68,3 @@ class MainAppQuery(object):
                 property.save()
         
         return Property.objects.filter(is_outstanding = True)
-    
-
-
-    
-
-
-
-  
-
-
