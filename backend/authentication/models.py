@@ -44,7 +44,7 @@ class FlatterUser(AbstractUser):
     profession = models.CharField(max_length=100, blank=True, null=True)
     birthday = models.DateField(_("birthday"), blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name=_('user_tags'))
-    
+    #falla por circularidad #favourite_properties = models.ManyToManyField(Property, related_name=_('favourite_properties')) -> ir a mainApp\models.py
     
     def __str__(self):
         return f"User[username: {self.username}, first_name: {self.first_name}, last_name: {self.last_name}, email: {self.email}]"
