@@ -1,5 +1,5 @@
 from graphene_django.types import DjangoObjectType
-from .models import Property, Image,  Request
+from .models import Property, Image, Petition
 import graphene, os, base64
 class PropertyType(DjangoObjectType):
   class Meta:
@@ -10,6 +10,6 @@ class ImageType(DjangoObjectType):
         model = Image
         
 
-class RequestType(DjangoObjectType):
+class PetitionType(DjangoObjectType):
   class Meta:
-    model = Request 
+    model = Petition 
