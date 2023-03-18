@@ -13,6 +13,7 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
+import TagSelector from './components/inputs/tagSelector';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
+        <Route path='/prueba' element={<TagSelector/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
