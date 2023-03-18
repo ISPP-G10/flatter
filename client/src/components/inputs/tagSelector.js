@@ -10,7 +10,7 @@ const TagSelector = (defaultValues) => {
   //Siendo value el id del tag, label el nombre del tag y color el color del tag
 
   const {data, loading} = useQuery(tagsAPI.getTags);
-  const defaultV = defaultValues.initialOptions;
+  const defaultV = defaultValues.defaultValues;
 
   //--------------------Style de tags 1--------------------
 

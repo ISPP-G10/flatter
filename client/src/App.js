@@ -31,7 +31,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
-        <Route path='/prueba' element={<TagSelector initialOptions={val}/>}/>
+        <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
