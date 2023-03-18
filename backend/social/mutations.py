@@ -523,6 +523,8 @@ def _parse_relationship(relationship):
         return 'E'
     if relationship == 'propietario':
         return 'P'
+    if relationship == 'inquilino':
+        return 'I'
     return None
 
 def valid_genre(genre):
