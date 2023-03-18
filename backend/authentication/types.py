@@ -29,7 +29,7 @@ class FlatterUserType(DjangoObjectType):
       rating = review.rating
       max_rating = 1
 
-      if review.relationship == 'P' or review.relationship == 'I' or review.relationship == 'C':
+      if review.relationship == 'P' or review.relationship == 'C':
         rating *= 0.5
         max_rating = 0.5
       elif review.relationship == 'A':
