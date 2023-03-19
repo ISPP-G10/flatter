@@ -43,19 +43,13 @@ def check_individual_group(sender, instance, **kwargs):
         if instance.users.count() > 1:
             raise Exception('Individual group can only have one user')
 
-# No eliminar un grupos si tiene usuarios
+# No eliminar un grupos no individuales si tienen más de tres usuarios
 @receiver(pre_delete, sender=Group)
-def check_group_users(sender, instance, **kwargs):
-    if instance.users.count() > 0:
-        raise Exception('Group has users')
+def check_group(sender, instance, **kwargs):
+    if not instance.individual and instance.users.count() > 3:
+        raise Exception('Group can not be deleted')
 
 
-# Comprobar que un grupo no individual tenga más de un usuario
-@receiver(pre_save, sender=Group)
-def check_group_users(sender, instance, **kwargs):
-    if not instance.individual:
-        if instance.users.count() > 1:
-            raise Exception('Group can only have one user')
 
 
 
