@@ -5,6 +5,8 @@ import propertiesAPI from '../api/propertiesAPI';
 
 import { useQuery } from '@apollo/client';
 import SolidButton from '../sections/solidButton';
+import FlatterForm from '../components/forms/flatterForm';
+import { filterRequestsInputs } from '../forms/filterRequestsForm';
 
 const PropertyRequests = () => {
 
@@ -21,7 +23,14 @@ const PropertyRequests = () => {
                 <section className="site-content-sidebar">
                     <aside className="sidebar">
                         <div className="card">
-                            esto es un sidebar
+                        <FlatterForm
+                            buttonText={"Filtrar"}
+                            showSuperAnimatedButton
+                            numberOfColumns={1}
+                            inputs={filterRequestsInputs}
+                            // onSubmit={handlePropertySubmit}
+                            // ref={createPropertyFormRef}                
+    />
                         </div>
                         
                     </aside>
