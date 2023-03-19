@@ -50,6 +50,7 @@
   height: 100%;
   position: absolute;
   aspect-ratio: 1/1;
+  object-fit: cover;
 }
 
 .carousel-item-1 {
