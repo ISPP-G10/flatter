@@ -272,6 +272,7 @@
     max-width: 30px;
     width: 100%;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .class-message-time-left{
@@ -285,6 +286,7 @@
     max-width: 30px;
     width: 100%;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .class-chat-date{
@@ -323,6 +325,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .class-chat-group-title{
