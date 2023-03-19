@@ -21,8 +21,7 @@ class Property(models.Model):
     bedrooms_number = models.IntegerField()
     bathrooms_number = models.IntegerField()
     price = models.FloatField()
-    # LOCATION DEBERIA SER UN SELECT
-    location = models.CharField(max_length=50)
+    location = models.TextField(max_length=100, blank=True, null=True)
     province = models.OneToOneField('Province', on_delete=models.CASCADE, related_name='province')
     municipality = models.OneToOneField('Municipality', on_delete=models.CASCADE, related_name='municipality')
     is_in_offer = models.BooleanField(default=False)

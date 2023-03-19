@@ -63,7 +63,7 @@ class CreatePropertyMutation(graphene.Mutation):
         bedrooms_number = graphene.Int(required=True)
         bathrooms_number = graphene.Int(required=True)
         price = graphene.Float(required=True)
-        location = graphene.String(required=True)
+        location = graphene.String(required=False)
         province = graphene.String(required=True)
         municipality = graphene.String(required=True)
         dimensions = graphene.Int(required=True)
@@ -105,9 +105,6 @@ class CreatePropertyMutation(graphene.Mutation):
         if not price or price < 1:
             raise ValueError(_("El precio debe tener un valor positivo"))
 
-        # if not location or len(location) < 4 or len(location) > 16:
-        #     raise ValueError(
-        #         _("La localización debe tener entre 4 y 16 caracteres"))
 
         if not province or not Province.objects.filter(name=province).exists():
             raise ValueError("No existe la provincia indicada")
@@ -261,6 +258,8 @@ class UpdatePropertyMutation(graphene.Mutation):
             raise ValueError(_("No existe el municipio indicado"))
         elif municipality:
             municipality = Municipality.objects.get(name=municipality)
+        else:
+            municipality = property_edit.municipality
 
         if municipality and municipality.province != province:
             raise ValueError(_("El municipio no pertenece a la provincia indicada"))

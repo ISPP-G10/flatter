@@ -15,7 +15,11 @@ class MainAppQuery(object):
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
     get_properties = graphene.List(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price=graphene.Float(),
-                                                              max_price=graphene.Float(), city=graphene.String())
+                                                              max_price=graphene.Float(), city=graphene.String(),
+                                                              location=graphene.String(), province=graphene.String())
+    get_filtered_properties_by_province_municipality_location = graphene.List(PropertyType, province=graphene.String(),
+                                                                              municipality=graphene.String(),
+                                                                              location=graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username=graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
     get_provinces_municipalities = graphene.List(ProvinceType, name=graphene.String(required=False))
@@ -36,7 +40,8 @@ class MainAppQuery(object):
         property = Property.objects.get(id=property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self, info, max_price=None, min_price=None, city=None):
+    def resolve_get_filtered_properties_by_price_and_city(self, info, max_price=None, min_price=None, city=None,
+                                                          location=None, province=None):
         q = Q()
         if min_price and max_price and max_price < min_price:
             raise ValueError(_("El precio máximo introducido es menor al mínimo"))
@@ -51,6 +56,42 @@ class MainAppQuery(object):
                 q &= Q(municipality=municipality)
             else:
                 raise ValueError(_("El municipio introducido no existe"))
+
+        if province:
+
+            if Province.objects.filter(name=province).exists():
+                province = Province.objects.get(name=province)
+                q &= Q(municipality__province=province)
+            else:
+                raise ValueError(_("La provincia introducida no existe"))
+
+        if location:
+            q &= Q(location__icontains=location)
+
+        properties = Property.objects.filter(q)
+
+        return properties
+
+    def resolve_get_filtered_properties_by_province_municipality_location(self, info, province=None,
+                                                                          municipality=None, location=None):
+        q = Q()
+        if province and not Province.objects.filter(name=province).exists():
+            raise ValueError(_("La provincia introducida no existe"))
+        elif province:
+            province = Province.objects.get(name=province)
+            q &= Q(municipality__province=province)
+
+        if municipality and not Municipality.objects.filter(name=municipality).exists():
+            raise ValueError(_("El municipio introducido no existe"))
+        elif municipality:
+            municipality = Municipality.objects.get(name=municipality)
+            q &= Q(municipality=municipality)
+
+        if province and municipality and not Municipality.objects.filter(name=municipality.name, province=province).exists():
+            raise ValueError(_("El municipio introducido no pertenece a la provincia introducida"))
+
+        if location:
+            q &= Q(location__icontains=location)
 
         properties = Property.objects.filter(q)
 
@@ -82,6 +123,5 @@ class MainAppQuery(object):
 
         if name:
             return Province.objects.filter(name__icontains=name)
-
 
         return Province.objects.all()
