@@ -7,8 +7,8 @@ from django.dispatch import receiver
 from mainApp.models import Municipality, Province
 
 # provinces.csv path
-PROVINCES_CSV = path.join(path.dirname(path.abspath(__file__)), 'data/provinces.csv')
-MUNICIPALITIES_CSV = path.join(path.dirname(path.abspath(__file__)), 'data/municipalities.csv')
+PROVINCES_CSV = path.join(path.dirname(path.abspath(__file__)), 'data', 'provinces.csv')
+MUNICIPALITIES_CSV = path.join(path.dirname(path.abspath(__file__)), 'data', 'municipalities.csv')
 
 
 @receiver(post_migrate)

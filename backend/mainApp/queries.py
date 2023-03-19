@@ -2,7 +2,7 @@ import graphene
 from authentication.models import Tag, FlatterUser
 from .types import PropertyType, ProvinceType
 from authentication.types import TagType
-from .models import Property, Province
+from .models import Property, Province, Municipality
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 from django.utils import timezone
@@ -45,7 +45,13 @@ class MainAppQuery(object):
         if min_price:
             q &= Q(price__gte=min_price)
         if city:
-            q &= Q(province__icontains=city)
+
+            if Municipality.objects.filter(name=city).exists():
+                municipality = Municipality.objects.get(name=city)
+                q &= Q(municipality=municipality)
+            else:
+                raise ValueError(_("El municipio introducido no existe"))
+
         properties = Property.objects.filter(q)
 
         return properties

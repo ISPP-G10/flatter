@@ -1,4 +1,4 @@
-from .models import Tag, Property
+from .models import Tag, Property, Province, Municipality
 from authentication.models import FlatterUser, Role
 from mainApp.models import Image
 from .models import Property
@@ -65,6 +65,7 @@ class CreatePropertyMutation(graphene.Mutation):
         price = graphene.Float(required=True)
         location = graphene.String(required=True)
         province = graphene.String(required=True)
+        municipality = graphene.String(required=True)
         dimensions = graphene.Int(required=True)
         owner_username = graphene.String(required=True)
         images = graphene.List(graphene.String, required=False)
@@ -81,6 +82,7 @@ class CreatePropertyMutation(graphene.Mutation):
         price = kwargs.get("price", "")
         location = kwargs.get("location", "").strip()
         province = kwargs.get("province", "").strip()
+        municipality = kwargs.get("municipality", "").strip()
         dimensions = kwargs.get("dimensions", "")
         owner_username = kwargs.get("owner_username", "")
         max_capacity = kwargs.get("max_capacity", "")
@@ -107,8 +109,18 @@ class CreatePropertyMutation(graphene.Mutation):
         #     raise ValueError(
         #         _("La localización debe tener entre 4 y 16 caracteres"))
 
-        if not province or len(province) > 15:
-            raise ValueError(_("La provincia debe tener máximo 15 caracteres"))
+        if not province or not Province.objects.filter(name=province).exists():
+            raise ValueError("No existe la provincia indicada")
+
+        province = Province.objects.get(name=province)
+
+        if not municipality or not Municipality.objects.filter(name=municipality).exists():
+            raise ValueError(_("No existe el municipio indicado"))
+
+        municipality = Municipality.objects.get(name=municipality)
+
+        if municipality.province != province:
+            raise ValueError(_("El municipio no pertenece a la provincia indicada"))
 
         if not dimensions or dimensions < 1:
             raise ValueError(
@@ -119,7 +131,7 @@ class CreatePropertyMutation(graphene.Mutation):
 
         owner = FlatterUser.objects.get(username=owner_username)
 
-        if not owner.roles.contains(Role.objects.get(role="OWNER")):
+        if not owner.roles.filter(role="OWNER").exists():
             raise ValueError(_("El usuario debe ser propietario"))
 
         obj = Property.objects.create(
@@ -130,6 +142,7 @@ class CreatePropertyMutation(graphene.Mutation):
             price=price,
             location=location,
             province=province,
+            municipality=municipality,
             dimensions=dimensions,
             owner=owner,
             max_capacity=max_capacity,
@@ -182,6 +195,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         price = graphene.Float(required=False)
         location = graphene.String(required=False)
         province = graphene.String(required=False)
+        municipality = graphene.String(required=False)
         dimensions = graphene.Int(required=False)
         images = graphene.List(graphene.String, required=False)
         max_capacity = graphene.Int(required=False)
@@ -197,6 +211,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         price = kwargs.get("price", "")
         location = kwargs.get("location", "").strip()
         province = kwargs.get("province", "").strip()
+        municipality = kwargs.get("municipality", "").strip()
         dimensions = kwargs.get("dimensions", "")
         property_id = kwargs.get("property_id", 0)
         images = kwargs.get('images', [])
@@ -224,8 +239,7 @@ class UpdatePropertyMutation(graphene.Mutation):
             raise ValueError(
                 _("La localización debe tener entre 4 y 16 caracteres"))
 
-        if province and len(province) > 16:
-            raise ValueError(_("La provincia debe tener máximo 16 caracteres"))
+
 
         if dimensions and dimensions < 1:
             raise ValueError(
@@ -235,6 +249,21 @@ class UpdatePropertyMutation(graphene.Mutation):
             raise ValueError("La capacidad máxima debe ser positiva")
 
         property_edit = Property.objects.get(pk=property_id)
+
+        if province and not Province.objects.filter(name=province).exists():
+            raise ValueError("No existe la provincia indicada")
+        elif province:
+            province = Province.objects.get(name=province)
+        else:
+            province = property_edit.province
+
+        if municipality and not Municipality.objects.filter(name=municipality).exists():
+            raise ValueError(_("No existe el municipio indicado"))
+        elif municipality:
+            municipality = Municipality.objects.get(name=municipality)
+
+        if municipality and municipality.province != province:
+            raise ValueError(_("El municipio no pertenece a la provincia indicada"))
 
         if title and title != property_edit.title:
             property_edit.title = title
@@ -256,6 +285,9 @@ class UpdatePropertyMutation(graphene.Mutation):
 
         if province and province != property_edit.province:
             property_edit.province = province
+
+        if municipality and municipality != property_edit.municipality:
+            property_edit.municipality = municipality
 
         if dimensions and dimensions != property_edit.dimensions:
             property_edit.dimensions = dimensions

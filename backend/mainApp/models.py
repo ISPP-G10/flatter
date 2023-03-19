@@ -23,7 +23,8 @@ class Property(models.Model):
     price = models.FloatField()
     # LOCATION DEBERIA SER UN SELECT
     location = models.CharField(max_length=50)
-    province = models.CharField(max_length=50)
+    province = models.OneToOneField('Province', on_delete=models.CASCADE, related_name='province')
+    municipality = models.OneToOneField('Municipality', on_delete=models.CASCADE, related_name='municipality')
     is_in_offer = models.BooleanField(default=False)
     max_capacity = models.IntegerField(default=1)
     dimensions = models.IntegerField()
@@ -66,7 +67,7 @@ class Application(models.Model):
 
 class Province(models.Model):
     code = models.PositiveIntegerField(primary_key=True, auto_created=False)
-    name = models.CharField(max_length=30, blank=False, null=False)
+    name = models.CharField(max_length=30, blank=False, null=False, unique=True)
 
 
 class Municipality(models.Model):
