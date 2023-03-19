@@ -16,9 +16,8 @@ class MainAppQuery(object):
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
-    get_petitions_by_status_and_username = graphene.List(PetitionType, username = graphene.String(), status = graphene.String())
-    get_filtered_petitions_by_date = graphene.List(PetitionType,start_date = graphene.String(), end_date = graphene.String(), username = graphene.String(), status = graphene.String())
-    get_petitions_by_requester = graphene.List(PetitionType, username = graphene.String())
+    get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
+    get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
 
     
 
@@ -72,24 +71,38 @@ class MainAppQuery(object):
                 property.is_outstanding = False
                 property.save()
         return Property.objects.filter(is_outstanding = True)
-    def resolve_get_petitions_by_status_and_username(self, info, username,status):
+    def resolve_get_petitions_by_status_and_username_and_dates(self, info, username,status=None, start_date=None, end_date =None):
+        q = Q()
         owner = FlatterUser.objects.get(username = username)
         properties = Property.objects.filter(owner = owner)
-        petitions = Petition.objects.filter(property__in =properties, status = status)
+        if status:
+            q &= Q(status = status)
+        if start_date:
+            start_date = datetime.strptime(start_date,"%Y-%m-%d")
+            start_date_with_tz = start_date.replace(tzinfo=timezone.utc)
+            q &= Q(creation_at__gte = start_date_with_tz)
+        if end_date:
+            end_date = datetime.strptime(end_date,"%Y-%m-%d")
+            end_date_with_tz = end_date.replace(tzinfo=timezone.utc)
+            q &= Q(creation_at__lte = end_date_with_tz)
+        q &= Q(property__in =properties)
+        petitions = Petition.objects.filter(q)
         return petitions
     
-    def resolve_get_filtered_petitions_by_date(self,info,username, status,start_date,end_date):
-        start_date = datetime.strptime(start_date,"%Y-%m-%d")
-        end_date = datetime.strptime(end_date,"%Y-%m-%d")
-        start_date_with_tz = start_date.replace(tzinfo=timezone.utc)
-        end_date_with_tz = end_date.replace(tzinfo=timezone.utc)
-        owner = FlatterUser.objects.get(username = username)
-        properties = Property.objects.filter(owner = owner)
-        petitions = Petition.objects.filter(property__in =properties, status = status, creation_at__gte = start_date_with_tz, creation_at__lte = end_date_with_tz)
-        return petitions
-    
-    def resolve_get_petitions_by_requester(self,info,username):
+    def resolve_get_petitions_by_requester_and_status_and_dates(self,info,username,status=None, start_date=None, end_date =None):
+        q = Q()
         requester = FlatterUser.objects.get(username = username)
-        petitions = Petition.objects.filter(requester = requester)
+        if status:
+            q &= Q(status = status)
+        if start_date:
+            start_date = datetime.strptime(start_date,"%Y-%m-%d")
+            start_date_with_tz = start_date.replace(tzinfo=timezone.utc)
+            q &= Q(creation_at__gte = start_date_with_tz)  
+        if end_date:
+            end_date = datetime.strptime(end_date,"%Y-%m-%d")
+            end_date_with_tz = end_date.replace(tzinfo=timezone.utc)
+            q &= Q(creation_at__lte = end_date_with_tz)
+        q &= Q(requester = requester)
+        petitions = Petition.objects.filter(q)
         return petitions
 
