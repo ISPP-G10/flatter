@@ -47,7 +47,7 @@ class Review(models.Model):
 class Type(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField()
-    
+
 class Petition(models.Model):   
     message = models.TextField(null=True, blank=True, max_length=1000)
     creation_at = models.DateTimeField(auto_now_add=True)
