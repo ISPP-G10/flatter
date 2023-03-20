@@ -13,6 +13,9 @@ const usersAPI = {
                         token
                         user{
                           username
+                          roles{
+                            role
+                          }
                         }
                       }
                 }
