@@ -20,12 +20,7 @@ const Incidence = () => {
 
     function handleIncidenceFormSubmit({values}){
 
-        if(!incidenceFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-        
-            return;
-        }
+        if(!incidenceFormRef.current.validate()) return;
 
         // let json_data = {
         //     'operation': 'core/create',
