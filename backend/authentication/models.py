@@ -56,13 +56,13 @@ class FlatterUser(AbstractUser):
         validators=[MinLengthValidator(6)]
     )
     first_name = models.CharField(
-        _('first name'),
+        _('first_name'),
         max_length=50,
         validators=[MinLengthValidator(3)]
     )
 
     last_name = models.CharField(
-        _('last name'),
+        _('last_name'),
         max_length=50,
         validators=[MinLengthValidator(3)]
     )
