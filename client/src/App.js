@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import LandingPage from './pages/landingPage';
 import Error from './pages/error';
+import Chat from './sections/chat';
 import PropertyDetails from './pages/propertyDetails';
 import MainPage from './pages/mainPage';
 import OwnerProperties from './pages/ownerProperties';
@@ -28,8 +29,8 @@ function App() {
         <Route path="/search" element={<ListProperties/>}/>
         <Route path="/users" element={<SearchUsers/>}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
-        <Route path='/profile' element={<> <PublicProfile/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> <Chat /> </>}/>
+        <Route path='/profile/:username' element={<> <PublicProfile/> <Chat /> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
         <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>
         <Route path="*" element={<Error/>}/>

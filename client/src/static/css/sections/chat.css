@@ -319,6 +319,8 @@
 .class-chat-group{
     border-bottom: 1px solid #FFFFFF;
     cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .class-group-image{
@@ -338,6 +340,7 @@
     align-self: flex-start;
     color: #dadada;
     font-style: italic;
+    margin: 0;
 }
 
 .class-chat-group-time{

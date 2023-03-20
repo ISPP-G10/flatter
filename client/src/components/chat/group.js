@@ -14,7 +14,7 @@ const Group = (props) => {
                     <span className="class-chat-group-message">{props.lastMessage}</span>
                 </div>
             </div>
-            <span className="class-chat-group-time mr-1 w-25">{props.lastTime}11:23</span>
+            <span className="class-chat-group-time mr-1 w-25">{props.lastTime}</span>
         </div>
     )
 }
