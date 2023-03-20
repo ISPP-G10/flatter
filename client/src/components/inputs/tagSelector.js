@@ -1,21 +1,35 @@
 import Select from 'react-select';
-import tagsAPI from '../../api/tagsAPI';
-import {useQuery} from '@apollo/client';
 import chroma from 'chroma-js';
+import {useState} from 'react';
+import PropTypes from 'prop-types';
+import {forwardRef} from 'react';
 
-const TagSelector = (defaultValues) => {
+
+const TagSelector = forwardRef((props, tagRef) => {
 
   //El parametro defaultValues debe tener la siguiente estructura:
   // [{value: "1", label: "Amistoso", color: "#FFC107"}, {value: "2", label: "Deportivo", color: "#FFC107"}, ...]
   //Siendo value el id del tag, label el nombre del tag y color el color del tag
 
-  const {data, loading} = useQuery(tagsAPI.getTags);
-  const defaultV = defaultValues.defaultValues;
+
+  function tagsTransform(values){
+    let tags = [];
+    tags = values.map((tag) => ({
+      value: tag.name,
+      label: tag.name,
+      color: tag.color
+    }));
+    return tags;
+  }
+
+  const [selectedOptions, setSelectedOptions] = useState(tagsTransform(props.defaultValues));
+  const [tagOptions, setTagOptions] = useState(tagsTransform(props.options));
+
 
   //--------------------Style de tags 1--------------------
 
   const colourStyles = {
-    control: (styles) => ({ ...styles, backgroundColor: 'white' }),
+    control: (styles) => ({ ...styles, backgroundColor: 'white', borderColor: '#92278f', borderRadius: '1px'}),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
       const color = chroma(data.color);
       return {
@@ -107,27 +121,50 @@ const TagSelector = (defaultValues) => {
 
   //------------------------------------------------------
 
-  if(loading) return <p>Loading...</p>
-  
-  const options = data.getAllTag.map((tag) => ({
-    value: tag.id,
-    label: tag.name,
-    color: tag.color
-  }));
+  const handleSelectChange = (selectedOptions) => {
+    if (selectedOptions.length <= props.max) {
+      setSelectedOptions(selectedOptions);
+    }
+  };
     
   return (
-    <Select 
-      isMulti
-      name="tags"
-      options={options}
-      className="basic-multi-select"
-      classNamePrefix="select"
-      defaultValue={defaultV}
-      styles={colourStyles}
-      >
-    </Select>
+      <>
+        <label htmlFor='tags-input'>
+          {selectedOptions.length < props.max ? 
+            <p style={{color: '#92278f', fontSize: '13px'}}>Límite {props.max} etiquetas. </p>
+            :
+            <p style={{color: '#cc0033', fontSize: '13px'}}>Límite de etiquetas alcanzado.</p>}
+          </label>
+          
+        <Select 
+          isMulti
+          id="tags-input"
+          name="tags"
+          options={tagOptions}
+          className="basic-multi-select"
+          classNamePrefix="select"
+          styles={colourStyles}
+          value={selectedOptions}
+          onChange={handleSelectChange}
+          placeholder="Selecciona las etiquetas"
+          ref={tagRef}
+          >
+        </Select>
+      </>
   );
-}
+});
+
+TagSelector.defaultProps = {
+  defaultValues: [],
+  options: [],
+  max: 6
+};
+
+TagSelector.propTypes = {
+  defaultValues: PropTypes.array,
+  options: PropTypes.array,
+  max: PropTypes.number
+};
 
 export default TagSelector;
 

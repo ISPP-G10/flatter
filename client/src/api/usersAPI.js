@@ -156,10 +156,23 @@ const usersAPI = {
         createRequest(command: $command){
             request{
                 command
+                }
             }
         }
-    }
-`,
+    `,
+    updatePublicProfile: gql`
+        mutation editUserTags($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String){
+            editUser(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags){
+                user{
+                    username
+                    roles{
+                        role
+                    }
+                }
+            }
+        }
+    `,
+
 
 }
 

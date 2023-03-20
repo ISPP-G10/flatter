@@ -1,16 +1,19 @@
 import '../../static/css/components/publicProfileCard.css';
 
 import Tag from '../tag';
-import PropTypes from 'prop-types';
+import PropTypes, { func } from 'prop-types';
 import FlatterModal from '../flatterModal';
 import FlatterForm from '../forms/flatterForm';
 import usersAPI from '../../api/usersAPI';
+import tagsAPI from '../../api/tagsAPI';
 
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import { useApolloClient } from '@apollo/client';
 
 
 import {useEffect, useRef, useState} from 'react';
+import TagSelector from '../inputs/tagSelector';
+import { useQuery } from '@apollo/client';
 
 const PublicProfileCard = (props) => {
 
@@ -18,19 +21,31 @@ const PublicProfileCard = (props) => {
 
     let [userImage, setUserImage] = useState(null);
     let [publicProfileFormValues, setPublicProfileFormValues] = useState(publicProfileFormInputs);
+    let [tagOptions, setTagOptions] = useState([]);
+
 
     const editPublicProfileModalRef = useRef(null);
     const editPublicProfileForm = useRef(null);
     const userImageField = useRef(null);
+    const tagsInput = useRef(null);
 
-    function performUserMutation(values, encodedImage){
+    const {data, loading} = useQuery(tagsAPI.getTags);
+
+    useEffect (() => {
+        if (!loading){
+            setTagOptions(data);
+        };
+    }, [data])
+
+    function performUserMutation(values, encodedImage, selectedTags){
         client.mutate({
-            mutation: usersAPI.updateUser,
+            mutation: usersAPI.updatePublicProfile,
             variables: {
                 username: localStorage.getItem('user', ''),
                 biography: values.biography,
                 profession: values.profession,
                 profilePicture: encodedImage,
+                tags: selectedTags
             }
         })
         .then((response) => {
@@ -42,20 +57,23 @@ const PublicProfileCard = (props) => {
 
     function handlePublicProfileEdit({values}){
 
+        var tagsSelected = tagsInput.current.props.value.map((tag) => (tag.value))
+
         if(!editPublicProfileForm.current.validate()) {
             alert('Hay campos incorrectos. Por favor, revise el formulario')
             return;
         }
 
         try{
+            
             var reader = new FileReader();
             reader.readAsDataURL(userImage);
 
             reader.onload = function () {
-                performUserMutation(values, reader.result);
+                performUserMutation(values, reader.result, tagsSelected);
             };
         }catch(error){
-            performUserMutation(values, null);
+            performUserMutation(values, null, tagsSelected);
         }
     }
 
@@ -134,7 +152,9 @@ const PublicProfileCard = (props) => {
                     <input id="file" type="file" onChange={changeImage}/>
                     <img ref={userImageField} className="user-img" src={props.pic} id="output" width="200" alt="Imagen de perfil"/>
                 </div>
-
+                <div className='tag-input'>
+                    <TagSelector options={tagOptions.getAllTag} defaultValues={props.tags} max={8} ref={tagsInput}/>
+                </div>
             </FlatterForm>
         </FlatterModal>
         </>
