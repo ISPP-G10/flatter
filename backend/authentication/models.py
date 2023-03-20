@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 
 
 class RoleType(models.TextChoices):
@@ -36,17 +36,17 @@ class FlatterUser(AbstractUser):
                      ('O', 'Otro'))
     email = models.EmailField(_("email_address"), unique=True)
     phone_number = models.CharField(_("phone_number"), max_length=9, null=True)
-    profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', blank=True, null=True)
+    profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', default='users/images/default.png')
     roles = models.ManyToManyField(Role, related_name=_('roles'))
     genre = models.CharField(choices=choices_genre, max_length=2)
     biography = models.TextField(_("biography"), blank=True, null=True)
-    flatter_coins = models.IntegerField(default=0)
+    flatter_coins = models.PositiveIntegerField(default=0)
     profession = models.CharField(max_length=100, blank=True, null=True)
     birthday = models.DateField(_("birthday"), blank=True, null=True)
     tags = models.ManyToManyField(Tag, related_name=_('user_tags'))
     username = models.CharField(
         _('username'),
-        max_length=25,
+        max_length=24,
         unique=True,
         validators=[MinLengthValidator(6)]
     )
@@ -77,7 +77,7 @@ class Plan(models.Model):
         ('A','Advanced'),
         ('P','Pro')
     )
-    price = models.FloatField()
+    price = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100000.0)],)
     initial_date = models.DateTimeField(default=datetime.now)
     end_date = models.DateTimeField(null=True)
     plan_type = models.CharField(max_length=1, choices=choices_type)
