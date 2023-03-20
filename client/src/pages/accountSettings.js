@@ -83,6 +83,15 @@ const AccountSettings = () => {
                         <div className='settings-section' onClick={() => setSetting('password')} style={setting === 'password' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
                             <h4>Cambiar contraseña</h4>
                         </div>
+                        {localStorage.getItem("roles") &&
+                         localStorage.getItem("roles").includes("RENTER") && (
+                            <div
+                            className="settings-section"
+                            onClick={() => navigator("/favourites")}
+                            >
+                            <h4>Ver pisos favoritos</h4>
+                            </div>
+                        )}
                         <div className='settings-section' onClick={() => setSetting('incidence')} style={setting === 'incidence' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
                             <h4>Abrir incidencia</h4>
                         </div>
