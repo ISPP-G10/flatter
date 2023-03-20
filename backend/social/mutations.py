@@ -68,7 +68,7 @@ class EditUserMutation(graphene.Mutation):
         last_name = kwargs.get('last_name', '').strip()
         email = kwargs.get('email', '').strip()
         biography = kwargs.get('biography', '').strip()
-        phone = kwargs.get('phone', '').strip()
+        phone = kwargs.get('phone', None)
         profile_picture = kwargs.get('profile_picture', '')
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
@@ -117,8 +117,8 @@ class EditUserMutation(graphene.Mutation):
         if biography and user_selected.biography != biography:
             user_selected.biography = biography
         
-        if phone and user_selected.phone_number != phone:
-            user_selected.phone_number = phone
+        if phone is not None and user_selected.phone_number != phone:
+            user_selected.phone_number = phone.strip()
         
         if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
