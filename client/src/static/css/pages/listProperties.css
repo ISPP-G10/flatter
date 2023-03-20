@@ -3,6 +3,7 @@
     max-width: 1200px;
     width: 100%;
     margin-top: 50px;
+    overflow: initial;
 }
 
 .site-content-sidebar > .sidebar {
