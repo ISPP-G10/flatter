@@ -43,7 +43,7 @@ const PropertyRequests = () => {
                                     <h2>Solicitud de propiedad a asdadasdasd as asdasd asd</h2>
 
                                     <div className="request-footer">
-                                        <div class="request-footer-element">
+                                        <div className="request-footer-element">
                                             <div className="request-user-picture">
                                                 <img src="" />
                                             </div>
@@ -54,7 +54,7 @@ const PropertyRequests = () => {
                                             </div>
                                         </div>
 
-                                        <div class="request-footer-element">
+                                        <div className="request-footer-element">
                                             <span>3 (iconoPersonas.png)</span>
                                         </div>
                                     </div>
