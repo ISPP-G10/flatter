@@ -1,0 +1,141 @@
+.content.content-list {
+    display: flex;
+    padding-left: 25px;
+}
+
+.content.content-list > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.content.content-list > .property-requests > .property-request {
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.content.content-list > .property-requests > .property-request:last-child {
+    border-bottom: initial;
+}
+
+.content.content-list > .property-requests {
+    width: 100%;
+}
+
+.content.content-list > .property-requests > .property-request {
+    display: flex;
+    width: 100%;
+}
+
+.content.content-list > .property-requests > .property-request > div:first-child {
+    flex: 1;
+    padding: 10px;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions {
+    padding: 10px;
+    margin: auto 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button {
+    border-radius: 8px;
+    color: #fff;
+    width: 100%;
+    transition: all 0.3s;
+    position: relative;
+    box-shadow: 0;
+    bottom: 0;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.accept {
+    background: #44D12D;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.accept:hover {
+    background: #51ef39;
+    bottom: 6px;
+    box-shadow: 0px 5px 3px #00000035;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.reject {
+    background: #FF006B;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.reject:hover {
+    background: #ff003c;
+    bottom: 6px;
+    box-shadow: 0px 5px 3px #00000035;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button:nth-child(n + 2) {
+    margin-top: 8px;
+}
+
+.content.content-list > .property-requests > .property-request > .request-data > .request-footer {
+    display: flex;
+    margin-top: 20px;
+}
+
+.content.content-list .request-footer > div {
+    margin: initial;
+    display: flex;
+    align-items: center;
+}
+
+.content.content-list .request-footer > div:first-child {
+    margin-right: 20px;
+}
+
+.content.content-list .request-footer .request-user-data {
+    display: flex;
+    flex-direction: column;
+    padding-left: 6px;
+}
+
+.content.content-list .request-footer .request-user-data > * {
+    margin: initial;
+}
+
+.content.content-list .request-footer > div > .request-user-picture > img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #05a8ff;
+    box-shadow: 0px 2px 3px #0000004a;
+    display: block;
+}
+
+@media all and (max-width: 768px) {
+    .content.content-list {
+        margin: 0 20px;
+        padding: initial;
+    }
+}
+
+@media all and (max-width: 550px) {
+    .content.content-list > .property-requests > .property-request .request-actions {
+        flex-direction: row;
+    }
+
+    .content.content-list > .property-requests > .property-request {
+        display: block;
+    }
+
+    .content.content-list > .property-requests > .property-request .request-actions > button:nth-child(n + 2) {
+        margin: initial;
+    }
+
+    .content.content-list > .property-requests > .property-request .request-actions > button.accept {
+        margin-right: 4px;
+    }
+
+    .content.content-list > .property-requests > .property-request .request-actions > button.reject {
+        margin-left: 4px;
+    }
+}
+
+@media all and (max-width: 350px) {
+    .content.content-list > .property-requests > .property-request > .request-data > .request-footer > div {
+        flex: 1;
+    }
+}

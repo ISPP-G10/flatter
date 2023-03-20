@@ -13,9 +13,25 @@ const FormProperty = ({ property }) => {
 
     if(!createPropertyFormRef.current.validate()) return
 
-    client.mutate({
+    client.mutate(property.id===undefined ? {
       mutation: propertiesAPI.createProperty,
       variables: {
+        title: values.title,
+        description: values.description,
+        province: values.province,
+        bathroomsNumber: parseInt(values.bathroomsNumber),
+        bedroomsNumber: parseInt(values.bedroomsNumber),
+        dimensions: parseInt(values.dimensions),
+        location: values.location,
+        ownerUsername: localStorage.getItem('user',''),
+        price: parseFloat(values.price),
+        images: values.images,
+        maxCapacity: parseInt(values.maxCapacity)
+      }
+    } : {
+      mutation: propertiesAPI.updateProperty,
+      variables: {
+        id: parseInt(property.id),
         title: values.title,
         description: values.description,
         province: values.province,

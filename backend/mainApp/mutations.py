@@ -1,11 +1,13 @@
-from .models import Tag, Property
+from graphql import GraphQLError
+from .models import Petition, Tag, Property
 from authentication.models import FlatterUser, Role
 from mainApp.models import Image
 from .models import Property
-from .types import PropertyType
+from .types import PropertyType, PetitionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene
+
 
 class DeleteImageFromProperty(graphene.Mutation):
     class Input:
@@ -180,7 +182,61 @@ class DeletePropertyMutation(graphene.Mutation):
         selected_property.delete()
         return DeletePropertyMutation(property=selected_property)
 
+class CreatePetitionMutation(graphene.Mutation):
+    class Input:
+        message = graphene.String(required=False)
+        property_id = graphene.Int(required=True)
+        requester_username= graphene.String(required=True)
+        
 
+    petition = graphene.Field(PetitionType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        message = kwargs.get('message', '').strip()
+        property_id = kwargs.get('property_id', '')
+        requester_username = kwargs.get("requester_username", "").strip()
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise ValueError(_("No se ha podido completar la solicitud debido a que el inmueble no existe"))
+        
+        requester = FlatterUser.objects.get(username = requester_username)
+        obj = Petition.objects.create(
+            message=message,
+            property=property,
+            requester=requester,
+            status='P',
+        )
+        obj.save()
+        return CreatePetitionMutation(petition=obj)
+         
+class UpdatePetitionStatus(graphene.Mutation):
+    class Input:
+        petition_id = graphene.Int(required=True)
+        status_petition = graphene.Boolean(required=True)
+
+    petition = graphene.Field(PetitionType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        petition_id = kwargs.get('petition_id', '')
+        status_petition = kwargs.get('status_petition', False)
+        try:
+            petition = Petition.objects.get(id=petition_id)
+        except Petition.DoesNotExist:
+            raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
+
+        if petition.status != "P":
+            raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
+
+        if status_petition:
+            petition.status = "A"
+        else:
+            petition.status = "D"
+        petition.save()
+        return UpdatePetitionStatus(petition=petition)
+      
 class UpdatePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
@@ -334,6 +390,8 @@ class PropertyMutation(graphene.ObjectType):
     delete_image_to_property = DeleteImageFromProperty.Field()
     delete_property = DeletePropertyMutation.Field()
     make_property_outstanding = MakePropertyOutstandingMutation.Field()
+    create_petition = CreatePetitionMutation.Field()
+    update_status_petition = UpdatePetitionStatus.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
