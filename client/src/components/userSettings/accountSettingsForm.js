@@ -43,7 +43,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
         if(accountFormRef.current){
 
-            if(!accountFormRef.current.validate(values)) return;
+            if(!accountFormRef.current.validate()) return;
 
             try{
                 let reader = new FileReader();

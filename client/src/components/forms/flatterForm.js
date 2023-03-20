@@ -21,13 +21,13 @@ const FlatterForm = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => {
         return{
-            validate: (values) => {
+            validate: () => {
                 let isValid = true;
                 console.log(formValues);
                 for(let i=0; i< props.inputs.length; i++){
                     let input = props.inputs[i];
                     for(let validator of input.validators){
-                        if(!validator.validate(values[input.name])){
+                        if(!validator.validate(formValues[input.name])){
                             formInputs.current[i].setErrors([validator.message]);
                             isValid = false;
                         }
@@ -44,6 +44,7 @@ const FlatterForm = forwardRef((props, ref) => {
         let inputs = document.getElementsByClassName("class-form-input");
         let formValuesCopy = {};
         for(let input of inputs){
+            console.log(input.name, input.value);
             formValuesCopy[input.name] = input.value;
         }
         setFormValues(formValuesCopy);
