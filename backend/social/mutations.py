@@ -319,11 +319,16 @@ class EditUserMutation(graphene.Mutation):
             user_selected.profile_picture = os.path.join('users', 'images', name)
 
         if birthday:
-        
-            formated_birthday = datetime.strptime(birthday, '%Y-%m-%d')
+            try:
+                formated_birthday = datetime.strptime(birthday, '%d/%m/%Y')
+                if formated_birthday > datetime.now():
+                    raise ValueError(_("La fecha de nacimiento no puede ser mayor a la actual"))
+            except ValueError:
+                raise ValueError(_("La fecha de nacimiento no es válida, debe tener el formato dd/mm/yyyy"))
 
             if user_selected.birthday != formated_birthday:
                 user_selected.birthday = formated_birthday
+
 
         if profession and user_selected.profession != profession:
             user_selected.profession = profession
