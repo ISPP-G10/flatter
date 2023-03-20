@@ -41,22 +41,20 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
     function handleAccountFormSubmit({values}){
 
-        if(!accountFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-            
-            return;
-        }
+        if(accountFormRef.current){
 
-        try{
-            var reader = new FileReader();
-            reader.readAsDataURL(userImage);
+            if(!accountFormRef.current.validate(values)) return;
 
-            reader.onload = function () {
-                performUserMutation(values, reader.result);
-            };
-        }catch(error){
-            performUserMutation(values, null);
+            try{
+                let reader = new FileReader();
+                reader.readAsDataURL(userImage);
+
+                reader.onload = function () {
+                    performUserMutation(values, reader.result);
+                };
+            }catch(error){
+                performUserMutation(values, null);
+            }
         }
     }
 
