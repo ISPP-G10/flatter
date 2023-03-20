@@ -11,7 +11,7 @@ class DeleteImageFromProperty(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
         image = graphene.String(required=True)
-        owner_username = graphene.String(required=True)
+        
     property = graphene.Field(PropertyType)
 
     @staticmethod
@@ -19,22 +19,11 @@ class DeleteImageFromProperty(graphene.Mutation):
 
         property_id = kwargs.get('property_id', '').strip()
         image = kwargs.get('image', '')
-        owner_username = kwargs.get('owner_username','').strip()
 
         os.remove(f"media/{image}")
-        try:
-            selected_property = Property.objects.get(id=property_id)
-        except Property.DoesNotExist:
-            raise ValueError(_("El inmueble seleccionado no existe"))
-        
-        owner = FlatterUser.objects.get(username = owner_username)
-        if selected_property.owner != owner and not owner.is_superuser and not owner.is_staff:
-            raise ValueError("No tienes los permisos suficientes para editar este inmueble")
-        try:
-            image = Image.objects.get(image=image)
-        except Property.DoesNotExist:
-            raise ValueError(_("La imagen seleccionada no existe"))
-        
+
+        property = Property.objects.get(pk=property_id)
+        image = Image.objects.get(image=image)
         property.images.remove(image)
 
         return DeleteImageFromProperty(property=property)
@@ -45,22 +34,18 @@ class AddTagToProperty(graphene.Mutation):
     class Input:
         id = graphene.Int(required=True)
         tag = graphene.String(required=True)
-        owner_username = graphene.String(required=True)
+        
     property = graphene.Field(PropertyType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         id = kwargs.get('id', '')
         tag = kwargs.get('tag', '').strip()
-        owner_username = kwargs.get("ownner_username","").strip()
+
         try:
             selected_property = Property.objects.get(id=id)
         except Property.DoesNotExist:
             raise ValueError(_("El inmueble seleccionado no existe"))
-        
-        owner = FlatterUser.objects.get(username = owner_username)
-        if selected_property.owner != owner and not owner.is_superuser and not owner.is_staff:
-            raise ValueError("No tienes los permisos suficientes para editar este inmueble")
         
         tag = Tag.objects.get_or_create(name=tag, entity='P')
 
@@ -78,7 +63,7 @@ class CreatePropertyMutation(graphene.Mutation):
 
     class Input:
         title = graphene.String(required=True)
-        description = graphene.String(required=False)
+        description = graphene.String(required=True)
         bedrooms_number = graphene.Int(required=True)
         bathrooms_number = graphene.Int(required=True)
         price = graphene.Float(required=True)
@@ -105,12 +90,12 @@ class CreatePropertyMutation(graphene.Mutation):
         max_capacity = kwargs.get("max_capacity", "")
        
 
-        if not title or len(title) < 4 or len(title) > 100:
-            raise ValueError(_("El título debe tener entre 4 y 100 caracteres"))
+        if not title or len(title) < 4 or len(title) > 50:
+            raise ValueError(_("El título debe tener entre 4 y 50 caracteres"))
 
-        if not description or len(description) > 1000:
+        if not description or len(description) > 1000 or len(description)<50:
             raise ValueError(
-                _("La descripción no puede tener más de 1000 caracteres"))
+                _("La descripción no puede tener más de 1000 caracteres o menos de 50"))
 
         if not bedrooms_number or bedrooms_number < 1 or bedrooms_number>50:
             raise ValueError(
@@ -120,17 +105,14 @@ class CreatePropertyMutation(graphene.Mutation):
             raise ValueError(
                 _("El número de cuartos de baño no es válido"))
 
-        if not price or price < 1:
-            raise ValueError(_("El precio debe tener un valor positivo"))
+        if not price or price < 1 or price>500000:
+            raise ValueError(_("El precio introducido no es válido"))
         
         if dimensions>50000 or dimensions<1:
             raise ValueError(_("El valor de dimensiones introducido no es correcto"))
         
         if not max_capacity or max_capacity<1 or max_capacity>20:
             raise ValueError(_("La capacidad máxima no es válida"))
-        
-        if not price or price<1 or price>500000:
-            raise ValueError(_("El precio indicado no es válido"))
         
         if not location or len(location) < 1 or len(location) > 30:
             raise ValueError(
@@ -185,22 +167,16 @@ class CreatePropertyMutation(graphene.Mutation):
 class DeletePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
-        owner_username = graphene.String(required=True)
 
     property = graphene.Field(PropertyType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         property_id = kwargs.get("property_id","")
-        owner_username = kwargs.get("owner_username","").strip()
         try:
             selected_property = Property.objects.get(id=property_id)
         except Property.DoesNotExist:
             raise ValueError(_("El inmueble seleccionado no existe"))
-        
-        owner = FlatterUser.objects.get(username = owner_username)
-        if selected_property.owner != owner and not owner.is_superuser and not owner.is_staff:
-            raise ValueError("No tienes los permisos suficientes para eliminar este inmueble")
         selected_property.delete()
         return DeletePropertyMutation(property=selected_property)
 
@@ -208,7 +184,6 @@ class DeletePropertyMutation(graphene.Mutation):
 class UpdatePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
-        owner_username = graphene.String(required=True)
         title = graphene.String(required=False)
         description = graphene.String(required=False)
         bedrooms_number = graphene.Int(required=False)
@@ -236,24 +211,23 @@ class UpdatePropertyMutation(graphene.Mutation):
         property_id = kwargs.get("property_id", 0)
         images = kwargs.get('images', [])
         max_capacity = kwargs.get("max_capacity", "")
-        owner_username = kwargs.get('owner_username',"").strip()
 
         if title and (len(title) < 4 or len(title) > 100):
             raise ValueError(_("El título debe tener entre 4 y 100 caracteres"))
 
-        if description and len(description) > 1000:
+        if description and (len(description)<50 or len(description)> 1000):
             raise ValueError(
-                _("La descripción no puede tener más de 1000 caracteres"))
+                _("La descripción no puede tener menos de 50 carácteres o más de 1000 caracteres"))
 
-        if (bedrooms_number and bedrooms_number < 1) or bedrooms_number>50:
+        if bedrooms_number and (bedrooms_number < 1 or bedrooms_number>50):
             raise ValueError(
                 _("El número de dormitorios no es válido"))
 
-        if (bathrooms_number and bathrooms_number < 1) or bathrooms_number>50:
+        if bathrooms_number and (bathrooms_number < 1 or bathrooms_number>50):
             raise ValueError(
                 _("El número de cuartos de baño no es válido"))
 
-        if (price and price < 1) or price>500000:
+        if price and (price < 1 or price>500000):
             raise ValueError(_("El precio introducido no es válido"))
 
         if location and (len(location) < 4 or len(location) > 16):
@@ -263,21 +237,14 @@ class UpdatePropertyMutation(graphene.Mutation):
         if province and len(province) > 16:
             raise ValueError(_("La provincia debe tener máximo 16 caracteres"))
 
-        if (dimensions and dimensions < 1) or dimensions>50000:
+        if dimensions and (dimensions < 1 or dimensions>50000):
             raise ValueError(
                 _("Las dimensiones introducidas no son válidas"))
         
-        if (max_capacity and max_capacity < 1) or max_capacity>20:
+        if max_capacity and (max_capacity < 1 or max_capacity>20):
             raise ValueError("La capacidad máxima no es válida")
         
-        
-
-
         property_edit = Property.objects.get(pk=property_id)
-
-        owner = FlatterUser.objects.get(username = owner_username)
-        if property_edit.owner != owner and not owner.is_superuser and not owner.is_staff:
-            raise ValueError("No tienes los permisos suficientes para editar este inmueble")
 
         if title and title != property_edit.title:
             property_edit.title = title
@@ -326,20 +293,19 @@ class UpdatePropertyMutation(graphene.Mutation):
 
             property_edit.images.add(*images_to_add)
 
-        # Devolver la propiedad actualizada
         return UpdatePropertyMutation(property=property_edit)
 
 
 class MakePropertyOutstandingMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
-        owner_username = graphene.String(required=True)
+
     property = graphene.Field(PropertyType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         property_id = kwargs.get('property_id', 0)
-        owner_username = kwargs.get('owner_username','').strip()
+        
         try:
             selected_property = Property.objects.get(id=property_id)
         except Property.DoesNotExist:
@@ -352,10 +318,6 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         
         if outstanding_properties.count() >= 5:
             raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
-        
-        owner = FlatterUser.objects.get(username = owner_username)
-        if selected_property.owner != owner and not owner.is_superuser and not owner.is_staff:
-            raise ValueError("No tienes los permisos suficientes para destacar este inmueble")
         
         selected_property.is_outstanding = True
         selected_property.outstanding_start_date = timezone.now()

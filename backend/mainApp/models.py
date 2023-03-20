@@ -14,8 +14,8 @@ class Image(models.Model):
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
     outstanding_start_date = models.DateTimeField(blank=True, null=True)
-    title = models.CharField(validators=[MinLengthValidator(4)],max_length=100, unique=True)
-    description = models.CharField(max_length=1000, default="")
+    title = models.CharField(validators=[MinLengthValidator(4)],max_length=50, unique=True)
+    description = models.CharField(max_length=1000,validators=[MinLengthValidator(50)], default="")
     visits_counter = models.PositiveIntegerField()
     bedrooms_number = models.PositiveIntegerField(validators=[MaxValueValidator(50)])
     bathrooms_number = models.PositiveIntegerField(validators=[MaxValueValidator(50)])
