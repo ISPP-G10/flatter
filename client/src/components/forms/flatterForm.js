@@ -23,7 +23,6 @@ const FlatterForm = forwardRef((props, ref) => {
         return{
             validate: () => {
                 let isValid = true;
-                console.log(formValues);
                 for(let i=0; i< props.inputs.length; i++){
                     let input = props.inputs[i];
                     for(let validator of input.validators){
@@ -44,7 +43,6 @@ const FlatterForm = forwardRef((props, ref) => {
         let inputs = document.getElementsByClassName("class-form-input");
         let formValuesCopy = {};
         for(let input of inputs){
-            console.log(input.name, input.value);
             formValuesCopy[input.name] = input.value;
         }
         setFormValues(formValuesCopy);
