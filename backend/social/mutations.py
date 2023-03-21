@@ -394,6 +394,7 @@ class EditUserPublicMutation(graphene.Mutation):
             if user_selected.birthday != formated_birthday:
                 user_selected.birthday = formated_birthday
 
+
         if profession and user_selected.profession != profession:
             user_selected.profession = profession
 

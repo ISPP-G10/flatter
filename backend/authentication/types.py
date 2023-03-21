@@ -8,13 +8,13 @@ from mainApp.models import Review
 
 
 class FlatterUserType(DjangoObjectType):
+
   class Meta:
     model = FlatterUser
     exclude = ('password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'user_permissions', 'last_login')
   
   average_rating = graphene.Float()
   age = graphene.Int()
-
   
   @staticmethod
   def resolve_average_rating(root, info, **kwargs):
