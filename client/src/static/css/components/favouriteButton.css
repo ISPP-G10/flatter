@@ -1,0 +1,7 @@
+.favourite-button {
+    background-color: black;
+}
+
+.favourite {
+    background-color: var(--flatter-yellow-color);
+}

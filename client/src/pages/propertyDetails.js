@@ -14,17 +14,23 @@ import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
 
 import { useState, useRef } from "react";
+import FavouriteButton from "../components/property/favouriteButton";
+import { useEffect } from "react";
 
 const PropertyDetails = () => {
-  let [ property, setProperty ] = useState({});
+  let [property, setProperty] = useState({});
   const editPropertyModalRef = useRef(null);
 
   const { id } = useParams();
 
-  const { loading, data } = useQuery(propertiesAPI.getPropertyById, {
+  const { loading, data, refetch } = useQuery(propertiesAPI.getPropertyById, {
     variables: {
       id: parseInt(id),
     },
+  });
+
+  useEffect(() => {
+    refetch();
   });
 
   if (loading) return <p>Loading...</p>;
@@ -62,7 +68,14 @@ const PropertyDetails = () => {
                 <Tag key={index} name={tag.name} color={tag.color} />
               ))}
             </div>
+
             <div className="property-btn__container">
+              <FavouriteButton
+                isFavourite={data.getPropertyById.interestedUsers
+                  .map((user) => user.username === localStorage.getItem("user"))
+                  .some((value) => value)}
+                propertyId={id}
+              />
               {localStorage.getItem("user") ===
               data.getPropertyById.owner.username ? (
                 <button

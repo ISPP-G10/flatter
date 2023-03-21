@@ -5,65 +5,29 @@ import Slider from "../components/slider/slider";
 import SolidButton from "../sections/solidButton";
 import Tag from "../components/tag";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import propertiesAPI from "../api/propertiesAPI";
+import { useEffect } from "react";
 
 const FavouritesProperties = () => {
   const navigator = useNavigate();
 
-  const data = [
+  const { loading, data, refetch } = useQuery(
+    propertiesAPI.getFavouritePropertiesByUser,
     {
-      __typename: "PropertyType",
-      id: "10",
-      description:
-        "lorem impusm lorem lorem impusm loremlorem impusm loremlorem impusm lorem lorem impusm lorem",
-      tags: [],
-      title: "Mi propiedad",
-      price: 300,
-      isOutstanding: false,
-      province: "Ceuta",
-      location: "Ceuta",
-      dimensions: 300,
-      bedroomsNumber: 3,
-      bathroomsNumber: 3,
-      maxCapacity: 4,
-      flatmates: [1],
-      images: [
-        {
-          __typename: "ImageType",
-          image: "properties/images/1.jpeg",
-        },
-        {
-            __typename: "ImageType",
-            image: "properties/images/2.jpeg",
-        }
-      ],
-    },
-    {
-      __typename: "PropertyType",
-      id: "11",
-      description: "lorem impusm lorem lorem impusm loremlorem impusm loremlorem impusm lorem lorem impusm lorem",
-      tags: [],
-      title: "Mi propiedad",
-      price: 300,
-      isOutstanding: false,
-      province: "Cádiz",
-      location: "Algeciras",
-      dimensions: 300,
-      bedroomsNumber: 3,
-      bathroomsNumber: 3,
-      maxCapacity: 4,
-      flatmates: [1, 2],
-      images: [
-        {
-          __typename: "ImageType",
-          image: "properties/images/1.jpeg",
-        },
-        {
-            __typename: "ImageType",
-            image: "properties/images/2.jpeg",
-        }
-      ],
-    },
-  ];
+      variables: {
+        username: localStorage.getItem("user"),
+      },
+    }
+  );
+
+  useEffect(() => {
+    refetch();
+  });
+
+  if (loading) return <p>Loading...</p>;
+
+  console.log("hola", data);
 
   return (
     <FlatterPage withBackground userLogged>
@@ -73,7 +37,7 @@ const FavouritesProperties = () => {
 
       <section className="site-content-sidebar properties">
         <div className="content">
-          {data.map((property, index) => {
+          {data.getFavouriteProperties.map((property, index) => {
             return (
               <article key={index} className="property-card card">
                 <div className="property-gallery">
