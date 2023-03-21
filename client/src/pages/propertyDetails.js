@@ -15,7 +15,6 @@ import propertiesAPI from "../api/propertiesAPI";
 
 import { useState, useRef } from "react";
 import FavouriteButton from "../components/property/favouriteButton";
-import { useEffect } from "react";
 
 const PropertyDetails = () => {
   let [property, setProperty] = useState({});
@@ -23,14 +22,11 @@ const PropertyDetails = () => {
 
   const { id } = useParams();
 
-  const { loading, data, refetch } = useQuery(propertiesAPI.getPropertyById, {
+  const { loading, data } = useQuery(propertiesAPI.getPropertyById, {
     variables: {
       id: parseInt(id),
     },
-  });
-
-  useEffect(() => {
-    refetch();
+    fetchPolicy: "no-cache",
   });
 
   if (loading) return <p>Loading...</p>;

@@ -7,23 +7,19 @@ import Tag from "../components/tag";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import propertiesAPI from "../api/propertiesAPI";
-import { useEffect } from "react";
 
 const FavouritesProperties = () => {
   const navigator = useNavigate();
 
-  const { loading, data, refetch } = useQuery(
+  const { loading, data } = useQuery(
     propertiesAPI.getFavouritePropertiesByUser,
     {
       variables: {
         username: localStorage.getItem("user"),
       },
+      fetchPolicy: "no-cache",
     }
   );
-
-  useEffect(() => {
-    refetch();
-  });
 
   if (loading) return <p>Loading...</p>;
 
