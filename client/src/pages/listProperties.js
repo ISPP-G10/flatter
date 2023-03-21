@@ -13,6 +13,8 @@ import { filterInputs } from "../forms/filterPropertiesForm";
 import {useNavigate} from 'react-router-dom';
 import {useApolloClient} from '@apollo/client';
 
+import FlatterModal from "../components/flatterModal";
+
 const ListProperties = () => {
 
   const query = useURLQuery();
@@ -26,7 +28,11 @@ const ListProperties = () => {
     city: query.get("city") ?? '',
   });
 
+  let [sharedProperty, setSharedProperty] = useState({});
+
   let [properties, setProperties] = useState([]);
+
+  const modalRef = useRef(null);
 
   function handleFilterForm({values}) {
 
@@ -62,6 +68,12 @@ const ListProperties = () => {
     })
 
   }, [filterValues]);
+
+  const copyShareInputClipboard = () => {
+    const input = document.querySelector('#share-modal-input');
+    input.select();
+    document.execCommand('copy');
+  }
 
 
 
@@ -127,10 +139,15 @@ const ListProperties = () => {
     
                   <footer className="property-footer">
                     <SolidButton text="Ver piso" onClick={ () => {
-                        navigator(`/property/${property.id}`)
+                        navigator(`/property/${property.id}`);
                     } } />
-                    <SolidButton text="Ver reseñas" />
-                    <SolidButton text="Compartir" />
+                    <SolidButton text="Ver reseñas" onClick={ () => {
+                      navigator(`/profile/${property.owner.username}`);
+                    } } />
+                    <SolidButton text="Compartir" onClick={ () => {
+                      modalRef.current.open();
+                      setSharedProperty(property);
+                    } }/>
                   </footer>
                 </div>
               </article>
@@ -139,6 +156,32 @@ const ListProperties = () => {
             )}
         </div>
       </section>
+
+      <FlatterModal maxWidth={350} ref={modalRef}>
+        <div className="info-modal share-property-modal">
+          <h3>¿Conoces a alguien a quién le puede interesar?</h3>
+          <p>Comparte este alquiler con quien tú quieras. Puedes copiar el siguiente enlace y la persona que lo reciba podrá entrar directamente a ver la información de la propiedad.</p>
+          <div className="share-input">
+            <input id="share-modal-input" type="text" value={`https://${window.location.host}/property/${sharedProperty.id}`} placeholder="Aquí aparecerá el enlace para compartir del alquiler que selecciones" readOnly={ true } /><button onClick={ function(e) {
+            
+              copyShareInputClipboard();
+              e.target.innerText = '¡Copiado!';
+
+              setTimeout(() => {
+                e.target.innerText = 'Copiar';
+              }, 3000);
+
+            } }>Copiar</button>
+          </div>
+
+          <div>
+            <SolidButton className="share-whatsapp" onClick={ () => {
+              const text = `¡Hola! Si estás buscando alquiler te recomiendo este sitio: ${sharedProperty.title}. Puedes entrar desde: https://${window.location.host}/property/${sharedProperty.id}`;
+              window.open(`https://api.whatsapp.com/send?text=${encodeURI(text)}`, "_blank");
+            } } text="Compartir en WhatsApp" />
+          </div>
+        </div>
+      </FlatterModal>
     </FlatterPage>
   );
 };
