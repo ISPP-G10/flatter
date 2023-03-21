@@ -136,7 +136,7 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef} minWidth={700} minHeight={800}>
+        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700}>
             <h1 className="comments-form-title mb-5">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
@@ -145,8 +145,7 @@ const PublicProfileCard = (props) => {
                 inputs={publicProfileFormInputs}
                 onSubmit={handlePublicProfileEdit}
                 ref={editPublicProfileForm}>
-
-                <div className="setting-profile-pic" style={{width: '40%'}}>
+                <div className="setting-profile-pic" >
                     <label className="-label" htmlFor="file">
                         <img src={require('../../static/files/icons/camera.png')} alt="camara" className="camera-icon"/>
                         <span style={{margin: '0'}}>Cambiar</span>
