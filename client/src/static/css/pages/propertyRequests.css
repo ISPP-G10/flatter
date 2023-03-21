@@ -37,6 +37,30 @@
     flex-direction: column;
 }
 
+.content.content-list > .property-requests > .property-request .request-actions > .accepted-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #44D12D;
+    color: #44D12D;
+    padding: 18px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > .rejected-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #ff003c;
+    color: #ff003c;
+    padding: 18px;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
 .content.content-list > .property-requests > .property-request .request-actions > button {
     border-radius: 8px;
     color: #fff;
@@ -73,7 +97,7 @@
 
 .content.content-list > .property-requests > .property-request > .request-data > .request-footer {
     display: flex;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .content.content-list .request-footer > div {
@@ -90,6 +114,7 @@
     display: flex;
     flex-direction: column;
     padding-left: 6px;
+    max-width: 200px;
 }
 
 .content.content-list .request-footer .request-user-data > * {
@@ -103,6 +128,41 @@
     border: 2px solid #05a8ff;
     box-shadow: 0px 2px 3px #0000004a;
     display: block;
+}
+
+.content.content-list .request-footer > div > .request-user-picture:hover > img  {
+    border: 3px solid green;
+}
+
+.content.content-list > .property-requests > .property-request .request-information {
+    padding: 10px;
+    padding-top: 18px;
+    margin: initial;
+    display: flex;
+    flex-direction: column;
+    flex:2;
+    max-height: 120px;
+    max-width: 400px;
+}
+
+.content.content-list > .property-requests > .property-request .request-information > .request-information-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.content.content-list > .property-requests > .property-request .request-information > .request-information-element {
+    display: flex;
+    margin-top: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-width: 100%;
+}
+
+.icon-img{
+    margin: 0;
+    width: 25px;
+    height: 25px;
 }
 
 @media all and (max-width: 768px) {

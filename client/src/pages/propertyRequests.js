@@ -1,16 +1,102 @@
 import '../static/css/pages/listProperties.css'
 
 import FlatterPage from "../sections/flatterPage";
-import propertiesAPI from '../api/propertiesAPI';
+import propertyRequestsAPI from '../api/propertyRequestsAPI';
+import * as settings from "../settings";
 
 import { useQuery } from '@apollo/client';
 import SolidButton from '../sections/solidButton';
 import FlatterForm from '../components/forms/flatterForm';
 import { filterRequestsInputs } from '../forms/filterRequestsForm';
+import {useApolloClient} from '@apollo/client';
+import { useNavigate } from "react-router-dom";
+import useURLQuery from "../hooks/useURLQuery";
+import { useState, useEffect, useRef } from "react";
 
 const PropertyRequests = () => {
 
-    const {loading, data} = useQuery(propertiesAPI.getOutstandingProperties);
+    const navigate = useNavigate();
+    const client = useApolloClient();
+    const query = useURLQuery();
+    const filterFormRef = useRef(null);
+
+    function acceptPetition(petitionId){
+
+        client.mutate({
+            mutation: propertyRequestsAPI.updateStatusPetition,
+            variables: {
+                petitionId: parseInt(petitionId),
+                statusPetition: true
+            }
+        }).then((response) => {
+            window.location.reload();
+        }).catch((error) => {
+            alert(error.message);
+        });
+    
+      }
+
+    function rejectPetition(petitionId){
+
+        client.mutate({
+            mutation: propertyRequestsAPI.updateStatusPetition,
+            variables: {
+                petitionId: parseInt(petitionId),
+                statusPetition: false
+            }
+        }).then((response) => {
+            window.location.reload();
+        }).catch((error) => {
+            alert(error.message);
+        });
+    
+    }
+
+    let [filterValues, setFilterValues] = useState({
+        username : localStorage.getItem('user',''),
+        status: query.get("status"),
+        startdate: query.get("startdate" ?? ''),
+        enddate: query.get("enddate" ?? ''),
+      });
+    
+    let [requests, setRequests] = useState([]);
+
+    function handleRequestFilter({values}){
+
+        if(!filterFormRef.current.validate()) return;
+
+        setFilterValues({
+            username: localStorage.getItem('user',''),
+            status: values.status,
+            startdate: values.startdate,
+            enddate: values.enddate
+        })
+
+    }
+    
+    useEffect(() => {
+
+        client.query({
+          query: propertyRequestsAPI.getPetitions,
+          variables: {
+            username: filterValues.username,
+            status: filterValues.status,
+            startDate: filterValues.startdate,
+            endDate: filterValues.enddate
+          }
+        })
+        .then((response) => setRequests(response.data.getPetitionsByStatusAndUsernameAndDates))
+        .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+    
+      }, [filterValues]);
+      
+
+
+
+
+    const {data, loading} = useQuery(propertyRequestsAPI.getPetitions, {variables: {
+        username: localStorage.getItem('user','')
+      }});
 
     return loading ? 
             <div className='carrousel-container'>Loading...</div>
@@ -28,48 +114,86 @@ const PropertyRequests = () => {
                             showSuperAnimatedButton
                             numberOfColumns={1}
                             inputs={filterRequestsInputs}
-                            // onSubmit={handlePropertySubmit}
-                            // ref={createPropertyFormRef}                
-    />
+                            onSubmit={handleRequestFilter}
+                            ref={filterFormRef}                
+                        />
                         </div>
                         
                     </aside>
 
                     <div className="content content-list">
                         <div className="property-requests card">
-                            
+                        
+                            {/* {requests.map((values, index) => {
+                                return(
+                                    {}
+                                );
+                                })}
+                                */}
+                        { 
+                            data && 
+                             (
+                            data.getPetitionsByStatusAndUsernameAndDates.map ((values, index) => { 
+                            return(
                             <div className="property-request">
                                 <div className="request-data">
-                                    <h2>Solicitud de propiedad a asdadasdasd as asdasd asd</h2>
+                                    <h2>{values.property.title}</h2>
 
                                     <div className="request-footer">
                                         <div class="request-footer-element">
-                                            <div className="request-user-picture">
-                                                <img src="" />
+                                            <div className="request-user-picture" onClick={() => navigate(`/profile/${values.requester.username}`)}>
+                                                <img src={settings.API_SERVER_MEDIA + values.requester.profilePicture} alt="Avatar"/>
                                             </div>
 
                                             <div className="request-user-data">
-                                                <a href="#">Sandra García Jiménez</a>
-                                                <span>3 (iconoEstrella.png)</span>
+                                                <span>{values.requester.firstName} {values.requester.lastName}</span>
+                                                <span>{values.requester.averageRating}/5 
+                                                <img className='icon-img' src={require("../static/files/icons/yellow-star.png")} alt="Icono estrella"/>
+                                                </span>
                                             </div>
                                         </div>
 
                                         <div class="request-footer-element">
-                                            <span>3 (iconoPersonas.png)</span>
+                                            <span>{values.property.maxCapacity} 
+                                                <img className='icon-img' src={require("../static/files/icons/partners.png")} alt="Icono Capacidad vivienda"/>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="request-actions">
-                                    <SolidButton onclick={ () => {
-
-                                    } } text="Aceptar" className="accept" />
-
-                                    <SolidButton onclick={ () => {
-
-                                    } } text="Cancelar" className="reject" />
+                                <div className='request-information'> 
+                                    <div className='request-information-header'>
+                                        <h4>Mensaje del Solicitante</h4>
+                                    </div>
+                                    <div className='request-information-element'>
+                                        {values.message}
+                                    </div>
                                 </div>
+                                {
+                                values.status === "P" ? 
+                                    (<div className="request-actions">
+                                        <SolidButton onClick={ () => {acceptPetition(values.id)}} text="Aceptar" className="accept" />
+
+                                        <SolidButton onClick={ () => {rejectPetition(values.id)}} text="Cancelar" className="reject" />
+                                    </div>)
+                                : values.status === "A" ?
+                                (
+                                    <div className="request-actions">
+                                        <div className='accepted-status'>Aceptada</div>
+                                    </div>  
+                                )
+                                : values.status === "D" ?
+                                (
+                                    <div className="request-actions">
+                                        <div className='rejected-status'>Rechazada</div>
+                                    </div>
+                                )
+                                : (<div></div>)
+                                }    
                             </div>
+                        );}))}
                         </div>
+
+                        
                     </div>
                 </section>
             </FlatterPage>
