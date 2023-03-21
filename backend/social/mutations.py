@@ -268,8 +268,10 @@ class EditUserPrivateMutation(graphene.Mutation):
         if role and not valid_roles(role):
             raise ValueError(_("Los roles no son válidos"))
 
-        if phone and not re.match(r"^[9|6|7][0-9]{8}$", phone):
-            raise ValueError(_("El teléfono no es válido"))
+        if phone:
+            phone = phone.strip()
+            if not re.match(r"^[9|6|7][0-9]{8}$", phone):
+                raise ValueError(_("El teléfono no es válido"))
 
         if genre:
             genre = parse_genre(genre)
