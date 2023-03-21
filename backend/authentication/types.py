@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import graphene
 from graphene_django.types import DjangoObjectType
 from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan
@@ -6,11 +8,13 @@ from mainApp.models import Review
 
 
 class FlatterUserType(DjangoObjectType):
+
   class Meta:
     model = FlatterUser
     exclude = ('password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'user_permissions', 'last_login')
   
   average_rating = graphene.Float()
+  age = graphene.Int()
   
   @staticmethod
   def resolve_average_rating(root, info, **kwargs):
@@ -43,6 +47,19 @@ class FlatterUserType(DjangoObjectType):
       return 0
     
     return final_rating / total_rating
+
+  @staticmethod
+  def resolve_age(root, info, **kwargs):
+    if root.birthday:
+      birthdate = root.birthday
+    else:
+      return None
+
+    today = datetime.now()
+    return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+
+
+
     
 class RoleType(DjangoObjectType):
   class Meta:
