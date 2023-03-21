@@ -24,6 +24,10 @@ const PropertyDetails = () => {
 
   if (loading) return <p>Loading...</p>;
 
+  const handlePropertyRequest = () => {
+
+  }
+
   return (
     <FlatterPage withBackground userLogged>
       <div className="property-housing-page">
@@ -55,6 +59,18 @@ const PropertyDetails = () => {
               ))}
             </div>
             <div className="property-btn__container">
+
+              <button className="property-btn" style={{textTransform: 'uppercase'}} onClick={ handlePropertyRequest }>
+                <>
+                  <img
+                    className="property-img"
+                    src={require("../static/files/icons/lapiz.png")}
+                    alt="Petición"
+                  />
+                  Solicitar
+                </>
+              </button>
+
               <button className="property-btn">
                 {localStorage.getItem("user") ===
                 data.getPropertyById.owner.username ? (
