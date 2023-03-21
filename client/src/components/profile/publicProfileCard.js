@@ -27,9 +27,12 @@ const PublicProfileCard = (props) => {
     const editPublicProfileModalRef = useRef(null);
     const editPublicProfileForm = useRef(null);
     const userImageField = useRef(null);
+    const [ tagsProfile, setTagsProfile ] = useState(props.tags);
     const tagsInput = useRef(null);
 
     const {data, loading} = useQuery(tagsAPI.getTags);
+
+    console.log(tagsProfile);
 
     useEffect (() => {
         if (!loading){
@@ -50,12 +53,15 @@ const PublicProfileCard = (props) => {
         })
         .then((response) => {
             editPublicProfileModalRef.current.close();
-            window.location.reload();
         })
         .catch((error) => alert(error.message));
     }
 
     function handlePublicProfileEdit({values}){
+
+        setTagsProfile(tagsInput.current.props.value.map((tag) => ({
+            name: tag.value,
+            color: tag.color})))
 
         var tagsSelected = tagsInput.current.props.value.map((tag) => (tag.value))
 
@@ -120,8 +126,8 @@ const PublicProfileCard = (props) => {
                     </p>
                     <div className='tags-container'>
                         {
-                            props.tags.length !== 0 ? (
-                                props.tags.map((tag, i) => { 
+                            tagsProfile.length !== 0 ? (
+                                tagsProfile.map((tag, i) => { 
                                     return(
                                         <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
                                     )
@@ -134,7 +140,7 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef}>
+        <FlatterModal ref={editPublicProfileModalRef} maxHeight={'700px'}>
             <h1 className="comments-form-title">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
@@ -153,7 +159,7 @@ const PublicProfileCard = (props) => {
                     <img ref={userImageField} className="user-img" src={props.pic} id="output" width="200" alt="Imagen de perfil"/>
                 </div>
                 <div className='tag-input'>
-                    <TagSelector options={tagOptions.getAllTag} defaultValues={props.tags} max={8} ref={tagsInput}/>
+                    <TagSelector options={tagOptions.getAllTag} defaultValues={tagsProfile} max={8} ref={tagsInput}/>
                 </div>
             </FlatterForm>
         </FlatterModal>

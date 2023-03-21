@@ -161,8 +161,8 @@ const usersAPI = {
         }
     `,
     updatePublicProfile: gql`
-        mutation editUserTags($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String){
-            editUser(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags){
+        mutation editUserTags($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String, $firstName: String, $lastName: String){
+            editUser(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName){
                 user{
                     username
                     roles{
