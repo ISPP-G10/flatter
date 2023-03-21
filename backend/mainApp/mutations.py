@@ -1,3 +1,4 @@
+from authentication.types import FlatterUserType
 from .models import Tag, Property
 from authentication.models import FlatterUser, Role
 from mainApp.models import Image
@@ -315,6 +316,69 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         selected_property.save()
 
         return MakePropertyOutstandingMutation(property=selected_property)
+class AddUsersToFavouritePropertyMutation(graphene.Mutation):
+
+  class Input:
+    property_id = graphene.Int(required=True)
+    username = graphene.String(required=True)
+
+  user = graphene.Field(FlatterUserType)
+  property = graphene.Field(PropertyType)
+
+  @staticmethod
+  def mutate(self, info, **kwargs):
+    
+
+    property_id = kwargs.get('property_id',0)
+    username=kwargs.get('username',0)
+    try:
+        user = FlatterUser.objects.get(username=username)
+    except FlatterUser.DoesNotExist:
+        raise ValueError(_(f"El usuario con nombre de usuario {username} no existe"))
+    
+    try:
+        property = Property.objects.get(id=property_id)
+    except Property.DoesNotExist:
+        raise ValueError(_("El inmueble seleccionado no existe"))
+    if property.interested_users.contains(user):
+        raise ValueError(_("Ya has marcado este piso como favorito"))
+    else:
+        # Agregar el usuario a la lista de interesados en la propiedad
+        property.interested_users.add(user)
+        property.save()
+    return AddUsersToFavouritePropertyMutation(user=user, property=property)
+  
+class DeleteUsersToFavouritePropertyMutation(graphene.Mutation):
+
+    class Input:
+        property_id = graphene.Int(required=True)
+        username = graphene.String(required=True)
+
+    user = graphene.Field(FlatterUserType)
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+        property_id = kwargs.get('property_id', 0)
+        username=kwargs.get('username')
+        
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise ValueError(_(f"El usuario con nombre de usuario {username} no existe"))
+    
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise ValueError(_("El inmueble seleccionado no existe"))
+
+        # Agregar el usuario a la lista de interesados en la propiedad
+        if property.interested_users.contains(user):
+            property.interested_users.remove(user)
+            property.save()
+        else:
+            raise ValueError(_("Ya has eliminado este usuario"))
+        return DeleteUsersToFavouritePropertyMutation(user=user, property=property)
 
 
 class PropertyMutation(graphene.ObjectType):
@@ -325,6 +389,8 @@ class PropertyMutation(graphene.ObjectType):
     delete_image_to_property = DeleteImageFromProperty.Field()
     delete_property = DeletePropertyMutation.Field()
     make_property_outstanding = MakePropertyOutstandingMutation.Field()
+    add_users_to_favourite_property=AddUsersToFavouritePropertyMutation.Field()
+    delete_users_to_favourite_property=DeleteUsersToFavouritePropertyMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
