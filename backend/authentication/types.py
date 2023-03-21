@@ -57,9 +57,6 @@ class FlatterUserType(DjangoObjectType):
 
     today = datetime.now()
     return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-
-
-
     
 class RoleType(DjangoObjectType):
   class Meta:

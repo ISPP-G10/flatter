@@ -1,4 +1,5 @@
 import base64, os
+import re
 
 import graphene
 from authentication.models import FlatterUser, Tag, Role
@@ -227,38 +228,30 @@ class CreateRequest(graphene.Mutation):
 
         return CreateRequest(request=request)
 
-class EditUserMutation(graphene.Mutation):
+
+class EditUserPrivateMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
         first_name = graphene.String(required=False)
         last_name = graphene.String(required=False)
-        email = graphene.String(required=False)
-        biography = graphene.String(required=False)
-        phone = graphene.String(required=False)
-        profile_picture = graphene.String(required=False)
-        profession = graphene.String(required=False)
-        birthday = graphene.String(required=False)
-        role = graphene.String(required=False)
         genre = graphene.String(required=False)
-        tags = graphene.List(graphene.String, required=True)
+        role = graphene.String(required=False)
+        phone = graphene.String(required=False)
+        email = graphene.String(required=False)
+        profile_picture = graphene.String(required=False)
 
     user = graphene.Field(FlatterUserType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
-
         username = kwargs.get('username', '').strip()
         first_name = kwargs.get('first_name', '').strip()
         last_name = kwargs.get('last_name', '').strip()
-        email = kwargs.get('email', '').strip()
-        biography = kwargs.get('biography', '').strip()
-        phone = kwargs.get('phone', '').strip()
-        profile_picture = kwargs.get('profile_picture', '')
-        profession = kwargs.get('profession', '').strip()
-        birthday = kwargs.get('birthday', '').strip()
         genre = kwargs.get('genre', '').strip()
         role = kwargs.get('role', '').strip()
-        tags = kwargs.get('tags', [])
+        phone = kwargs.get('phone', '').strip()
+        email = kwargs.get('email', '').strip()
+        profile_picture = kwargs.get('profile_picture', '').strip()
 
         if first_name and (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
@@ -269,20 +262,20 @@ class EditUserMutation(graphene.Mutation):
         if email and ("@" not in email or "." not in email):
             raise ValueError(_("El email no es válido"))
 
-        # TODO: VALIDAR TELÉFONO
-
-        if profession and len(profession) < 1 and len(profession) > 100:
-            raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
-
         if genre and not valid_genre(genre):
             raise ValueError(_("El género no es válido"))
-            
+
         if role and not valid_roles(role):
             raise ValueError(_("Los roles no son válidos"))
-        
+
+        if phone:
+            phone = phone.strip()
+            if not re.match(r"^[9|6|7][0-9]{8}$", phone):
+                raise ValueError(_("El teléfono no es válido"))
+
         if genre:
             genre = parse_genre(genre)
-        
+
         if role:
             roles = parse_roles(role)
 
@@ -298,13 +291,85 @@ class EditUserMutation(graphene.Mutation):
             if _exists_email(email):
                 raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
             else:
-                user_selected.email = email    
-        if biography and user_selected.biography != biography:
-            user_selected.biography = biography
-        
+                user_selected.email = email
+
+
+
         if phone and user_selected.phone_number != phone:
             user_selected.phone_number = phone
-        
+
+        if profile_picture:
+            imgdata = base64.b64decode(profile_picture.split(',')[1])
+            name = user_selected.username + '.png'
+            filename = os.path.join('media', 'users', 'images', name)
+
+            if os.path.exists(filename):
+                os.remove(filename)
+
+            with open(filename, 'wb') as f:
+                f.write(imgdata)
+
+            user_selected.profile_picture = os.path.join('users', 'images', name)
+
+        if genre and user_selected.genre != genre:
+            user_selected.genre = genre
+
+        user_selected.save()
+
+        if role:
+            user_selected.roles.clear()
+            user_selected.roles.add(*roles)
+
+        return EditUserPrivateMutation(user=user_selected)
+
+
+
+class EditUserPublicMutation(graphene.Mutation):
+    class Input:
+        username = graphene.String(required=True)
+        first_name = graphene.String(required=False)
+        last_name = graphene.String(required=False)
+        biography = graphene.String(required=False)
+        profile_picture = graphene.String(required=False)
+        profession = graphene.String(required=False)
+        birthday = graphene.String(required=False)
+        tags = graphene.List(graphene.String, required=True)
+
+    user = graphene.Field(FlatterUserType)
+
+    @staticmethod
+    def mutate(root, info, **kwargs):
+
+        username = kwargs.get('username', '').strip()
+        first_name = kwargs.get('first_name', '').strip()
+        last_name = kwargs.get('last_name', '').strip()
+        biography = kwargs.get('biography', '').strip()
+        profile_picture = kwargs.get('profile_picture', '')
+        profession = kwargs.get('profession', '').strip()
+        birthday = kwargs.get('birthday', '').strip()
+        tags = kwargs.get('tags', [])
+
+        if first_name and (len(first_name) < 3 or len(first_name) >= 50):
+            raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
+
+        if last_name and (len(last_name) < 3 or len(last_name) >= 50):
+            raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
+
+        if profession and len(profession) < 1 and len(profession) > 100:
+            raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
+
+
+
+        user_selected = FlatterUser.objects.get(username=username)
+
+        if username and user_selected.username != username:
+            user_selected.username = username
+        if first_name and user_selected.first_name != first_name:
+            user_selected.first_name = first_name
+        if last_name and user_selected.last_name != last_name:
+            user_selected.last_name = last_name
+        if biography and user_selected.biography != biography:
+            user_selected.biography = biography
         if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
@@ -332,17 +397,9 @@ class EditUserMutation(graphene.Mutation):
 
         if profession and user_selected.profession != profession:
             user_selected.profession = profession
-            
-        if genre and user_selected.genre != genre:
-            user_selected.genre = genre
+
 
         user_selected.save()
-        
-        if role:
-            user_selected.roles.clear()
-            user_selected.roles.add(*roles)
-
-
 
         if len(tags) > 8:
             raise ValueError(_("No se pueden añadir más de 8 tags"))
@@ -355,7 +412,7 @@ class EditUserMutation(graphene.Mutation):
 
         user_selected.tags.set(user_tags)
 
-        return EditUserMutation(user=user_selected)
+        return EditUserPublicMutation(user=user_selected)
 
 class ChangePasswordMutation(graphene.Mutation):
     class Input:
@@ -497,7 +554,8 @@ class CreateReview(graphene.Mutation):
 
 
 class SocialMutation(graphene.ObjectType):
-    edit_user = EditUserMutation.Field()
+    edit_user_public = EditUserPublicMutation.Field()
+    edit_user_private = EditUserPrivateMutation.Field()
     add_role_to_user = AddRoleToUserMutation.Field()
     delete_role_to_user = DeleteRoleFromUserMutation.Field()
     change_user_password = ChangePasswordMutation.Field()
