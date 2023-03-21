@@ -50,7 +50,7 @@ const ListProperties = () => {
         city: filterValues.city
       }
     })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
+    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCityAndTags))
     .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
 
     filterInputs.map((input) => {
