@@ -42,6 +42,8 @@ const PublicProfileCard = (props) => {
             mutation: usersAPI.updatePublicProfile,
             variables: {
                 username: localStorage.getItem('user', ''),
+                firstName: values.firstName,
+                lastName: values.lastName,
                 biography: values.biography,
                 profession: values.profession,
                 profilePicture: encodedImage,
@@ -134,8 +136,8 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef}>
-            <h1 className="comments-form-title">Editar perfil público</h1>
+        <FlatterModal ref={editPublicProfileModalRef} minWidth={700} minHeight={800}>
+            <h1 className="comments-form-title mb-5">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
                 showSuperAnimatedButton

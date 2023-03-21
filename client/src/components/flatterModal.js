@@ -18,6 +18,8 @@ const FlatterModal = forwardRef((props, ref) => {
         if(modalContentWrapper.current){
             modalContentWrapper.current.style.maxHeight = `${props.maxHeight ? props.maxHeight : 600}px`;
             modalContentWrapper.current.style.maxWidth = `${props.maxWidth ? props.maxWidth : 500}px`;
+            modalContentWrapper.current.style.minHeight = `${props.minHeight ? props.minHeight : 300}px`;
+            modalContentWrapper.current.style.minWidth = `${props.minWidth ? props.minWidth : 300}px`;
         }
 
         // eslint-disable-next-line

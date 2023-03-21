@@ -2,10 +2,10 @@ import Select from 'react-select';
 import chroma from 'chroma-js';
 import {useState} from 'react';
 import PropTypes from 'prop-types';
-import {forwardRef} from 'react';
+import "../../static/css/sections/tagSelector.css"
 
 
-const TagSelector = forwardRef((props, tagRef) => {
+const TagSelector = (props) => {
 
   //El parametro defaultValues debe tener la siguiente estructura:
   // [{value: "1", label: "Amistoso", color: "#FFC107"}, {value: "2", label: "Deportivo", color: "#FFC107"}, ...]
@@ -23,7 +23,8 @@ const TagSelector = forwardRef((props, tagRef) => {
   }
 
   const [selectedOptions, setSelectedOptions] = useState(tagsTransform(props.defaultValues));
-  const [tagOptions, setTagOptions] = useState(tagsTransform(props.options));
+  const [maxReached, setMaxReached] = useState(false);
+  const tagOptions = tagsTransform(props.options);
 
 
   //--------------------Style de tags 1--------------------
@@ -123,18 +124,24 @@ const TagSelector = forwardRef((props, tagRef) => {
 
   const handleSelectChange = (selectedOptions) => {
     if (selectedOptions.length <= props.max) {
+      setMaxReached(false)
       setSelectedOptions(selectedOptions);
+    } else{
+      setMaxReached(true)
     }
   };
     
   return (
       <>
-        <label htmlFor='tags-input'>
-          {selectedOptions.length < props.max ? 
-            <p style={{color: '#92278f', fontSize: '13px'}}>Límite {props.max} etiquetas. </p>
+        
+          {
+            maxReached ? 
+              <label htmlFor='tags-input'>
+                <p style={{color: '#cc0033', fontSize: '13px'}}>Límite de etiquetas alcanzado.</p>
+              </label>
             :
-            <p style={{color: '#cc0033', fontSize: '13px'}}>Límite de etiquetas alcanzado.</p>}
-          </label>
+              <></>
+          }
           
         <Select 
           isMulti
@@ -147,17 +154,16 @@ const TagSelector = forwardRef((props, tagRef) => {
           value={selectedOptions}
           onChange={handleSelectChange}
           placeholder="Selecciona las etiquetas"
-          ref={tagRef}
           >
         </Select>
       </>
   );
-});
+};
 
 TagSelector.defaultProps = {
   defaultValues: [],
   options: [],
-  max: 6
+  max: 8
 };
 
 TagSelector.propTypes = {
