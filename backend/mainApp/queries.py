@@ -18,8 +18,7 @@ class MainAppQuery(object):
     get_outstanding_properties = graphene.List(PropertyType)
     get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
     get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
-
-    
+    get_petition_by_requester_to_property = graphene.List(PetitionType, username = graphene.String(required=True), property_id = graphene.Int(required=True))
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
@@ -111,4 +110,10 @@ class MainAppQuery(object):
         q &= Q(requester = requester)
         petitions = Petition.objects.filter(q)
         return petitions
+    
+    def resolve_get_petition_by_requester_to_property(self,info,username, property_id):
+        requester = FlatterUser.objects.get(username = username)
+        property = Property.objects.get(id = property_id)
+        petition = Petition.objects.filter(property = property, requester = requester).exclude(status = 'D')
+        return petition
 
