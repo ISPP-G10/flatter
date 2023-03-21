@@ -64,6 +64,9 @@ const propertiesAPI = {
                 price
                 isOutstanding
                 maxCapacity
+                owner {
+                    username
+                }
                 images{
                     image
                 }
