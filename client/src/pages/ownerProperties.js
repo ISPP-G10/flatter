@@ -1,5 +1,6 @@
 import "../static/css/pages/ownerProperties.css";
 import FlatterPage from "../sections/flatterPage";
+import { Link } from "react-router-dom";
 import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
@@ -69,9 +70,18 @@ const OwnerProperties = ({}) => {
       <section id="searchView">
         <div className="filterview">
           <div className="filterview-content">
+            <div className="filterview-element">
             <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
                 addPropertyModalRef.current.open();
             } } />
+            </div>
+            <Link to="/property/requests">
+            <div className="filterview-element" >
+                       <SolidButton text="Ver Solicitudes" type="" onClick={ () => { 
+            } } />
+            </div>
+            </Link>
+
           </div>
 
           

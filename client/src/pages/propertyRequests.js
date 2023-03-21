@@ -65,14 +65,31 @@ const PropertyRequests = () => {
 
         if(!filterFormRef.current.validate()) return;
 
-        setFilterValues({
-            username: localStorage.getItem('user',''),
-            status: values.status,
-            startdate: values.startdate,
-            enddate: values.enddate
-        })
-
+        let newStatus;
+        switch(values.status) {
+            case 'Pendientes':
+                newStatus = 'P';
+                break;
+            case 'Aceptadas':
+                newStatus = 'A';
+                break;
+            case 'Rechazadas':
+                newStatus = 'D';
+                break;
+            case 'Todas':
+                newStatus = '';
+                break;
+            default:
+                newStatus = values.status;
     }
+
+    setFilterValues({
+        username: localStorage.getItem('user',''),
+        status: newStatus,
+        startdate: values.startdate,
+        enddate: values.enddate
+    })
+}
     
     useEffect(() => {
 
@@ -130,31 +147,29 @@ const PropertyRequests = () => {
                                 );
                                 })}
                                 */}
-                        { 
-                            data && 
-                             (
-                            data.getPetitionsByStatusAndUsernameAndDates.map ((values, index) => { 
-                            return(
-                            <div className="property-request">
+                    {
+                    requests.map((request, index) => {
+                        return(
+                            <div key = {index} className="property-request">
                                 <div className="request-data">
-                                    <h2>{values.property.title}</h2>
+                                    <h2>{request.property.title}</h2>
 
                                     <div className="request-footer">
                                         <div class="request-footer-element">
-                                            <div className="request-user-picture" onClick={() => navigate(`/profile/${values.requester.username}`)}>
-                                                <img src={settings.API_SERVER_MEDIA + values.requester.profilePicture} alt="Avatar"/>
+                                            <div className="request-user-picture" onClick={() => navigate(`/profile/${request.requester.username}`)}>
+                                                <img src={settings.API_SERVER_MEDIA + request.requester.profilePicture} alt="Avatar"/>
                                             </div>
 
                                             <div className="request-user-data">
-                                                <span>{values.requester.firstName} {values.requester.lastName}</span>
-                                                <span>{values.requester.averageRating}/5 
+                                                <span>{request.requester.firstName} {request.requester.lastName}</span>
+                                                <span>{request.requester.averageRating}/5 
                                                 <img className='icon-img' src={require("../static/files/icons/yellow-star.png")} alt="Icono estrella"/>
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div class="request-footer-element">
-                                            <span>{values.property.maxCapacity} 
+                                            <span>{request.property.maxCapacity} 
                                                 <img className='icon-img' src={require("../static/files/icons/partners.png")} alt="Icono Capacidad vivienda"/>
                                             </span>
                                         </div>
@@ -165,23 +180,23 @@ const PropertyRequests = () => {
                                         <h4>Mensaje del Solicitante</h4>
                                     </div>
                                     <div className='request-information-element'>
-                                        {values.message}
+                                        {request.message}
                                     </div>
                                 </div>
                                 {
-                                values.status === "P" ? 
+                                request.status === "P" ? 
                                     (<div className="request-actions">
-                                        <SolidButton onClick={ () => {acceptPetition(values.id)}} text="Aceptar" className="accept" />
+                                        <SolidButton onClick={ () => {acceptPetition(request.id)}} text="Aceptar" className="accept" />
 
-                                        <SolidButton onClick={ () => {rejectPetition(values.id)}} text="Cancelar" className="reject" />
+                                        <SolidButton onClick={ () => {rejectPetition(request.id)}} text="Cancelar" className="reject" />
                                     </div>)
-                                : values.status === "A" ?
+                                : request.status === "A" ?
                                 (
                                     <div className="request-actions">
                                         <div className='accepted-status'>Aceptada</div>
                                     </div>  
                                 )
-                                : values.status === "D" ?
+                                : request.status === "D" ?
                                 (
                                     <div className="request-actions">
                                         <div className='rejected-status'>Rechazada</div>
@@ -190,7 +205,7 @@ const PropertyRequests = () => {
                                 : (<div></div>)
                                 }    
                             </div>
-                        );}))}
+                        );})}
                         </div>
 
                         
