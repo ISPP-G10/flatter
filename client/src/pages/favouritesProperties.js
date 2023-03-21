@@ -27,8 +27,6 @@ const FavouritesProperties = () => {
 
   if (loading) return <p>Loading...</p>;
 
-  console.log("hola", data);
-
   return (
     <FlatterPage withBackground userLogged>
       <div>
