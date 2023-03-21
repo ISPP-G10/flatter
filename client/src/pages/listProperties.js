@@ -69,19 +69,10 @@ const ListProperties = () => {
 
   }, [filterValues]);
 
-  const copyToClipboard = (text) => {
-    if (!navigator.clipboard) {
-      console.error("El clipboard no está disponible.");
-      return;
-    }
-  
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        console.log("Copiado al clipboard: ", text);
-      })
-      .catch((error) => {
-        console.error("Error al copiar al clipboard: ", error);
-      });
+  const copyShareInputClipboard = () => {
+    const input = document.querySelector('#share-modal-input');
+    input.select();
+    document.execCommand('copy');
   }
 
 
@@ -171,9 +162,9 @@ const ListProperties = () => {
           <h3>¿Conoces a alguien a quién le puede interesar?</h3>
           <p>Comparte este alquiler con quien tú quieras. Puedes copiar el siguiente enlace y la persona que lo reciba podrá entrar directamente a ver la información de la propiedad.</p>
           <div className="share-input">
-            <input id="share-modal-input" type="text" value={`https://${window.location.host}/property/${sharedProperty.id}`} placeholder="Aquí aparecerá el enlace para compartir del alquiler que selecciones" disabled={true} /><button onClick={ function(e) {
+            <input id="share-modal-input" type="text" value={`https://${window.location.host}/property/${sharedProperty.id}`} placeholder="Aquí aparecerá el enlace para compartir del alquiler que selecciones" readOnly={ true } /><button onClick={ function(e) {
             
-              copyToClipboard(`https://${window.location.host}/property/${sharedProperty.id}`);
+              copyShareInputClipboard();
               e.target.innerText = '¡Copiado!';
 
               setTimeout(() => {
