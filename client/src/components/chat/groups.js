@@ -17,19 +17,16 @@ const Groups = (props) => {
     if (loading) return <p>Loading...</p>
     
     const groups = data.getMyGroups;
-    const messagesData = data.getMyMessages;
-    const messages = messagesData===undefined?[]:messagesData;
 
     return(
         <>
             {
-            groups && messages && groups.map(group => {
-                let filter_user = group.users.filter(u => u.username !== localStorage.getItem('user'))[0]
-                let filter_message = messages.filter(m => m.group.id === group.id);
-                let lastMessage = filter_message.length>0?filter_message[0].text.length>MAX_LEN?filter_message[0].text.trim().substring(0, MAX_LEN-3)+"...":filter_message[0].text:"";
-                let lastTime =filter_message.length>0?socialLib.getTimeToString(filter_message[0].timestamp):"";
+            groups && groups.map(data => {
+                let filter_user = data.group.users.filter(u => u.username !== localStorage.getItem('user'))[0]
+                let lastMessage = data.lastMessage?data.lastMessage.text.length>MAX_LEN?data.lastMessage.text.trim().substring(0, MAX_LEN-3)+"...":data.lastMessage.text:"";
+                let lastTime = data.lastMessage?socialLib.getTimeToString(data.lastMessage.timestamp):"";
                 return(
-                    <Group onClick={()=>{props.setChatId(parseInt(group.id))}} name={group.individual?filter_user.username:group.name} chatPic={group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} key={`chat-${group.id}`}/>
+                    <Group onClick={()=>{props.setChatId(parseInt(data.group.id))}} name={data.group.individual?filter_user.username:data.group.name} chatPic={data.group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} key={`chat-${data.group.id}`}/>
             )} 
             )}         
         </>

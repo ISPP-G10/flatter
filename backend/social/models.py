@@ -10,7 +10,7 @@ class Group(models.Model):
     users = models.ManyToManyField(FlatterUser)
 
 class Message(models.Model):
-    text = models.TextField(max_length=500, blank=False, null=False)
+    text = models.CharField(max_length=140, blank=False, null=False)
     timestamp = models.DateTimeField(auto_now_add=True, null=False)
     user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)

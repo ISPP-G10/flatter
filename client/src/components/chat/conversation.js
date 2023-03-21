@@ -1,34 +1,56 @@
 import MessagesDate from "./messagesDate";
 import Messages from "./messages";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import chatsAPI from "../../api/chatsAPI";
+import socialLib from "../../libs/socialLib";
 
 const Conversation = (props) => {
     
     let chatId = props.chatId;
     let username = localStorage.getItem("user");
-
-    useEffect (() => {
-        chatId = props.chatId;
-    }, [props.chatId]);
+    const [messagesMap, setMessagesMap] = useState(undefined);
 
     const {data, loading} = useQuery(chatsAPI.getMessagesByGroup, {
         variables: {
-            username: localStorage.getItem("user"),
+            username: username,
             chatId: chatId
-        }
+        },
+        fetchPolicy: "no-cache"
     });
 
-    if (loading) return <p>Loading...</p>
-
-    console.log(data);
+    useEffect (() => {
+        chatId = props.chatId;
+        if (chatId!==null && chatId!==undefined){
+            if (!loading){
+                setMessagesMap(data.getMessagesByGroup);
+            }
+        }else{
+            setMessagesMap(undefined);
+        }
+    }, [props.chatId, loading]);
 
     return (
         <>
-            <MessagesDate key={`message-date-1`} date="13 Jun 2022" />
-            <Messages key={`message-1`} whose="mine"/>
+            { 
+                messagesMap ? (messagesMap.map((dict, index) => {
+                    return (
+                        <>
+                            <MessagesDate key={`message-date-${index}`} date={socialLib.getDateToString(dict.key)} />
+                            {
+                                dict.value.map((messagesList, messageIndex) => {
+                                    return (
+                                        <Messages key={`messages-list-${messageIndex}`} messagesList={messagesList} whose={messagesList[0].user.username==username?"mine":"yours"} />
+                                    )
+                                }
+                            )}
+                        </>
+                    )
+                }))
+                :
+                <></>
+            };
         </>
     );
 }

@@ -67,27 +67,34 @@ class CreateMessageMutation(graphene.Mutation):
     class Input:
         text = graphene.String(required=True)
         group_id = graphene.Int(required=True)
-        sender_id = graphene.Int(required=True)
+        username = graphene.String(required=True)
 
     message = graphene.Field(MessageType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
 
-        try:
-            user = FlatterUser.objects.get(id=kwargs.get('sender_id'))
-        except FlatterUser.DoesNotExist:
+        username = kwargs.get('username', '').strip()
+        group_id = kwargs.get('group_id', None)
+        text = kwargs.get('text', '').strip()
+
+        if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(USER_DOES_NOT_EXIST)
-
-        user_group = Group.objects.get(id=kwargs.get('group_id'))
-
-        if not user_group:
+        
+        user = FlatterUser.objects.get(username=username)
+        
+        if not group_id or not Group.objects.filter(id=group_id).exists():
             raise ValueError(GROUP_DOES_NOT_EXIST)
 
-        if user.id not in user_group.users.values_list('id', flat=True):
-            raise ValueError(f'The user with id {user.id} is not part of the group')
+        user_group = Group.objects.get(id=group_id)
 
-        message = Message.objects.create(text=kwargs.get('text'), user=user, group=user_group)
+        if not user_group.users.filter(id=user.id).exists():
+            raise ValueError('The user is not part of the group')
+        
+        if not text or len(text) > 140:
+            raise ValueError('The message must have between 1 and 140 characters')
+        
+        message = Message.objects.create(text=text, user=user, group=user_group)
 
         return CreateMessageMutation(message=message)
 

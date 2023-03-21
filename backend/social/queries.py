@@ -2,7 +2,7 @@ import graphene
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
 from authentication.types import TagType
-from .types import GroupType, MessageType, GroupedMessagesType
+from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
 from .models import Group, Message
 from authentication.models import FlatterUser
 
@@ -10,8 +10,7 @@ class SocialQueries(object):
 
     get_all_tag = graphene.List(TagType, tag=graphene.String())
     get_groups = graphene.List(GroupType)
-    get_my_groups = graphene.Field(graphene.List(GroupType), username=graphene.String())
-    get_my_messages = graphene.Field(graphene.List(MessageType), username=graphene.String())
+    get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
     get_messages = graphene.List(MessageType)
 
@@ -29,20 +28,18 @@ class SocialQueries(object):
         
         user = FlatterUser.objects.get(username=username)
         
-        return Group.objects.filter(users__in=[user])
-    
-    def resolve_get_my_messages(self, info, username):
-        username = username.strip()
+        groups = Group.objects.filter(users__in=[user])
         
-        if not username or not FlatterUser.objects.filter(username=username).exists():
-            raise ValueError(_('El usuario no es válido'))
+        result = []
         
-        user = FlatterUser.objects.get(username=username)
+        for group in groups:
+            if Message.objects.filter(group=group).exists():
+                last_message = Message.objects.filter(group=group).order_by('-timestamp').first()
+            else:
+                last_message = None
+            result.append(GroupAndLastMessageType(group=group, last_message=last_message))
         
-        if not Message.objects.filter(group__users=user).exists():
-            return None
-                
-        return Message.objects.filter(group__users=user).order_by('-timestamp')
+        return result
     
     def resolve_get_messages_by_group(self, info, username, group_id):
         username = username.strip()
@@ -73,7 +70,7 @@ class SocialQueries(object):
             else:
                 grouped_messages[day] = [[message]]
                 
-        result = [GroupedMessagesType(key=f"{key.day}/{key.month}/{key.year}", value=value) for key, value in grouped_messages.items()]
+        result = [GroupedMessagesType(key=key, value=value) for key, value in grouped_messages.items()]
         
         return result
 

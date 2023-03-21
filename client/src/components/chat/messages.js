@@ -1,19 +1,23 @@
 import Message from "./message";
 import PropTypes from 'prop-types';
+import socialLib from "../../libs/socialLib";
+import {API_SERVER_MEDIA} from "../../settings";
 
 const Messages = (props) =>{
 
+    let username = localStorage.getItem("user");
+    let messagesLength = props.messagesList.length;
+
     return(
         <>
-            <div className={`yours messages`}>
-                <Message key={`unique-message-1`} message="Prueba" displayPic="none" displayUser="block" profilePic={require("../../static/files/images/default-user.png")} time="11:23" user="Juan" mine={props.whose!=="mine"} />
-                <Message key={`unique-message-1`} message="Prueba" displayPic="none" displayUser="none" profilePic={require("../../static/files/images/default-user.png")} time="11:23" user="Juan" mine={props.whose!=="mine"} />
-                <Message key={`unique-message-1`} message="Prueba" displayPic="block" displayUser="none" profilePic={require("../../static/files/images/default-user.png")} time="11:23" last="last" user="Juan" mine={props.whose!=="mine"} />
-            </div>
             <div className={`${props.whose} messages`}>
-                <Message key={`unique-message-1`} message="Prueba" displayPic="none" profilePic={require("../../static/files/images/default-user.png")} time="11:23" mine={props.whose==="mine"} />
-                <Message key={`unique-message-1`} message="Prueba" displayPic="none" profilePic={require("../../static/files/images/default-user.png")} time="11:23" mine={props.whose==="mine"} />
-                <Message key={`unique-message-1`} message="Prueba" displayPic="block" profilePic={require("../../static/files/images/default-user.png")} time="11:23" last="last" mine={props.whose==="mine"} />
+                {
+                    props.messagesList && props.messagesList.map((message, index) => {
+                        return (
+                            <Message key={`message-${index}`} message={message.text} displayPic={(index===messagesLength-1 && message.user.username!=username && !message.group.individual)?"block":"none"} profilePic={API_SERVER_MEDIA+message.user.profilePicture} time={socialLib.getTimeToString(message.timestamp)} last={index===messagesLength-1?"last":""} mine={props.whose==="mine"} displayUser={(index===0 && message.user.username!=username && !message.group.individual)?"block":"none"} user={message.user.username}/>
+                        )
+                    })
+                }
             </div>
         </>
     );
@@ -21,10 +25,12 @@ const Messages = (props) =>{
 
 Messages.propTypes = {
     whose: PropTypes.string,
+    messagesList: PropTypes.array,
 }
 
 Messages.defaultProps = {
     whose: "",
+    messagesList: [],
 }
 
 export default Messages;

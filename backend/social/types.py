@@ -16,5 +16,9 @@ class MessageType(DjangoObjectType):
         model = Message
         
 class GroupedMessagesType(graphene.ObjectType):
-    key = graphene.String()
+    key = graphene.DateTime()
     value = graphene.Field(graphene.List(graphene.List(MessageType)))
+    
+class GroupAndLastMessageType(graphene.ObjectType):
+    group = graphene.Field(GroupType)
+    last_message = graphene.Field(MessageType)
