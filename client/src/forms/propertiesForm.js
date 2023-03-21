@@ -24,17 +24,7 @@ export const propertyInputs = [
       ]
     },
     {
-      tag: 'Provincia',
-      name: 'province',
-      type: 'text',
-      defaultValue: "",
-      isRequired: true,
-      validators: [
-        propertyValidators.notEmptyValidator
-      ]
-    },
-    {
-      tag: 'Municipio',
+      tag: 'Localización',
       name: 'location',
       type: 'text',
       defaultValue: "",
