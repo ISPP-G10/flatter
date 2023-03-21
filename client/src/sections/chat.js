@@ -11,6 +11,7 @@ const Chat = () => {
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
+    const [chatId, setChatId] = useState(null);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
 
     let chatBtn = useRef();
@@ -389,7 +390,7 @@ const Chat = () => {
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation />
+                    <Conversation chatId={chatId} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -399,7 +400,7 @@ const Chat = () => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups />
+                        <Groups setChatId={setChatId} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">

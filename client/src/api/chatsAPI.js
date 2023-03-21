@@ -22,6 +22,18 @@ const chatsAPI = {
             }
         }
     `,
+    getMessagesByGroup: gql`
+        query getMessagesByGroup($username: String!, $chatId: Int!) {
+            getMessagesByGroup(username: $username, groupId: $chatId) {
+                text
+                timestamp
+                user {
+                    username
+                    profilePicture
+                }
+            }
+        }
+    `,
 }
 
 export default chatsAPI;
