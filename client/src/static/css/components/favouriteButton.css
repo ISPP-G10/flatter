@@ -1,0 +1,13 @@
+.favourite-button {
+    background-color: black;
+    border-radius: 50%;
+}
+
+.favourite-button img {
+    padding: 0;
+    margin: 0;
+}
+
+.favourite {
+    background-color: var(--flatter-yellow-color);
+}

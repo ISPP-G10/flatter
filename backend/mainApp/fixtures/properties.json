@@ -226,7 +226,8 @@
       "tags": [78, 79],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3]
+      "flatmates": [2, 3],
+      "interested_users": [2]
     }
   },
   {
@@ -249,7 +250,8 @@
       "tags": [85, 86, 83],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4, 5],
+      "interested_users": [2]
     }
   },
   {
@@ -271,7 +273,8 @@
       "tags": [81, 80, 84],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4, 5],
+      "interested_users": [2,4]
     }
   },
   {
@@ -294,7 +297,8 @@
       "tags": [79, 86, 85],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4]
+      "flatmates": [2, 3, 4],
+      "interested_users": [3]
     }
   },
   {
@@ -316,7 +320,8 @@
       "tags": [87, 79, 80],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4, 5],
+      "interested_users": [5]
     }
   },
   {
@@ -338,7 +343,8 @@
       "tags": [82, 83, 84],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4, 5],
+      "interested_users": [2]
     }
   },
   {
@@ -361,7 +367,8 @@
       "tags": [85, 86, 87],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [4, 5]
+      "flatmates": [4, 5],
+      "interested_users": [4]
     }
   },
   {
@@ -383,7 +390,8 @@
       "tags": [80, 81, 82],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 4, 5]
+      "flatmates": [2, 3, 4, 5],
+      "interested_users": [5]
     }
   },
   {
@@ -406,7 +414,8 @@
       "tags": [83, 85],
       "images": [1, 2, 3, 4],
       "owner": 1,
-      "flatmates": [2, 3, 5]
+      "flatmates": [2, 3, 5],
+      "interested_users": [3]
     }
   }
 ]

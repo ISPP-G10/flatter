@@ -3,30 +3,36 @@ import "../static/css/pages/propertyDetails.css";
 import SlideShow from "../components/slider/slideShow";
 import SmallProfile from "../components/profile/smallProfile";
 import FlatterPage from "../sections/flatterPage";
+import FlatterModal from "../components/flatterModal";
+import FormProperty from "../components/forms/formProperty";
 import Tag from "../components/tag";
 import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
-
 import FlatterModal from "../components/flatterModal";
 import FlatterForm from "../components/forms/flatterForm";
+import FavouriteButton from "../components/property/favouriteButton";
 
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useApolloClient } from "@apollo/client";
 
 const PropertyDetails = () => {
-  const { id } = useParams();
+  let [property, setProperty] = useState({});
+  const editPropertyModalRef = useRef(null);
 
   const client = useApolloClient();
 
   const propertyRequestModalRef = useRef(null);
   const propertyRequestFormRef = useRef(null);
 
+  const { id } = useParams();
+
   const { loading: propertyLoading, data: propertyData } = useQuery(propertiesAPI.getPropertyById, {
     variables: { 
       id: parseInt(id),
     },
+    fetchPolicy: "no-cache",
   });
 
   const { loading: propertyRequestsLoading, data: propertyRequestsData } = useQuery(propertiesAPI.getPropertyRequestsByUsername, {
@@ -100,6 +106,7 @@ const PropertyDetails = () => {
                 <Tag key={index} name={tag.name} color={tag.color} />
               ))}
             </div>
+
             <div className="property-btn__container">
 
               { propertyData.getPropertyById.owner.username!==localStorage.getItem('user') ? 
@@ -129,6 +136,17 @@ const PropertyDetails = () => {
                : (
                 <></>
                ) }
+               
+               {localStorage.getItem("roles") &&
+            localStorage.getItem("roles").includes("RENTER") && 
+            localStorage.getItem("user") !== data.getPropertyById.owner.username &&(
+              <FavouriteButton
+                isFavourite={data.getPropertyById.interestedUsers
+                  .map((user) => user.username === localStorage.getItem("user"))
+                  .some((value) => value)}
+                propertyId={id}
+              />
+            )}
 
               <button className="property-btn">
                 {localStorage.getItem("user") ===
@@ -198,6 +216,9 @@ const PropertyDetails = () => {
             onSubmit={handlePropertyRequest}
             ref={propertyRequestFormRef}>
         </FlatterForm>
+      </FlatterModal>
+      <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
+        <FormProperty property={property} />
       </FlatterModal>
     </FlatterPage>
   );

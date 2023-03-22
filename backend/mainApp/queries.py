@@ -19,6 +19,7 @@ class MainAppQuery(object):
     get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
     get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
     get_petition_by_requester_to_property = graphene.List(PetitionType, username = graphene.String(required=True), property_id = graphene.Int(required=True))
+    get_favourite_properties = graphene.List(PropertyType, username = graphene.String())
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
@@ -75,7 +76,8 @@ class MainAppQuery(object):
             if (timezone.now() - property.outstanding_start_date).days > 7:
                 property.is_outstanding = False
                 property.save()
-        return Property.objects.filter(is_outstanding = True)
+        return Property.objects.filter(is_outstanding = True
+        
     def resolve_get_petitions_by_status_and_username_and_dates(self, info, username,status=None, start_date=None, end_date =None):
         q = Q()
         owner = FlatterUser.objects.get(username = username)
@@ -116,4 +118,10 @@ class MainAppQuery(object):
         property = Property.objects.get(id = property_id)
         petition = Petition.objects.filter(property = property, requester = requester).exclude(status = 'D')
         return petition
+
+    def resolve_get_favourite_properties(self, info, username):
+        user = FlatterUser.objects.get(username = username)
+        favourites_properties = Property.objects.filter(interested_users = user)
+        return favourites_properties
+
 

@@ -14,13 +14,22 @@ import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
+import FavouritesProperties from './pages/favouritesProperties';
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<LandingPage/>}/>
-        <Route exact path="/main" element={<MainPage/>}/>
+        <Route exact path="/" element={
+          <>
+            {
+              localStorage.getItem('user') && localStorage.getItem('token') ?
+              <MainPage/>
+              :
+              <LandingPage/>
+            }
+          </>
+        }/>
         <Route path="/privacy" element={<PrivacyPage/>}/>
         <Route path="/search" element={<ListProperties/>}/>
         <Route path="/users" element={<SearchUsers/>}/>
@@ -30,6 +39,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
+        <Route path='/favourites' element={<FavouritesProperties/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
