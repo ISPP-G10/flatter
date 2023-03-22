@@ -49,6 +49,21 @@ const chatsAPI = {
             }
         }
     `,
+    newMessages: gql`
+        subscription messageSubscription($username: String!) {
+            messageSubscription(username: $username) {
+                text
+                timestamp
+                user{
+                    username
+                    profilePicture
+                }
+                group{
+                    id
+                }
+            }
+        }
+    `,
 }
 
 export default chatsAPI;
