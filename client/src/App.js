@@ -13,6 +13,7 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
+import FavouritesProperties from './pages/favouritesProperties';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
+        <Route path='/favourites' element={<FavouritesProperties/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

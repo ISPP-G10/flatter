@@ -29,6 +29,7 @@ class Property(models.Model):
     images = models.ManyToManyField(Image, related_name=_('property_images'))
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
     flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
+    interested_users = models.ManyToManyField(FlatterUser, related_name=_('interested_users'))
 
 class Review(models.Model):
     choices_entity = (('A', 'Amigo'), ('C', 'Compañero'), ('E', 'Excompañero'), ('P', 'Propietario'), ('I', 'Inquilino'))
