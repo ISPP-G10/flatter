@@ -28,11 +28,12 @@ const PublicProfileCard = (props) => {
     const editPublicProfileForm = useRef(null);
     const userImageField = useRef(null);
     const [ tagsProfile, setTagsProfile ] = useState(props.tags);
+    const [ name, setName ] = useState(props.name);
+    const [ bio, setBio ] = useState(props.bio);
+    const [ prof, setProf ] = useState(props.job);
     const tagsInput = useRef(null);
 
     const {data, loading} = useQuery(tagsAPI.getTags);
-
-    console.log(tagsProfile);
 
     useEffect (() => {
         if (!loading){
@@ -55,16 +56,19 @@ const PublicProfileCard = (props) => {
         })
         .then((response) => {
             editPublicProfileModalRef.current.close();
+            setName(values.firstName + " " + values.lastName);
+            setBio(values.biography);
+            setProf(values.profession);
+            setTagsProfile(tagsInput.current.props.value.map((tag) => ({
+                name: tag.value,
+                color: tag.color})))
+            
         })
         .catch((error) => alert(error.message));
     }
 
     function handlePublicProfileEdit({values}){
-
-        setTagsProfile(tagsInput.current.props.value.map((tag) => ({
-            name: tag.value,
-            color: tag.color})))
-
+        
         var tagsSelected = tagsInput.current.props.value.map((tag) => (tag.value))
 
         if(!editPublicProfileForm.current.validate()) {
@@ -106,16 +110,30 @@ const PublicProfileCard = (props) => {
 
     }, [userImage]);
 
+    useEffect(() => {
+        publicProfileFormInputs.map((input) => {
+            if(input.name === 'biography'){
+                input.defaultValue = bio;
+            }else if(input.name === 'profession'){
+                input.defaultValue = prof;
+            }else if(input.name === 'firstName'){
+                input.defaultValue = name.split(' ')[0];
+            }else if(input.name === 'lastName'){
+                input.defaultValue = name.split(' ')[1];
+            }
+        });
+    }, [tagsProfile, name]);
+
     return (
         <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
                 <div className="profile-card-data">
                     <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
-                        <h2>{props.name}</h2>
+                        <h2>{name}</h2>
                         <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                     </div>
-                    <p>{props.job ? props.job : ''}</p>
+                    <p>{prof ? prof : ''}</p>
                     <p>{props.age ? props.age + "años": ''}</p> 
                 </div>
             </div>
@@ -124,7 +142,7 @@ const PublicProfileCard = (props) => {
                 <div className='profile-card-bio'>
                     <h2>Yo...</h2>
                     <p className="profile-card-description">
-                        {props.bio ? props.bio : props.me ? 'Añade una descripción para que el resto te conozca' : 'No hay descripción disponible'}
+                        {bio ? bio : props.me ? 'Añade una descripción para que el resto te conozca' : 'No hay descripción disponible'}
                     </p>
                     <div className='tags-container'>
                         {
@@ -143,11 +161,11 @@ const PublicProfileCard = (props) => {
             </div>           
         </div>
         <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700}>
-            <h1 className="comments-form-title mb-5">Editar perfil público</h1>
+            <h1 className="comments-form-title">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
                 showSuperAnimatedButton
-                numberOfColumns={1}
+                numberOfColumns={2}
                 inputs={publicProfileFormInputs}
                 onSubmit={handlePublicProfileEdit}
                 ref={editPublicProfileForm}>

@@ -1,11 +1,11 @@
 import Select from 'react-select';
 import chroma from 'chroma-js';
-import {useState} from 'react';
+import {forwardRef, useState} from 'react';
 import PropTypes from 'prop-types';
 import "../../static/css/sections/tagSelector.css"
 
 
-const TagSelector = (props) => {
+const TagSelector = forwardRef((props, tagRef) => {
 
   //El parametro defaultValues debe tener la siguiente estructura:
   // [{value: "1", label: "Amistoso", color: "#FFC107"}, {value: "2", label: "Deportivo", color: "#FFC107"}, ...]
@@ -154,11 +154,12 @@ const TagSelector = (props) => {
           value={selectedOptions}
           onChange={handleSelectChange}
           placeholder="Selecciona las etiquetas"
+          ref={tagRef}
           >
         </Select>
       </>
   );
-};
+});
 
 TagSelector.defaultProps = {
   defaultValues: [],

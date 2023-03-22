@@ -143,6 +143,10 @@
     border-color: #8492A6;
 }
 
+.super-animated-button-wrapper{
+    padding-bottom: 20px !important;
+}
+
 @media screen and (max-width: 1319px) {
     .no-edit{
         justify-content: center;
@@ -186,6 +190,7 @@
     .tags-container{
         margin-top: 10px;
     }
+
 }
 
 @media screen and (max-width: 767px) {
