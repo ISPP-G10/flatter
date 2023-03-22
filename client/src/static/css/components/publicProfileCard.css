@@ -143,9 +143,21 @@
     border-color: #8492A6;
 }
 
-.super-animated-button-wrapper{
-    padding-bottom: 20px !important;
+.setting-profile-pic{
+    margin-top: 15% !important;
 }
+
+h1.edit-form-title {
+    font-size: 200%;
+    width: 100%;
+    color: #573b8a;
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 
 @media screen and (max-width: 1319px) {
     .no-edit{
@@ -200,6 +212,10 @@
         width: 90%;
         text-align: center;
         padding: 20px;
+    }
+
+    .setting-profile-pic{
+        margin-top: 0% !important;
     }
 }
 

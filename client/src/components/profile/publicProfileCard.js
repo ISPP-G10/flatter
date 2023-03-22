@@ -160,12 +160,12 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700}>
-            <h1 className="comments-form-title">Editar perfil público</h1>
+        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700} overflowY='scroll'>
+            <h1 className="edit-form-title">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
                 showSuperAnimatedButton
-                numberOfColumns={2}
+                numberOfColumns={1}
                 inputs={publicProfileFormInputs}
                 onSubmit={handlePublicProfileEdit}
                 ref={editPublicProfileForm}>
@@ -175,7 +175,7 @@ const PublicProfileCard = (props) => {
                         <span style={{margin: '0'}}>Cambiar</span>
                     </label>
                     <input id="file" type="file" onChange={changeImage}/>
-                    <img ref={userImageField} className="user-img" src={props.pic} id="output" width="200" alt="Imagen de perfil"/>
+                    <img ref={userImageField} className="user-img" src={props.pic} id="output" width="100" alt="Imagen de perfil"/>
                 </div>
                 <div className='tag-input'>
                     <TagSelector options={tagOptions.getAllTag} defaultValues={tagsProfile} max={8} ref={tagsInput}/>
