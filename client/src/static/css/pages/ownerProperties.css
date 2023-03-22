@@ -335,6 +335,15 @@
 
 }
 
+.class-error-message-province-municipality{
+  display: flex;
+  width: 100%;
+  position: relative;
+  font-size: 0.7em;
+  color: var(--color-error);
+  padding-left: 3px;
+}
+
 @media screen and (max-width: 500px) {
   .properties-title{
     width: 90%;

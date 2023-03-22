@@ -3,7 +3,8 @@ import {gql} from 'apollo-boost';
 const propertiesAPI = {
     createProperty: gql`
         mutation createProperty($title: String!, $description: String!, $province: String!, $bathroomsNumber: Int!, 
-            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerUsername: String!, $price: Float!, $images: [String], $maxCapacity: Int!) {
+            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $ownerUsername: String!, $price: Float!, $images: [String], $maxCapacity: Int!,
+            $municipality: String!) {
                 createProperty(
                     title: $title, 
                     description: $description, 
@@ -15,7 +16,8 @@ const propertiesAPI = {
                     province: $province, 
                     price: $price,
                     images: $images,
-                    maxCapacity: $maxCapacity
+                    maxCapacity: $maxCapacity,
+                    municipality: $municipality
                 ) {
                 property {
                     title
@@ -26,7 +28,7 @@ const propertiesAPI = {
     `,
     updateProperty: gql`
         mutation updateProperty($id: Int!, $title: String!, $description: String!, $province: String!, $bathroomsNumber: Int!, 
-            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $price: Float!, $images: [String]) {
+            $bedroomsNumber: Int!, $dimensions: Int!, $location: String!, $price: Float!, $images: [String], $municipality: String!) {
                 updateProperty(
                     propertyId: $id,
                     title: $title, 
@@ -36,8 +38,10 @@ const propertiesAPI = {
                     bedroomsNumber: $bedroomsNumber,
                     bathroomsNumber: $bathroomsNumber, 
                     province: $province, 
-                    price: $price
-                    images: $images
+                    price: $price,
+                    images: $images,
+                    municipality: $municipality
+
                 ) {
                 property {
                     title
@@ -60,7 +64,9 @@ const propertiesAPI = {
                     name
                     color
                 }
-                province
+                province{
+                    name
+                }
                 price
                 isOutstanding
                 maxCapacity
@@ -86,7 +92,12 @@ const propertiesAPI = {
                 title
                 price
                 isOutstanding
-                province
+                province{
+                    name
+                }
+                municipality{
+                    name
+                }
                 location
                 dimensions
                 bedroomsNumber
@@ -143,7 +154,12 @@ const propertiesAPI = {
       getPropertyById(id: $id) {
         title
         location
-        province
+        province{
+            name
+        }
+        municipality{
+            name
+        }
         description
         price
         owner {
