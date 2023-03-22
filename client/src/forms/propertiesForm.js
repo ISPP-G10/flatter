@@ -24,7 +24,7 @@ export const propertyInputs = [
       ]
     },
     {
-      tag: 'Localización',
+      tag: 'Dirección',
       name: 'location',
       type: 'text',
       defaultValue: "",
