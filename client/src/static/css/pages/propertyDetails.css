@@ -117,6 +117,7 @@
 .property-btn__container{
   display: flex;
   justify-content: flex-end;
+  gap: 1em;
   width: 100%;
 }
 

@@ -321,7 +321,7 @@
       "images": [1, 2, 3, 4],
       "owner": 1,
       "flatmates": [2, 3, 4, 5],
-      "interested_users": [6]
+      "interested_users": [5]
     }
   },
   {
@@ -391,7 +391,7 @@
       "images": [1, 2, 3, 4],
       "owner": 1,
       "flatmates": [2, 3, 4, 5],
-      "interested_users": [6]
+      "interested_users": [5]
     }
   },
   {

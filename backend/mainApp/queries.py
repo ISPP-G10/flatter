@@ -16,6 +16,7 @@ class MainAppQuery(object):
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price = graphene.Float(), max_price = graphene.Float(), city = graphene.String())
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
+    get_favourite_properties = graphene.List(PropertyType, username = graphene.String())
 
     def resolve_get_property_by_title(self, info, title):
         return Property.objects.get(title=title)
@@ -68,6 +69,10 @@ class MainAppQuery(object):
                 property.save()
         
         return Property.objects.filter(is_outstanding = True)
-  
+
+    def resolve_get_favourite_properties(self, info, username):
+        user = FlatterUser.objects.get(username = username)
+        favourites_properties = Property.objects.filter(interested_users = user)
+        return favourites_properties
 
 

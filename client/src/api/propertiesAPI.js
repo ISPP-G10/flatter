@@ -171,6 +171,9 @@ const propertiesAPI = {
         bedroomsNumber
         bathroomsNumber
         maxCapacity
+        interestedUsers {
+          username
+        }
         owner {
           username
           firstName
@@ -197,6 +200,52 @@ const propertiesAPI = {
         }
       }
     }
+  `,
+  addUsersToFavouriteProperty: gql`
+    mutation addUsersToFavouriteProperty($username: String!, $propertyId: Int!){
+        addUsersToFavouriteProperty(username: $username, propertyId: $propertyId){
+            user{
+                username
+            }
+        }
+    }
+  `,
+  deleteUsersToFavouriteProperty: gql`
+      mutation deleteUsersToFavouriteProperty($username: String!, $propertyId: Int!){
+          deleteUsersToFavouriteProperty(username: $username, propertyId: $propertyId){
+              user{
+                  username
+              }
+          }
+      }
+  `,
+  getFavouritePropertiesByUser: gql`
+      query getFavouritePropertiesByUser($username: String!){
+        getFavouriteProperties(username: $username) {
+          id
+          title
+          description
+          dimensions
+          location
+          bedroomsNumber
+          bathroomsNumber
+          tags {
+            name
+            color
+          }
+          province
+          price
+          isOutstanding
+          maxCapacity
+          images {
+            image
+          }
+          flatmates {
+            firstName
+            lastName
+          }
+        }
+      }
   `,
 };
 
