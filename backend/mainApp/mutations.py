@@ -216,7 +216,9 @@ class CreatePetitionMutation(graphene.Mutation):
             raise ValueError(_("No se ha podido completar la solicitud debido a que el inmueble no existe"))
         
         requester = FlatterUser.objects.get(username = requester_username)
-
+        if Petition.objects.filter(property = property, requester = requester).exclude(status = 'D').exists():
+            raise ValueError(_("Ya has realizado una solicitud a este inmueble."))
+           
         check_token(user_token,requester)
         obj = Petition.objects.create(
             message=message,
