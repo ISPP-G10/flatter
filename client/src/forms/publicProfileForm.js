@@ -3,6 +3,28 @@ import { publicProfileValidator } from "../libs/validators/publicProfileValidato
 
 export const publicProfileFormInputs = [
     {
+        tag: "Nombre",
+        name: "firstName",
+        type: "text",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.namesLengthValidator
+        ]
+    },
+    {
+        tag: "Apellidos",
+        name: "lastName",
+        type: "text",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.namesLengthValidator
+        ]
+    },
+    {
         tag: "Biografía",
         name: "biography",
         type: "textarea",
