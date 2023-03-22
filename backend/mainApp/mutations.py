@@ -231,7 +231,27 @@ class UpdatePetitionStatus(graphene.Mutation):
             petition.status = "D"
         petition.save()
         return UpdatePetitionStatus(petition=petition)
-      
+
+class DeletePetition(graphene.Mutation):
+    class Input:
+        petition_id = graphene.Int(required=True)
+    
+    petition = graphene.Field(PetitionType)
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        petition_id = kwargs.get('petition_id', '')
+        
+        try:
+            petition = Petition.objects.get(id=petition_id)
+        except Petition.DoesNotExist:
+            raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
+
+        if petition.status == "A":
+            raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada")
+        petition.delete()
+        return DeletePetition(petition=petition)
+
 class UpdatePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
@@ -387,6 +407,7 @@ class PropertyMutation(graphene.ObjectType):
     make_property_outstanding = MakePropertyOutstandingMutation.Field()
     create_petition = CreatePetitionMutation.Field()
     update_status_petition = UpdatePetitionStatus.Field()
+    delete_petition = DeletePetition.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

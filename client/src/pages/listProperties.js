@@ -139,7 +139,7 @@ const ListProperties = () => {
     
                   <footer className="property-footer">
                     <SolidButton text="Ver piso" onClick={ () => {
-                        navigator(`/property/${property.id}`);
+                      navigator(`/property/${property.id}`);
                     } } />
                     <SolidButton text="Ver reseñas" onClick={ () => {
                       navigator(`/profile/${property.owner.username}`);
