@@ -70,6 +70,7 @@ const FlatterForm = forwardRef((props, ref) => {
     return (
         <div className="class-profile-form">
             <form className="class-form" ref={formElement} style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
+                    {props.children}
                     { 
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
                             return(
@@ -89,7 +90,6 @@ const FlatterForm = forwardRef((props, ref) => {
                             )
                         })
                     }
-                    {props.children}
             </form>
             {
                 props.showSuperAnimatedButton ?
