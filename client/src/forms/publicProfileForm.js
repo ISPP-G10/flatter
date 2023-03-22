@@ -1,4 +1,5 @@
 import { registerValidators } from "../libs/validators/registerValidators"
+import { publicProfileValidator } from "../libs/validators/publicProfileValidator"
 
 export const publicProfileFormInputs = [
     {
@@ -19,4 +20,14 @@ export const publicProfileFormInputs = [
             registerValidators.noNumbersValidator,
         ]
     },
+    {
+        tag: "Fecha de nacimiento",
+        name: "birthDate",
+        type: "date",
+        defaultValue: "",
+        isRequired: false,
+        validators: [
+            publicProfileValidator.notPastDate,
+        ]
+    }
 ]

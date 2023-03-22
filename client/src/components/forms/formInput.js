@@ -109,6 +109,18 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                     />
                 </div>
             )
+
+        case "date":
+            <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={{width: `100%`}}>	
+                <input className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " value={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
+                <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
+                {
+                    inputErrors.length > 0 && inputErrors.map((error) => {
+                        return(<span className="class-error-message">{error}</span>)
+                    })
+                }
+            </div>
+
         
         default:
             return(
@@ -128,7 +140,7 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
 FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files"]),
+    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
     isRequired: PropTypes.bool,
