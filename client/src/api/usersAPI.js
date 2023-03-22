@@ -164,7 +164,7 @@ const usersAPI = {
         }
     `,
     updatePublicProfile: gql`
-        mutation editUserPublic($username: String!, $tags: [String]!, $biography: String!, $profession: String!, $profilePicture: String!, $firstName: String!, $lastName: String!, $birthday: String!){
+        mutation editUserPublic($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String, $firstName: String!, $lastName: String!, $birthday: String){
             editUserPublic(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday){
                 user{
                     firstName
@@ -180,6 +180,22 @@ const usersAPI = {
                     tags{
                         name
                         color
+                    }
+                }
+            }
+        }
+    `,
+    updatePrivateProfile: gql`
+        mutation editUserPrivate($username: String!, $firstName: String!, $lastName: String!, $email: String!, $phone: String, $genre: String!, $role: String!, $profilePicture: String){
+            editUserPrivate(username: $username, firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, genre: $genre, role: $role, profilePicture: $profilePicture){
+                user{
+                    firstName
+                    lastName
+                    profilePicture
+                    email
+                    phoneNumber
+                    roles{
+                        role
                     }
                 }
             }
