@@ -158,6 +158,10 @@ h1.edit-form-title {
     cursor: pointer;
 }
 
+.profile-grid .class-profile-form .super-animated-button-wrapper {
+    transform: translateY(-24px);
+}
+
 
 @media screen and (max-width: 1319px) {
     .no-edit{
