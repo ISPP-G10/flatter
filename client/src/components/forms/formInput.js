@@ -111,16 +111,17 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
             )
 
         case "date":
-            <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={{width: `100%`}}>	
-                <input className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " value={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
-                <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
-                {
-                    inputErrors.length > 0 && inputErrors.map((error) => {
-                        return(<span className="class-error-message">{error}</span>)
-                    })
-                }
-            </div>
-
+            return(
+                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {marginTop: `7.5%`}}>	
+                    <input className="class-form-input" type="date" id={`${name}`} name={`${name}`} required={isRequired} defaultValue={defaultValue} ref={inputField} />
+                    <label htmlFor={`${name}`} className="class-form-label" style={numberOfColumns>1 ? {paddingLeft: `1%`} : {}}>{tag}:</label>
+                    {
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
+                        })
+                    }
+                </div>
+            );
         
         default:
             return(

@@ -108,7 +108,7 @@ const PublicProfileCard = (props) => {
                         <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                     </div>
                     <p>{props.job ? props.job : ''}</p>
-                    <p>{age!=0 ? age + " años": ''}</p> 
+                    <p>{age!=null ? age + " años": ''}</p> 
                 </div>
             </div>
             <div className='profile-card-details'>
