@@ -253,6 +253,7 @@ class EditUserPrivateMutation(graphene.Mutation):
         phone = graphene.String(required=True)
         email = graphene.String(required=True)
         profile_picture = graphene.String(required=True)
+        user_token = graphene.String(required=False)
 
     user = graphene.Field(FlatterUserType)
 
@@ -266,6 +267,11 @@ class EditUserPrivateMutation(graphene.Mutation):
         phone = kwargs.get('phone', '').strip()
         email = kwargs.get('email', '').strip()
         profile_picture = kwargs.get('profile_picture', '').strip()
+        user_token = kwargs.get('user_token', '').strip()
+
+        user_selected = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user_selected)
 
         if (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
@@ -293,7 +299,7 @@ class EditUserPrivateMutation(graphene.Mutation):
         if role:
             roles = parse_roles(role)
 
-        user_selected = FlatterUser.objects.get(username=username)
+
 
         if first_name and user_selected.first_name != first_name:
             user_selected.first_name = first_name
@@ -347,6 +353,7 @@ class EditUserPublicMutation(graphene.Mutation):
         profession = graphene.String(required=True)
         birthday = graphene.String(required=True)
         tags = graphene.List(graphene.String, required=True)
+        user_token = graphene.String(required=False)
 
     user = graphene.Field(FlatterUserType)
 
@@ -361,6 +368,11 @@ class EditUserPublicMutation(graphene.Mutation):
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
         tags = kwargs.get('tags', [])
+        user_token = kwargs.get('user_token', '').strip()
+
+        user_selected = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user_selected)
 
         if (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
@@ -371,7 +383,7 @@ class EditUserPublicMutation(graphene.Mutation):
         if profession and len(profession) < 1 and len(profession) > 100:
             raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
 
-        user_selected = FlatterUser.objects.get(username=username)
+
 
         if user_selected.first_name != first_name:
             user_selected.first_name = first_name
