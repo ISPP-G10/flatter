@@ -52,14 +52,16 @@ const chatsAPI = {
     newMessages: gql`
         subscription messageSubscription($username: String!) {
             messageSubscription(username: $username) {
-                text
-                timestamp
-                user{
-                    username
-                    profilePicture
-                }
-                group{
-                    id
+                message{
+                    text
+                    timestamp
+                    user{
+                        username
+                        profilePicture
+                    }
+                    group{
+                        id
+                    }
                 }
             }
         }
