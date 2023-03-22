@@ -19,23 +19,33 @@ const PublicProfileCard = (props) => {
     let [userImage, setUserImage] = useState(null);
     let [publicProfileFormValues, setPublicProfileFormValues] = useState(publicProfileFormInputs);
 
+    const [age, setAge] = useState(props.age);
+    const [birthDate, setBirthdate] = useState(props.birthDate);
+
     const editPublicProfileModalRef = useRef(null);
     const editPublicProfileForm = useRef(null);
     const userImageField = useRef(null);
 
     function performUserMutation(values, encodedImage){
+        const arr = String(values.birthDate).split('-')
+        const birthday = arr[2] + '/' + arr[1] + '/' + arr[0]
         client.mutate({
-            mutation: usersAPI.updateUser,
+            mutation: usersAPI.editUserPublic,
             variables: {
                 username: localStorage.getItem('user', ''),
                 biography: values.biography,
                 profession: values.profession,
                 profilePicture: encodedImage,
+                birthday: birthday,
+                tags: [],
+                firstName: "Rafael",
+                lastName: "Estrada"
             }
         })
         .then((response) => {
             editPublicProfileModalRef.current.close();
-            window.location.reload();
+            setAge(response.data.editUserPublic.user.age);
+            setBirthdate(values.birthDate);
         })
         .catch((error) => alert(error.message));
     }
@@ -80,6 +90,14 @@ const PublicProfileCard = (props) => {
 
     }, [userImage]);
 
+    useEffect (() => {
+        publicProfileFormValues.map((input) => {
+            if(input.name === 'birthDate'){
+                input.defaultValue = birthDate;
+            }
+        });
+    }, [birthDate]);
+
     return (
         <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
@@ -90,7 +108,7 @@ const PublicProfileCard = (props) => {
                         <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                     </div>
                     <p>{props.job ? props.job : ''}</p>
-                    <p>{props.age ? props.age + "años": ''}</p> 
+                    <p>{age!=null ? age + " años": ''}</p> 
                 </div>
             </div>
             <div className='profile-card-details'>
