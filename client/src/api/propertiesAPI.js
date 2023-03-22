@@ -64,40 +64,38 @@ const propertiesAPI = {
           title
           description
         }
-      }
-    }
-  `,
-  filterProperties: gql`
-    query filterProperties($minPrice: Float, $maxPrice: Float, $city: String) {
-      getFilteredPropertiesByPriceAndCity(
-        minPrice: $minPrice
-        maxPrice: $maxPrice
-        city: $city
-      ) {
-        id
-        title
-        description
-        dimensions
-        location
-        bedroomsNumber
-        bathroomsNumber
-        tags {
-          name
-          color
+
+    `,
+    filterProperties: gql`
+        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String, $tag: String) {
+            getFilteredPropertiesByPriceAndCityAndTags(minPrice: $minPrice, maxPrice: $maxPrice, city: $city, tag: $tag) {
+                id
+                title
+                description
+                dimensions
+                location
+                bedroomsNumber
+                bathroomsNumber
+                tags {
+                    name
+                    color
+                }
+                province
+                price
+                isOutstanding
+                maxCapacity
+                owner {
+                    username
+                }
+                images{
+                    image
+                }
+                flatmates{
+                    firstName
+                    lastName
+                }
+            }
         }
-        province
-        price
-        isOutstanding
-        maxCapacity
-        images {
-          image
-        }
-        flatmates {
-          firstName
-          lastName
-        }
-      }
-    }
   `,
   getPropertiesByOwner: gql`
     query getPropertiesByOwner($username: String!) {
@@ -200,7 +198,34 @@ const propertiesAPI = {
         }
       }
     }
-  `,
+    `,
+    getPropertyRequestsByUsername: gql`
+        query getPropertyRequestsByUsername($requesterUsername: String!, $propertyId: Int!) {
+            getPetitionByRequesterToProperty(username: $requesterUsername, propertyId: $propertyId) {
+                id
+                status
+            }
+        }
+    `,
+    createPropertyRequest: gql`
+        mutation createPropertyRequest($message: String!, $requesterUsername: String!, $propertyId: Int!) {
+            createPetition(message: $message, requesterUsername: $requesterUsername, propertyId: $propertyId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `,
+    removePropertyRequest: gql`
+        mutation removePropertyRequest($requestId: Int!) {
+            deletePetition(petitionId: $requestId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `,
+    
   addUsersToFavouriteProperty: gql`
     mutation addUsersToFavouriteProperty($username: String!, $propertyId: Int!){
         addUsersToFavouriteProperty(username: $username, propertyId: $propertyId){

@@ -139,6 +139,10 @@
   margin-bottom: 1em;
 }
 
+.property-btn.red {
+  background-color: #e7166d;
+}
+
 .property-btn img {
   margin-right: 0.5em;
 }
