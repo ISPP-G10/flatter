@@ -136,10 +136,9 @@ const Header = ({scrollY, userLogged}) => {
                             {
                                 userLogged && 
                                 <>
-                                    <li><Link to="/main">Inicio</Link></li>
+                                    <li><Link to="/">Inicio</Link></li>
                                     <li><Link to="/search">Buscador de viviendas</Link></li>
-                                    <li><Link to="/users?owner=false">Buscador de compañeros</Link></li>
-                                    <li><Link to="/users?owner=true">Buscador de propietarios</Link></li>
+                                    <li><Link to="/users">Buscador de usuarios</Link></li>
                                     {
                                         localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
                                         <li><Link to="/properties">Mis viviendas</Link></li>

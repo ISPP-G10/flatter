@@ -133,8 +133,8 @@ const usersAPI = {
         }
     `,
     filteredUsersByTagAndReview: gql`
-        query getFilteredUsersByTagAndReview($tag: String){
-            getFilteredUsersByTagAndReview(tag: $tag){
+        query getFilteredUsersByTagAndReview($tag: String, $owner: Boolean){
+            getFilteredUsersByTagAndReview(tag: $tag, owner: $owner){
             id
             firstName
             lastName

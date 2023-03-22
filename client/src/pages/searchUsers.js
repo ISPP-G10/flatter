@@ -22,7 +22,7 @@ const SearchUsers = () => {
     min: parseInt(query.get("min")),
     max: parseInt(query.get("max")),
     tag: query.get("tag") ?? '',
-    owner: query.get("owner") === 'true' ? true : false,
+    owner: query.get("owner") ? (query.get("owner") === 'true' ? true : false) : null,
   });
 
   let [users, setUsers] = useState([]);
@@ -35,7 +35,7 @@ const SearchUsers = () => {
         min: values.min_rating,
         max: values.max_rating,
         tag: values.province,
-        owner: filterValues.owner
+        owner: values.role === 'Propietario' ? true : values.role === 'Inquilino' ? false : null
     })
 
   }
@@ -80,7 +80,7 @@ const SearchUsers = () => {
                 <div className="filters">
                 <h3>Filtrar por:</h3>
 
-                <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
+                <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar usuarios"/>
                 </div>
             </div>
             <div style={{marginTop: '20px'}}>
