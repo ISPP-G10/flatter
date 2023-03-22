@@ -2,7 +2,6 @@ import Select from 'react-select';
 import chroma from 'chroma-js';
 import {forwardRef, useState} from 'react';
 import PropTypes from 'prop-types';
-import "../../static/css/sections/tagSelector.css"
 
 
 const TagSelector = forwardRef((props, tagRef) => {

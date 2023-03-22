@@ -160,7 +160,7 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700} overflowY='scroll'>
+        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700}>
             <h1 className="edit-form-title">Editar perfil público</h1>
             <FlatterForm 
                 buttonText="Actualizar perfil"
@@ -168,7 +168,9 @@ const PublicProfileCard = (props) => {
                 numberOfColumns={1}
                 inputs={publicProfileFormInputs}
                 onSubmit={handlePublicProfileEdit}
-                ref={editPublicProfileForm}>
+                ref={editPublicProfileForm}
+                scrollable
+                >
                 <div className="setting-profile-pic" >
                     <label className="-label" htmlFor="file">
                         <img src={require('../../static/files/icons/camera.png')} alt="camara" className="camera-icon"/>

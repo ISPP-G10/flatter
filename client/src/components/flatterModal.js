@@ -18,7 +18,6 @@ const FlatterModal = forwardRef((props, ref) => {
         if(modalContentWrapper.current){
             modalContentWrapper.current.style.maxHeight = `${props.maxHeight ? props.maxHeight : 600}px`;
             modalContentWrapper.current.style.maxWidth = `${props.maxWidth ? props.maxWidth : 500}px`;
-            modalContentWrapper.current.style.overflowY = `${props.overflowY ? props.overflowY : null}`;
         }
 
         // eslint-disable-next-line
