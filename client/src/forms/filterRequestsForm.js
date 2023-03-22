@@ -8,7 +8,7 @@ export const filterRequestsInputs = [
         type: "select",
         defaultValue: "Todas",
         isRequired: true,
-        values: ['Pendientes', 'Aceptadas', 'Rechazadas', 'Todas'],
+        values: ['Todas', 'Aceptadas', 'Rechazadas', 'Pendientes'],
         validators: [
             filterRequestsValidators.notEmptyValidator,
             filterRequestsValidators.validStatus
@@ -19,7 +19,7 @@ export const filterRequestsInputs = [
         name: "startdate",
         type: "date",
         defaultValue: "",
-        isRequired: true,
+        isRequired: false,
         validators: [
         ],
     },
@@ -28,8 +28,20 @@ export const filterRequestsInputs = [
         name: "enddate",
         type: "date",
         defaultValue: "",
-        isRequired: true,
+        isRequired: false,
         validators: [
+            {
+                validate: (value) => {
+                    const startdate = document.querySelector('[name="startdate"]').value;
+                    const enddate = value;
+                    if (startdate && enddate) {
+                        return filterRequestsValidators.validDate.validate(startdate, enddate);
+                    } else {
+                        return true;
+                    }
+                },
+                message: filterRequestsValidators.validDate.message
+            }
         ],
     }
 
