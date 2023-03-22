@@ -164,8 +164,8 @@ const usersAPI = {
         }
     `,
     updatePublicProfile: gql`
-        mutation editUserTags($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String, $firstName: String, $lastName: String){
-            editUser(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName){
+        mutation editUserPublic($username: String!, $tags: [String]!, $biography: String!, $profession: String!, $profilePicture: String!, $firstName: String!, $lastName: String!, $birthday: String!){
+            editUserPublic(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday){
                 user{
                     firstName
                     lastName
@@ -185,28 +185,6 @@ const usersAPI = {
             }
         }
     `,
-
-    editUserPublic: gql`
-        mutation editUserPublic($username: String!, $tags: [String]!, $firstName: String!, $lastName: String! $birthday: String, $biography: String, $profession: String, $profilePicture: String){
-            editUserPublic(username: $username, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday, biography: $biography, profession: $profession, profilePicture: $profilePicture){
-                user{
-                    username
-                    tags{
-                        name
-                        color
-                    }
-                    age
-                    birthday
-                    profession
-                    biography
-                    firstName
-                    lastName
-                    profilePicture
-                }
-            }
-        }
-        `,
-
 }   
 
 export default usersAPI;
