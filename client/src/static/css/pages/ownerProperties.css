@@ -197,10 +197,10 @@
 
 .small-size{
   font-size: small;
-  overflow: scroll;
+  overflow-y: scroll;
   text-align: justify;
   text-justify: inter-word;
-  height: 55px;
+  height: 75px;
 }
 
 .styled-button{

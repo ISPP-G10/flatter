@@ -90,9 +90,9 @@ class CreatePropertyMutation(graphene.Mutation):
         if not title or len(title) < 4 or len(title) > 25:
             raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
 
-        if not description or len(description) > 256:
+        if not description or len(description) > 512:
             raise ValueError(
-                _("La descripción no puede tener más de 256 caracteres"))
+                _("La descripción no puede tener más de 512 caracteres"))
 
         if not bedrooms_number or bedrooms_number < 1:
             raise ValueError(
@@ -265,9 +265,9 @@ class UpdatePropertyMutation(graphene.Mutation):
         if title and (len(title) < 4 or len(title) > 25):
             raise ValueError(_("El título debe tener entre 4 y 25 caracteres"))
 
-        if description and len(description) > 256:
+        if description and len(description) > 512:
             raise ValueError(
-                _("La descripción no puede tener más de 256 caracteres"))
+                _("La descripción no puede tener más de 512 caracteres"))
 
         if bedrooms_number and bedrooms_number < 1:
             raise ValueError(
