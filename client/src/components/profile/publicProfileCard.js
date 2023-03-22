@@ -23,6 +23,8 @@ const PublicProfileCard = (props) => {
     let [publicProfileFormValues, setPublicProfileFormValues] = useState(publicProfileFormInputs);
     let [tagOptions, setTagOptions] = useState([]);
 
+    const [age, setAge] = useState(props.age);
+    const [birthDate, setBirthdate] = useState(props.birthDate);
 
     const editPublicProfileModalRef = useRef(null);
     const editPublicProfileForm = useRef(null);
@@ -42,6 +44,8 @@ const PublicProfileCard = (props) => {
     }, [data])
 
     function performUserMutation(values, encodedImage, selectedTags){
+        const arr = String(values.birthDate).split('-')
+        const birthday = arr[2] + '/' + arr[1] + '/' + arr[0]
         client.mutate({
             mutation: usersAPI.updatePublicProfile,
             variables: {
@@ -51,7 +55,8 @@ const PublicProfileCard = (props) => {
                 biography: values.biography,
                 profession: values.profession,
                 profilePicture: encodedImage,
-                tags: selectedTags
+                tags: selectedTags,
+                birthday: birthday,
             }
         })
         .then((response) => {
@@ -63,6 +68,8 @@ const PublicProfileCard = (props) => {
                 name: tag.value,
                 color: tag.color})))
             
+            setAge(response.data.editUserPublic.user.age);
+            setBirthdate(values.birthDate);
         })
         .catch((error) => alert(error.message));
     }
@@ -120,9 +127,11 @@ const PublicProfileCard = (props) => {
                 input.defaultValue = name.split(' ')[0];
             }else if(input.name === 'lastName'){
                 input.defaultValue = name.split(' ')[1];
+            } if(input.name === 'birthDate'){
+                input.defaultValue = birthDate;
             }
         });
-    }, [tagsProfile, name]);
+    }, [tagsProfile, name, prof, bio, birthDate]);
 
     return (
         <>
@@ -134,7 +143,7 @@ const PublicProfileCard = (props) => {
                         <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                     </div>
                     <p>{prof ? prof : ''}</p>
-                    <p>{props.age ? props.age + "años": ''}</p> 
+                    <p>{age!=null ? age + " años": ''}</p> 
                 </div>
             </div>
             <div className='profile-card-details'>
