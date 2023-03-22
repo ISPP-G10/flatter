@@ -65,7 +65,7 @@ class CreatePropertyMutation(graphene.Mutation):
 
     class Input:
         title = graphene.String(required=True)
-        description = graphene.String(required=True)
+        description = graphene.String(required=False)
         bedrooms_number = graphene.Int(required=True)
         bathrooms_number = graphene.Int(required=True)
         price = graphene.Float(required=True)
@@ -95,23 +95,23 @@ class CreatePropertyMutation(graphene.Mutation):
         if not title or len(title) < 4 or len(title) > 50:
             raise ValueError(_("El título debe tener entre 4 y 50 caracteres"))
 
-        if not description or len(description) > 1000 or len(description)<50:
+        if not description or len(description) > 1000:
             raise ValueError(
-                _("La descripción no puede tener más de 1000 caracteres o menos de 50"))
+                _("La descripción no puede tener más de 1000 caracteres"))
 
         if not bedrooms_number or bedrooms_number < 1 or bedrooms_number>50:
             raise ValueError(
-                _("El número de dormitorios no es válido"))
+                _("El número de dormitorios debe estar entre 1 y 50"))
 
         if not bathrooms_number or bathrooms_number < 1 or bathrooms_number>50:
             raise ValueError(
-                _("El número de cuartos de baño no es válido"))
+                _("El número de cuartos de baño debe estar entre 1 y 50"))
 
         if not price or price < 1 or price>500000:
-            raise ValueError(_("El precio introducido no es válido"))
+            raise ValueError(_("El precio introducido no es válido. Debe estar entre 1 y 500k"))
         
         if dimensions>50000 or dimensions<1:
-            raise ValueError(_("El valor de dimensiones introducido no es correcto"))
+            raise ValueError(_("El valor de dimensiones introducido no es correcto. Debe estar entre 1 y 50k"))
         
         if not max_capacity or max_capacity<1 or max_capacity>20:
             raise ValueError(_("La capacidad máxima no es válida"))
@@ -268,37 +268,37 @@ class UpdatePropertyMutation(graphene.Mutation):
         images = kwargs.get('images', [])
         max_capacity = kwargs.get("max_capacity", "")
 
-        if title and (len(title) < 4 or len(title) > 100):
-            raise ValueError(_("El título debe tener entre 4 y 100 caracteres"))
+        if title and (len(title) < 4 or len(title) > 50):
+            raise ValueError(_("El título debe tener entre 4 y 50 caracteres"))
 
-        if description and (len(description)<50 or len(description)> 1000):
+        if description and len(description) > 1000:
             raise ValueError(
-                _("La descripción no puede tener menos de 50 carácteres o más de 1000 caracteres"))
+                _("La descripción no puede tener más de 1000 caracteres"))
 
         if bedrooms_number and (bedrooms_number < 1 or bedrooms_number>50):
             raise ValueError(
-                _("El número de dormitorios no es válido"))
+                _("El número de dormitorios no es válido. Debe ser un número entre 1 y 50"))
 
         if bathrooms_number and (bathrooms_number < 1 or bathrooms_number>50):
             raise ValueError(
-                _("El número de cuartos de baño no es válido"))
+                _("El número de cuartos de baño no es válido. Debe ser un número entre 1 y 50"))
 
         if price and (price < 1 or price>500000):
-            raise ValueError(_("El precio introducido no es válido"))
+            raise ValueError(_("El precio introducido no es válido. Debe ser un número entre 1 y 500k"))
 
-        if location and (len(location) < 4 or len(location) > 16):
+        if location and len(location) > 50:
             raise ValueError(
-                _("La localización debe tener entre 4 y 16 caracteres"))
+                _("La localización debe más de 50 caracteres"))
 
-        if province and len(province) > 16:
-            raise ValueError(_("La provincia debe tener máximo 16 caracteres"))
+        if province and len(province) > 50:
+            raise ValueError(_("La provincia debe tener máximo 50 caracteres"))
 
         if dimensions and (dimensions < 1 or dimensions>50000):
             raise ValueError(
-                _("Las dimensiones introducidas no son válidas"))
+                _("Las dimensiones introducidas no son válidas. Debe estar entre 1 y 50k"))
         
         if max_capacity and (max_capacity < 1 or max_capacity>20):
-            raise ValueError("La capacidad máxima no es válida")
+            raise ValueError("La capacidad máxima no es válida. Debe estar entre 1 y 20")
         
         property_edit = Property.objects.get(pk=property_id)
 
