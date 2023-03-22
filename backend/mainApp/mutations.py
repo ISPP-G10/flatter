@@ -328,7 +328,6 @@ class AddUsersToFavouritePropertyMutation(graphene.Mutation):
   @staticmethod
   def mutate(self, info, **kwargs):
     
-
     property_id = kwargs.get('property_id',0)
     username=kwargs.get('username',0)
     try:
@@ -340,6 +339,10 @@ class AddUsersToFavouritePropertyMutation(graphene.Mutation):
         property = Property.objects.get(id=property_id)
     except Property.DoesNotExist:
         raise ValueError(_("El inmueble seleccionado no existe"))
+    
+    if property.owner.username == username:
+        raise ValueError(_("No puedes marcar tu propio inmueble como favorito"))
+    
     if property.interested_users.contains(user):
         raise ValueError(_("Ya has marcado este piso como favorito"))
     else:

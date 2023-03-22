@@ -66,12 +66,16 @@ const PropertyDetails = () => {
             </div>
 
             <div className="property-btn__container">
+            {localStorage.getItem("roles") &&
+            localStorage.getItem("roles").includes("RENTER") && 
+            localStorage.getItem("user") !== data.getPropertyById.owner.username &&(
               <FavouriteButton
                 isFavourite={data.getPropertyById.interestedUsers
                   .map((user) => user.username === localStorage.getItem("user"))
                   .some((value) => value)}
                 propertyId={id}
               />
+            )}
               {localStorage.getItem("user") ===
               data.getPropertyById.owner.username ? (
                 <button
