@@ -246,14 +246,13 @@ class CreateRequest(graphene.Mutation):
 class EditUserPrivateMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
-        first_name = graphene.String(required=False)
-        last_name = graphene.String(required=False)
-        genre = graphene.String(required=False)
-        role = graphene.String(required=False)
-        phone = graphene.String(required=False)
-        email = graphene.String(required=False)
-        profile_picture = graphene.String(required=False)
-        user_token = graphene.String(required=False)
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
+        genre = graphene.String(required=True)
+        role = graphene.String(required=True)
+        phone = graphene.String(required=True)
+        email = graphene.String(required=True)
+        profile_picture = graphene.String(required=True)
 
     user = graphene.Field(FlatterUserType)
 
@@ -267,19 +266,14 @@ class EditUserPrivateMutation(graphene.Mutation):
         phone = kwargs.get('phone', '').strip()
         email = kwargs.get('email', '').strip()
         profile_picture = kwargs.get('profile_picture', '').strip()
-        user_token = kwargs.get('user_token', '').strip()
 
-        user_selected = FlatterUser.objects.get(username=username)
-
-        check_token(user_token, user_selected)
-
-        if first_name and (len(first_name) < 3 or len(first_name) >= 50):
+        if (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
 
-        if last_name and (len(last_name) < 3 or len(last_name) >= 50):
+        if (len(last_name) < 3 or len(last_name) >= 50):
             raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
 
-        if email and ("@" not in email or "." not in email):
+        if not re.match(r"^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$", email):
             raise ValueError(_("El email no es válido"))
 
         if genre and not valid_genre(genre):
@@ -299,8 +293,8 @@ class EditUserPrivateMutation(graphene.Mutation):
         if role:
             roles = parse_roles(role)
 
-        if username and user_selected.username != username:
-            user_selected.username = username
+        user_selected = FlatterUser.objects.get(username=username)
+
         if first_name and user_selected.first_name != first_name:
             user_selected.first_name = first_name
         if last_name and user_selected.last_name != last_name:
@@ -311,10 +305,14 @@ class EditUserPrivateMutation(graphene.Mutation):
             else:
                 user_selected.email = email
 
-        if phone and user_selected.phone_number != phone:
+        if not phone:
+            user_selected.phone_number = None
+        else:
             user_selected.phone_number = phone
 
-        if profile_picture:
+        if not profile_picture:
+            user_selected.profile_picture = "users/images/default.jpg"
+        else:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
             filename = os.path.join('media', 'users', 'images', name)
@@ -342,14 +340,13 @@ class EditUserPrivateMutation(graphene.Mutation):
 class EditUserPublicMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
-        first_name = graphene.String(required=False)
-        last_name = graphene.String(required=False)
-        biography = graphene.String(required=False)
-        profile_picture = graphene.String(required=False)
-        profession = graphene.String(required=False)
-        birthday = graphene.String(required=False)
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
+        biography = graphene.String(required=True)
+        profile_picture = graphene.String(required=True)
+        profession = graphene.String(required=True)
+        birthday = graphene.String(required=True)
         tags = graphene.List(graphene.String, required=True)
-        user_token = graphene.String(required=False)
 
     user = graphene.Field(FlatterUserType)
 
@@ -364,30 +361,32 @@ class EditUserPublicMutation(graphene.Mutation):
         profession = kwargs.get('profession', '').strip()
         birthday = kwargs.get('birthday', '').strip()
         tags = kwargs.get('tags', [])
-        user_token = kwargs.get('user_token', '').strip()
 
-        user_selected = FlatterUser.objects.get(username=username)
-
-        check_token(user_token, user_selected)
-
-        if first_name and (len(first_name) < 3 or len(first_name) >= 50):
+        if (len(first_name) < 3 or len(first_name) >= 50):
             raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
 
-        if last_name and (len(last_name) < 3 or len(last_name) >= 50):
+        if (len(last_name) < 3 or len(last_name) >= 50):
             raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
 
         if profession and len(profession) < 1 and len(profession) > 100:
             raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
 
-        if username and user_selected.username != username:
-            user_selected.username = username
-        if first_name and user_selected.first_name != first_name:
+        user_selected = FlatterUser.objects.get(username=username)
+
+        if user_selected.first_name != first_name:
             user_selected.first_name = first_name
-        if last_name and user_selected.last_name != last_name:
+        if user_selected.last_name != last_name:
             user_selected.last_name = last_name
-        if biography and user_selected.biography != biography:
+
+        if not biography:
+            user_selected.biography = None
+        else:
+            user_selected.biography != biography
             user_selected.biography = biography
-        if profile_picture:
+
+        if not profile_picture:
+            user_selected.profile_picture = "users/images/default.jpg"
+        else:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
             filename = os.path.join('media', 'users', 'images', name)
@@ -400,7 +399,9 @@ class EditUserPublicMutation(graphene.Mutation):
 
             user_selected.profile_picture = os.path.join('users', 'images', name)
 
-        if birthday:
+        if not birthday:
+            user_selected.birthday = None
+        else:
             try:
                 formated_birthday = datetime.strptime(birthday, '%d/%m/%Y')
                 if formated_birthday > datetime.now():
@@ -411,7 +412,10 @@ class EditUserPublicMutation(graphene.Mutation):
             if user_selected.birthday != formated_birthday:
                 user_selected.birthday = formated_birthday
 
-        if profession and user_selected.profession != profession:
+        if not profession:
+            user_selected.profession = None
+        else:
+            user_selected.profession != profession
             user_selected.profession = profession
 
         user_selected.save()
