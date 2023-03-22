@@ -16,51 +16,47 @@ GROUP_DOES_NOT_EXIST = 'Group does not exist'
 USER_DOES_NOT_EXIST = 'User does not exist'
 
 
-class CreateGroupMutation(graphene.Mutation):
+class CreateIndividualGroupMutation(graphene.Mutation):
     class Input:
-        name = graphene.String(required=False)
-        individual = graphene.Boolean(required=False)
-        user_ids = graphene.List(graphene.Int, required=True)
+        username = graphene.String(required=True)
+        users = graphene.List(graphene.String, required=True)
 
     group = graphene.Field(GroupType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
 
-        users_ids = kwargs.get('user_ids')
-
-        users = FlatterUser.objects.filter(id__in=users_ids)
-
-        if not users.exists() and len(users) != len(users_ids):
-            raise ValueError('User ids must be valid')
-
-        if users.distinct().count() != len(users_ids):
-            raise ValueError('User ids must be unique')
-
-        users_not_add_group = users.filter(userpreferences__add_group=False)
-
-        if users_not_add_group.exists():
-            raise ValueError(f"The user(s) with id {', '.join(str(u.id) for u in users_not_add_group)} do not allow "
-                             f"you to add them to a group")
-
-        if 'individual' in kwargs and kwargs.get('individual'):
-            individual = kwargs.get('individual')
-            if len(users) != 2:
-                raise ValueError('Individual groups can only have two users')
-        else:
-            individual = False
-
-        if 'name' in kwargs and kwargs.get('name').strip():
-            name = kwargs.get('name')
-            if len(name) < 3 or len(name) > 30:
-                raise ValueError('Group name must have between 3 and 30 characters')
-        else:
-            name = None
-
-        group = Group.objects.create(name=name, individual=individual)
+        username = kwargs.get('username', '').strip()
+        users = kwargs.get('users', [])
+        
+        if not username and not FlatterUser.objects.filter(username=username).exists():
+            raise ValueError(USER_DOES_NOT_EXIST)
+        
+        if not users:
+            raise ValueError('The group must have at least one user')
+        
+        if username not in users:
+            users.append(username)
+            
+        users = list(set([user.strip() for user in users]))
+            
+        if len(users) != 2:
+            raise ValueError('The group must have 2 users')
+        
+        if FlatterUser.objects.filter(username__in=users).count() != len(users):
+            raise ValueError('Some users do not exist')
+        
+        users = [FlatterUser.objects.get(username=user) for user in users]
+        
+        groups = [group for group in Group.objects.filter(users=users[0]).filter(users=users[1]) if 2 == group.users.count()]
+        
+        if groups:
+            raise ValueError('The group already exists')
+        
+        group = Group.objects.create(individual=True)
         group.users.set(users)
 
-        return CreateGroupMutation(group=group)
+        return CreateIndividualGroupMutation(group=group)
 
 
 class CreateMessageMutation(graphene.Mutation):
@@ -506,7 +502,7 @@ class SocialMutation(graphene.ObjectType):
     create_review = CreateReview.Field()
     create_incident = CreateIncident.Field()
     create_request = CreateRequest.Field()
-    create_group = CreateGroupMutation.Field()
+    create_individual_group = CreateIndividualGroupMutation.Field()
     create_message = CreateMessageMutation.Field()
     leave_group = LeaveGroupMutation.Field()
     add_users_group = AddUsersGroupMutation.Field()

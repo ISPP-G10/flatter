@@ -66,6 +66,36 @@ const chatsAPI = {
             }
         }
     `,
+    createIndividualChat: gql`
+        mutation createIndividualGroup($username: String!, $users: [String!]!) {
+            createIndividualGroup(username: $username, users: $users) {
+                group{
+                    id
+                    name
+                    individual
+                    users {
+                        username
+                        profilePicture
+                    }
+                }
+            }
+        }
+    `,
+    createGroupalChat: gql`
+        mutation createGroupalGroup($username: String!, $groupName: String!, $users: [String!]!) {
+            createGroupalGroup(username: $username, groupName: $groupName, users: $users) {
+                group{
+                    id
+                    name
+                    individual
+                    users {
+                        username
+                        profilePicture
+                    }
+                }
+            }
+        }
+    `,
 }
 
 export default chatsAPI;
