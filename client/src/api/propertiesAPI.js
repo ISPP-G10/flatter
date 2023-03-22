@@ -47,8 +47,8 @@ const propertiesAPI = {
         }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String){
-            getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, city: $city){
+        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String, $tag: String) {
+            getFilteredPropertiesByPriceAndCityAndTags(minPrice: $minPrice, maxPrice: $maxPrice, city: $city, tag: $tag) {
                 id
                 title
                 description
@@ -64,6 +64,9 @@ const propertiesAPI = {
                 price
                 isOutstanding
                 maxCapacity
+                owner {
+                    username
+                }
                 images{
                     image
                 }
@@ -173,7 +176,32 @@ const propertiesAPI = {
       }
     }
     `,
-
+    getPropertyRequestsByUsername: gql`
+        query getPropertyRequestsByUsername($requesterUsername: String!, $propertyId: Int!) {
+            getPetitionByRequesterToProperty(username: $requesterUsername, propertyId: $propertyId) {
+                id
+                status
+            }
+        }
+    `,
+    createPropertyRequest: gql`
+        mutation createPropertyRequest($message: String!, $requesterUsername: String!, $propertyId: Int!) {
+            createPetition(message: $message, requesterUsername: $requesterUsername, propertyId: $propertyId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `,
+    removePropertyRequest: gql`
+        mutation removePropertyRequest($requestId: Int!) {
+            deletePetition(petitionId: $requestId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `
 }
 
 export default propertiesAPI;

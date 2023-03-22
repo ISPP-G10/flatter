@@ -11,5 +11,14 @@ export const filterRequestsValidators = {
             return validStatus.includes(value);
         },
         message: "El campo debe ser un estado válido",
+    },
+    validDate: {
+        validate: (startdate, enddate) => {
+            const startDateObj = new Date(startdate);
+            const endDateObj = new Date(enddate);
+            return startDateObj < endDateObj;
+        },
+        message: "La fecha de inicio debe ser anterior a la fecha de fin",
     }
+
 }
