@@ -25,6 +25,8 @@ const usersAPI = {
                             roles{
                                 role
                             }
+                            age
+                            birthday
                         }
                     }
                 }
@@ -57,6 +59,7 @@ const usersAPI = {
                     firstName
                     lastName
                     profilePicture
+                    age
                     biography
                     profession
                     birthday
@@ -156,11 +159,32 @@ const usersAPI = {
         createRequest(command: $command){
             request{
                 command
+                }
             }
         }
-    }
-`,
-
-}
+    `,
+    updatePublicProfile: gql`
+        mutation editUserPublic($username: String!, $tags: [String]!, $biography: String!, $profession: String!, $profilePicture: String!, $firstName: String!, $lastName: String!, $birthday: String!){
+            editUserPublic(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday){
+                user{
+                    firstName
+                    lastName
+                    profilePicture
+                    biography
+                    profession
+                    birthday
+                    averageRating
+                    roles{
+                        role
+                    }
+                    tags{
+                        name
+                        color
+                    }
+                }
+            }
+        }
+    `,
+}   
 
 export default usersAPI;

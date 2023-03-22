@@ -148,6 +148,26 @@
     border-color: #8492A6;
 }
 
+.setting-profile-pic{
+    margin-top: 15% !important;
+}
+
+h1.edit-form-title {
+    font-size: 200%;
+    width: 100%;
+    color: #573b8a;
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.profile-grid .class-profile-form .super-animated-button-wrapper {
+    transform: translateY(-24px);
+}
+
+
 @media screen and (max-width: 1319px) {
     .no-edit{
         justify-content: center;
@@ -191,6 +211,7 @@
     .tags-container{
         margin-top: 10px;
     }
+
 }
 
 @media screen and (max-width: 767px) {
@@ -202,4 +223,13 @@
         padding: 20px;
     }
 
+    .setting-profile-pic{
+        margin-top: 0% !important;
+    }
+}
+
+@media screen  and (max-width: 400px){
+    .tag-input{
+        width: 90%;
+    }
 }
