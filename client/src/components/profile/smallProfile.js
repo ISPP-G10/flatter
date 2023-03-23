@@ -15,7 +15,7 @@ const SmallProfile = ({ user }) => {
           {user.firstName} {user.lastName}
         </h2>
         <h3>{user.profession ? user.profession : ''}</h3>
-        <span>{user.averageRating === 0 ? '-' : user.averageRating}</span>
+        <span>{user.averageRating === 0 ? '-' : parseFloat(user.averageRating).toFixed(2)}</span>
       </div>
     </div>
   );

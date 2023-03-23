@@ -12,6 +12,8 @@ import { useApolloClient } from '@apollo/client';
 
 
 import {useEffect, useRef, useState} from 'react';
+import { useParams } from 'react-router-dom';
+import chatsAPI from '../../api/chatsAPI';
 import TagSelector from '../inputs/tagSelector';
 import { useQuery } from '@apollo/client';
 
@@ -25,6 +27,9 @@ const PublicProfileCard = (props) => {
 
     const [age, setAge] = useState(props.age);
     const [birthDate, setBirthdate] = useState(props.birthDate);
+
+    let params = useParams();
+    let username = params.username ? params.username : localStorage.getItem('user');
 
     const editPublicProfileModalRef = useRef(null);
     const editPublicProfileForm = useRef(null);
@@ -49,7 +54,7 @@ const PublicProfileCard = (props) => {
         client.mutate({
             mutation: usersAPI.updatePublicProfile,
             variables: {
-                username: localStorage.getItem('user', ''),
+                username: username,
                 firstName: values.firstName,
                 lastName: values.lastName,
                 biography: values.biography,
@@ -117,6 +122,20 @@ const PublicProfileCard = (props) => {
 
     }, [userImage]);
 
+    const openChat = () => {
+        client.mutate({
+            mutation: chatsAPI.createIndividualChat,
+            variables: {
+                username: username,
+                users: [username, localStorage.getItem('user')]
+            }
+        }).then((response) => {
+            alert("Ya puedes chatear con este usuario")
+        }).catch((error) => {
+            alert(error.message.split("\n")[0]);
+        });
+    }
+    
     useEffect(() => {
         publicProfileFormInputs.map((input) => {
             if(input.name === 'biography'){
@@ -137,13 +156,19 @@ const PublicProfileCard = (props) => {
         <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
-                <div className="profile-card-data">
-                    <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
-                        <h2>{name}</h2>
-                        <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
-                    </div>
-                    <p>{prof ? prof : ''}</p>
-                    <p>{age!=null ? age + " años": ''}</p> 
+                <div className="profile-card-edit">
+                    <h2>{props.name}</h2>
+                    {
+                        props.isMe ? (
+                            <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
+                        ) : 
+                        (
+                            <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
+                        )
+                    }
+                  </div>
+                  <p>{prof ? prof : ''}</p>
+                  <p>{age!=null ? age + " años": ''}</p> 
                 </div>
             </div>
             <div className='profile-card-details'>

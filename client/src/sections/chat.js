@@ -4,6 +4,7 @@ import Groups from "../components/chat/groups";
 import Settings from "../components/chat/settings";
 import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
+import { useApolloClient } from "@apollo/client";
 
 const Chat = () => {
 
@@ -11,7 +12,9 @@ const Chat = () => {
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
+    const [chatId, setChatId] = useState(null);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
+    const client = useApolloClient();
 
     let chatBtn = useRef();
     let chatSlide = useRef();
@@ -30,7 +33,7 @@ const Chat = () => {
     let nodesList = [];
 
     const sendMessage = () => {
-        socialLib.sendMessage(chatInput, MAX_LEN);
+        socialLib.sendMessage(client, chatInput, chatId, MAX_LEN);
     }
 
     const setChangeTabTrue = () => {
@@ -109,6 +112,7 @@ const Chat = () => {
             groups.current.scrollTop = 1;
             footer.current.style.display = "block";
             settings.current.style.display = "none";
+            setChatId(null);
         } else {
             chat.current.style.display = "block";
             chat.current.scrollTop = chat.current.scrollHeight;
@@ -389,7 +393,7 @@ const Chat = () => {
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation />
+                    <Conversation chatId={chatId} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -399,7 +403,7 @@ const Chat = () => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups />
+                        <Groups setChatId={setChatId} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">

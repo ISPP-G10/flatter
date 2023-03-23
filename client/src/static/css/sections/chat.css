@@ -243,6 +243,7 @@
     background-color: rgb(255, 123, 0);
     transform: rotate(45deg);
     transition: all 0.5s;
+    cursor: pointer;
 }
 
 .class-chat-arrow{
@@ -296,6 +297,12 @@
 
 .class-chat-user{
     font-weight: bold;
+    font-size: 85%;
+    width: 100%;
+}
+
+.class-chat-message-text{
+    text-align: left;
 }
 
 .class-chat-groups{
@@ -319,6 +326,8 @@
 .class-chat-group{
     border-bottom: 1px solid #FFFFFF;
     cursor: pointer;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .class-group-image{
@@ -338,11 +347,13 @@
     align-self: flex-start;
     color: #dadada;
     font-style: italic;
+    margin: 0;
 }
 
 .class-chat-group-time{
     color: #dadada;
     font-size: 11px;
+    text-align: right;
 }
 
 .class-chat-group:hover{
@@ -505,6 +516,7 @@ input[type="checkbox"].ios-switch:checked + label:before {
 
 .class-chat-title{
     font-weight: bold;
+    font-size: 30px;
 }
 
 #chatSlideHeader2 > *{

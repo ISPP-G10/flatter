@@ -9,7 +9,7 @@ const Message = (props) => {
                 props.mine ?
                     (
                         <div className={`message ${props.last} d-flex justify-content-center align-items-center`}>
-                            {props.message}
+                            <p className="class-chat-message-text">{props.message}</p>
                             <div className="d-flex flex-column justify-content-center align-items-center ml-2">
                                 <img className="class-message-profile" style={{display: props.displayPic }} src={props.profilePic} alt=""/>
                                 <span className="class-message-time">{props.time}</span>
@@ -26,7 +26,7 @@ const Message = (props) => {
                                 </div>
                                 <div className="d-flex flex-column justify-content-center align-items-center">
                                     <span className="class-chat-user" style={{display: props.displayUser }}>{props.user}</span>
-                                    {props.message}
+                                    <p className="class-chat-message-text">{props.message}</p>
                                 </div>
                             </div>
                         </div>
