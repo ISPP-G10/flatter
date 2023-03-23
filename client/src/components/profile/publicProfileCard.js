@@ -1,22 +1,26 @@
 import '../../static/css/components/publicProfileCard.css'
 import Tag from '../tag';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 import { useApolloClient } from '@apollo/client';
 import chatsAPI from '../../api/chatsAPI';
+import FlatterModal from '../flatterModal';
+import FlatterForm from '../forms/flatterForm';
+import { useEffect, useRef, useState } from 'react';
+import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 
 const PublicProfileCard = (props) => {
 
-    let params = useParams()
-    let username = params.username ? params.username : localStorage.getItem('user')
-    let client = useApolloClient()
+    const client = useApolloClient()
+
+    const editPublicProfileModalRef = useRef(null);
+    const updatePublicProfileRef = useRef(null); 
 
     const openChat = () => {
         client.mutate({
             mutation: chatsAPI.createIndividualChat,
             variables: {
-                username: username,
-                users: [username, localStorage.getItem('user')]
+                username: props.username,
+                users: [props.username, localStorage.getItem('user')]
             }
         }).then((response) => {
             alert("Ya puedes chatear con este usuario")
@@ -25,7 +29,39 @@ const PublicProfileCard = (props) => {
         });
     }
 
+    function handlePublicProfileUpdate({values}){
+        console.log(values);
+    }
+
+    useEffect(() => {
+        publicProfileFormInputs.map(input => {
+            switch(input.name){
+                case 'firstName':
+                    input.defaultValue = props.name.split(" ")[0];
+                    break;
+                case 'lastName':
+                    input.defaultValue = props.name.split(" ")[1];
+                    break;
+                case 'biography':
+                    input.defaultValue = props.bio;
+                    break;
+                case 'tags':
+                    input.defaultValues = props.tags;
+                    break;
+                case 'profession':
+                    input.defaultValue = props.job;
+                    break;
+                case 'birthDate':
+                    input.defaultValue = props.birthDate;
+                    break;
+                default:
+                    break;
+            }
+        })
+    }, []);
+
     return (
+        <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
                 <div className="profile-card-data">
@@ -33,10 +69,10 @@ const PublicProfileCard = (props) => {
                         <h2>{props.name}</h2>
                         {
                             props.isMe ? (
-                                <button className="profile-card-btn" title="Edita tu perfil" ></button>
+                                <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
                             (
-                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
+                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
                             )
                         }
                     </div>
@@ -67,6 +103,21 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
+        <FlatterModal
+            ref={editPublicProfileModalRef}
+        >
+            <FlatterForm
+                buttonText="Actualizar perfil"
+                showSuperAnimatedButton
+                numberOfColumns={1}
+                inputs={publicProfileFormInputs}
+                onSubmit={handlePublicProfileUpdate}
+                ref={updatePublicProfileRef}
+            >
+
+            </FlatterForm>
+        </FlatterModal>
+        </>
     );
 }
 
