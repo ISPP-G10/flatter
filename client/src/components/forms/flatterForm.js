@@ -2,7 +2,6 @@ import '../../static/css/components/flatterForm.css'
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-
 import SuperAnimatedButton from "../superAnimatedButton/superAnimatedButton";
 
 import {useState, useImperativeHandle, forwardRef, useEffect, useRef} from 'react';
@@ -46,8 +45,6 @@ const FlatterForm = forwardRef((props, ref) => {
             let input = props.inputs[i];
             if(input.type === "files"){
                 formValuesCopy[input.name] = formInputs.current[i].files.map(file => file.getFileEncodeBase64String());
-            }else if(input.type === "flatter-tags"){
-                formValuesCopy[input.name] = formInputs.current[i].selectedTags;
             }else if(input.type === "interval"){
                 formValuesCopy[`min_${input.name}`] = formInputs.current[i].min;
                 formValuesCopy[`max_${input.name}`] = formInputs.current[i].max;
@@ -60,17 +57,13 @@ const FlatterForm = forwardRef((props, ref) => {
     }
 
     useEffect(() => {
-
         if(Object.keys(formValues).length === 0){
             let newFormValues = {};
             for(let input of props.inputs){
                 if(input.type === "interval"){
                     newFormValues[`min_${input.name}`] = input.min;
                     newFormValues[`max_${input.name}`] = input.max;
-                }else if(input.type === "flatter-tags"){
-                    newFormValues[input.name] = input.defaultValues ? input.defaultValues : [];
-                }
-                else{
+                }else{
                     newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
                 }
             };
@@ -114,10 +107,8 @@ const FlatterForm = forwardRef((props, ref) => {
                                             tag={input.tag}
                                             name={input.name}
                                             type={input.type}
-                                            tagType={input.tagType}
                                             values={input.values}
                                             defaultValue={input.defaultValue}
-                                            defaultValues={input.defaultValues}
                                             isRequired={input.isRequired}
                                             minValue={input.min}
                                             maxValue={input.max}

@@ -40,8 +40,8 @@ function App() {
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile/> <Chat/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> </>}/>
+        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
         <Route path='/favourites' element={<FavouritesProperties/>}/>
         <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>

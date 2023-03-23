@@ -33,15 +33,6 @@ export const publicProfileFormInputs = [
         validators: []
     },
     {
-        tag: "Etiquetas",
-        name: "tags",
-        type: "flatter-tags",
-        tagType: "user",
-        defaultValues: [],
-        isRequired: false,
-        validators: []
-    },
-    {
         tag: "Profesión",
         name: "profession",
         type: "text",

@@ -1,19 +1,31 @@
 import '../../static/css/components/publicProfileCard.css'
 import Tag from '../tag';
 import PropTypes from 'prop-types';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client';
 import chatsAPI from '../../api/chatsAPI';
+import tagsAPI from '../../api/tagsAPI';
 import FlatterModal from '../flatterModal';
 import FlatterForm from '../forms/flatterForm';
+import TagSelector from '../inputs/tagSelector';
 import { useEffect, useRef, useState } from 'react';
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
+import usersAPI from '../../api/usersAPI';
 
 const PublicProfileCard = (props) => {
 
     const client = useApolloClient()
 
+    const [reload, setReload] = useState(false);
+
     const editPublicProfileModalRef = useRef(null);
     const updatePublicProfileRef = useRef(null); 
+    const tagsInput = useRef(null);
+
+    const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
+        variables: {
+            type: "user"
+        }
+    });
 
     const openChat = () => {
         client.mutate({
@@ -30,35 +42,63 @@ const PublicProfileCard = (props) => {
     }
 
     function handlePublicProfileUpdate({values}){
-        console.log(values);
+        
+        let tagsValues = tagsInput.current.props.value.map(tag => tag.value);
+        
+        if (!updatePublicProfileRef.current.validate()) return
+
+        let birthDateSplitted = values.birthDate.split("-");
+        let userBirthday = birthDateSplitted[2] + "/" + birthDateSplitted[1] + "/" + birthDateSplitted[0];
+
+        client.mutate({
+            mutation: usersAPI.updatePublicProfile,
+            variables: {
+                username: props.username,
+                firstName: values.firstName,
+                lastName: values.lastName,
+                biography: values.biography,
+                profession: values.profession,
+                birthday: userBirthday,
+                tags: tagsValues
+            }
+        })
+        .then((response) => {
+            editPublicProfileModalRef.current.close();
+            setReload(true);
+        })
+        .catch((error) => alert(error.message.split("\n")[0]));
     }
 
     useEffect(() => {
-        publicProfileFormInputs.map(input => {
-            switch(input.name){
-                case 'firstName':
-                    input.defaultValue = props.name.split(" ")[0];
-                    break;
-                case 'lastName':
-                    input.defaultValue = props.name.split(" ")[1];
-                    break;
-                case 'biography':
-                    input.defaultValue = props.bio;
-                    break;
-                case 'tags':
-                    input.defaultValues = props.tags;
-                    break;
-                case 'profession':
-                    input.defaultValue = props.job;
-                    break;
-                case 'birthDate':
-                    input.defaultValue = props.birthDate;
-                    break;
-                default:
-                    break;
-            }
-        })
-    }, []);
+        if(!userTagsLoading){
+            publicProfileFormInputs.map(input => {
+                switch(input.name){
+                    case 'firstName':
+                        input.defaultValue = props.name.split(" ")[0];
+                        break;
+                    case 'lastName':
+                        input.defaultValue = props.name.split(" ")[1];
+                        break;
+                    case 'biography':
+                        input.defaultValue = props.bio;
+                        break;
+                    case 'profession':
+                        input.defaultValue = props.job;
+                        break;
+                    case 'birthDate':
+                        if(props.birthDate) input.defaultValue = props.birthDate;
+                        break;
+                    default:
+                        break;
+                }
+            })
+        }
+
+        if(reload){
+            props.refetchUser();
+            setReload(false);
+        }
+    }, [userTagsLoading, reload]);
 
     return (
         <>
@@ -114,6 +154,29 @@ const PublicProfileCard = (props) => {
                 onSubmit={handlePublicProfileUpdate}
                 ref={updatePublicProfileRef}
             >
+
+                <div className='tag-input'>
+                    {
+                        !userTagsLoading && 
+                            <TagSelector 
+                                options={userTagsData.getTagsByType.map(tag => {
+                                            return {
+                                                    value: tag.id,
+                                                    name: tag.name, 
+                                                    color: tag.color
+                                                }
+                                        })}
+                                defaultValues={props.tags.map(tag => {
+                                            return {
+                                                    value: tag.id,
+                                                    name: tag.name,
+                                                    color: tag.color
+                                                }
+                                        })}
+                                max={8} 
+                                ref={tagsInput}/>
+                    }
+                </div>
 
             </FlatterForm>
         </FlatterModal>

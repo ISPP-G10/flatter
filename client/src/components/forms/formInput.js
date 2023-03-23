@@ -3,27 +3,21 @@ import MultiRangeSlider from '../inputs/multiRangeSlider';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
-import TagSelector from '../inputs/tagSelector';
 
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
-import { useApolloClient } from '@apollo/client';
-import tagsAPI from '../../api/tagsAPI';
 
-const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultValues, values, isRequired, 
+const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
                     numberOfColumns, validators, minValue, maxValue}, ref) => {
-
-    const client = useApolloClient();
                         
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
-    let [tagsOptions, setTagsOptions] = useState([]);
     let [minInputValue, setMinInputValue] = useState(minValue);
     let [maxInputValue, setMaxInputValue] = useState(maxValue);
     let inputField = useRef(null);
-    let tagsInput = useRef(null);
 
     useImperativeHandle(ref, () => {
+
         return{
             setErrors: (errors) => {
                 setInputErrors(errors);
@@ -32,15 +26,6 @@ const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultV
             min: minInputValue,
             max: maxInputValue,
             files: files,
-            selectedTags: tagsInput.current ? tagsInput.current.props.value.map((tag) => {
-                                return{
-                                    name: tag.value,
-                                    color: tag.color
-                                }
-                            }
-                        )
-                        :
-                        []
         }
     });
 
@@ -49,7 +34,7 @@ const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultV
     }
 
     useEffect(() => {
-        if(type !== "interval" && type !== "files" && type !== "flatter-tags"){
+        if(type !== "interval" && type !== "files"){
             inputField.current.addEventListener("change", () => {
                 let errors = [];
                 validators.forEach((validator) => {
@@ -62,8 +47,6 @@ const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultV
         }
         // eslint-disable-next-line
     }, []);
-
-    useEffect(() => {}, [tagsOptions]);
 
     switch(type){
 
@@ -151,26 +134,6 @@ const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultV
                     }
                 </div>
             );
-        case "flatter-tags":
-
-            if(tagType === "user"){
-                client.query({
-                    query: tagsAPI.getTagsByType,
-                    variables: {
-                        type: tagType
-                    }
-                })
-                .then(response => {
-                    setTagsOptions(response.data.getTagsByType)
-                })
-                .catch(error => {});
-            }
-
-            return(
-                <div className='tag-input'>
-                    <TagSelector options={tagsOptions} defaultValues={defaultValues} max={8} ref={tagsInput}/>
-                </div>
-            );
 
         default:
             return(
@@ -191,10 +154,8 @@ FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
     type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date", "flatter-tags"]),
-    tagType: PropTypes.oneOf(["user", "property"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
-    defaultValues: PropTypes.array,
     isRequired: PropTypes.bool,
     minValue: PropTypes.number,
     maxValue: PropTypes.number,
@@ -208,9 +169,7 @@ FormInput.defaultProps = {
     tag: "default",
     name: "default",
     type: "text",
-    tagType: "user",
     defaultValue: "",
-    defaultValues: [],
     numberOfColumns: 1,
     values: [],
     isRequired: false,

@@ -19,7 +19,7 @@ const PublicProfile = () => {
     let [averageRating, setAverageRating] = useState(0);
     let [totalRatings, setTotalRatings] = useState(0);
 
-    const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+    const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
         username: username
     }});
 
@@ -60,6 +60,7 @@ const PublicProfile = () => {
                     isPropietary={roles.includes("OWNER")} 
                     tags={profile.tags} 
                     pic={API_SERVER_MEDIA+profile.profilePicture}
+                    refetchUser = {refetch}
                 />
                 <ReviewsBox average={averageRating} total={totalRatings} />
                 <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} />
