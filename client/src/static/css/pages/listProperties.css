@@ -159,6 +159,9 @@
 .share-property-modal .share-input > input {
     flex: 1;
     padding: 10px;
+    border: 1px solid #008000a3;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
 }
 
 .share-property-modal .share-whatsapp {
