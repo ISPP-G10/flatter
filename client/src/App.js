@@ -14,11 +14,8 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
-import TagSelector from './components/inputs/tagSelector';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
-
-const val = [{ value: "1", label: "Amistoso", color: "#FFC107" }]
 
 function App() {
   return (
@@ -47,7 +44,6 @@ function App() {
         <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
         <Route path='/me' element={<> <AccountSettings/> <Chat/> </>}/>
         <Route path='/favourites' element={<> <FavouritesProperties/> <Chat/> </>}/>
-        <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

@@ -72,6 +72,7 @@ const PublicProfileCard = (props) => {
 
     useEffect(() => {
         if(!userTagsLoading){
+            //eslint-disable-next-line
             publicProfileFormInputs.map(input => {
                 switch(input.name){
                     case 'firstName':
@@ -99,6 +100,7 @@ const PublicProfileCard = (props) => {
             props.refetchUser();
             setReload(false);
         }
+        //eslint-disable-next-line
     }, [userTagsLoading, reload]);
 
     return (
@@ -117,7 +119,7 @@ const PublicProfileCard = (props) => {
                             )
                         }
                     </div>
-                    <p>{props.job ? props.job : ''}</p>
+                    {props.job && <p>{props.job}</p>}
                     <p>{props.age ? props.age + " años": ''}</p> 
                 </div>
             </div>

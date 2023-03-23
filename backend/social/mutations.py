@@ -382,9 +382,8 @@ class EditUserPublicMutation(graphene.Mutation):
         elif user_selected.biography != biography:
             user_selected.biography = biography
 
-        if not profile_picture:
-            user_selected.profile_picture = "users/images/default.jpg"
-        else:
+        if profile_picture:
+
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
             filename = os.path.join('media', 'users', 'images', name)

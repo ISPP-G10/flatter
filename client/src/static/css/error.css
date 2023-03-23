@@ -96,6 +96,22 @@
   animation-direction: alternate;
 }
 
+.return-btn{
+  max-width: 250px;
+  background-color: var(--flatter-purple-color);
+  color: #fff;
+  font-family: "Lato", sans-serif;
+  font-weight: 300;
+  font-size: 24px;
+  letter-spacing: 5px;
+  padding: 10px 20px;
+  margin: 30px 0 0 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
 @-webkit-keyframes animation_error_1 {
   from {
     -webkit-transform: rotate(20deg);
