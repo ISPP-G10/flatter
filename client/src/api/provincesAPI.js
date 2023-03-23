@@ -1,16 +1,20 @@
 import {gql} from 'apollo-boost';
 
-const provincesApi = {
-    getAllProvincesAndMunicipes: gql`
-        query getAllProvincesAndMunicipes{
-            getProvincesMunicipalities(name: ""){
+const provincesAPI = {
+    getAllProvinces: gql`
+        query getAllProvinces{
+            getProvinces(name: ""){
                 name
-                municipalitySet{
-                    name
-                }
+            }
+        }
+    `,
+    getMunicipalitiesByProvince: gql`
+        query getMunicipalitiesByProvince($province: String!){
+            getMunicipalitiesByProvince(province: $province){
+                name
             }
         }
     `,
 }
 
-export default provincesApi;
+export default provincesAPI;

@@ -112,7 +112,12 @@ const propertiesAPI = {
         title
         price
         isOutstanding
-        province
+        province{
+          name
+        }
+        municipality{
+          name
+        }
         location
         dimensions
         bedroomsNumber
