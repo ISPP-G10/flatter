@@ -60,7 +60,6 @@ const FormProperty = ({ property }) => {
   }
 
   useEffect(() => {
-    console.log(property);
     if(property){
       propertyInputs.map((input) => {
         input.defaultValue = property[input.name] ? property[input.name].toString() : property[input.name];
@@ -91,13 +90,20 @@ const FormProperty = ({ property }) => {
 
     }else{
       propertyInputs.map((input) => {
-        input.defaultValue = '';
+        if(input.name === "province"){
+          input.defaultValue = "-";
+        }else if(input.name === "municipality"){
+          input.defaultValue = "-";
+          setOptionMunicipality(["-"]);
+        }else{
+          input.defaultValue = '';
+        } 
       });
     }
 
     if(!loading){
       propertyInputs.map((input) => {
-        if(input.name === 'province') input.values = data.getProvinces.map(province => province.name);
+        if(input.name === 'province') input.values = ['-'].concat(data.getProvinces.map(province => province.name));
       });
     }
 
@@ -128,7 +134,11 @@ const FormProperty = ({ property }) => {
             }
           })
           .then(response => {
-            setOptionMunicipality(response.data.getMunicipalitiesByProvince.map(municipality => municipality.name));
+            if(provinceInput.value !== "-"){
+              setOptionMunicipality(response.data.getMunicipalitiesByProvince.map(municipality => municipality.name));
+            }else{
+              setOptionMunicipality(["-"]);
+            }
           })
           .catch(error => console.log(error));
   

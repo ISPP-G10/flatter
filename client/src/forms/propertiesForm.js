@@ -41,7 +41,8 @@ export const propertyInputs = [
       defaultValue: "-",
       isRequired: true,
       validators: [
-        propertyValidators.notEmptyValidator
+        propertyValidators.notEmptyValidator,
+        propertyValidators.notEmptyProvinceValidator
       ]
     },
     {
@@ -52,7 +53,8 @@ export const propertyInputs = [
       defaultValue: "-",
       isRequired: true,
       validators: [
-        propertyValidators.notEmptyValidator
+        propertyValidators.notEmptyValidator,
+        propertyValidators.notEmptyMunicipalityValidator
       ]
     },
     {

@@ -97,4 +97,14 @@ export const propertyValidators = {
         },
         message: "El campo debe ser un rol válido",
     },
+
+    notEmptyProvinceValidator: {
+        validate: (value) => value.trim() !== "-",
+        message: "Debe seleccionar una provincia"
+    },
+
+    notEmptyMunicipalityValidator: {
+        validate: (value) => !value.trim() !== "-",
+        message: "Debe seleccionar un municipio"
+    }
 }
