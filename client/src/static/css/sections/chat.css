@@ -105,7 +105,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    max-height: 87%;
+    max-height: 88%;
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
@@ -558,4 +558,10 @@ input[type="checkbox"].ios-switch:checked + label:before {
     display: none;
     height: 0px;
     width: 0px;
+}
+
+@media screen and (max-height: 700px) {
+    .chat{
+        max-height: 85%;
+    }
 }
