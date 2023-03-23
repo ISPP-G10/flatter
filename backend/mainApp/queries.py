@@ -1,6 +1,6 @@
 import graphene
 from authentication.models import Tag, FlatterUser
-from .types import PropertyType, PetitionType, ProvinceType
+from .types import PropertyType, PetitionType, ProvinceType, MunicipalityType
 from authentication.types import TagType
 from .models import Property, Petition, Province, Municipality
 from django.utils.translation import gettext_lazy as _
@@ -21,7 +21,8 @@ class MainAppQuery(object):
     get_filtered_properties_by_province_municipality_location = graphene.List(PropertyType, province=graphene.String(),
                                                                               municipality=graphene.String(),
                                                                               location=graphene.String())
-    get_provinces_municipalities = graphene.List(ProvinceType, name=graphene.String(required=False))
+    get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
+    get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
     get_outstanding_properties = graphene.List(PropertyType)
     get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
@@ -173,11 +174,15 @@ class MainAppQuery(object):
         favourites_properties = Property.objects.filter(interested_users = user)
         return favourites_properties
 
-        return Property.objects.filter(is_outstanding=True)
-
-    def resolve_get_provinces_municipalities(self, info, name=None):
+    def resolve_get_provinces(self, info, name=None):
 
         if name:
             return Province.objects.filter(name__icontains=name)
 
         return Province.objects.all()
+
+    def resolve_get_municipalities_by_province(self, info, province=None):
+        
+        print(Municipality.objects.filter(province__name=province))
+        
+        return Municipality.objects.filter(province__name=province)
