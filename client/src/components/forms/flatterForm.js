@@ -99,10 +99,12 @@ const FlatterForm = forwardRef((props, ref) => {
     return (
         <div className="class-profile-form">
             <form className="class-form" ref={formElement} style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
-                    {props.children}
                     { 
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
+                            console.log(index, props.childrenPosition);
                             return(
+                                <>
+                                {index === props.childrenPosition && props.children}
                                 <FormInput  key={index} 
                                             tag={input.tag}
                                             name={input.name}
@@ -118,7 +120,9 @@ const FlatterForm = forwardRef((props, ref) => {
                                             setFormValues={setFormValues}
                                             ref={(input) => (formInputs.current[index] = input)}
                                             />
+                                </>
                             )
+                            
                         })
                     }
             </form>
@@ -146,6 +150,7 @@ FlatterForm.propTypes = {
     buttonText: PropTypes.string,
     showSuperAnimatedButton: PropTypes.bool,
     numberOfColumns: PropTypes.number,
+    childrenPosition: PropTypes.number,
 }
 
 FlatterForm.defaultProps = {
@@ -154,6 +159,7 @@ FlatterForm.defaultProps = {
     buttonText: "Enviar",
     showSuperAnimatedButton: false,
     numberOfColumns: 1,
+    childrenPosition: 0,
 }
 
 export default FlatterForm;

@@ -36,6 +36,7 @@ const PublicProfileCard = (props) => {
             }
         }).then((response) => {
             alert("Ya puedes chatear con este usuario")
+            window.location.reload();
         }).catch((error) => {
             alert(error.message.split("\n")[0]);
         });
@@ -105,7 +106,7 @@ const PublicProfileCard = (props) => {
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
                 <div className="profile-card-data">
-                    <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
+                    <div className={`profile-card-edit`}>
                         <h2>{props.name}</h2>
                         {
                             props.isMe ? (
@@ -144,15 +145,20 @@ const PublicProfileCard = (props) => {
             </div>           
         </div>
         <FlatterModal
+            maxWidth={800}
+            maxHeight={800}
             ref={editPublicProfileModalRef}
         >
+            <h2 className='section-title'>Personalizar perfil público</h2>
             <FlatterForm
                 buttonText="Actualizar perfil"
                 showSuperAnimatedButton
                 numberOfColumns={1}
                 inputs={publicProfileFormInputs}
+                childrenPosition={3}
                 onSubmit={handlePublicProfileUpdate}
                 ref={updatePublicProfileRef}
+                scrollable
             >
 
                 <div className='tag-input'>
