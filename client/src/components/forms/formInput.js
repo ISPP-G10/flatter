@@ -1,39 +1,57 @@
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import MultiRangeSlider from '../inputs/multiRangeSlider';
-import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
+import TagSelector from '../inputs/tagSelector';
 
-const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
-                    numberOfColumns, validators, minValue, maxValue, formValues, setFormValues}, ref) => {
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { FilePond, registerPlugin } from 'react-filepond';
+import { useApolloClient } from '@apollo/client';
+import tagsAPI from '../../api/tagsAPI';
 
+const FormInput = forwardRef(({ tag, name, type, tagType, defaultValue, defaultValues, values, isRequired, 
+                    numberOfColumns, validators, minValue, maxValue}, ref) => {
+
+    const client = useApolloClient();
+                        
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
+    let [tagsOptions, setTagsOptions] = useState([]);
+    let [minInputValue, setMinInputValue] = useState(minValue);
+    let [maxInputValue, setMaxInputValue] = useState(maxValue);
     let inputField = useRef(null);
+    let tagsInput = useRef(null);
 
     useImperativeHandle(ref, () => {
         return{
             setErrors: (errors) => {
                 setInputErrors(errors);
             },
-            files: files
+            value: inputField.current ? inputField.current.value : "",
+            min: minInputValue,
+            max: maxInputValue,
+            files: files,
+            selectedTags: tagsInput.current ? tagsInput.current.props.value.map((tag) => {
+                                return{
+                                    name: tag.value,
+                                    color: tag.color
+                                }
+                            }
+                        )
+                        :
+                        []
         }
     });
 
     function handleFiles(fileItems){
         setFiles(fileItems);
-        formValues[name] = fileItems.map(file => file.getFileEncodeBase64String());
-        setFormValues(formValues);
     }
 
     useEffect(() => {
-        if(type !== "interval" && type !== "files"){
+        if(type !== "interval" && type !== "files" && type !== "flatter-tags"){
             inputField.current.addEventListener("change", () => {
                 let errors = [];
-                formValues[name] = inputField.current.value;
-                setFormValues(formValues);
                 validators.forEach((validator) => {
                     if(!validator.validate(inputField.current.value)){
                         errors.push(validator.message);
@@ -44,6 +62,8 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
         }
         // eslint-disable-next-line
     }, []);
+
+    useEffect(() => {}, [tagsOptions]);
 
     switch(type){
 
@@ -91,9 +111,8 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                                 min={minValue}
                                 max={maxValue}
                                 onChange={({min, max})=>{
-                                    formValues[`min_${name}`] = min;
-                                    formValues[`max_${name}`] = max;
-                                    setFormValues(formValues);
+                                    setMinInputValue(min);
+                                    setMaxInputValue(max);
                                 }}
                             />
                 </div>
@@ -120,6 +139,7 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
             );
         
         case "date":
+            
             return(
                 <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {marginTop: `7.5%`}}>	
                     <input className="class-form-input" type="date" id={`${name}`} name={`${name}`} required={isRequired} defaultValue={defaultValue} ref={inputField} />
@@ -131,7 +151,26 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                     }
                 </div>
             );
+        case "flatter-tags":
 
+            if(tagType === "user"){
+                client.query({
+                    query: tagsAPI.getTagsByType,
+                    variables: {
+                        type: tagType
+                    }
+                })
+                .then(response => {
+                    setTagsOptions(response.data.getTagsByType)
+                })
+                .catch(error => {});
+            }
+
+            return(
+                <div className='tag-input'>
+                    <TagSelector options={tagsOptions} defaultValues={defaultValues} max={8} ref={tagsInput}/>
+                </div>
+            );
 
         default:
             return(
@@ -151,9 +190,11 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
 FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date"]),
+    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date", "flatter-tags"]),
+    tagType: PropTypes.oneOf(["user", "property"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
+    defaultValues: PropTypes.array,
     isRequired: PropTypes.bool,
     minValue: PropTypes.number,
     maxValue: PropTypes.number,
@@ -167,7 +208,9 @@ FormInput.defaultProps = {
     tag: "default",
     name: "default",
     type: "text",
+    tagType: "user",
     defaultValue: "",
+    defaultValues: [],
     numberOfColumns: 1,
     values: [],
     isRequired: false,

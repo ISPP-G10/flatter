@@ -9,6 +9,7 @@ from authentication.models import FlatterUser
 class SocialQueries(object):
 
     get_all_tag = graphene.List(TagType, tag=graphene.String())
+    get_tags_by_type = graphene.List(TagType, tag_type=graphene.String())
     get_groups = graphene.List(GroupType)
     get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
@@ -76,3 +77,9 @@ class SocialQueries(object):
 
     def resolve_get_messages(self, info):
         return Message.objects.all()
+
+    def resolve_get_tags_by_type(self, info, tag_type=None):
+        
+        parsed_tag = 'P' if tag_type == "property" else "U"
+        
+        return Tag.objects.filter(entity=parsed_tag)

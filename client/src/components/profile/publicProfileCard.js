@@ -1,20 +1,17 @@
 import '../../static/css/components/publicProfileCard.css';
 
 import Tag from '../tag';
-import PropTypes, { func } from 'prop-types';
+import PropTypes from 'prop-types';
 import FlatterModal from '../flatterModal';
 import FlatterForm from '../forms/flatterForm';
 import usersAPI from '../../api/usersAPI';
 import tagsAPI from '../../api/tagsAPI';
+import chatsAPI from '../../api/chatsAPI';
 
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import { useApolloClient } from '@apollo/client';
-
-
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import chatsAPI from '../../api/chatsAPI';
-import TagSelector from '../inputs/tagSelector';
 import { useQuery } from '@apollo/client';
 
 const PublicProfileCard = (props) => {
@@ -22,11 +19,10 @@ const PublicProfileCard = (props) => {
     const client = useApolloClient();
 
     let [userImage, setUserImage] = useState(null);
-    let [publicProfileFormValues, setPublicProfileFormValues] = useState(publicProfileFormInputs);
     let [tagOptions, setTagOptions] = useState([]);
 
     const [age, setAge] = useState(props.age);
-    const [birthDate, setBirthdate] = useState(props.birthDate);
+    const [birthDate, setBirthdate] = useState(props.birthDate ?? publicProfileFormInputs.filter(input => input.name === "birthDate")[0].defaultValue);
 
     let params = useParams();
     let username = params.username ? params.username : localStorage.getItem('user');
@@ -38,7 +34,6 @@ const PublicProfileCard = (props) => {
     const [ name, setName ] = useState(props.name);
     const [ bio, setBio ] = useState(props.bio);
     const [ prof, setProf ] = useState(props.job);
-    const tagsInput = useRef(null);
 
     const {data, loading} = useQuery(tagsAPI.getTags);
 
@@ -48,7 +43,7 @@ const PublicProfileCard = (props) => {
         };
     }, [data])
 
-    function performUserMutation(values, encodedImage, selectedTags){
+    function performUserMutation(values, encodedImage){
         const arr = String(values.birthDate).split('-')
         const birthday = arr[2] + '/' + arr[1] + '/' + arr[0]
         client.mutate({
@@ -60,33 +55,27 @@ const PublicProfileCard = (props) => {
                 biography: values.biography,
                 profession: values.profession,
                 profilePicture: encodedImage,
-                tags: selectedTags,
+                tags: values.tags ? values.tags.map(tag => tag.name) : [],
                 birthday: birthday,
             }
         })
         .then((response) => {
             editPublicProfileModalRef.current.close();
-            setName(values.firstName + " " + values.lastName);
-            setBio(values.biography);
-            setProf(values.profession);
-            setTagsProfile(tagsInput.current.props.value.map((tag) => ({
-                name: tag.value,
-                color: tag.color})))
-            
-            setAge(response.data.editUserPublic.user.age);
-            setBirthdate(values.birthDate);
+            // setName(values.firstName + " " + values.lastName);
+            // setBio(values.biography);
+            // setProf(values.profession);
+            // setTagsProfile(values.tags ?? []);
+            // setAge(response.data.editUserPublic.user.age);
+            // setBirthdate(values.birthDate);
         })
         .catch((error) => alert(error.message));
     }
 
     function handlePublicProfileEdit({values}){
-        
-        var tagsSelected = tagsInput.current.props.value.map((tag) => (tag.value))
 
-        if(!editPublicProfileForm.current.validate()) {
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-            return;
-        }
+        console.log(values);
+
+        if(!editPublicProfileForm.current.validate()) return;
 
         try{
             
@@ -94,10 +83,10 @@ const PublicProfileCard = (props) => {
             reader.readAsDataURL(userImage);
 
             reader.onload = function () {
-                performUserMutation(values, reader.result, tagsSelected);
+                performUserMutation(values, reader.result);
             };
         }catch(error){
-            performUserMutation(values, null, tagsSelected);
+            performUserMutation(values, null);
         }
     }
 
@@ -109,18 +98,6 @@ const PublicProfileCard = (props) => {
 
         setUserImage(file);
     }
-
-    useEffect(() => {
-
-        publicProfileFormValues.map((input) => {
-            if(input.name === 'biography'){
-                input.defaultValue = props.bio;
-            }else if(input.name === 'profession'){
-                input.defaultValue = props.job;
-            }
-        });
-
-    }, [userImage]);
 
     const openChat = () => {
         client.mutate({
@@ -138,16 +115,27 @@ const PublicProfileCard = (props) => {
     
     useEffect(() => {
         publicProfileFormInputs.map((input) => {
-            if(input.name === 'biography'){
-                input.defaultValue = bio;
-            }else if(input.name === 'profession'){
-                input.defaultValue = prof;
-            }else if(input.name === 'firstName'){
-                input.defaultValue = name.split(' ')[0];
-            }else if(input.name === 'lastName'){
-                input.defaultValue = name.split(' ')[1];
-            } if(input.name === 'birthDate'){
-                input.defaultValue = birthDate;
+            switch(input.name){
+                case 'biography':
+                    input.defaultValue = bio;
+                    break;
+                case 'profession':
+                    input.defaultValue = prof;
+                    break;
+                case 'firstName':
+                    input.defaultValue = name.split(' ')[0];
+                    break;
+                case 'lastName':
+                    input.defaultValue = name.split(' ')[1];
+                    break;
+                case 'birthDate':
+                    input.defaultValue = birthDate;
+                    break;
+                case 'tags':
+                    input.defaultValues = tagsProfile;
+                    break;
+                default:
+                    break;
             }
         });
     }, [tagsProfile, name, prof, bio, birthDate]);
@@ -211,9 +199,6 @@ const PublicProfileCard = (props) => {
                     </label>
                     <input id="file" type="file" onChange={changeImage}/>
                     <img ref={userImageField} className="user-img" src={props.pic} id="output" width="100" alt="Imagen de perfil"/>
-                </div>
-                <div className='tag-input'>
-                    <TagSelector options={tagOptions.getAllTag} defaultValues={tagsProfile} max={8} ref={tagsInput}/>
                 </div>
             </FlatterForm>
         </FlatterModal>

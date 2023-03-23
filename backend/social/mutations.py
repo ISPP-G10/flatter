@@ -1,12 +1,6 @@
-import base64
-import os
-import re
+import base64, os, re, jwt, graphene
 from datetime import datetime
-
-import graphene
-import jwt
 from django.utils.translation import gettext_lazy as _
-
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType, IncidentType, RequestType
 from mainApp.models import Review
@@ -247,12 +241,12 @@ class CreateRequest(graphene.Mutation):
 class EditUserPrivateMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
-        first_name = graphene.String(required=True)
-        last_name = graphene.String(required=True)
-        genre = graphene.String(required=True)
-        role = graphene.String(required=True)
+        first_name = graphene.String(required=False)
+        last_name = graphene.String(required=False)
+        genre = graphene.String(required=False)
+        role = graphene.String(required=False)
         phone = graphene.String(required=False)
-        email = graphene.String(required=True)
+        email = graphene.String(required=False)
         profile_picture = graphene.String(required=False)
         user_token = graphene.String(required=False)
 
@@ -300,8 +294,6 @@ class EditUserPrivateMutation(graphene.Mutation):
         if role:
             roles = parse_roles(role)
 
-
-
         if first_name and user_selected.first_name != first_name:
             user_selected.first_name = first_name
         if last_name and user_selected.last_name != last_name:
@@ -315,9 +307,7 @@ class EditUserPrivateMutation(graphene.Mutation):
         if phone is not None and user_selected.phone_number != phone:
             user_selected.phone_number = phone.strip()
 
-        if not profile_picture:
-            user_selected.profile_picture = "users/images/default.jpg"
-        else:
+        if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
             name = user_selected.username + '.png'
             filename = os.path.join('media', 'users', 'images', name)
@@ -382,8 +372,6 @@ class EditUserPublicMutation(graphene.Mutation):
         if profession and len(profession) < 1 and len(profession) > 100:
             raise ValueError(_("La profesión debe tener entre 1 y 100 caracteres"))
 
-
-
         if user_selected.first_name != first_name:
             user_selected.first_name = first_name
         if user_selected.last_name != last_name:
@@ -391,8 +379,7 @@ class EditUserPublicMutation(graphene.Mutation):
 
         if not biography:
             user_selected.biography = None
-        else:
-            user_selected.biography != biography
+        elif user_selected.biography != biography:
             user_selected.biography = biography
 
         if not profile_picture:
@@ -425,11 +412,8 @@ class EditUserPublicMutation(graphene.Mutation):
 
         if not profession:
             user_selected.profession = None
-        else:
-            user_selected.profession != profession
+        elif user_selected.profession != profession:
             user_selected.profession = profession
-
-        user_selected.save()
 
         if len(tags) > 8:
             raise ValueError(_("No se pueden añadir más de 8 tags"))
@@ -441,6 +425,10 @@ class EditUserPublicMutation(graphene.Mutation):
             user_tags.append(Tag.objects.get(name=tag))
 
         user_selected.tags.set(user_tags)
+        
+        user_selected.save()
+
+        print(user_selected)
 
         return EditUserPublicMutation(user=user_selected)
 

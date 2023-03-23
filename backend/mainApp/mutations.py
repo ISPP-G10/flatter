@@ -1,4 +1,4 @@
-from .models import Tag, Property, Province, Municipality
+from .models import Tag, Property, Province, Municipality, Petition
 from graphql import GraphQLError
 from authentication.types import FlatterUserType
 from authentication.models import FlatterUser, Role

@@ -9,7 +9,17 @@ const tagsAPI = {
                 color
             }
         }
-`,
+    `,
+
+    getTagsByType: gql`
+        query getTagsByType($type: String!){
+            getTagsByType(tagType: $type){
+                id
+                name
+                color
+            }
+        }
+    `,
 }
 
 export default tagsAPI;

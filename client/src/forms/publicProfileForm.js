@@ -33,6 +33,15 @@ export const publicProfileFormInputs = [
         validators: []
     },
     {
+        tag: "Etiquetas",
+        name: "tags",
+        type: "flatter-tags",
+        tagType: "user",
+        defaultValues: [],
+        isRequired: false,
+        validators: []
+    },
+    {
         tag: "Profesión",
         name: "profession",
         type: "text",
@@ -42,14 +51,14 @@ export const publicProfileFormInputs = [
             registerValidators.noNumbersValidator,
         ]
     },
-    {
-        tag: "Fecha de nacimiento",
-        name: "birthDate",
-        type: "date",
-        defaultValue: "",
-        isRequired: false,
-        validators: [
-            publicProfileValidator.notPastDate,
-        ]
-    }
+    // {
+    //     tag: "Fecha de nacimiento",
+    //     name: "birthDate",
+    //     type: "date",
+    //     defaultValue: "1900-01-01",
+    //     isRequired: false,
+    //     validators: [
+    //         //publicProfileValidator.notPastDate,
+    //     ]
+    // }
 ]
