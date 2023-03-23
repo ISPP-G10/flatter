@@ -27,54 +27,61 @@ const PropertyDetails = () => {
 
   const { id } = useParams();
 
-  const { loading: propertyLoading, data: propertyData } = useQuery(propertiesAPI.getPropertyById, {
-    variables: { 
-      id: parseInt(id),
-    },
-    fetchPolicy: "no-cache",
-  });
+  const { loading: propertyLoading, data: propertyData } = useQuery(
+    propertiesAPI.getPropertyById,
+    {
+      variables: {
+        id: parseInt(id),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
 
-  const { loading: propertyRequestsLoading, data: propertyRequestsData } = useQuery(propertiesAPI.getPropertyRequestsByUsername, {
-    variables: { 
-      requesterUsername: localStorage.getItem('user'),
-      propertyId: parseInt(id)
-    },
-  });
+  const { loading: propertyRequestsLoading, data: propertyRequestsData } =
+    useQuery(propertiesAPI.getPropertyRequestsByUsername, {
+      variables: {
+        requesterUsername: localStorage.getItem("user"),
+        propertyId: parseInt(id),
+      },
+    });
 
   if (propertyLoading || propertyRequestsLoading) return <p>Loading...</p>;
 
-  const userRequest = propertyRequestsData.getPetitionByRequesterToProperty[0] ?? false;
+  const userRequest =
+    propertyRequestsData.getPetitionByRequesterToProperty[0] ?? false;
 
   const handlePropertyRequest = ({ values }) => {
     console.log(values);
-    client.mutate({
-      mutation: propertiesAPI.createPropertyRequest,
-      variables: {
-        requesterUsername: localStorage.getItem('user'),
-        propertyId: parseInt(id),
-        message: values.message
-      }
-    })
-    .then((response) => {
+    client
+      .mutate({
+        mutation: propertiesAPI.createPropertyRequest,
+        variables: {
+          requesterUsername: localStorage.getItem("user"),
+          propertyId: parseInt(id),
+          message: values.message,
+        },
+      })
+      .then((response) => {
         propertyRequestModalRef.current.close();
         window.location.reload();
-    })
-    .catch((error) => alert(error.message));
-  }
+      })
+      .catch((error) => alert(error.message));
+  };
 
   const handleCancelRequest = (e) => {
-    client.mutate({
+    client
+      .mutate({
         mutation: propertiesAPI.removePropertyRequest,
         variables: {
-          requestId: parseInt(userRequest.id)
-        }
-    })
-    .then((response) => {
+          requestId: parseInt(userRequest.id),
+        },
+      })
+      .then((response) => {
         propertyRequestModalRef.current.close();
         window.location.reload();
-    })
-    .catch((error) => alert(error.message));
-  }
+      })
+      .catch((error) => alert(error.message));
+  };
   return (
     <FlatterPage withBackground userLogged>
       <div className="property-housing-page">
@@ -91,10 +98,14 @@ const PropertyDetails = () => {
           <div className="property-housing__info">
             <div className="property-title">
               <h1>{propertyData.getPropertyById.title}</h1>
-              <span>LOCALIZACIÓN: {propertyData.getPropertyById.province}, {propertyData.getPropertyById.location}</span>
+              <span>
+                LOCALIZACIÓN: {propertyData.getPropertyById.province},{" "}
+                {propertyData.getPropertyById.location}
+              </span>
             </div>
             <div className="property-price">
-              <span>{propertyData.getPropertyById.price}</span> <span>€/mes</span>
+              <span>{propertyData.getPropertyById.price}</span>{" "}
+              <span>€/mes</span>
             </div>
             <div className="property-description">
               <h3>Descripción</h3>
@@ -108,9 +119,31 @@ const PropertyDetails = () => {
 
             <div className="property-btn__container">
 
-              { propertyData.getPropertyById.owner.username!==localStorage.getItem('user') ? 
-                userRequest===false ? (
-                  <button className="property-btn" style={{textTransform: 'uppercase', marginRight: 'auto'}} onClick={ () => { propertyRequestModalRef.current.open() } }>
+              {localStorage.getItem("roles") &&
+                localStorage.getItem("roles").includes("RENTER") &&
+                localStorage.getItem("user") !==
+                  propertyData.getPropertyById.owner.username && (
+                  <FavouriteButton
+                    isFavourite={propertyData.getPropertyById.interestedUsers
+                      .map(
+                        (user) => user.username === localStorage.getItem("user")
+                      )
+                      .some((value) => value)}
+                    propertyId={id}
+                  />
+                )
+              }
+
+              {propertyData.getPropertyById.owner.username !==
+              localStorage.getItem("user") ? (
+                userRequest === false ? (
+                  <button
+                    className="property-btn"
+                    style={{ textTransform: "uppercase", marginLeft: "auto" }}
+                    onClick={() => {
+                      propertyRequestModalRef.current.open();
+                    }}
+                  >
                     <>
                       <img
                         className="property-img"
@@ -121,7 +154,11 @@ const PropertyDetails = () => {
                     </>
                   </button>
                 ) : (
-                  <button className="property-btn red outlined" style={{textTransform: 'uppercase', marginRight: 'auto'}} onClick={ handleCancelRequest }>
+                  <button
+                    className="property-btn red outlined"
+                    style={{ textTransform: "uppercase", marginLeft: "auto" }}
+                    onClick={handleCancelRequest}
+                  >
                     <>
                       <img
                         className="property-img"
@@ -132,22 +169,11 @@ const PropertyDetails = () => {
                     </>
                   </button>
                 )
-               : (
+              ) : (
                 <></>
-               ) }
-               
-               {localStorage.getItem("roles") &&
-            localStorage.getItem("roles").includes("RENTER") && 
-            localStorage.getItem("user") !== propertyData.getPropertyById.owner.username &&(
-              <FavouriteButton
-                isFavourite={propertyData.getPropertyById.interestedUsers
-                  .map((user) => user.username === localStorage.getItem("user"))
-                  .some((value) => value)}
-                propertyId={id}
-              />
-            )}
+              )}
 
-              <button 
+              <button
                 className="property-btn"
                 onClick={() => {
                   setProperty(propertyData.getPropertyById);
@@ -211,16 +237,20 @@ const PropertyDetails = () => {
         </section>
       </div>
 
-      <FlatterModal maxWidth={500} maxHeight={500} ref={propertyRequestModalRef}>
+      <FlatterModal
+        maxWidth={500}
+        maxHeight={500}
+        ref={propertyRequestModalRef}
+      >
         <h1 className="comments-form-title">Solicitar alquiler</h1>
-        <FlatterForm 
-            buttonText="Solicitar"
-            showSuperAnimatedButton
-            numberOfColumns={1}
-            inputs={propertyRequestsInputs}
-            onSubmit={handlePropertyRequest}
-            ref={propertyRequestFormRef}>
-        </FlatterForm>
+        <FlatterForm
+          buttonText="Solicitar"
+          showSuperAnimatedButton
+          numberOfColumns={1}
+          inputs={propertyRequestsInputs}
+          onSubmit={handlePropertyRequest}
+          ref={propertyRequestFormRef}
+        ></FlatterForm>
       </FlatterModal>
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
         <FormProperty property={property} />

@@ -23,14 +23,11 @@ class DeleteImageFromProperty(graphene.Mutation):
 
         property_id = kwargs.get('property_id', '').strip()
         image = kwargs.get('image', '')
-        user_token = kwargs.get('user_token', '').strip()
 
         os.remove(f"media/{image}")
 
         property = Property.objects.get(pk=property_id)
         user = property.owner
-
-        check_token(user_token,user)
 
         image = Image.objects.get(image=image)
         property.images.remove(image)
@@ -211,7 +208,6 @@ class CreatePetitionMutation(graphene.Mutation):
         if Petition.objects.filter(property = property, requester = requester).exclude(status = 'D').exists():
             raise ValueError(_("Ya has realizado una solicitud a este inmueble."))
            
-        check_token(user_token,requester)
         obj = Petition.objects.create(
             message=message,
             property=property,
@@ -225,7 +221,6 @@ class UpdatePetitionStatus(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
         status_petition = graphene.Boolean(required=True)
-        user_token = graphene.String(required=False)
 
     petition = graphene.Field(PetitionType)
 
@@ -233,14 +228,14 @@ class UpdatePetitionStatus(graphene.Mutation):
     def mutate(root, info, **kwargs):
         petition_id = kwargs.get('petition_id', '')
         status_petition = kwargs.get('status_petition', False)
-        user_token = kwargs.get('user_token', '').strip()
+        
         try:
             petition = Petition.objects.get(id=petition_id)
         except Petition.DoesNotExist:
             raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
 
         user = petition.property.owner
-        check_token(user_token,user)
+        
         if petition.status != "P":
             raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
 
@@ -254,22 +249,18 @@ class UpdatePetitionStatus(graphene.Mutation):
 class DeletePetition(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
-        user_token = graphene.String(required=False)
 
     petition = graphene.Field(PetitionType)
     
     @staticmethod
     def mutate(root, info, **kwargs):
         petition_id = kwargs.get('petition_id', '')
-        user_token = kwargs.get('user_token', '').strip()
         
         try:
             petition = Petition.objects.get(id=petition_id)
         except Petition.DoesNotExist:
             raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
-
-        user = petition.requester
-        check_token(user_token,user)
+        
         if petition.status == "A":
             raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada")
         petition.delete()
@@ -406,9 +397,6 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         except Property.DoesNotExist:
             raise ValueError(_("El inmueble seleccionado no existe"))
 
-        user = selected_property.owner
-        check_token(user_token,user)
-
         if selected_property.is_outstanding:
             raise ValueError(_("El inmueble ya es destacado"))
         
@@ -506,14 +494,6 @@ class PropertyMutation(graphene.ObjectType):
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
-def check_token(user_token: str, user: FlatterUser):
-    if user_token:
-        try:
-            user_token = jwt.decode(user_token, 'my_secret', algorithms=['HS256'])
-            if user_token['username'] != user.username:
-                raise ValueError(_("El token no es válido"))
-        except jwt.exceptions.DecodeError:
-            raise ValueError(_("El token no es válido"))
 
 def random_string(atributo):
     # Obtenemos las primeras tres letras del atributo

@@ -155,7 +155,7 @@ const PropertyRequests = () => {
                                     <h2>{request.property.title}</h2>
 
                                     <div className="request-footer">
-                                        <div class="request-footer-element">
+                                        <div className="request-footer-element">
                                             <div className="request-user-picture" onClick={() => navigate(`/profile/${request.requester.username}`)}>
                                                 <img src={settings.API_SERVER_MEDIA + request.requester.profilePicture} alt="Avatar"/>
                                             </div>
@@ -168,7 +168,7 @@ const PropertyRequests = () => {
                                             </div>
                                         </div>
 
-                                        <div class="request-footer-element">
+                                        <div className="request-footer-element">
                                             <span>{request.property.maxCapacity} 
                                                 <img className='icon-img' src={require("../static/files/icons/partners.png")} alt="Icono Capacidad vivienda"/>
                                             </span>
