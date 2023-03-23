@@ -342,6 +342,7 @@
   font-size: 0.7em;
   color: var(--color-error);
   padding-left: 3px;
+}
 
 .filterview-element > button{
   width: 100%;

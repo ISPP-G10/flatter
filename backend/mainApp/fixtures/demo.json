@@ -481,7 +481,7 @@
     "pk": 2,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "outstanding_start_date": "2023-03-09 12:00:00",
       "title": "Casa con piscina",
       "description": "Una hermosa casa con piscina en el jardín",
       "visits_counter": 50,
@@ -526,7 +526,7 @@
     "pk": 4,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "outstanding_start_date": "2023-03-09 12:00:00",
       "title": "Casa de campo",
       "description": "Una hermosa casa de campo rodeada de naturaleza",
       "visits_counter": 100,
@@ -593,7 +593,7 @@
     "pk": 7,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "outstanding_start_date": "2023-03-09 12:00:00",
       "title": "Casa moderna",
       "description": "Una casa moderna y elegante en el centro de la ciudad",
       "visits_counter": 25,
@@ -638,7 +638,7 @@
     "pk": 9,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00.00 +0100",
+      "outstanding_start_date": "2023-03-09 12:00:00",
       "title": "Penthouse con vista al mar",
       "description": "Un espectacular penthouse con vista al mar en la costa del Pacífico",
       "visits_counter": 50,
@@ -662,7 +662,7 @@
     "fields": {
       "rating": 5,
       "text": "Excelente persona y cumple con lo que ofrece. El apartamento es fantástico.",
-      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "creation_date": "2023-03-16 14:30:00",
       "valued_user": 1,
       "evaluator_user": 2,
       "relationship": "I"
@@ -674,7 +674,7 @@
     "fields": {
       "rating": 4,
       "text": "La cocina un poco perqueña pero por lo demás genial",
-      "creation_date": "2023-02-13 20:20:00.00 +0100",
+      "creation_date": "2023-02-13 20:20:00",
       "valued_user": 1,
       "evaluator_user": 3,
       "relationship": "I"
@@ -686,7 +686,7 @@
     "fields": {
       "rating": 4,
       "text": "Excelente persona y excelente compañero de piso.",
-      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "creation_date": "2023-03-16 14:30:00",
       "valued_user": 3,
       "evaluator_user": 2,
       "relationship": "C"
@@ -698,7 +698,7 @@
     "fields": {
       "rating": 2,
       "text": "Lo he tenido en otros pisos y huele mal.",
-      "creation_date": "2022-01-26 13:10:00.00 +0100",
+      "creation_date": "2022-01-26 13:10:00",
       "valued_user": 2,
       "evaluator_user": 3,
       "relationship": "C"
@@ -710,7 +710,7 @@
     "fields": {
       "rating": 4,
       "text": "El mejor compañero que he tenido nunca.",
-      "creation_date": "2023-02-22 21:00:00.00 +0100",
+      "creation_date": "2023-02-22 21:00:00",
       "valued_user": 3,
       "evaluator_user": 4,
       "relationship": "E"
@@ -722,7 +722,7 @@
     "fields": {
       "rating": 5,
       "text": "Es el mejor.",
-      "creation_date": "2023-03-14 09:30:00.00 +0100",
+      "creation_date": "2023-03-14 09:30:00",
       "valued_user": 3,
       "evaluator_user": 5,
       "relationship": "A"
@@ -734,7 +734,7 @@
     "fields": {
       "rating": 1,
       "text": "Se ha peleado con su compañero de piso",
-      "creation_date": "2023-03-16 14:30:00.00 +0100",
+      "creation_date": "2023-03-16 14:30:00",
       "valued_user": 3,
       "evaluator_user": 1,
       "relationship": "P"

@@ -166,7 +166,6 @@ const PublicProfileCard = (props) => {
                             <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
                         )
                     }
-                  </div>
                   <p>{prof ? prof : ''}</p>
                   <p>{age!=null ? age + " años": ''}</p> 
                 </div>
