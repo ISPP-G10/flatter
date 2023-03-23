@@ -1,103 +1,15 @@
-import '../../static/css/components/publicProfileCard.css';
-
+import '../../static/css/components/publicProfileCard.css'
 import Tag from '../tag';
 import PropTypes from 'prop-types';
-import FlatterModal from '../flatterModal';
-import FlatterForm from '../forms/flatterForm';
-import usersAPI from '../../api/usersAPI';
-import tagsAPI from '../../api/tagsAPI';
-import chatsAPI from '../../api/chatsAPI';
-
-import { publicProfileFormInputs } from '../../forms/publicProfileForm';
-import { useApolloClient } from '@apollo/client';
-import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
+import chatsAPI from '../../api/chatsAPI';
 
 const PublicProfileCard = (props) => {
 
-    const client = useApolloClient();
-
-    let [userImage, setUserImage] = useState(null);
-    let [tagOptions, setTagOptions] = useState([]);
-
-    const [age, setAge] = useState(props.age);
-    const [birthDate, setBirthdate] = useState(props.birthDate ?? publicProfileFormInputs.filter(input => input.name === "birthDate")[0].defaultValue);
-
-    let params = useParams();
-    let username = params.username ? params.username : localStorage.getItem('user');
-
-    const editPublicProfileModalRef = useRef(null);
-    const editPublicProfileForm = useRef(null);
-    const userImageField = useRef(null);
-    const [ tagsProfile, setTagsProfile ] = useState(props.tags);
-    const [ name, setName ] = useState(props.name);
-    const [ bio, setBio ] = useState(props.bio);
-    const [ prof, setProf ] = useState(props.job);
-
-    const {data, loading} = useQuery(tagsAPI.getTags);
-
-    useEffect (() => {
-        if (!loading){
-            setTagOptions(data);
-        };
-    }, [data])
-
-    function performUserMutation(values, encodedImage){
-        const arr = String(values.birthDate).split('-')
-        const birthday = arr[2] + '/' + arr[1] + '/' + arr[0]
-        client.mutate({
-            mutation: usersAPI.updatePublicProfile,
-            variables: {
-                username: username,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                biography: values.biography,
-                profession: values.profession,
-                profilePicture: encodedImage,
-                tags: values.tags ? values.tags.map(tag => tag.name) : [],
-                birthday: birthday,
-            }
-        })
-        .then((response) => {
-            editPublicProfileModalRef.current.close();
-            // setName(values.firstName + " " + values.lastName);
-            // setBio(values.biography);
-            // setProf(values.profession);
-            // setTagsProfile(values.tags ?? []);
-            // setAge(response.data.editUserPublic.user.age);
-            // setBirthdate(values.birthDate);
-        })
-        .catch((error) => alert(error.message));
-    }
-
-    function handlePublicProfileEdit({values}){
-
-        console.log(values);
-
-        if(!editPublicProfileForm.current.validate()) return;
-
-        try{
-            
-            var reader = new FileReader();
-            reader.readAsDataURL(userImage);
-
-            reader.onload = function () {
-                performUserMutation(values, reader.result);
-            };
-        }catch(error){
-            performUserMutation(values, null);
-        }
-    }
-
-    function changeImage(e){
-
-        let file = e.target.files[0];
-
-        userImageField.current.src = URL.createObjectURL(file);
-
-        setUserImage(file);
-    }
+    let params = useParams()
+    let username = params.username ? params.username : localStorage.getItem('user')
+    let client = useApolloClient()
 
     const openChat = () => {
         client.mutate({
@@ -112,63 +24,37 @@ const PublicProfileCard = (props) => {
             alert(error.message.split("\n")[0]);
         });
     }
-    
-    useEffect(() => {
-        publicProfileFormInputs.map((input) => {
-            switch(input.name){
-                case 'biography':
-                    input.defaultValue = bio;
-                    break;
-                case 'profession':
-                    input.defaultValue = prof;
-                    break;
-                case 'firstName':
-                    input.defaultValue = name.split(' ')[0];
-                    break;
-                case 'lastName':
-                    input.defaultValue = name.split(' ')[1];
-                    break;
-                case 'birthDate':
-                    input.defaultValue = birthDate;
-                    break;
-                case 'tags':
-                    input.defaultValues = tagsProfile;
-                    break;
-                default:
-                    break;
-            }
-        });
-    }, [tagsProfile, name, prof, bio, birthDate]);
 
     return (
-        <>
         <div className={`profile-card-container ${props.isMe ? 'profile-card-me' : props.isPropietary ? 'profile-card-propietary' : 'profile-card-tenant'}`}>
             <div className="profile-card-info">
-                <div className="profile-card-edit">
-                    <h2>{props.name}</h2>
-                    {
-                        props.isMe ? (
-                            <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
-                        ) : 
-                        (
-                            <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
-                        )
-                    }
+                <div className="profile-card-data">
+                    <div className={`profile-card-edit ${props.isMe ? '' : 'no-edit'}`}>
+                        <h2>{props.name}</h2>
+                        {
+                            props.isMe ? (
+                                <button className="profile-card-btn" title="Edita tu perfil" ></button>
+                            ) : 
+                            (
+                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
+                            )
+                        }
+                    </div>
+                    <p>{props.job ? props.job : ''}</p>
+                    <p>{props.age ? props.age + " años": ''}</p> 
                 </div>
-                <p>{prof ? prof : ''}</p>
-                <p>{age!=null ? age + " años": ''}</p> 
             </div>
             <div className='profile-card-details'>
                 <img className='profile-card-img' src={props.pic} alt='Profile'/>
                 <div className='profile-card-bio'>
                     <h2>Yo...</h2>
                     <p className="profile-card-description">
-                        {bio ? bio : props.me ? 'Añade una descripción para que el resto te conozca' : 'No hay descripción disponible'}
+                        {props.bio ? props.bio : props.me ? 'Añade una descripción para que el resto te conozca' : 'No hay descripción disponible'}
                     </p>
                     <div className='tags-container'>
                         {
-                            tagsProfile.length !== 0 ? (
-                                tagsProfile.map((tag, i) => { 
+                            props.tags.length !== 0 ? (
+                                props.tags.map((tag, i) => { 
                                     return(
                                         <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
                                     )
@@ -181,28 +67,6 @@ const PublicProfileCard = (props) => {
                 </div>
             </div>           
         </div>
-        <FlatterModal ref={editPublicProfileModalRef} maxHeight={800} maxWidth={700}>
-            <h1 className="edit-form-title">Editar perfil público</h1>
-            <FlatterForm 
-                buttonText="Actualizar perfil"
-                showSuperAnimatedButton
-                numberOfColumns={1}
-                inputs={publicProfileFormInputs}
-                onSubmit={handlePublicProfileEdit}
-                ref={editPublicProfileForm}
-                scrollable
-                >
-                <div className="setting-profile-pic" >
-                    <label className="-label" htmlFor="file">
-                        <img src={require('../../static/files/icons/camera.png')} alt="camara" className="camera-icon"/>
-                        <span style={{margin: '0'}}>Cambiar</span>
-                    </label>
-                    <input id="file" type="file" onChange={changeImage}/>
-                    <img ref={userImageField} className="user-img" src={props.pic} id="output" width="100" alt="Imagen de perfil"/>
-                </div>
-            </FlatterForm>
-        </FlatterModal>
-        </>
     );
 }
 
