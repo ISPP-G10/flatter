@@ -8,8 +8,8 @@ export const propertyValidators = {
     },
 
     maxPrice: {
-        validate: (value) => parseInt(value)<5000,
-        message: "El valor debe ser menor de 5000"
+        validate: (value) => parseInt(value)<500000,
+        message: "El valor debe ser menor de 500k"
     },
 
     minDimensions: {
@@ -18,8 +18,8 @@ export const propertyValidators = {
     },
 
     maxDimensions: {
-        validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 320"
+        validate: (value) => parseInt(value)<50000,
+        message: "El valor debe ser menor de 50k"
     },
 
     minRooms: {
@@ -28,8 +28,8 @@ export const propertyValidators = {
     },
 
     maxRooms: {
-        validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 320"
+        validate: (value) => parseInt(value)<50,
+        message: "El valor debe ser menor de 50"
     },
 
     minBaths: {
@@ -38,8 +38,8 @@ export const propertyValidators = {
     },
 
     maxBaths: {
-        validate: (value) => parseInt(value)<320,
-        message: "El valor debe ser menor de 320"
+        validate: (value) => parseInt(value)<50,
+        message: "El valor debe ser menor de 50"
     },
 
     minCapacity: {

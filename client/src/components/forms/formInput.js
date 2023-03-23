@@ -18,6 +18,7 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
             setErrors: (errors) => {
                 setInputErrors(errors);
             },
+            files: files
         }
     });
 
@@ -116,7 +117,7 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                         credits={false}
                     />
                 </div>
-            )
+            );
         
         case "date":
             return(

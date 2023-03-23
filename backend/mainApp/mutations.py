@@ -150,7 +150,6 @@ class CreatePropertyMutation(graphene.Mutation):
         )
 
         images = kwargs.get('images', [])
-        print(len(images))
         images_to_add = []
 
         if images:
@@ -340,8 +339,6 @@ class UpdatePropertyMutation(graphene.Mutation):
         
         property_edit = Property.objects.get(pk=property_id)
 
-        user = property_edit.owner
-        check_token(user_token,user)
         if title and title != property_edit.title:
             property_edit.title = title
 
@@ -370,6 +367,8 @@ class UpdatePropertyMutation(graphene.Mutation):
             property_edit.max_capacity = max_capacity
             
         property_edit.save()
+
+        print(images)
 
         if images:
             

@@ -4,8 +4,9 @@ from .types import PropertyType, PetitionType
 from authentication.types import TagType
 from .models import Property,Petition
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from django.db.models import Q
-from datetime import datetime, timezone
+from datetime import datetime
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
@@ -76,7 +77,7 @@ class MainAppQuery(object):
             if (timezone.now() - property.outstanding_start_date).days > 7:
                 property.is_outstanding = False
                 property.save()
-        return Property.objects.filter(is_outstanding = True
+        return Property.objects.filter(is_outstanding = True)
         
     def resolve_get_petitions_by_status_and_username_and_dates(self, info, username,status=None, start_date=None, end_date =None):
         q = Q()

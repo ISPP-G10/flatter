@@ -64,7 +64,8 @@ const propertiesAPI = {
           title
           description
         }
-
+      }
+    }
     `,
     filterProperties: gql`
         query filterProperties($minPrice: Float, $maxPrice: Float, $city: String, $tag: String) {
@@ -160,6 +161,7 @@ const propertiesAPI = {
   getPropertyById: gql`
     query getPropertyById($id: Int!) {
       getPropertyById(id: $id) {
+        id
         title
         location
         province

@@ -45,6 +45,12 @@ const FlatterForm = forwardRef((props, ref) => {
         for(let input of inputs){
             formValuesCopy[input.name] = input.value;
         }
+        for(let i=0; i< props.inputs.length; i++){
+            let input = props.inputs[i];
+            if(input.type === "files"){
+                formValuesCopy[input.name] = formInputs.current[i].files.map(file => file.getFileEncodeBase64String());
+            }
+        }
         setFormValues(formValuesCopy);
         setSubmitForm(true);
     }

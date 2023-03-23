@@ -8,7 +8,6 @@ import FormProperty from "../components/forms/formProperty";
 import Tag from "../components/tag";
 import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
-import FlatterModal from "../components/flatterModal";
 import FlatterForm from "../components/forms/flatterForm";
 import FavouriteButton from "../components/property/favouriteButton";
 
@@ -139,16 +138,22 @@ const PropertyDetails = () => {
                
                {localStorage.getItem("roles") &&
             localStorage.getItem("roles").includes("RENTER") && 
-            localStorage.getItem("user") !== data.getPropertyById.owner.username &&(
+            localStorage.getItem("user") !== propertyData.getPropertyById.owner.username &&(
               <FavouriteButton
-                isFavourite={data.getPropertyById.interestedUsers
+                isFavourite={propertyData.getPropertyById.interestedUsers
                   .map((user) => user.username === localStorage.getItem("user"))
                   .some((value) => value)}
                 propertyId={id}
               />
             )}
 
-              <button className="property-btn">
+              <button 
+                className="property-btn"
+                onClick={() => {
+                  setProperty(propertyData.getPropertyById);
+                  editPropertyModalRef.current.open();
+                }}
+              >
                 {localStorage.getItem("user") ===
                 propertyData.getPropertyById.owner.username ? (
                   <>
