@@ -166,9 +166,9 @@ const PublicProfileCard = (props) => {
                             <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${username}`} onClick={() => openChat()}></button>
                         )
                     }
-                  <p>{prof ? prof : ''}</p>
-                  <p>{age!=null ? age + " años": ''}</p> 
                 </div>
+                <p>{prof ? prof : ''}</p>
+                <p>{age!=null ? age + " años": ''}</p> 
             </div>
             <div className='profile-card-details'>
                 <img className='profile-card-img' src={props.pic} alt='Profile'/>
