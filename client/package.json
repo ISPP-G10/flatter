@@ -31,6 +31,7 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.7.0",
     "react-slick": "^0.29.0",
+    "subscriptions-transport-ws": "^0.11.0",
     "three": "^0.150.1",
     "web-vitals": "^2.1.0"
   },

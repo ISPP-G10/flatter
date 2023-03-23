@@ -7,8 +7,8 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import * as settings from './settings';
 import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
+import { WebSocketLink } from '@apollo/client/link/ws'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 function parseWSLink(uri) {
   if (uri.startsWith('ws')) return uri;
@@ -19,9 +19,13 @@ const httpLink = new HttpLink({
   uri: `${settings.API_SERVER}graphql/`
 });
 
-const wsLink = new GraphQLWsLink(createClient({
-  url: parseWSLink(`${settings.API_SERVER}graphql/`),
-}));
+const wsLink = new WebSocketLink(
+    new SubscriptionClient(parseWSLink(`${settings.API_SERVER}graphql/`), {
+      options: {
+        reconnect: true
+      }
+    })
+  );
 
 const splitLink = split(
   ({ query }) => {
