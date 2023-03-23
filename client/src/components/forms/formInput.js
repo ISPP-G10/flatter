@@ -151,7 +151,7 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
 FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files","date"]),
+    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
     isRequired: PropTypes.bool,

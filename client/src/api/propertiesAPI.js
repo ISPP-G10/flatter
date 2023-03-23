@@ -81,7 +81,9 @@ const propertiesAPI = {
                     name
                     color
                 }
-                province
+                province{
+                    name
+                }
                 price
                 isOutstanding
                 maxCapacity
@@ -164,7 +166,12 @@ const propertiesAPI = {
         id
         title
         location
-        province
+        province{
+            name
+        }
+        municipality{
+            name
+        }
         description
         price
         dimensions

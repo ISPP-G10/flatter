@@ -109,7 +109,7 @@ const OwnerProperties = ({}) => {
               <div className="attrcontainer"> 
                 <div className="attrindv">
                   <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">{prop.province}</p>  
+                  <p className = "location">{prop.location}</p>  
                 </div>
                 <div className="attrindv">
                   <p className = "team">{prop.price} €/mes</p>
@@ -166,7 +166,7 @@ const OwnerProperties = ({}) => {
       </section>
 
       <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
-        <FormProperty property={{}} />
+        <FormProperty/>
       </FlatterModal>
 
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>

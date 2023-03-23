@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import LandingPage from './pages/landingPage';
 import Error from './pages/error';
+import Chat from './sections/chat';
 import PropertyDetails from './pages/propertyDetails';
 import MainPage from './pages/mainPage';
 import OwnerProperties from './pages/ownerProperties';
@@ -13,8 +14,11 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
+import TagSelector from './components/inputs/tagSelector';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
+
+const val = [{ value: "1", label: "Amistoso", color: "#FFC107" }]
 
 function App() {
   return (
@@ -36,10 +40,11 @@ function App() {
         <Route path="/properties" element={<OwnerProperties />}/>
         <Route path="/property/:id" element={<PropertyDetails />}/>
         <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> <Chat/> </>}/>
+        <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
         <Route path='/me' element={<AccountSettings/>}/>
         <Route path='/favourites' element={<FavouritesProperties/>}/>
+        <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
