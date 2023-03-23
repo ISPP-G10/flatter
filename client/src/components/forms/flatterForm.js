@@ -2,7 +2,6 @@ import '../../static/css/components/flatterForm.css'
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 
-
 import SuperAnimatedButton from "../superAnimatedButton/superAnimatedButton";
 
 import {useState, useImperativeHandle, forwardRef, useEffect, useRef} from 'react';
@@ -14,66 +13,98 @@ import SolidButton from '../../sections/solidButton';
 const FlatterForm = forwardRef((props, ref) => {
 
     const [formValues, setFormValues] = useState({});
+    const [submitForm, setSubmitForm] = useState(false);
 
     let formElement = useRef(null);
+    let formInputs = useRef([]);
 
     useImperativeHandle(ref, () => {
         return{
             validate: () => {
-                for(let input of props.inputs){
+                let isValid = true;
+                for(let i=0; i< props.inputs.length; i++){
+                    let input = props.inputs[i];
                     for(let validator of input.validators){
                         if(!validator.validate(formValues[input.name])){
-                            return false;
+                            formInputs.current[i].setErrors([validator.message]);
+                            isValid = false;
                         }
                     }
                 }
 
-                return true;
+                return isValid;
             },
         }
     });
 
     function handleSubmit(e){
         e.preventDefault();
-        let inputs = document.getElementsByClassName("class-form-input");
-        for(let input of inputs){
-            formValues[input.name] = input.value;
+        let formValuesCopy = {};
+
+        for(let i=0; i< props.inputs.length; i++){
+            let input = props.inputs[i];
+            if(input.type === "files"){
+                formValuesCopy[input.name] = formInputs.current[i].files.map(file => file.getFileEncodeBase64String());
+            }else if(input.type === "interval"){
+                formValuesCopy[`min_${input.name}`] = formInputs.current[i].min;
+                formValuesCopy[`max_${input.name}`] = formInputs.current[i].max;
+            }else{
+                formValuesCopy[input.name] = formInputs.current[i].value;
+            }
         }
-        props.onSubmit({values: formValues});
+        setFormValues(formValuesCopy);
+        setSubmitForm(true);
     }
 
     useEffect(() => {
-
         if(Object.keys(formValues).length === 0){
             let newFormValues = {};
-
-            props.inputs && props.inputs.forEach(input => {
+            for(let input of props.inputs){
                 if(input.type === "interval"){
                     newFormValues[`min_${input.name}`] = input.min;
                     newFormValues[`max_${input.name}`] = input.max;
                 }else{
                     newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
                 }
-            });
-
+            };
             setFormValues(newFormValues);
         }
 
-        if(props.scrollable){
-            
+        if(props.scrollable){   
             formElement.current.style.overflow = 'scroll';
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formValues]);
 
+    useEffect(() => {
+
+        if(submitForm){
+            props.onSubmit({values: formValues});
+            setSubmitForm(false);
+        }
+
+    }, [submitForm]);
+
+    useEffect(() => {
+
+        document.addEventListener('keyup', (e) => {
+            if(e.key === 'Enter'){
+                handleSubmit(e);
+            }
+        });
+
+    }, []);
+
     return (
         <div className="class-profile-form">
             <form className="class-form" ref={formElement} style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
-                    {props.children}
                     { 
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
+                            console.log(index, props.childrenPosition);
                             return(
+                                <>
+                                {index === props.childrenPosition && props.children}
                                 <FormInput  key={index} 
                                             tag={input.tag}
                                             name={input.name}
@@ -86,8 +117,12 @@ const FlatterForm = forwardRef((props, ref) => {
                                             numberOfColumns={props.numberOfColumns}
                                             validators={input.validators}
                                             formValues={formValues}
-                                            setFormValues={setFormValues}/>
+                                            setFormValues={setFormValues}
+                                            ref={(input) => (formInputs.current[index] = input)}
+                                            />
+                                </>
                             )
+                            
                         })
                     }
             </form>
@@ -115,6 +150,7 @@ FlatterForm.propTypes = {
     buttonText: PropTypes.string,
     showSuperAnimatedButton: PropTypes.bool,
     numberOfColumns: PropTypes.number,
+    childrenPosition: PropTypes.number,
 }
 
 FlatterForm.defaultProps = {
@@ -123,6 +159,7 @@ FlatterForm.defaultProps = {
     buttonText: "Enviar",
     showSuperAnimatedButton: false,
     numberOfColumns: 1,
+    childrenPosition: 0,
 }
 
 export default FlatterForm;

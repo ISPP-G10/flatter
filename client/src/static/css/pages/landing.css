@@ -292,6 +292,14 @@
   transform: translateY(-50%);
 }
 
+.input-subscribe{
+  height: 100%;
+}
+
+.input-email-subscribe{
+  margin-right: 30px;
+}
+
 /* RESPONSIVE */
 
 @media screen and (max-width: 1319px) {
@@ -380,7 +388,7 @@
   .mc-field-group{
     width: 100%;
   }
-  
+
   .email-input{
     width: 100%;
     margin-bottom: 20px !important;
@@ -396,6 +404,9 @@
     grid-template-columns: 1fr !important;
   }
 
+  .input-email-subscribe{
+    margin-right: 0px;
+  }
 }
 
 @media screen and (max-width: 440px) {
@@ -461,7 +472,7 @@
 }
 
 .info-modal p {
-  text-align: justify;
+  text-align: center;
   margin-bottom: 30px;
 }
 

@@ -16,7 +16,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
     function performUserMutation(values, encodedImage){
         client.mutate({
-            mutation: usersAPI.updateUser,
+            mutation: usersAPI.updatePrivateProfile,
             variables: {
                 username: localStorage.getItem('user', ''),
                 firstName: values.firstName,
@@ -25,12 +25,13 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
                 genre: values.genre,
                 role: values.role,
                 profilePicture: encodedImage,
-                phoneNumber: values.phoneNumber,
+                phone: values.phoneNumber,
+                profilePicture: encodedImage,
+
             }
         })
         .then((response) => {
-
-            let roles = response.data.editUser.user.roles.map((role) => role.role);
+            let roles = response.data.editUserPrivate.user.roles.map((role) => role.role);
 
             localStorage.setItem('roles', roles);
 
@@ -41,22 +42,20 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
     function handleAccountFormSubmit({values}){
 
-        if(!accountFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-            
-            return;
-        }
+        if(accountFormRef.current){
 
-        try{
-            var reader = new FileReader();
-            reader.readAsDataURL(userImage);
+            if(!accountFormRef.current.validate()) return;
 
-            reader.onload = function () {
-                performUserMutation(values, reader.result);
-            };
-        }catch(error){
-            performUserMutation(values, null);
+            try{
+                let reader = new FileReader();
+                reader.readAsDataURL(userImage);
+
+                reader.onload = function () {
+                    performUserMutation(values, reader.result);
+                };
+            }catch(error){
+                performUserMutation(values, null);
+            }
         }
     }
 

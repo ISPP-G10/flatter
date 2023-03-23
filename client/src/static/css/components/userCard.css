@@ -20,6 +20,7 @@
   height: 150px;
   border-radius: 50%;
   border: 1px solid rgb(0, 57, 85);
+  object-fit: cover;
 }
 
 .user-card__info{

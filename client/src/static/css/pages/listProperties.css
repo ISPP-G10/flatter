@@ -3,6 +3,7 @@
     max-width: 1200px;
     width: 100%;
     margin-top: 50px;
+    overflow: initial;
 }
 
 .site-content-sidebar > .sidebar {
@@ -149,6 +150,51 @@
     display: flex;
     align-items: center;
     margin: initial;
+}
+
+.share-property-modal .share-input {
+    display: flex;
+}
+
+.share-property-modal .share-input > input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #008000a3;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.share-property-modal .share-whatsapp {
+    margin-top: 20px;
+    background: #25D366;
+    transition: all 0.3s;
+}
+
+.share-property-modal .share-input button {
+    padding: 10px;
+    background: #008000a3;
+    color: #fff;
+    border: initial;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.share-property-modal .share-input button:hover, .share-property-modal .share-whatsapp:hover {
+    background: #008000c3;
+}
+
+.modal-content-wrapper:has(.share-property-modal) {
+    max-height: 375px !important;
+}
+
+.share-property-modal.info-modal h3 {
+    text-align: center;
+}
+
+.share-property-modal.info-modal h3::before {
+    display: none;
 }
 
 

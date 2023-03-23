@@ -4,6 +4,7 @@ import Groups from "../components/chat/groups";
 import Settings from "../components/chat/settings";
 import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
+import { useApolloClient } from "@apollo/client";
 
 const Chat = () => {
 
@@ -11,7 +12,9 @@ const Chat = () => {
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
+    const [chatId, setChatId] = useState(null);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
+    const client = useApolloClient();
 
     let chatBtn = useRef();
     let chatSlide = useRef();
@@ -30,7 +33,7 @@ const Chat = () => {
     let nodesList = [];
 
     const sendMessage = () => {
-        socialLib.sendMessage(chatInput, MAX_LEN);
+        socialLib.sendMessage(client, chatInput, chatId, MAX_LEN);
     }
 
     const setChangeTabTrue = () => {
@@ -76,7 +79,7 @@ const Chat = () => {
 
             if (chatInput.current.innerHTML === '' || chatInput.current.innerHTML === '<br>') {
                 chatInput.current.innerHTML = 'Escribe tu mensaje aquí...';
-                chatInput.current.style.color = "rgb(165, 165, 165)";
+                chatInput.current.style.color = "#FFFFFF)";
             }
 
             if (groups.current.style.display === "block" && groups.current.scrollHeight === groups.current.offsetHeight) {
@@ -109,6 +112,7 @@ const Chat = () => {
             groups.current.scrollTop = 1;
             footer.current.style.display = "block";
             settings.current.style.display = "none";
+            setChatId(null);
         } else {
             chat.current.style.display = "block";
             chat.current.scrollTop = chat.current.scrollHeight;
@@ -164,7 +168,7 @@ const Chat = () => {
     const setPlaceholderOn = () => {
         if (chatInput.current.innerHTML === '' || chatInput.current.innerHTML === '<br>') {
             chatInput.current.innerHTML = 'Escribe tu mensaje aquí...';
-            chatInput.current.style.color = "rgb(165, 165, 165)";
+            chatInput.current.style.color = "#FFFFFF";
         }
     }
 
@@ -269,7 +273,7 @@ const Chat = () => {
         let searchMessage = document.createElement("h4");
         let newContent = document.createTextNode("La búsqueda no tuvo ningún resultado. Por favor, pruebe de nuevo.");
         searchMessage.appendChild(newContent);
-        searchMessage.style.color = "#FFFFFF";
+        searchMessage.style.color = "#000000";
         searchMessage.classList.add("ml-2");
         searchMessage.classList.add("mr-2");
 
@@ -318,46 +322,6 @@ const Chat = () => {
         }
     }
 
-    // useEffect(() => {
-    //     if (chatId) {
-    //         chatHeaderTitle.current.innerHTML = chatId[1];
-    //         if (chatHeaderActive.current.classList.contains("class-chat-active")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-active");
-    //         } else if (chatHeaderActive.current.classList.contains("class-chat-inactive")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-inactive");
-    //         } else if (chatHeaderActive.current.classList.contains("class-chat-none")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-none");
-    //         }
-    //         chatHeaderActive.current.classList.add("class-chat-" + chatId[2]);
-    //         if (chatId[2] !== "none") {
-    //             chatHeaderActive.current.title = "The user is " + chatId[2];
-    //         } else {
-    //             chatHeaderActive.current.title = "";
-    //         }
-    //     }
-    // }, [chatId])
-
-    // useEffect(() => {
-    //     if (userPreferences) {
-    //         if (chatHeaderTitle.current.innerText === userPreferences.user.username) {
-    //             if (chatHeaderActive.current.classList.contains("class-chat-active")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-active");
-    //             } else if (chatHeaderActive.current.classList.contains("class-chat-inactive")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-inactive");
-    //             } else if (chatHeaderActive.current.classList.contains("class-chat-none")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-none");
-    //             }
-    //             let status = sessionStorage.visibilityOnline === "true" ? userPreferences.visibilityOnline === true ? userPreferences.isOnline ? "active" : "inactive" : "inactive" : "none";
-    //             chatHeaderActive.current.classList.add("class-chat-" + status);
-    //             if (status !== "none") {
-    //                 chatHeaderActive.current.title = "The user is " + status;
-    //             } else {
-    //                 chatHeaderActive.current.title = "";
-    //             }
-    //         }
-    //     }
-    // }, [userPreferences])
-
     return (
         <>
             <div className="class-button-chat d-flex justify-content-center align-items-center" ref={chatBtn}>
@@ -389,7 +353,7 @@ const Chat = () => {
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation />
+                    <Conversation chatId={chatId} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -399,7 +363,7 @@ const Chat = () => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups />
+                        <Groups setChatId={setChatId} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">
