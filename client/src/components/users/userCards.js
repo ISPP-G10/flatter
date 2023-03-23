@@ -16,7 +16,7 @@ const UserCard = ({ user }) => {
                 <p>@{user.username}</p>
                 <span>{user.profession}</span>
                 <div className='average-rating-bubble'>
-                    <span>{user.averageRating !== 0 ? user.averageRating : '-'}</span>
+                    <span>{user.averageRating !== 0 ? user.averageRating.toFixed(1) : '-'}</span>
                 </div>
             </div>
         </div>

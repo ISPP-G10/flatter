@@ -12,12 +12,7 @@ const PasswordSettingForm = ({correctModalRef}) => {
 
     function handleAccountFormSubmit({values}){
 
-        if(!accountFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-            
-            return;
-        }
+        if(!accountFormRef.current.validate()) return;
 
         client.mutate({
             mutation: usersAPI.changeUserPassword,

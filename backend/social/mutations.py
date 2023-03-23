@@ -265,7 +265,7 @@ class EditUserPrivateMutation(graphene.Mutation):
         last_name = kwargs.get('last_name', '').strip()
         genre = kwargs.get('genre', '').strip()
         role = kwargs.get('role', '').strip()
-        phone = kwargs.get('phone', '').strip()
+        phone = kwargs.get('phone', None)
         email = kwargs.get('email', '').strip()
         profile_picture = kwargs.get('profile_picture', '').strip()
         user_token = kwargs.get('user_token', '').strip()
@@ -312,10 +312,8 @@ class EditUserPrivateMutation(graphene.Mutation):
             else:
                 user_selected.email = email
 
-        if not phone:
-            user_selected.phone_number = None
-        else:
-            user_selected.phone_number = phone
+        if phone is not None and user_selected.phone_number != phone:
+            user_selected.phone_number = phone.strip()
 
         if not profile_picture:
             user_selected.profile_picture = "users/images/default.jpg"

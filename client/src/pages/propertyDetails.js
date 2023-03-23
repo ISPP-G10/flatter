@@ -3,27 +3,85 @@ import "../static/css/pages/propertyDetails.css";
 import SlideShow from "../components/slider/slideShow";
 import SmallProfile from "../components/profile/smallProfile";
 import FlatterPage from "../sections/flatterPage";
+import FlatterModal from "../components/flatterModal";
+import FormProperty from "../components/forms/formProperty";
 import Tag from "../components/tag";
-
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-
 import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
+import FlatterForm from "../components/forms/flatterForm";
+import FavouriteButton from "../components/property/favouriteButton";
+
+import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
+import { useState, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useApolloClient } from "@apollo/client";
 
 const PropertyDetails = () => {
+  let [property, setProperty] = useState({});
+  const editPropertyModalRef = useRef(null);
+
+  const client = useApolloClient();
+
+  const propertyRequestModalRef = useRef(null);
+  const propertyRequestFormRef = useRef(null);
+
   const { id } = useParams();
 
-  console.log(parseInt(id));
+  const { loading: propertyLoading, data: propertyData } = useQuery(
+    propertiesAPI.getPropertyById,
+    {
+      variables: {
+        id: parseInt(id),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
 
-  const { loading, data } = useQuery(propertiesAPI.getPropertyById, {
-    variables: { 
-      id: parseInt(id),
-    },
-  });
+  const { loading: propertyRequestsLoading, data: propertyRequestsData } =
+    useQuery(propertiesAPI.getPropertyRequestsByUsername, {
+      variables: {
+        requesterUsername: localStorage.getItem("user"),
+        propertyId: parseInt(id),
+      },
+    });
 
-  if (loading) return <p>Loading...</p>;
+  if (propertyLoading || propertyRequestsLoading) return <p>Loading...</p>;
 
+  const userRequest =
+    propertyRequestsData.getPetitionByRequesterToProperty[0] ?? false;
+
+  const handlePropertyRequest = ({ values }) => {
+    console.log(values);
+    client
+      .mutate({
+        mutation: propertiesAPI.createPropertyRequest,
+        variables: {
+          requesterUsername: localStorage.getItem("user"),
+          propertyId: parseInt(id),
+          message: values.message,
+        },
+      })
+      .then((response) => {
+        propertyRequestModalRef.current.close();
+        window.location.reload();
+      })
+      .catch((error) => alert(error.message));
+  };
+
+  const handleCancelRequest = (e) => {
+    client
+      .mutate({
+        mutation: propertiesAPI.removePropertyRequest,
+        variables: {
+          requestId: parseInt(userRequest.id),
+        },
+      })
+      .then((response) => {
+        propertyRequestModalRef.current.close();
+        window.location.reload();
+      })
+      .catch((error) => alert(error.message));
+  };
   return (
     <FlatterPage withBackground userLogged>
       <div className="property-housing-page">
@@ -31,7 +89,7 @@ const PropertyDetails = () => {
           <div className="property-housing__photo">
             <div className="property-photo-container">
               <SlideShow
-                images={data.getPropertyById.images.map(
+                images={propertyData.getPropertyById.images.map(
                   (image) => settings.API_SERVER_MEDIA + image.image
                 )}
               />
@@ -39,25 +97,91 @@ const PropertyDetails = () => {
           </div>
           <div className="property-housing__info">
             <div className="property-title">
-              <h1>{data.getPropertyById.title}</h1>
-              <span>LOCALIZACIÓN: {data.getPropertyById.province.name}, {data.getPropertyById.municipality.name}, {data.getPropertyById.location}</span>
+              <h1>{propertyData.getPropertyById.title}</h1>
+              <span>
+                LOCALIZACIÓN: {propertyData.getPropertyById.province},{" "}
+                {propertyData.getPropertyById.location}
+              </span>
             </div>
             <div className="property-price">
-              <span>{data.getPropertyById.price}</span> <span>€/mes</span>
+              <span>{propertyData.getPropertyById.price}</span>{" "}
+              <span>€/mes</span>
             </div>
             <div className="property-description">
               <h3>Descripción</h3>
-              <p>{data.getPropertyById.description}</p>
+              <p>{propertyData.getPropertyById.description}</p>
             </div>
             <div className="property-tags-row">
-              {data.getPropertyById.tags.map((tag, index) => (
+              {propertyData.getPropertyById.tags.map((tag, index) => (
                 <Tag key={index} name={tag.name} color={tag.color} />
               ))}
             </div>
+
             <div className="property-btn__container">
-              <button className="property-btn">
+
+              {localStorage.getItem("roles") &&
+                localStorage.getItem("roles").includes("RENTER") &&
+                localStorage.getItem("user") !==
+                  propertyData.getPropertyById.owner.username && (
+                  <FavouriteButton
+                    isFavourite={propertyData.getPropertyById.interestedUsers
+                      .map(
+                        (user) => user.username === localStorage.getItem("user")
+                      )
+                      .some((value) => value)}
+                    propertyId={id}
+                  />
+                )
+              }
+
+              {propertyData.getPropertyById.owner.username !==
+              localStorage.getItem("user") ? (
+                userRequest === false ? (
+                  <button
+                    className="property-btn"
+                    style={{ textTransform: "uppercase", marginLeft: "auto" }}
+                    onClick={() => {
+                      propertyRequestModalRef.current.open();
+                    }}
+                  >
+                    <>
+                      <img
+                        className="property-img"
+                        src={require("../static/files/icons/lapiz.png")}
+                        alt="Petición"
+                      />
+                      Solicitar
+                    </>
+                  </button>
+                ) : (
+                  <button
+                    className="property-btn red outlined"
+                    style={{ textTransform: "uppercase", marginLeft: "auto" }}
+                    onClick={handleCancelRequest}
+                  >
+                    <>
+                      <img
+                        className="property-img"
+                        src={require("../static/files/icons/lapiz.png")}
+                        alt="Petición"
+                      />
+                      Cancelar
+                    </>
+                  </button>
+                )
+              ) : (
+                <></>
+              )}
+
+              <button
+                className="property-btn"
+                onClick={() => {
+                  setProperty(propertyData.getPropertyById);
+                  editPropertyModalRef.current.open();
+                }}
+              >
                 {localStorage.getItem("user") ===
-                data.getPropertyById.owner.username ? (
+                propertyData.getPropertyById.owner.username ? (
                   <>
                     <img
                       className="property-img"
@@ -81,7 +205,7 @@ const PropertyDetails = () => {
           </div>
         </section>
         <section className="property-people">
-          {data.getPropertyById.flatmates.length !== 0 && (
+          {propertyData.getPropertyById.flatmates.length !== 0 && (
             <section className="property-flatmates">
               <div className="property-container__title">
                 <img
@@ -93,7 +217,7 @@ const PropertyDetails = () => {
               </div>
 
               <div className="property-flatmates__container">
-                {data.getPropertyById.flatmates.map((user, index) => (
+                {propertyData.getPropertyById.flatmates.map((user, index) => (
                   <SmallProfile key={index} user={user} />
                 ))}
               </div>
@@ -108,10 +232,29 @@ const PropertyDetails = () => {
               />
               <h1>Propietario</h1>
             </div>
-            <SmallProfile user={data.getPropertyById.owner} />
+            <SmallProfile user={propertyData.getPropertyById.owner} />
           </section>
         </section>
       </div>
+
+      <FlatterModal
+        maxWidth={500}
+        maxHeight={500}
+        ref={propertyRequestModalRef}
+      >
+        <h1 className="comments-form-title">Solicitar alquiler</h1>
+        <FlatterForm
+          buttonText="Solicitar"
+          showSuperAnimatedButton
+          numberOfColumns={1}
+          inputs={propertyRequestsInputs}
+          onSubmit={handlePropertyRequest}
+          ref={propertyRequestFormRef}
+        ></FlatterForm>
+      </FlatterModal>
+      <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
+        <FormProperty property={property} />
+      </FlatterModal>
     </FlatterPage>
   );
 };

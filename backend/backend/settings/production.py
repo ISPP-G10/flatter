@@ -25,7 +25,7 @@ except Exception:
 try:
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 except Exception:
-    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
+    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'dev.socialflatter.es', 'socialflatter.es', 'www.socialflatter.es', '34.155.143.170']
 
 CORS_ORIGIN_ALLOW_ALL = True
 

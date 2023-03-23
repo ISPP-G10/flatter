@@ -1,7 +1,5 @@
 version: '3'
 
-name: flatter
-
 services:
   db:
     restart: always
@@ -23,7 +21,7 @@ services:
     build: 
       context: ..
       dockerfile: ./docker/backend/Dockerfile
-    command: bash -c "/usr/src/app/flatter-backend/entrypoint.sh && gunicorn -w 5 backend.wsgi:application --timeout=500 --bind 0.0.0.0:8000 -c gunicorn.conf.py"
+    command: bash -c "/usr/src/app/flatter-backend/entrypoint_demo.sh && gunicorn -w 5 backend.wsgi:application --timeout=500 --bind 0.0.0.0:8000 -c gunicorn.conf.py"
     environment:
       DEBUG: ${DEBUG}
       DJANGO_ENV: ${DJANGO_ENV}

@@ -14,21 +14,26 @@ import SolidButton from '../../sections/solidButton';
 const FlatterForm = forwardRef((props, ref) => {
 
     const [formValues, setFormValues] = useState({});
+    const [submitForm, setSubmitForm] = useState(false);
 
     let formElement = useRef(null);
+    let formInputs = useRef([]);
 
     useImperativeHandle(ref, () => {
         return{
             validate: () => {
-                for(let input of props.inputs){
+                let isValid = true;
+                for(let i=0; i< props.inputs.length; i++){
+                    let input = props.inputs[i];
                     for(let validator of input.validators){
                         if(!validator.validate(formValues[input.name])){
-                            return false;
+                            formInputs.current[i].setErrors([validator.message]);
+                            isValid = false;
                         }
                     }
                 }
 
-                return true;
+                return isValid;
             },
         }
     });
@@ -36,36 +41,61 @@ const FlatterForm = forwardRef((props, ref) => {
     function handleSubmit(e){
         e.preventDefault();
         let inputs = document.getElementsByClassName("class-form-input");
+        let formValuesCopy = {};
         for(let input of inputs){
-            formValues[input.name] = input.value;
+            formValuesCopy[input.name] = input.value;
         }
-        props.onSubmit({values: formValues});
+        for(let i=0; i< props.inputs.length; i++){
+            let input = props.inputs[i];
+            if(input.type === "files"){
+                formValuesCopy[input.name] = formInputs.current[i].files.map(file => file.getFileEncodeBase64String());
+            }
+        }
+        setFormValues(formValuesCopy);
+        setSubmitForm(true);
     }
 
     useEffect(() => {
 
         if(Object.keys(formValues).length === 0){
             let newFormValues = {};
-
-            props.inputs && props.inputs.forEach(input => {
+            for(let input of props.inputs){
                 if(input.type === "interval"){
                     newFormValues[`min_${input.name}`] = input.min;
                     newFormValues[`max_${input.name}`] = input.max;
                 }else{
                     newFormValues[input.name] = input.defaultValue ? input.defaultValue : '';
                 }
-            });
+            };
 
             setFormValues(newFormValues);
         }
 
-        if(props.scrollable){
-            
+        if(props.scrollable){   
             formElement.current.style.overflow = 'scroll';
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formValues]);
+
+    useEffect(() => {
+
+        if(submitForm){
+            props.onSubmit({values: formValues});
+            setSubmitForm(false);
+        }
+
+    }, [submitForm]);
+
+    useEffect(() => {
+
+        document.addEventListener('keyup', (e) => {
+            if(e.key === 'Enter'){
+                handleSubmit(e);
+            }
+        });
+
+    }, []);
 
     return (
         <div className="class-profile-form">
@@ -86,7 +116,9 @@ const FlatterForm = forwardRef((props, ref) => {
                                             numberOfColumns={props.numberOfColumns}
                                             validators={input.validators}
                                             formValues={formValues}
-                                            setFormValues={setFormValues}/>
+                                            setFormValues={setFormValues}
+                                            ref={(input) => (formInputs.current[index] = input)}
+                                            />
                             )
                         })
                     }

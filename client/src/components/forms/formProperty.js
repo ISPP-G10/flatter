@@ -66,7 +66,9 @@ const FormProperty = ({ property }) => {
     if(!createPropertyFormRef.current.validate()) return;
     if(provinceSelected === ' - ' || municipalitySelected === ' - ') return alert('Debes seleccionar una provincia y un municipio');
 
-    client.mutate({
+    console.log(values);
+
+    client.mutate(property.id===undefined ? {
       mutation: propertiesAPI.createProperty,
       variables: {
         title: values.title,
@@ -81,6 +83,22 @@ const FormProperty = ({ property }) => {
         images: values.images,
         maxCapacity: parseInt(values.maxCapacity),
         location: values.location
+      }
+    } : {
+      mutation: propertiesAPI.updateProperty,
+      variables: {
+        id: parseInt(property.id),
+        title: values.title,
+        description: values.description,
+        province: values.province,
+        bathroomsNumber: parseInt(values.bathroomsNumber),
+        bedroomsNumber: parseInt(values.bedroomsNumber),
+        dimensions: parseInt(values.dimensions),
+        location: values.location,
+        ownerUsername: localStorage.getItem('user',''),
+        price: parseFloat(values.price),
+        images: values.images,
+        maxCapacity: parseInt(values.maxCapacity)
       }
     })
     .then(response => window.location.reload())

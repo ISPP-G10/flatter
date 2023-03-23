@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import MultiRangeSlider from '../inputs/multiRangeSlider';
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -6,12 +6,21 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 
-const FormInput = ({ tag, name, type, defaultValue, values, isRequired, 
-                    numberOfColumns, validators, minValue, maxValue, formValues, setFormValues}) => {
+const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
+                    numberOfColumns, validators, minValue, maxValue, formValues, setFormValues}, ref) => {
 
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
     let inputField = useRef(null);
+
+    useImperativeHandle(ref, () => {
+        return{
+            setErrors: (errors) => {
+                setInputErrors(errors);
+            },
+            files: files
+        }
+    });
 
     function handleFiles(fileItems){
         setFiles(fileItems);
@@ -66,8 +75,8 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                     <textarea className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " defaultValue={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
                     <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
                     {
-                        inputErrors.length > 0 && inputErrors.map((error) => {
-                            return(<span className="class-error-message">{error}</span>)
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
                         })
                     }
                 </div>
@@ -108,8 +117,8 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                         credits={false}
                     />
                 </div>
-            )
-
+            );
+        
         case "date":
             return(
                 <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {marginTop: `7.5%`}}>	
@@ -122,21 +131,22 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                     }
                 </div>
             );
-        
+
+
         default:
             return(
                 <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {width: `${100/numberOfColumns-3}%`} : {}}>	
                     <input className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " defaultValue={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
                     <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
                     {
-                        inputErrors.length > 0 && inputErrors.map((error) => {
-                            return(<span className="class-error-message">{error}</span>)
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
                         })
                     }
                 </div>
             );
     }
-};
+});
 
 FormInput.propTypes = {
     tag: PropTypes.string,
