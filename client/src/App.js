@@ -42,7 +42,7 @@ function App() {
         <Route path='/property/requests' element={<> <PropertyRequests/> <Chat/> </>}/>
         <Route path='/profile' element={<> <PublicProfile/> <Chat/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
-        <Route path='/me' element={<> <AccountSettings/> <Chat/> </>}/>
+        <Route path='/me' element={<> <AccountSettings/> </>}/>
         <Route path='/favourites' element={<> <FavouritesProperties/> <Chat/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
