@@ -32,7 +32,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 INSTALLED_APPS = [
-    'channels'
+    'channels',
     'authentication',
     'social',
     'mainApp',
