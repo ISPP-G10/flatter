@@ -60,7 +60,7 @@ const chatsAPI = {
                         profilePicture
                     }
                     group{
-                        id
+                        individual
                     }
                 }
             }
