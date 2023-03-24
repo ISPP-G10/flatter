@@ -30,6 +30,7 @@
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+  text-align: center;
 }
 
 .user-card__info h2{
