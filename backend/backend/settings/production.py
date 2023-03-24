@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "graphene_django",
     "corsheaders",
+    "pytest"
 ]
 
 MIDDLEWARE = [
