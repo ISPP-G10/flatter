@@ -13,6 +13,7 @@ RUN apk add chromium-chromedriver
 RUN apk add gettext
 
 RUN pip install gunicorn
+RUN pip install daphne
 RUN pip install ipdb
 RUN pip install ipython
 
