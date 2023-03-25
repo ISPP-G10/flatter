@@ -4,9 +4,7 @@ from authentication.models import FlatterUser
 
 # Create your tests here.
 
-### Datos de prueba
-# Creación de usuarios de prueba
-
+########## MODELS TESTS ##########
 class TestModels(TestCase):
 
     @classmethod
@@ -30,6 +28,8 @@ class TestModels(TestCase):
         super().tearDownClass()
         FlatterUser.objects.filter(username='test_user').delete()
         FlatterUser.objects.filter(username='test_user2').delete()
+        FlatterUser.objects.filter(username='test_user3').delete()
+        Group.objects.filter(name='test_group_1').delete()
 
 
     # Modelo Group
@@ -146,5 +146,3 @@ class TestModels(TestCase):
         request = Request(command="")
         request.save()
         self.assertEqual(request.command, "")
-    
-
