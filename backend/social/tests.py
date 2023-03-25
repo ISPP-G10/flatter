@@ -35,17 +35,18 @@ class TestModels(TestCase):
     # Modelo Group
     ### Test de creación de un grupo individual  +++ Caso positivo
     def test_individual_group_positive(self):
-        group = Group(name='individual_test1', individual=True)
+        group = Group(name='individual_group_test_positive', individual=True)
         group.save()
         group.users.add(self.user1, self.user2)
-        self.assertEqual(group.name, 'individual_test1')
+        self.assertEqual(group.name, 'individual_group_test_positive')
         self.assertEqual(group.individual, True)
         self.assertEqual(group.users.count(), 2)
+        group.delete()
 
     ### Test de creación de un grupo individual  --- Caso negativo: el grupo individual no tiene suficientes miembros 
     def test_individual_group_negative(self):
         try:
-            group = Group(name='individual_test2', individual=True)
+            group = Group(name='individual_group_test_negative', individual=True)
             group.save()
             group.users.add(self.user1)
             self.fail("Individual group can only have two users")
@@ -101,6 +102,7 @@ class TestModels(TestCase):
         self.assertEqual(message.text, 'Esto es una prueba positiva')
         self.assertEqual(message.user, self.user1)
         self.assertEqual(message.group, self.group1)
+        message.delete()
 
     ### Test de creación de un mensaje  --- Caso negativo: mensaje en blanco
     def test_message_negative(self):
@@ -126,12 +128,14 @@ class TestModels(TestCase):
         incident = Incident(command='test_incident')
         incident.save()
         self.assertEqual(incident.command, 'test_incident')
+        incident.delete()
 
     ### Test de creación de un incidente  +++ Caso positivo: comando en blanco
     def test_incident_negative(self):
         incident = Incident(command='')
         incident.save()
         self.assertEqual(incident.command, '')
+        incident.delete()
             
 
     # Modelo Request
@@ -140,9 +144,11 @@ class TestModels(TestCase):
         request = Request(command="test_request")
         request.save()
         self.assertEqual(request.command, "test_request")
+        request.delete()
 
     ### Test de creación de una petición  +++ Caso positivo: comando en blanco
     def test_request_negative(self):
         request = Request(command="")
         request.save()
         self.assertEqual(request.command, "")
+        request.delete()

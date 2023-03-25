@@ -20,7 +20,7 @@ class TestQueries(TestCase):
         cls.user3 = FlatterUser.objects.create_user(username="test_user3", password="1234", email="test3@gmail.com", first_name="Test",
                                                 last_name="User3", genre = 'H', flatter_coins = 0,)
         
-        cls.group1 = Group(name='test_group_1', individual=True)
+        cls.group1 = Group(name='test_query_group_1', individual=True)
         cls.group1.save()
         cls.group1.users.add(cls.user1, cls.user2)
 
@@ -47,7 +47,7 @@ class TestQueries(TestCase):
     def test_get_groups_returns_correct_data(self):
         client = Client(schema)
         executed = client.execute('''query {getGroups{ name }}''')
-        assert executed == {'data': {'getGroups': [{'name': 'test_group_1'}]}}
+        assert executed == {'data': {'getGroups': [{'name': 'test_query_group_1'}]}}
 
     ### Test de query de mensajes  +++ Caso positivo: no hay mensajes
     def test_get_messages_returns_empty_list_when_no_messages(self):
