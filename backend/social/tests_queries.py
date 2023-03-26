@@ -19,10 +19,14 @@ class TestQueries(TestCase):
         
         cls.user3 = FlatterUser.objects.create_user(username="test_user3", password="1234", email="test3@gmail.com", first_name="Test",
                                                 last_name="User3", genre = 'H', flatter_coins = 0,)
-        
+        cls.user1.save()
+        cls.user2.save()
+        cls.user3.save()
+
         cls.group1 = Group(name='test_query_group_1', individual=True)
         cls.group1.save()
         cls.group1.users.add(cls.user1, cls.user2)
+        cls.group1.save()
 
         cls.tag1 = Tag(name='test_tag_1', entity='U', color='red')
         cls.tag1.save()
