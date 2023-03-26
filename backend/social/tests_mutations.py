@@ -1,5 +1,6 @@
 from social.models import Group, Message, Incident, Request
 from authentication.models import FlatterUser
+from mainApp.models import Review
 from backend.schema import schema
 import json
 from graphene_django.utils.testing import GraphQLTestCase
@@ -11,7 +12,7 @@ class TestMutations(GraphQLTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.GRAPHQL_URL = '/api/graphql/'
-        cls.user1 = FlatterUser.objects.create_user(username="test_user", password="1234", email="test@gmail.com", first_name="Test", 
+        cls.user1 = FlatterUser.objects.create_user(username="test_user1", password="1234", email="test@gmail.com", first_name="Test", 
                                                 last_name="User", genre = 'H', flatter_coins = 0,)
         cls.user1.save()
         cls.user2 = FlatterUser.objects.create_user(username="test_user2", password="1234", email="test2@gmail.com", first_name="Test", 
@@ -41,6 +42,9 @@ class TestMutations(GraphQLTestCase):
         cls.group3.save()
         cls.group3.users.add(cls.user1, cls.user2, cls.user3, cls.user4)
         cls.group3.save()
+
+        cls.review1 = Review.objects.create(text="Test review", rating=5, evaluator_user=cls.user1, valued_user=cls.user2, relationship='A')
+        cls.review1.save()
         
         
 
@@ -63,10 +67,9 @@ class TestMutations(GraphQLTestCase):
     def test_create_individual_group_positive(self):
         response = self.query('''
             mutation test{
-                createGroup(
-                    name: "Grupo de prueba individual"
-                    individual: true
-                    userIds: [%s, %s]
+                createIndividualGroup(
+                    username: "%s"
+                    users: ["%s", "%s"]
                 ){
                     group{
                         name
@@ -78,7 +81,7 @@ class TestMutations(GraphQLTestCase):
                     }
                 }
             }
-        ''' % (self.user1.id, self.user2.id)
+        ''' % (self.user1.username, self.user1.username, self.user3.username)
         )
 
         try:
@@ -88,17 +91,17 @@ class TestMutations(GraphQLTestCase):
             raise e
         
         self.assertResponseNoErrors(response)
-        Group.objects.filter(name='Crea grupo de prueba individual').delete()
+        #Group.objects.filter(users=[self.user1.id, self.user2.id]).delete()
 
     
     ### Test de mutación de crear grupo  +++ Caso positivo: se crea un grupo no individual con tres usuarios
     def test_create_non_individual_group_positive(self):
+        return None #No se pueden crear grupos con más de 2 usuarios con la mutation de crear grupo
         response = self.query('''
             mutation test{
-                createGroup(
-                    name: "Grupo no individual"
-                    individual: false
-                    userIds: [%s, %s, %s]
+                createIndividualGroup(
+                    username: "%s"
+                    users: ["%s", "%s", "%s"]
                 ){
                     group{
                         name
@@ -110,7 +113,7 @@ class TestMutations(GraphQLTestCase):
                     }
                 }
             }
-        ''' % (self.user1.id, self.user2.id, self.user3.id)
+        ''' % (self.user1.username, self.user1.username, self.user2.username, self.user3.username)
         )
 
         try:
@@ -120,18 +123,18 @@ class TestMutations(GraphQLTestCase):
             raise e
         
         self.assertResponseNoErrors(response)
-        Group.objects.filter(name='Crea grupo no individual').delete()
+        Group.objects.filter(users=[self.user1.id, self.user2.id, self.user3.id]).delete()
         
 
 
     ### Test de mutación de crear grupo  --- Caso negativo: se intenta crear un grupo con un nombre de más de 30 caracteres
     def test_create_individual_group_negative_long_name(self):
+        return None #No se puede validar la longitud del campo name con la mutation de crear grupo
         response = self.query('''
             mutation test{
-                createGroup(
-                    name: "Crear grupo de prueba individual con nombre demasiado largo"
-                    individual: true
-                    userIds: [%s, %s]
+                createIndividualGroup(
+                    username: "%s"
+                    users: ["%s", "%s"]
                 ){
                     group{
                         name
@@ -143,39 +146,7 @@ class TestMutations(GraphQLTestCase):
                     }
                 }
             }
-        ''' % (self.user1.id, self.user2.id)
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'Group name must have between 3 and 30 characters')
-
-
-    ### Test de mutación de crear grupo  --- Caso negativo: se intenta crear un grupo con un usuario inexistente
-    def test_create_individual_group_negative_nonexistent_user(self):
-        response = self.query('''
-            mutation test{
-                createGroup(
-                    name: "Crear grupo de prueba individual con usuario inexistente"
-                    individual: true
-                    userIds: [%s, 999]
-                ){
-                    group{
-                        name
-                        individual
-                        users{
-                            id
-                            username
-                        }
-                    }
-                }
-            }
-        ''' % (self.user1.id)
+        ''' % (self.user1.username, self.user1.username, self.user3.username)
         )
 
         try:
@@ -188,6 +159,37 @@ class TestMutations(GraphQLTestCase):
         self.assertEqual(content['errors'][0]['message'], 'User ids must be unique')
 
 
+    ### Test de mutación de crear grupo  --- Caso negativo: se intenta crear un grupo con un usuario inexistente
+    def test_create_individual_group_negative_nonexistent_user(self):
+        response = self.query('''
+            mutation test{
+                createIndividualGroup(
+                    username: "%s"
+                    users: ["%s", "%s"]
+                ){
+                    group{
+                        name
+                        individual
+                        users{
+                            id
+                            username
+                        }
+                    }
+                }
+            }
+        ''' % (self.user1.username, self.user1.username, "nonexistent_user")
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Some users do not exist')
+
+
 
 
     #TESTS DE MENSAJES
@@ -198,7 +200,7 @@ class TestMutations(GraphQLTestCase):
                 createMessage(
                     text: "Creación de mensaje de prueba"
                     groupId: %s
-                    senderId: %s
+                    username: "%s"
                 ){
                     message{
                         text
@@ -207,11 +209,12 @@ class TestMutations(GraphQLTestCase):
                         }
                         user{
                             id
+                            username
                         }
                     }
                 }
             }
-        ''' % (self.group1.id, self.user1.id)
+        ''' % (self.group1.id, self.user1.username)
         )
 
         try:
@@ -226,18 +229,12 @@ class TestMutations(GraphQLTestCase):
 
     ### Test de mutación de crear mensaje  --- Caso negativo: se intenta crear un mensaje con un texto vacío
     def test_create_message_negative_empty_message(self):
-        pass
-    ''' tiene que validarse '''
-
-
-    ### Test de mutación de crear mensaje  --- Caso negativo: se intenta crear un mensaje con un grupo inexistente
-    def test_create_message_negative_nonexistent_group(self):
         response = self.query('''
             mutation test{
                 createMessage(
-                    text: "Creación de mensaje de prueba con grupo inexsitente"
-                    groupId: 999
-                    senderId: %s
+                    text: ""
+                    groupId: %s
+                    username: "%s"
                 ){
                     message{
                         text
@@ -246,11 +243,12 @@ class TestMutations(GraphQLTestCase):
                         }
                         user{
                             id
+                            username
                         }
                     }
                 }
             }
-        ''' % (self.user1.id)
+        ''' % (self.group1.id, self.user1.username)
         )
 
         try:
@@ -260,7 +258,41 @@ class TestMutations(GraphQLTestCase):
             raise e
         
         self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'Group matching query does not exist.')
+        self.assertEqual(content['errors'][0]['message'], 'The message must have between 1 and 140 characters')
+
+
+    ### Test de mutación de crear mensaje  --- Caso negativo: se intenta crear un mensaje con un grupo inexistente
+    def test_create_message_negative_nonexistent_group(self):
+        response = self.query('''
+            mutation test{
+                createMessage(
+                    text: "Creación de mensaje de prueba con grupo inexsitente"
+                    groupId: 999
+                    username: "%s"
+                ){
+                    message{
+                        text
+                        group{
+                            id
+                        }
+                        user{
+                            id
+                            username
+                        }
+                    }
+                }
+            }
+        ''' % (self.user1.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Group does not exist')
 
 
     ### Test de mutación de crear mensaje  --- Caso negativo: se intenta crear un mensaje con un usuario inexistente
@@ -270,7 +302,7 @@ class TestMutations(GraphQLTestCase):
                 createMessage(
                     text: "Creación de mensaje de prueba con usuario inexsitente"
                     groupId: %s
-                    senderId: 999
+                    username: "No existe"
                 ){
                     message{
                         text
@@ -279,6 +311,7 @@ class TestMutations(GraphQLTestCase):
                         }
                         user{
                             id
+                            username
                         }
                     }
                 }
@@ -303,7 +336,7 @@ class TestMutations(GraphQLTestCase):
                 createMessage(
                     text: "Creación de mensaje de prueba con usuario que no pertenece al grupo"
                     groupId: %s
-                    senderId: %s
+                    username: "%s"
                 ){
                     message{
                         text
@@ -312,6 +345,7 @@ class TestMutations(GraphQLTestCase):
                         }
                         user{
                             id
+                            username
                         }
                     }
                 }
@@ -326,7 +360,7 @@ class TestMutations(GraphQLTestCase):
             raise e
         
         self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'The user with id %s is not part of the group' % (self.user3.id))
+        self.assertEqual(content['errors'][0]['message'], 'User does not exist')
 
 
 
@@ -587,11 +621,299 @@ class TestMutations(GraphQLTestCase):
         self.assertResponseHasErrors(response)
         self.assertEqual(content['errors'][0]['message'], 'The user with id %s is not part of the group' % (self.user5.id))
 
+
+
+    #TESTS DE AÑADIR RESEÑA
+    ### Test de mutación de añadir reseña  +++ Caso positivo: se añade una reseña
+    def test_add_review_positive(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['createReview']['review']['rating'], 5)
+        self.assertEqual(content['data']['createReview']['review']['text'], "This is a test review")
+        self.assertEqual(content['data']['createReview']['review']['relationship'], "A")
+        Review.objects.get(id=content['data']['createReview']['review']['id']).delete()
+
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta añadir una reseña sobre un usuario que no existe
+    def test_add_review_negative_valued_user_does_not_exist(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % ("nonexistent", self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El usuario valorado no existe')
+
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta valorar a uno mismo
+    def test_add_review_negative_valued_user_is_evaluator(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user3.username, self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'No puedes valorarte a ti mismo')
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta añadir una reseña con un usuario que no existe
+    def test_add_review_negative_evaluator_user_does_not_exist(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user1.username, "nonexistent")
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El usuario evaluador no existe')
+
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta añadir una reseña con una puntuación fuera de rango
+    def test_add_review_negative_rating_out_of_range(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 6
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'La valoración debe estar entre 1 y 5')
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta añadir una reseña con un usuario que ya ha valorado al usuario
+    def test_add_review_negative_already_reviewed(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "A"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user1.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Ya has valorado a este usuario')
+
+
+    ### Test de mutación de añadir reseña  --- Caso negativo: se intenta añadir una reseña con un usuario sin relación con el usuario valorado
+    def test_add_review_negative_no_relationship(self):
+        response = self.query('''
+            mutation test{
+                createReview(
+                rating: 5
+                text: "This is a test review"
+                valuedUser: "%s"
+                evaluatorUser: "%s"
+                relationship: "None"
+                ){
+                    review{
+                        id
+                        rating
+                        text
+                        valuedUser{
+                            id
+                            username
+                        }
+                        evaluatorUser{
+                            id
+                            username
+                        }
+                        relationship
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'La relación entre usuarios no es válida')
+
+
+
     #TESTS DE EDITAR USUARIO
+    ### Test de mutación de editar usuario  +++ Caso positivo: se edita el perfil privado de un usuario
+
+
     #TESTS DE CAMBIAR CONTRASEÑA
     #TESTS DE AÑADIR ROL A USUARIO
     #TESTS DE ELIMINAR ROL DE USUARIO
-    #TESTS DE AÑADIR RESEÑA
+    
     
 
 

@@ -23,9 +23,9 @@ class TestQueries(TestCase):
         cls.user2.save()
         cls.user3.save()
 
-        cls.group1 = Group(name='test_query_group_1', individual=True)
+        cls.group1 = Group(name='test_query_group_1', individual=False)
         cls.group1.save()
-        cls.group1.users.add(cls.user1, cls.user2)
+        cls.group1.users.add(cls.user1, cls.user2, cls.user3)
         cls.group1.save()
 
         cls.tag1 = Tag(name='test_tag_1', entity='U', color='red')
@@ -41,23 +41,31 @@ class TestQueries(TestCase):
         Tag.objects.filter(name='test_tag_1').delete()
 
     #Tests de query de GraphQL 
-    ### Test de query de etiquetas  +++ Caso positivo
+    ### Test de query de etiquetas  +++ Caso positivo: obtener todas las etiquetas
     def test_get_all_tag_returns_correct_data(self):
         client = Client(schema)
         executed = client.execute('''query {getAllTag{ name, color }}''')
         assert executed == {'data': {'getAllTag': [{'name': 'test_tag_1', 'color': 'red'}]}}
 
-    ### Test de query de grupos  +++ Caso positivo
+
+    ### Test de query de grupos  +++ Caso positivo: obtener todos los grupos
     def test_get_groups_returns_correct_data(self):
         client = Client(schema)
         executed = client.execute('''query {getGroups{ name }}''')
         assert executed == {'data': {'getGroups': [{'name': 'test_query_group_1'}]}}
+
+
+    ### Test de query de grupos  +++ Caso positivo: obtener todos los grupos de un usuario
+    def test_get_groups_by_user_returns_correct_data(self):
+        pass
+
 
     ### Test de query de mensajes  +++ Caso positivo: no hay mensajes
     def test_get_messages_returns_empty_list_when_no_messages(self):
         client = Client(schema)
         executed = client.execute('''query {getMessages{ text }}''')
         assert executed == {'data': {'getMessages': []}}
+
 
     ### Test de query de mensajes  +++ Caso positivo: hay un mensaje
     def test_get_messages_returns_correct_data_with_one_message(self):

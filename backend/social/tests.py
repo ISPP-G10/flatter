@@ -39,13 +39,14 @@ class TestModels(TestCase):
     # Modelo Group
     ### Test de creación de un grupo individual  +++ Caso positivo
     def test_individual_group_positive(self):
-        group = Group(name='individual_group_test_positive', individual=True)
+        group = Group(name='individual_group', individual=True)
         group.save()
         group.users.add(self.user1, self.user2)
-        self.assertEqual(group.name, 'individual_group_test_positive')
+        self.assertEqual(group.name, None) # EL nombre de un grupo individual es None
         self.assertEqual(group.individual, True)
         self.assertEqual(group.users.count(), 2)
         group.delete()
+
 
     ### Test de creación de un grupo individual  --- Caso negativo: el grupo individual no tiene suficientes miembros 
     def test_individual_group_negative(self):
@@ -57,6 +58,7 @@ class TestModels(TestCase):
         except:
             pass
 
+
     ### Test de creación de un grupo individual  --- Caso negativo: el nombre del grupo está vacío
     def test_individual_group_negative2(self):
         try:
@@ -67,6 +69,7 @@ class TestModels(TestCase):
         except:
             pass
 
+
     ### Test de creación de un grupo público  +++ Caso positivo
     def test_public_group_positive(self):
         group = Group(name='group_test1', individual=False)
@@ -75,6 +78,7 @@ class TestModels(TestCase):
         self.assertEqual(group.name, 'group_test1')
         self.assertEqual(group.individual, False)
         self.assertEqual(group.users.count(), 3)
+
 
     ### Test de creación de un grupo público --- Caso negativo: el grupo público no tiene suficientes miembros (3)
     def test_public_group_negative(self):
@@ -85,6 +89,7 @@ class TestModels(TestCase):
             self.fail("Group must have at least 3 users")
         except:
             pass
+
 
     ### Test de borrado de un grupo público --- Caso negativo: no se puede borrar un grupo público con más de 2 miembros
     def test_public_group_negative2(self):
