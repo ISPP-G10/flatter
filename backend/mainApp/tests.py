@@ -8,6 +8,7 @@ from graphene_django.utils.testing import GraphQLTestCase
 
 
 # Create your tests here.
+# Tests de models.py de inmueble
 class TestProperty(TestCase):
     def setUp(self):
         self.user = FlatterUser.objects.create_user(
@@ -88,7 +89,7 @@ class TestProperty(TestCase):
 
         assert Property.objects.get(title="title").is_outstanding == True
     
-    #Tests de query de GraphQL 
+#Tests de queries.py de inmueble 
     def test_resolve_get_properties(self):
         query = '''
             query test{
@@ -113,17 +114,17 @@ class TestProperty(TestCase):
         result = schema.execute(query)
         assert not result.errors
     
-    # def test_resolve_get_property_by_id(self):
-    #     query = '''
-    #         query test{
-    #             getPropertyById(id: 16) {
-    #                 title
-    #                 id
-    #             }
-    #         }
-    #     '''
-    #     result = schema.execute(query)
-    #     assert not result.errors
+    def test_resolve_get_property_by_id(self):
+        query = '''
+            query test{
+                getPropertyById(id: 12) {
+                    title
+                    id
+                }
+            }
+        '''
+        result = schema.execute(query)
+        assert not result.errors
     
     def test_resolve_get_all_tags(self):
         query = '''
@@ -175,7 +176,7 @@ class TestProperty(TestCase):
         result = schema.execute(query)
         assert not result.errors
         
-#Tests de mutation con graphQL
+#Tests de mutation.py de inmueble
 class DefaultTests(GraphQLTestCase):
 
     def setUp(self):
@@ -185,6 +186,15 @@ class TestsMutations(DefaultTests):
 
     def setUp(self):
         super().setUp()
+        self.user = FlatterUser.objects.create_user(
+            username="Hola",
+            password="1234",
+            email="asd@asd.asd",
+            first_name="A",
+            last_name="B",
+            genre='H',
+            flatter_coins=0,
+        )
         self.quser = '''
             mutation testUser{
                 createUser(
@@ -263,6 +273,216 @@ class TestsMutations(DefaultTests):
 
         self.assertResponseNoErrors(response)
     
+    def test_create_property_mutation_negative_title(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla"
+                    title: "UWU"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El título debe tener entre 4 y 25 caracteres")
+    
+    def test_create_property_mutation_negative_description(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusíon en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion, inicia expediciones o adentrate en mazmorras en las que encontraras enemigos aun mas dificiles, enfrentate a otros jugadores en encuentros en el mundo abierto, lucha por los territorios o por ciudades enteras en batallas tacticas, relajate en tu isla privada donde podras construir un hogar, cultivar cosechas, criar animales, unete a un gremio, todo es mejor cuando se trabaja en grupo [musica] adentrate ya en el mundo de albion y escribe tu propia historia."
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla"
+                    title: "Pesito"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "La descripción no puede tener más de 256 caracteres")
+    
+    def test_create_property_mutation_negative_bedrooms(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: -1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla"
+                    title: "Pisito2"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El número de dormitorios no debe ser inferior a 1")
+    
+    def test_create_property_mutation_negative_bathrooms(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: -3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla"
+                    title: "Pisito2"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El número de cuartos de baño no debe ser inferior a 1")
+    
+    def test_create_property_mutation_negative_price(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: -245
+                    province: "Sevilla"
+                    title: "Pisito2"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El precio debe tener un valor positivo")
+    
+    def test_create_property_mutation_negative_province(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla es un lugar especial y llena de color"
+                    title: "Pisito2"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "La provincia debe tener máximo 15 caracteres")
+    
     def test_create_property_mutation_negative_dimensions(self):
         response = self.query('''
             mutation test{
@@ -298,10 +518,80 @@ class TestsMutations(DefaultTests):
         self.assertResponseHasErrors(response)
         self.assertEqual(content['errors'][0]['message'], "Las dimensiones deben poseer un valor positivo")
     
+    def test_create_property_mutation_negative_capacity(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "usuario"
+                    price: 245
+                    province: "Sevilla"
+                    title: "Pisito2"
+                    maxCapacity: -5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "La capacidad máxima debe ser positiva")
+    
+    def test_create_property_mutation_negative_user(self):
+        response = self.query('''
+            mutation test{
+                createProperty(
+                    bathroomsNumber: 3
+                    bedroomsNumber: 1
+                    dimensions: 23
+                    description: "Perro malo"
+                    location: "Sevillaaa"
+                    ownerUsername: "Hola"
+                    price: 245
+                    province: "Sevilla"
+                    title: "Pisito2"
+                    maxCapacity: 5
+                ){
+                    property{
+                        owner{
+                            username
+                        }
+                        title
+                    }
+                }   
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El usuario debe ser propietario")
+
     def test_add_tag_to_property_mutation(self):
         response = self.query('''
             mutation test{
-                addTagToProperty(id: 18, tag: "P"){
+                addTagToProperty(id: 15, tag: "P"){
     					property{
                             title
                             id
@@ -321,12 +611,12 @@ class TestsMutations(DefaultTests):
             print(response.content)
             raise e
 
-        self.assertResponseHasErrors(response)
+        self.assertResponseNoErrors(response)
     
     def test_update_property_mutation(self):
         response = self.query('''
             mutation test{
-                updateProperty(propertyId:20){
+                updateProperty(propertyId:29, title:"Nombre"){
                     property{
                         id
                     }
@@ -343,10 +633,52 @@ class TestsMutations(DefaultTests):
 
         self.assertResponseNoErrors(response)
     
+    def test_update_property_mutation_negative_title(self):
+        response = self.query('''
+            mutation test{
+                updateProperty(propertyId:30, title:"123"){
+                    property{
+                        id
+                    }
+                }
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "El título debe tener entre 4 y 25 caracteres")
+    
+    def test_update_property_mutation_negative_title (self):
+        response = self.query('''
+            mutation test{
+                updateProperty(propertyId:31, description: "albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusíon en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion, inicia expediciones o adentrate en mazmorras en las que encontraras enemigos aun mas dificiles, enfrentate a otros jugadores en encuentros en el mundo abierto, lucha por los territorios o por ciudades enteras en batallas tacticas, relajate en tu isla privada donde podras construir un hogar, cultivar cosechas, criar animales, unete a un gremio, todo es mejor cuando se trabaja en grupo [musica] adentrate ya en el mundo de albion y escribe tu propia historia."){
+                    property{
+                        id
+                    }
+                }
+            }
+        '''
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], "La descripción no puede tener más de 256 caracteres")
+    
     def test_make_property_outstanding_mutation(self):
         response = self.query('''
             mutation test{
-                makePropertyOutstanding(propertyId:19){
+                makePropertyOutstanding(propertyId:28){
                         property{
                             id
                             title
@@ -367,7 +699,7 @@ class TestsMutations(DefaultTests):
     def test_delete_property_mutation(self):
         response = self.query('''
             mutation test{
-                deleteProperty(propertyId:18){
+                deleteProperty(propertyId:27){
                             property{
                                     isInOffer
                                 }
