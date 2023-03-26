@@ -1,4 +1,6 @@
 from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
+from channels.auth import AuthMiddlewareStack
 from backend.socket import MyGraphqlWsConsumer
 from django.urls import path
 from channels.staticfiles import StaticFilesHandler
@@ -10,8 +12,12 @@ websocket_urlPattern = [
 ]
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": URLRouter(
-        websocket_urlPattern
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter(
+                websocket_urlPattern
+                )
+            )
     )
 })
 

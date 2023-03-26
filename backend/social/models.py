@@ -5,18 +5,15 @@ from django.db.models.signals import post_save, pre_save, pre_delete, m2m_change
 from django.dispatch import receiver
 
 class Group(models.Model):
-    name = models.CharField(max_length=30, blank=False, null=False)
+    name = models.CharField(max_length=30, blank=False, null=True)
     individual = models.BooleanField(default=False)
     users = models.ManyToManyField(FlatterUser)
 
-
 class Message(models.Model):
-    text = models.TextField(max_length=500, blank=False, null=False)
+    text = models.CharField(max_length=140, blank=False, null=False)
     timestamp = models.DateTimeField(auto_now_add=True, null=False)
     user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-
-  
     
 class Incident(models.Model):
     command = models.TextField()
@@ -49,7 +46,13 @@ def check_group(sender, instance, **kwargs):
     if not instance.individual and instance.users.count() > 2:
         raise ValidationError('Group can not be deleted')
 
-
+@receiver(pre_save, sender=Group)
+def check_name(sender, instance, **kwargs):
+    if instance.name and instance.individual:
+        instance.name = None
+        
+    if not instance.name and not instance.individual:
+        raise ValidationError('Group must have a name')
 
 #No permitir la creación de grupos no individuales con menos de 3 usuarios.
 @receiver(m2m_changed, sender=Group.users.through)

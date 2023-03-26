@@ -13,6 +13,9 @@ const usersAPI = {
                         token
                         user{
                           username
+                          roles{
+                            role
+                          }
                         }
                       }
                 }
@@ -25,6 +28,8 @@ const usersAPI = {
                             roles{
                                 role
                             }
+                            age
+                            birthday
                         }
                     }
                 }
@@ -57,6 +62,7 @@ const usersAPI = {
                     firstName
                     lastName
                     profilePicture
+                    age
                     biography
                     profession
                     birthday
@@ -130,8 +136,8 @@ const usersAPI = {
         }
     `,
     filteredUsersByTagAndReview: gql`
-        query getFilteredUsersByTagAndReview($tag: String){
-            getFilteredUsersByTagAndReview(tag: $tag){
+        query getFilteredUsersByTagAndReview($tag: String, $owner: Boolean){
+            getFilteredUsersByTagAndReview(tag: $tag, owner: $owner){
             id
             firstName
             lastName
@@ -156,11 +162,48 @@ const usersAPI = {
         createRequest(command: $command){
             request{
                 command
+                }
             }
         }
-    }
-`,
-
-}
+    `,
+    updatePublicProfile: gql`
+        mutation editUserPublic($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String, $firstName: String!, $lastName: String!, $birthday: String){
+            editUserPublic(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday){
+                user{
+                    firstName
+                    lastName
+                    profilePicture
+                    biography
+                    profession
+                    birthday
+                    averageRating
+                    roles{
+                        role
+                    }
+                    tags{
+                        name
+                        color
+                    }
+                }
+            }
+        }
+    `,
+    updatePrivateProfile: gql`
+        mutation editUserPrivate($username: String!, $firstName: String!, $lastName: String!, $email: String!, $phone: String, $genre: String!, $role: String!, $profilePicture: String){
+            editUserPrivate(username: $username, firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, genre: $genre, role: $role, profilePicture: $profilePicture){
+                user{
+                    firstName
+                    lastName
+                    profilePicture
+                    email
+                    phoneNumber
+                    roles{
+                        role
+                    }
+                }
+            }
+        }
+    `,
+}   
 
 export default usersAPI;

@@ -25,14 +25,14 @@ except Exception:
 try:
     ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 except Exception:
-    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost']
+    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'localhost', 'dev.socialflatter.es', 'socialflatter.es', 'www.socialflatter.es', '34.155.143.170']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
 # Application definition
 
 INSTALLED_APPS = [
-    'channels'
+    'channels',
     'authentication',
     'social',
     'mainApp',
@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
-ASGI_APPLICATION = 'routing.application'
+ASGI_APPLICATION = 'backend.asgi.application'
 
 
 # Database
@@ -174,13 +174,13 @@ GRAPHENE = {
     "allow_subscriptions": True,
 }
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [("127.0.0.1", 6379)],
-#         },
-#     },
-# }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("http://flatter-redis", 6379)],
+        }
+    },
+}
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 100000000
