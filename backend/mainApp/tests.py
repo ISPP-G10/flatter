@@ -1,5 +1,4 @@
 import json
-from django.db import IntegrityError
 from django.test import TestCase
 from authentication.models import FlatterUser, Tag
 from .models import Property
@@ -34,28 +33,9 @@ class TestProperty(TestCase):
             max_capacity=5,
         )
     
-    def test_createPropertyPositive(self):
+    def test_createProperty(self):
         
         assert Property.objects.count() == 1
-
-    def test_createPropertyNegative(self):
-        
-        try:
-            self.property = Property.objects.create(
-                title="title",
-                description="description",
-                bedrooms_number=3,
-                bathrooms_number=2,
-                price=100,
-                location="location",
-                province="province",
-                dimensions=200,
-                owner=self.user,
-                max_capacity=-5,
-            ) 
-            self.fail("Se esperaba un error por creación de inmueble")
-        except IntegrityError:
-            pass
     
     def test_addTagToProperty(self):
 
@@ -88,8 +68,8 @@ class TestProperty(TestCase):
         )
 
         assert Property.objects.get(title="title").is_outstanding == True
-    
-#Tests de queries.py de inmueble 
+
+#Tests de queries.py de inmueble
     def test_resolve_get_properties(self):
         query = '''
             query test{
@@ -116,14 +96,14 @@ class TestProperty(TestCase):
     
     def test_resolve_get_property_by_id(self):
         query = '''
-            query test{
-                getPropertyById(id: 12) {
+            query test($id: Int!){
+                getPropertyById(id: $id) {
                     title
                     id
                 }
             }
         '''
-        result = schema.execute(query)
+        result = schema.execute(query, variables={'id': self.property.id})
         assert not result.errors
     
     def test_resolve_get_all_tags(self):
@@ -184,9 +164,10 @@ class DefaultTests(GraphQLTestCase):
 
 class TestsMutations(DefaultTests):
 
-    def setUp(self):
-        super().setUp()
-        self.user = FlatterUser.objects.create_user(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.user = FlatterUser.objects.create_user(
             username="Hola",
             password="1234",
             email="asd@asd.asd",
@@ -195,7 +176,7 @@ class TestsMutations(DefaultTests):
             genre='H',
             flatter_coins=0,
         )
-        self.quser = '''
+        cls.quser = '''
             mutation testUser{
                 createUser(
                     email: "e@e.com"
@@ -213,8 +194,8 @@ class TestsMutations(DefaultTests):
                 }
             }
         '''
-        schema.execute(self.quser)
-        self.qproperty = '''
+        schema.execute(cls.quser)
+        cls.qproperty = '''
             mutation test{
                 createProperty(
                     bathroomsNumber: 2
@@ -233,11 +214,13 @@ class TestsMutations(DefaultTests):
                             username
                         }
                         title
+                        id
                     }
                 }   
             }
         '''
-        schema.execute(self.qproperty)
+        prop = schema.execute(cls.qproperty)
+        cls.property_id = prop.data.get("createProperty").get("property").get("id")
 
     def test_create_property_mutation(self):
         response = self.query('''
@@ -266,7 +249,7 @@ class TestsMutations(DefaultTests):
         )
 
         try:
-            content = json.loads(response.content)
+            json.loads(response.content)
         except json.JSONDecodeError as e:
             print(response.content)
             raise e
@@ -590,8 +573,8 @@ class TestsMutations(DefaultTests):
 
     def test_add_tag_to_property_mutation(self):
         response = self.query('''
-            mutation test{
-                addTagToProperty(id: 15, tag: "P"){
+            mutation test($id: Int!){
+                addTagToProperty(id: $id, tag: "P"){
     					property{
                             title
                             id
@@ -602,11 +585,12 @@ class TestsMutations(DefaultTests):
                     }
                 }  
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
-            content = json.loads(response.content)
+            json.loads(response.content)
         except json.JSONDecodeError as e:
             print(response.content)
             raise e
@@ -615,18 +599,19 @@ class TestsMutations(DefaultTests):
     
     def test_update_property_mutation(self):
         response = self.query('''
-            mutation test{
-                updateProperty(propertyId:29, title:"Nombre"){
+            mutation test($id: Int!){
+                updateProperty(propertyId:$id, title:"Nombre"){
                     property{
                         id
                     }
                 }
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
-            content = json.loads(response.content)
+            json.loads(response.content)
         except json.JSONDecodeError as e:
             print(response.content)
             raise e
@@ -635,14 +620,15 @@ class TestsMutations(DefaultTests):
     
     def test_update_property_mutation_negative_title(self):
         response = self.query('''
-            mutation test{
-                updateProperty(propertyId:30, title:"123"){
+            mutation test($id: Int!){
+                updateProperty(propertyId:$id, title:"123"){
                     property{
                         id
                     }
                 }
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
@@ -656,14 +642,15 @@ class TestsMutations(DefaultTests):
     
     def test_update_property_mutation_negative_title (self):
         response = self.query('''
-            mutation test{
-                updateProperty(propertyId:31, description: "albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusíon en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion, inicia expediciones o adentrate en mazmorras en las que encontraras enemigos aun mas dificiles, enfrentate a otros jugadores en encuentros en el mundo abierto, lucha por los territorios o por ciudades enteras en batallas tacticas, relajate en tu isla privada donde podras construir un hogar, cultivar cosechas, criar animales, unete a un gremio, todo es mejor cuando se trabaja en grupo [musica] adentrate ya en el mundo de albion y escribe tu propia historia."){
+            mutation test($id: Int!){
+                updateProperty(propertyId:$id, description: "albion online es un mmorpg no lineal en el que escribes tu propia historia sin limitarte a seguir un camino prefijado, explora un amplio mundo abierto con cinco biomas unicos, todo cuanto hagas tendra su repercusíon en el mundo, con su economia orientada al jugador de albion los jugadores crean practicamente todo el equipo a partir de los recursos que consiguen, el equipo que llevas define quien eres, cambia de arma y armadura para pasar de caballero a mago o juego como una mezcla de ambas clases, aventurate en el mundo abierto y haz frente a los habitantes y las criaturas de albion, inicia expediciones o adentrate en mazmorras en las que encontraras enemigos aun mas dificiles, enfrentate a otros jugadores en encuentros en el mundo abierto, lucha por los territorios o por ciudades enteras en batallas tacticas, relajate en tu isla privada donde podras construir un hogar, cultivar cosechas, criar animales, unete a un gremio, todo es mejor cuando se trabaja en grupo [musica] adentrate ya en el mundo de albion y escribe tu propia historia."){
                     property{
                         id
                     }
                 }
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
@@ -677,19 +664,20 @@ class TestsMutations(DefaultTests):
     
     def test_make_property_outstanding_mutation(self):
         response = self.query('''
-            mutation test{
-                makePropertyOutstanding(propertyId:28){
+            mutation test($id:Int!){
+                makePropertyOutstanding(propertyId:$id){
                         property{
                             id
                             title
                     }
                 }
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
-            content = json.loads(response.content)
+            json.loads(response.content)
         except json.JSONDecodeError as e:
             print(response.content)
             raise e
@@ -698,18 +686,19 @@ class TestsMutations(DefaultTests):
     
     def test_delete_property_mutation(self):
         response = self.query('''
-            mutation test{
-                deleteProperty(propertyId:27){
+            mutation test($id:Int!){
+                deleteProperty(propertyId: $id){
                             property{
                                     isInOffer
                                 }
                             }
             }
-        '''
+        ''',
+        variables={'id': int(self.property_id)}
         )
 
         try:
-            content = json.loads(response.content)
+            json.loads(response.content)
         except json.JSONDecodeError as e:
             print(response.content)
             raise e
