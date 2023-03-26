@@ -19,9 +19,9 @@ class AuthenticationQuery(object):
     if tag:    
       q &= Q(tags__icontains = tag)
       
-    if owner:
+    if owner is not None and owner:
       q &= Q(roles__in = [Role.objects.get(role="OWNER").pk])
-    else:
+    elif owner is not None:
       q &= Q(roles__in = [Role.objects.get(role="RENTER").pk])
       
     return FlatterUser.objects.filter(q)

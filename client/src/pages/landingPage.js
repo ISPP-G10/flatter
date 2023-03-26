@@ -303,7 +303,7 @@ const LandingPage = () => {
                 </p>
               </div>
               <div className="mail-form-input-column">
-                <div className="mc-field-group">
+                <div className="mc-field-group input-email-subscribe">
                   <input
                     type="email"
                     name="EMAIL"
@@ -340,7 +340,7 @@ const LandingPage = () => {
                   />
                 </div>
                 <div className="optionalParent">
-                  <div className="clear foot">
+                  <div className="input-subscribe">
                     <input
                       type="submit"
                       value="Suscribirme"

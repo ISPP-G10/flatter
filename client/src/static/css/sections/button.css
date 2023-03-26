@@ -49,3 +49,15 @@ button.button {
   stroke: none;
   stroke-width: 0;
 }
+
+@media screen and (max-width: 425px) {
+  .button {
+    padding: 12px 15px;
+  }
+}
+
+@media screen and (max-width: 290px) {
+  .button {
+    padding: 12px 10px;
+  }
+}
