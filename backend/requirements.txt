@@ -1,15 +1,16 @@
-aniso8601==9.0.1
+aniso8601==7.0.0
 asgiref==3.6.0
 coverage==7.2.0
-Django==4.1.7
+Django==3.2.18
 django-cors-headers==3.13.0
 django-extensions==3.2.1
 django-graphql-jwt==0.3.4
 django-modeltranslation==0.18.9
-graphene==3.2.1
-graphene-django==3.0.0
-graphql-core==3.2.3
-graphql-relay==3.2.0
+graphene==2.1.9
+graphene-django==2.15.0
+graphene-file-upload==1.3.0
+graphql-core==2.3.2
+graphql-relay==2.0.1
 Pillow==9.4.0
 promise==2.3
 psycopg2-binary==2.9.5
@@ -18,3 +19,4 @@ six==1.16.0
 sqlparse==0.4.3
 text-unidecode==1.3
 typing_extensions==4.5.0
+django-channels-graphql-ws==0.9.1

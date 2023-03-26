@@ -1,30 +1,42 @@
-import { useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import MultiRangeSlider from '../inputs/multiRangeSlider';
-import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 
-const FormInput = ({ tag, name, type, defaultValue, values, isRequired, 
-                    numberOfColumns, validators, minValue, maxValue, formValues, setFormValues}) => {
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { FilePond, registerPlugin } from 'react-filepond';
 
+const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
+                    numberOfColumns, validators, minValue, maxValue}, ref) => {
+                        
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
+    let [minInputValue, setMinInputValue] = useState(minValue);
+    let [maxInputValue, setMaxInputValue] = useState(maxValue);
     let inputField = useRef(null);
+
+    useImperativeHandle(ref, () => {
+
+        return{
+            setErrors: (errors) => {
+                setInputErrors(errors);
+            },
+            value: inputField.current ? inputField.current.value : "",
+            min: minInputValue,
+            max: maxInputValue,
+            files: files,
+        }
+    });
 
     function handleFiles(fileItems){
         setFiles(fileItems);
-        formValues[name] = fileItems.map(file => file.getFileEncodeBase64String());
-        setFormValues(formValues);
     }
 
     useEffect(() => {
         if(type !== "interval" && type !== "files"){
             inputField.current.addEventListener("change", () => {
                 let errors = [];
-                formValues[name] = inputField.current.value;
-                setFormValues(formValues);
                 validators.forEach((validator) => {
                     if(!validator.validate(inputField.current.value)){
                         errors.push(validator.message);
@@ -66,8 +78,8 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                     <textarea className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " defaultValue={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
                     <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
                     {
-                        inputErrors.length > 0 && inputErrors.map((error) => {
-                            return(<span className="class-error-message">{error}</span>)
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
                         })
                     }
                 </div>
@@ -82,9 +94,8 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                                 min={minValue}
                                 max={maxValue}
                                 onChange={({min, max})=>{
-                                    formValues[`min_${name}`] = min;
-                                    formValues[`max_${name}`] = max;
-                                    setFormValues(formValues);
+                                    setMinInputValue(min);
+                                    setMaxInputValue(max);
                                 }}
                             />
                 </div>
@@ -108,27 +119,41 @@ const FormInput = ({ tag, name, type, defaultValue, values, isRequired,
                         credits={false}
                     />
                 </div>
-            )
+            );
         
+        case "date":
+            
+            return(
+                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {}}>	
+                    <input className="class-form-input" type="date" id={`${name}`} name={`${name}`} required={isRequired} defaultValue={defaultValue} ref={inputField} />
+                    <label htmlFor={`${name}`} className="class-form-label" style={numberOfColumns>1 ? {paddingLeft: `1%`} : {}}>{tag}:</label>
+                    {
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
+                        })
+                    }
+                </div>
+            );
+
         default:
             return(
                 <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {width: `${100/numberOfColumns-3}%`} : {}}>	
                     <input className="class-form-input" type={type} id={`${name}`} name={`${name}`} placeholder=" " defaultValue={`${defaultValue ? defaultValue : ""}`} required={isRequired} ref={inputField}/>
                     <label htmlFor={`${name}`} className="class-form-label">{tag}:</label>
                     {
-                        inputErrors.length > 0 && inputErrors.map((error) => {
-                            return(<span className="class-error-message">{error}</span>)
+                        inputErrors.length > 0 && inputErrors.map((error, index) => {
+                            return(<span key={index} className="class-error-message">{error}</span>)
                         })
                     }
                 </div>
             );
     }
-};
+});
 
 FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files"]),
+    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date", "flatter-tags"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
     isRequired: PropTypes.bool,

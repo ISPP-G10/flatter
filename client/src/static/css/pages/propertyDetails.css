@@ -117,6 +117,7 @@
 .property-btn__container{
   display: flex;
   justify-content: flex-end;
+  gap: 1em;
   width: 100%;
 }
 
@@ -136,6 +137,10 @@
   float: left;
   margin: 0;
   margin-bottom: 1em;
+}
+
+.property-btn.red {
+  background-color: #e7166d;
 }
 
 .property-btn img {
