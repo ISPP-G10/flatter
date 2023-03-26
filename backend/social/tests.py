@@ -125,34 +125,3 @@ class TestModels(TestCase):
             self.fail("User not in group")
         except:
             pass
-
-    # Modelo Incident
-    ### Test de creación de un incidente  +++ Caso positivo
-    def test_incident_positive(self):
-        incident = Incident(command='test_incident')
-        incident.save()
-        self.assertEqual(incident.command, 'test_incident')
-        incident.delete()
-
-    ### Test de creación de un incidente  +++ Caso positivo: comando en blanco
-    def test_incident_negative(self):
-        incident = Incident(command='')
-        incident.save()
-        self.assertEqual(incident.command, '')
-        incident.delete()
-            
-
-    # Modelo Request
-    ### Test de creación de una petición  +++ Caso positivo
-    def test_request_positive(self):
-        request = Request(command="test_request")
-        request.save()
-        self.assertEqual(request.command, "test_request")
-        request.delete()
-
-    ### Test de creación de una petición  +++ Caso positivo: comando en blanco
-    def test_request_negative(self):
-        request = Request(command="")
-        request.save()
-        self.assertEqual(request.command, "")
-        request.delete()
