@@ -10,6 +10,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $ownerUsername: String!
       $price: Float!
       $images: [String]
@@ -24,6 +25,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
         maxCapacity: $maxCapacity
@@ -45,6 +47,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $price: Float!
       $images: [String]
     ) {
@@ -57,6 +60,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
       ) {
@@ -66,38 +70,39 @@ const propertiesAPI = {
         }
       }
     }
-  `,
-  filterProperties: gql`
-    query filterProperties($minPrice: Float, $maxPrice: Float, $city: String) {
-      getFilteredPropertiesByPriceAndCity(
-        minPrice: $minPrice
-        maxPrice: $maxPrice
-        city: $city
-      ) {
-        id
-        title
-        description
-        dimensions
-        location
-        bedroomsNumber
-        bathroomsNumber
-        tags {
-          name
-          color
+    `,
+    filterProperties: gql`
+        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String) {
+          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, city: $city) {
+                id
+                title
+                description
+                dimensions
+                location
+                bedroomsNumber
+                bathroomsNumber
+                tags {
+                    name
+                    color
+                }
+                province{
+                    name
+                }
+                price
+                isOutstanding
+                maxCapacity
+                owner {
+                    username
+                }
+                images{
+                    image
+                }
+                flatmates{
+                    firstName
+                    lastName
+                }
+            }
         }
-        province
-        price
-        isOutstanding
-        maxCapacity
-        images {
-          image
-        }
-        flatmates {
-          firstName
-          lastName
-        }
-      }
-    }
   `,
   getPropertiesByOwner: gql`
     query getPropertiesByOwner($username: String!) {
@@ -111,7 +116,12 @@ const propertiesAPI = {
         title
         price
         isOutstanding
-        province
+        province{
+          name
+        }
+        municipality{
+          name
+        }
         location
         dimensions
         bedroomsNumber
@@ -162,9 +172,15 @@ const propertiesAPI = {
   getPropertyById: gql`
     query getPropertyById($id: Int!) {
       getPropertyById(id: $id) {
+        id
         title
         location
-        province
+        province{
+            name
+        }
+        municipality{
+            name
+        }
         description
         price
         dimensions
@@ -200,7 +216,34 @@ const propertiesAPI = {
         }
       }
     }
-  `,
+    `,
+    getPropertyRequestsByUsername: gql`
+        query getPropertyRequestsByUsername($requesterUsername: String!, $propertyId: Int!) {
+            getPetitionByRequesterToProperty(username: $requesterUsername, propertyId: $propertyId) {
+                id
+                status
+            }
+        }
+    `,
+    createPropertyRequest: gql`
+        mutation createPropertyRequest($message: String!, $requesterUsername: String!, $propertyId: Int!) {
+            createPetition(message: $message, requesterUsername: $requesterUsername, propertyId: $propertyId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `,
+    removePropertyRequest: gql`
+        mutation removePropertyRequest($requestId: Int!) {
+            deletePetition(petitionId: $requestId) {
+                petition {
+                    status
+                }
+            }
+        }
+    `,
+    
   addUsersToFavouriteProperty: gql`
     mutation addUsersToFavouriteProperty($username: String!, $propertyId: Int!){
         addUsersToFavouriteProperty(username: $username, propertyId: $propertyId){
@@ -233,7 +276,12 @@ const propertiesAPI = {
             name
             color
           }
-          province
+          province{
+            name
+          }
+          municipality{
+            name
+          }
           price
           isOutstanding
           maxCapacity

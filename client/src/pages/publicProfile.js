@@ -19,7 +19,7 @@ const PublicProfile = () => {
     let [averageRating, setAverageRating] = useState(0);
     let [totalRatings, setTotalRatings] = useState(0);
 
-    const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+    const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
         username: username
     }});
 
@@ -49,7 +49,19 @@ const PublicProfile = () => {
     return(
         <FlatterPage withBackground userLogged>
             <div className="profile-grid">
-                <PublicProfileCard name={profile.firstName+" "+profile.lastName} job={profile.profession} age={profile.birthday} bio={profile.biography} isMe={username===localStorage.getItem("user")} isPropietary={roles.includes("OWNER")} tags={profile.tags} pic={API_SERVER_MEDIA+profile.profilePicture}/>
+                <PublicProfileCard 
+                    username={username} 
+                    name={profile.firstName+" "+profile.lastName} 
+                    birthDate={profile.birthday} 
+                    job={profile.profession} 
+                    age={profile.age} 
+                    bio={profile.biography} 
+                    isMe={username===localStorage.getItem("user")} 
+                    isPropietary={roles.includes("OWNER")} 
+                    tags={profile.tags} 
+                    pic={API_SERVER_MEDIA+profile.profilePicture}
+                    refetchUser = {refetch}
+                />
                 <ReviewsBox average={averageRating} total={totalRatings} />
                 <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} />
             </div>

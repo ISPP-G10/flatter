@@ -369,10 +369,10 @@
       "email": "mariacabello625@gmail.com",
       "phone_number": "",
       "profile_picture": "users/images/default.jpg",
-      "genre": "",
+      "genre": "M",
       "biography": "",
       "flatter_coins": 2000,
-      "roles": [],
+      "roles": [1, 2],
       "tags": [],
       "password": "pbkdf2_sha256$390000$MukE7WiSsjU0PImcSBJFor$Hiy6awqcvZa5CkxquWn/Ev+euaEdgmpgIm6hH0ezAuM="
     }
