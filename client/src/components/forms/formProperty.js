@@ -21,8 +21,6 @@ const FormProperty = ({ property }) => {
   function createPropertySubmit({values}){
 
     if(!createPropertyFormRef.current.validate()) return;
-    
-    console.log(values);
 
     client.mutate(property===undefined ? {
       mutation: propertiesAPI.createProperty,
