@@ -1,9 +1,7 @@
 import graphene, graphql_jwt, json, base64, os
 from .models import FlatterUser, Role
-from .models import Tag
 from .types import FlatterUserType
 from django.utils.translation import gettext_lazy as _
-from graphene_file_upload.scalars import Upload
 from django.core.files.storage import default_storage
 
 class CreateUserMutation(graphene.Mutation):
@@ -103,34 +101,7 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     def resolve(cls, root, info, **kwargs):
         return cls(user=info.context.user)
 
-class AddTagToUser(graphene.Mutation):
-  
-  class Input:
-    username = graphene.String(required=True)
-    tag = graphene.String(required=True)
 
-  user = graphene.Field(FlatterUserType)
-  
-  @staticmethod
-  def mutate(root, info, **kwargs):
-    username = kwargs.get('username', '').strip()
-    tag = kwargs.get('tag', '').strip()
-    
-    if not username:
-      raise ValueError(_("El usuario no puede estar vacío"))
-    
-    user_selected = FlatterUser.objects.get(username=username)
-    try:
-      tag = Tag.objects.get(name=tag)
-    except Exception:
-      raise ValueError(_("La etiqueta no existe"))
-
-    if tag in user_selected.tags.all():
-      raise ValueError(_("Ya tienes esta etiqueta"))
-
-    user_selected.tags.add(tag)
-    
-    return AddTagToUser(user=user_selected)
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
@@ -138,8 +109,7 @@ class AuthenticationMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_user = CreateUserMutation.Field()
   delete_user = DeleteUserMutation.Field()
-  add_tag_to_user = AddTagToUser.Field()
-  
+
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
 def _exists_user(username):

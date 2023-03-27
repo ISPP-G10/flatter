@@ -15,5 +15,5 @@ RUN yarn global add serve
 
 ARG API_SERVER
 ENV REACT_APP_API_SERVER=${API_SERVER}
-ENV NODE_ENV='production'
+ENV NODE_ENV=${NODE_ENV}
 RUN yarn build

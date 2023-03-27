@@ -12,11 +12,16 @@ const HeaderProfile = ({user}) => {
 
     const navigator = useNavigate();
 
-    const {data, loading} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
+    const {data, loading, error} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
         username: user
     }});
 
     if (loading) return <p>Loading...</p>
+
+    if (error) {
+        localStorage.clear();
+        navigator("/ups");
+    }
 
     return(
         <>

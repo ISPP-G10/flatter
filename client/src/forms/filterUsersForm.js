@@ -12,6 +12,15 @@ export const filterInputs = [
         ]
     },
     {
+        tag: "Rol",
+        name: "role",
+        type: "select",
+        values: ["Cualquiera", "Propietario", "Inquilino"],
+        defaultValue: "Cualquiera",
+        isRequired: false,
+        validators: []
+    },
+    {
         tag: "Valoración",
         name: "rating",
         type: "interval",

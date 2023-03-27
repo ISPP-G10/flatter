@@ -46,7 +46,7 @@ export const registerValidators = {
     },
 
     phoneNumber: {
-        validate: (value) => value.match(/^[9|6|7][0-9]{8}$/),
+        validate: (value) => value.match(/^(?:[9|6|7][0-9]{8})?$/),
         message: "El campo debe ser un número válido"
     }
 }

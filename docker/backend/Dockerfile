@@ -13,6 +13,8 @@ RUN apk add chromium-chromedriver
 RUN apk add gettext
 
 RUN pip install gunicorn
+RUN pip install -U channels_redis
+RUN pip install daphne
 RUN pip install ipdb
 RUN pip install ipython
 
@@ -20,7 +22,7 @@ WORKDIR /usr/src/app/flatter-backend
 
 COPY ./backend .
 
-ENV DJANGO_ENV='production'
+ENV DJANGO_ENV=${DJANGO_ENV}
 RUN pip install -U pip
 RUN pip install -r requirements.txt
-RUN chmod +x /usr/src/app/flatter-backend/entrypoint.sh
+RUN chmod +x /usr/src/app/flatter-backend/entrypoint_demo.sh

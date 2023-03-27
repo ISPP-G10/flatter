@@ -1,19 +1,17 @@
 import "../static/css/pages/ownerProperties.css";
+
 import FlatterPage from "../sections/flatterPage";
-import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
-import {useApolloClient} from '@apollo/client';
-
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
-
-import {useQuery} from '@apollo/client';
-
 import propertiesAPI from '../api/propertiesAPI';
-//import usersAPI from '../api/usersAPI';
+import * as settings from "../settings";
 
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from '@apollo/client';
 import { useState, useRef } from 'react';
+import { useApolloClient } from '@apollo/client';
 
 
 const OwnerProperties = ({}) => {
@@ -24,6 +22,7 @@ const OwnerProperties = ({}) => {
   const editPropertyModalRef = useRef(null);
 
     const client = useApolloClient();
+    const navigate = useNavigate();
 
     function deleteProperty(id){
 
@@ -69,9 +68,18 @@ const OwnerProperties = ({}) => {
       <section id="searchView">
         <div className="filterview">
           <div className="filterview-content">
+            <div className="filterview-element">
             <SolidButton text="Nueva Propiedad" type="" onClick={ () => { 
                 addPropertyModalRef.current.open();
             } } />
+            </div>
+            <Link to="/property/requests">
+            <div className="filterview-element" >
+                       <SolidButton text="Ver Solicitudes" type="" onClick={ () => { 
+            } } />
+            </div>
+            </Link>
+
           </div>
 
           
@@ -86,7 +94,7 @@ const OwnerProperties = ({}) => {
               data.getPropertiesByOwner.map ((prop, index) => { 
                 return(
             <div className="listview" key={ index }>
-              <div className="listview-header">
+              <div className="listview-header" onClick={() => navigate(`/property/${prop.id}`)}>
                 {
                   prop.isOutstanding ? 
                     <img src={require('../static/files/icons/yellow-star.png')} className="outstanding-icon"></img>
@@ -99,7 +107,7 @@ const OwnerProperties = ({}) => {
               <div className="attrcontainer"> 
                 <div className="attrindv">
                   <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
-                  <p className = "location">{prop.province}</p>  
+                  <p className = "location" style={{fontSize: '12px', overflowY: 'scroll', maxHeight: '30px', maxWidth: '215px'}}>{prop.location}, {prop.municipality.name}, {prop.province.name}</p>  
                 </div>
                 <div className="attrindv">
                   <p className = "team">{prop.price} €/mes</p>
@@ -107,9 +115,9 @@ const OwnerProperties = ({}) => {
               </div>
               
 
-              <div className="listview-content">
+              <div className="listview-content" onClick={() => navigate(`/property/${prop.id}`)}>
 
-                <Slider images={prop.images.map((image) => image.image)}/>
+                <img src={`${settings.API_SERVER_MEDIA}${prop.images[0].image}`} alt="Vista previa vivienda" style={{width: '100%', height: "100%"}}/>
 
               </div>
               <div className="etiquetacontainer">
@@ -125,15 +133,13 @@ const OwnerProperties = ({}) => {
               </div>
 
 
-              <div className="listview-content">
- 
+              <div className="listview-content" onClick={() => navigate(`/property/${prop.id}`)}>
                 <p className="small-size">{prop.description}</p>
               </div>
               
                 <div className="btncontainer">
                     <div className="btnindv">
                       <button className="styled-info-button" onClick={ () => {
-                        
                         setProperty(prop);
                         editPropertyModalRef.current.open();
                       } }>Editar Piso</button>
@@ -156,7 +162,7 @@ const OwnerProperties = ({}) => {
       </section>
 
       <FlatterModal maxWidth={700} ref={addPropertyModalRef}>
-        <FormProperty property={{}} />
+        <FormProperty/>
       </FlatterModal>
 
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>

@@ -20,12 +20,7 @@ const Request = () => {
 
     function handleRequestFormSubmit({values}){
 
-        if(!requestFormRef.current.validate()) {
-            
-            alert('Hay campos incorrectos. Por favor, revise el formulario')
-        
-            return;
-        }
+        if(!requestFormRef.current.validate()) return;
 
         // let json_data = {
         //     'operation': 'core/create',

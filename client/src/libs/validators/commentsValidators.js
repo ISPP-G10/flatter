@@ -11,7 +11,7 @@ export const commentsValidators = {
 
     validRelationship: {
         validate: (value) => {
-            let validRelationships = ['Amigo', 'Excompañero', 'Compañero', 'Propietario'];
+            let validRelationships = ['Amigo', 'Excompañero', 'Compañero', 'Propietario', 'Inquilino'];
             return validRelationships.includes(value);
         },
         message: "El campo debe ser una relación válida",
