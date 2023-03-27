@@ -20,6 +20,7 @@
   height: 150px;
   border-radius: 50%;
   border: 1px solid rgb(0, 57, 85);
+  object-fit: cover;
 }
 
 .user-card__info{
@@ -29,6 +30,7 @@
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+  text-align: center;
 }
 
 .user-card__info h2{

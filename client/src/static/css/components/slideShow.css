@@ -17,6 +17,7 @@
 .mySlides img {
   border-radius: 20px;
   max-height: 550px;
+  object-fit: cover;
 }
 
 /* Next & previous buttons */

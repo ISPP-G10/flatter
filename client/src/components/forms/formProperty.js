@@ -1,19 +1,28 @@
-import { useApolloClient } from "@apollo/client";
-import propertiesAPI from "../../api/propertiesAPI";
-import { propertyInputs } from '../../forms/propertiesForm';
 import FlatterForm from './flatterForm';
+import provincesAPI from "../../api/provincesAPI";
+import propertiesAPI from "../../api/propertiesAPI";
+
+import { useApolloClient } from "@apollo/client";
+import { propertyInputs } from '../../forms/propertiesForm';
 import { useEffect, useRef } from 'react';
+import { useQuery } from "@apollo/client";
+import { useState } from "react";
 
 const FormProperty = ({ property }) => {
 
   const client = useApolloClient();
   const createPropertyFormRef = useRef(null);
 
-  function handlePropertySubmit({values}){
+  const { data, loading } = useQuery( provincesAPI.getAllProvinces );
+  const [ optionMunicipality, setOptionMunicipality ] = useState([]);
+  const [configured, setConfigured] = useState(false);
+  const [inputsChanged, setInputsChanged] = useState(false);
 
-    if(!createPropertyFormRef.current.validate()) return
+  function createPropertySubmit({values}){
 
-    client.mutate(property.id===undefined ? {
+    if(!createPropertyFormRef.current.validate()) return;
+
+    client.mutate(property===undefined ? {
       mutation: propertiesAPI.createProperty,
       variables: {
         title: values.title,
@@ -22,11 +31,12 @@ const FormProperty = ({ property }) => {
         bathroomsNumber: parseInt(values.bathroomsNumber),
         bedroomsNumber: parseInt(values.bedroomsNumber),
         dimensions: parseInt(values.dimensions),
-        location: values.location,
+        municipality: values.municipality,
         ownerUsername: localStorage.getItem('user',''),
         price: parseFloat(values.price),
         images: values.images,
-        maxCapacity: parseInt(values.maxCapacity)
+        maxCapacity: parseInt(values.maxCapacity),
+        location: values.location
       }
     } : {
       mutation: propertiesAPI.updateProperty,
@@ -39,6 +49,7 @@ const FormProperty = ({ property }) => {
         bedroomsNumber: parseInt(values.bedroomsNumber),
         dimensions: parseInt(values.dimensions),
         location: values.location,
+        municipality: values.municipality,
         ownerUsername: localStorage.getItem('user',''),
         price: parseFloat(values.price),
         images: values.images,
@@ -53,10 +64,93 @@ const FormProperty = ({ property }) => {
     if(property){
       propertyInputs.map((input) => {
         input.defaultValue = property[input.name] ? property[input.name].toString() : property[input.name];
-        if(input.name === 'images') input.tag = 'Imágenes de la propiedad (al añadir imágenes, se sustituirán las actuales)';
-    });
+
+        if(input.name === 'province') input.defaultValue = property.province.name;
+
+        if(input.name === 'municipality') {
+          input.defaultValue = property.municipality.name
+          client.query({
+            query: provincesAPI.getMunicipalitiesByProvince,
+            variables: {
+              province: property.province.name
+            }
+          })
+          .then(response => {
+
+            let municipalityOptions = response.data.getMunicipalitiesByProvince.map(municipality => municipality.name);
+
+            setOptionMunicipality(municipalityOptions);
+            input.values = municipalityOptions;
+          })
+          .catch(error => console.log(error));
+        };
+
+        if(input.name === 'images') input.tag = 'Imágenes de la propiedad (al añadir imágenes, se sustituirán las actuales)';  
+
+      });
+
+    }else{
+      propertyInputs.map((input) => {
+        if(input.name === "province"){
+          input.defaultValue = "-";
+        }else if(input.name === "municipality"){
+          input.defaultValue = "-";
+          setOptionMunicipality(["-"]);
+        }else{
+          input.defaultValue = '';
+        } 
+      });
     }
-  }, [property]);
+
+    if(!loading){
+      propertyInputs.map((input) => {
+        if(input.name === 'province') input.values = ['-'].concat(data.getProvinces.map(province => province.name));
+      });
+    }
+
+  }, [property, loading]);
+
+  useEffect(() => {
+    if(optionMunicipality.length > 0){
+      propertyInputs.map((input) => {
+        if(input.name === 'municipality') {
+          input.values = optionMunicipality;
+        }
+      });
+      setInputsChanged(!inputsChanged);
+    }
+  }, [optionMunicipality]);
+
+  useEffect(() => {
+    if(!configured){
+      setTimeout(() => {
+        let provinceInput = document.querySelector('select#province');
+  
+        provinceInput.addEventListener('change', () => {
+  
+          client.query({
+            query: provincesAPI.getMunicipalitiesByProvince,
+            variables: {
+              province: provinceInput.value
+            }
+          })
+          .then(response => {
+            if(provinceInput.value !== "-"){
+              setOptionMunicipality(response.data.getMunicipalitiesByProvince.map(municipality => municipality.name));
+            }else{
+              setOptionMunicipality(["-"]);
+            }
+          })
+          .catch(error => console.log(error));
+  
+        });
+
+        setConfigured(true);
+      }, 1000);
+    }
+  }, [inputsChanged]);
+
+  if(loading) return <p>Loading...</p>
 
   return (
     <FlatterForm
@@ -64,7 +158,7 @@ const FormProperty = ({ property }) => {
         showSuperAnimatedButton
         numberOfColumns={3}
         inputs={propertyInputs}
-        onSubmit={handlePropertySubmit}
+        onSubmit={createPropertySubmit}
         ref={createPropertyFormRef}
         scrollable
     />

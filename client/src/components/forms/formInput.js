@@ -1,38 +1,42 @@
-import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import MultiRangeSlider from '../inputs/multiRangeSlider';
-import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 
-const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
-                    numberOfColumns, validators, minValue, maxValue, formValues, setFormValues}, ref) => {
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
+import { FilePond, registerPlugin } from 'react-filepond';
 
+const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
+                    numberOfColumns, validators, minValue, maxValue}, ref) => {
+                        
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
+    let [minInputValue, setMinInputValue] = useState(minValue);
+    let [maxInputValue, setMaxInputValue] = useState(maxValue);
     let inputField = useRef(null);
 
     useImperativeHandle(ref, () => {
+
         return{
             setErrors: (errors) => {
                 setInputErrors(errors);
             },
+            value: inputField.current ? inputField.current.value : "",
+            min: minInputValue,
+            max: maxInputValue,
+            files: files,
         }
     });
 
     function handleFiles(fileItems){
         setFiles(fileItems);
-        formValues[name] = fileItems.map(file => file.getFileEncodeBase64String());
-        setFormValues(formValues);
     }
 
     useEffect(() => {
         if(type !== "interval" && type !== "files"){
             inputField.current.addEventListener("change", () => {
                 let errors = [];
-                formValues[name] = inputField.current.value;
-                setFormValues(formValues);
                 validators.forEach((validator) => {
                     if(!validator.validate(inputField.current.value)){
                         errors.push(validator.message);
@@ -90,9 +94,8 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                                 min={minValue}
                                 max={maxValue}
                                 onChange={({min, max})=>{
-                                    formValues[`min_${name}`] = min;
-                                    formValues[`max_${name}`] = max;
-                                    setFormValues(formValues);
+                                    setMinInputValue(min);
+                                    setMaxInputValue(max);
                                 }}
                             />
                 </div>
@@ -116,11 +119,12 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                         credits={false}
                     />
                 </div>
-            )
+            );
         
         case "date":
+            
             return(
-                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {marginTop: `7.5%`}}>	
+                <div className={`class-form-group ${inputErrors.length>0 ? "class-error-form" : ""}`} id={`${name}_form`} style={numberOfColumns>1 ? {paddingTop: `2%`, width: `${100/numberOfColumns-3}%`} : {}}>	
                     <input className="class-form-input" type="date" id={`${name}`} name={`${name}`} required={isRequired} defaultValue={defaultValue} ref={inputField} />
                     <label htmlFor={`${name}`} className="class-form-label" style={numberOfColumns>1 ? {paddingLeft: `1%`} : {}}>{tag}:</label>
                     {
@@ -130,7 +134,6 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
                     }
                 </div>
             );
-
 
         default:
             return(
@@ -150,7 +153,7 @@ const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequire
 FormInput.propTypes = {
     tag: PropTypes.string,
     name: PropTypes.string,
-    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files","date"]),
+    type: PropTypes.oneOf(["text", "password", "email", "number", "select", "textarea", "interval", "files", "date", "flatter-tags"]),
     values: PropTypes.array,
     defaultValue: PropTypes.string,
     isRequired: PropTypes.bool,

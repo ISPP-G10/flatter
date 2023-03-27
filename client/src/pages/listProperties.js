@@ -56,7 +56,7 @@ const ListProperties = () => {
         city: filterValues.city
       }
     })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCityAndTags))
+    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
     .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
 
     filterInputs.map((input) => {
@@ -131,7 +131,7 @@ const ListProperties = () => {
                     </div>
     
                     <div className="meta-left">
-                      <div className="meta-location"><img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/> { property.province }</div>
+                      <div className="meta-location"><img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/> { property.province.name }</div>
     
                       <div className="meta-flatmates"><img className="small-picture-back" src={require('../static/files/icons/partners.png')} alt='Compañeros'/> {property.flatmates.length}/{property.maxCapacity}</div>
                     </div>
