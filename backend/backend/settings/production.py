@@ -178,7 +178,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("http://flatter-redis", 6379)],
+            "hosts": [("flatter-redis", 6379)],
         }
     },
 }
