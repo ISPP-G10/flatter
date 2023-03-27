@@ -99,8 +99,7 @@ const PropertyDetails = () => {
             <div className="property-title">
               <h1>{propertyData.getPropertyById.title}</h1>
               <span>
-                LOCALIZACIÓN: {propertyData.getPropertyById.province},{" "}
-                {propertyData.getPropertyById.location}
+                {propertyData.getPropertyById.location}, {propertyData.getPropertyById.municipality.name}, {propertyData.getPropertyById.province.name}
               </span>
             </div>
             <div className="property-price">

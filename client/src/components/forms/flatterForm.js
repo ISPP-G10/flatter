@@ -101,7 +101,6 @@ const FlatterForm = forwardRef((props, ref) => {
             <form className="class-form" ref={formElement} style={props.numberOfColumns > 1 ? {flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'} : {}}>
                     { 
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
-                            console.log(index, props.childrenPosition);
                             return(
                                 <>
                                 {index === props.childrenPosition && props.children}

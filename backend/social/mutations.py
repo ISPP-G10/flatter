@@ -427,8 +427,6 @@ class EditUserPublicMutation(graphene.Mutation):
         
         user_selected.save()
 
-        print(user_selected)
-
         return EditUserPublicMutation(user=user_selected)
 
 

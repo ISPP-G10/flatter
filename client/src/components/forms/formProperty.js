@@ -21,8 +21,10 @@ const FormProperty = ({ property }) => {
   function createPropertySubmit({values}){
 
     if(!createPropertyFormRef.current.validate()) return;
+    
+    console.log(values);
 
-    client.mutate(property.id===undefined ? {
+    client.mutate(property===undefined ? {
       mutation: propertiesAPI.createProperty,
       variables: {
         title: values.title,
@@ -49,6 +51,7 @@ const FormProperty = ({ property }) => {
         bedroomsNumber: parseInt(values.bedroomsNumber),
         dimensions: parseInt(values.dimensions),
         location: values.location,
+        municipality: values.municipality,
         ownerUsername: localStorage.getItem('user',''),
         price: parseFloat(values.price),
         images: values.images,

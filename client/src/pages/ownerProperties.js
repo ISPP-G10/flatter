@@ -1,12 +1,12 @@
 import "../static/css/pages/ownerProperties.css";
 
 import FlatterPage from "../sections/flatterPage";
-import Slider from "../components/slider/slider";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 import propertiesAPI from '../api/propertiesAPI';
+import * as settings from "../settings";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from '@apollo/client';
@@ -117,7 +117,7 @@ const OwnerProperties = ({}) => {
 
               <div className="listview-content" onClick={() => navigate(`/property/${prop.id}`)}>
 
-                <Slider images={prop.images.map((image) => image.image)}/>
+                <img src={`${settings.API_SERVER_MEDIA}${prop.images[0].image}`} alt="Vista previa vivienda" style={{width: '100%', height: "100%"}}/>
 
               </div>
               <div className="etiquetacontainer">

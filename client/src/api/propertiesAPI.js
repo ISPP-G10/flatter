@@ -10,6 +10,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $ownerUsername: String!
       $price: Float!
       $images: [String]
@@ -24,6 +25,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
         maxCapacity: $maxCapacity
@@ -45,6 +47,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $price: Float!
       $images: [String]
     ) {
@@ -57,6 +60,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
       ) {

@@ -390,8 +390,6 @@ class UpdatePropertyMutation(graphene.Mutation):
             
         property_edit.save()
 
-        print(images)
-
         if images:
             
             images_to_add = []

@@ -183,6 +183,4 @@ class MainAppQuery(object):
 
     def resolve_get_municipalities_by_province(self, info, province=None):
         
-        print(Municipality.objects.filter(province__name=province))
-        
         return Municipality.objects.filter(province__name=province)
