@@ -183,14 +183,50 @@
     "model": "authentication.flatteruser",
     "pk": 6,
     "fields": {
-      "username": "profesores.ispp",
+      "username": "profesores.propietarios",
       "first_name": "Profesores",
-      "last_name": "ISPP",
-      "email": "profesores.ispp@us.es",
-      "phone_number": "600600600",
-      "profile_picture": "users/images/Gigachad.jpg",
+      "last_name": "Propietarios",
+      "email": "profesores.ispp.propietarios@us.es",
+      "phone_number": "603603603",
+      "profile_picture": "users/images/universidad-de-sevilla.png",
       "genre": "O",
-      "biography": "Somos profesores de ISPP de la us",
+      "biography": "Somos profesores de ISPP de la us. Únicamente con el rol de propietario.",
+      "flatter_coins": 2500,
+      "roles": [1],
+      "tags": [20, 2, 13],
+      "password": "pbkdf2_sha256$390000$BeRsXwzce8qEVIO7rNkD3U$0TbaQyqSZNYwACfh7cvIGO6hcVtDjGDxJgqnOGQZ/1c="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 7,
+    "fields": {
+      "username": "profesores.inquilinos",
+      "first_name": "Profesores",
+      "last_name": "Inquilinos",
+      "email": "profesores.ispp.inquilinos@us.es",
+      "phone_number": "602602602",
+      "profile_picture": "users/images/universidad-de-sevilla.png",
+      "genre": "O",
+      "biography": "Somos profesores de ISPP de la us. Únicamente con el rol de inquilino.",
+      "flatter_coins": 2500,
+      "roles": [2],
+      "tags": [20, 2, 13],
+      "password": "pbkdf2_sha256$390000$BeRsXwzce8qEVIO7rNkD3U$0TbaQyqSZNYwACfh7cvIGO6hcVtDjGDxJgqnOGQZ/1c="
+    }
+  },
+  {
+    "model": "authentication.flatteruser",
+    "pk": 8,
+    "fields": {
+      "username": "profesores.full",
+      "first_name": "Profesores",
+      "last_name": "Completo",
+      "email": "profesores.ispp.full@us.es",
+      "phone_number": "601601601",
+      "profile_picture": "users/images/universidad-de-sevilla.png",
+      "genre": "O",
+      "biography": "Somos profesores de ISPP de la us. Con ambos roles.",
       "flatter_coins": 2500,
       "roles": [1, 2],
       "tags": [20, 2, 13],
@@ -199,7 +235,7 @@
   },
   {
     "model": "authentication.flatteruser",
-    "pk": 7,
+    "pk": 9,
     "fields": {
       "username": "homersimpson",
       "first_name": "Homer",
@@ -217,7 +253,7 @@
   },
   {
     "model": "authentication.flatteruser",
-    "pk": 8,
+    "pk": 10,
     "fields": {
       "username": "bartsimpson",
       "first_name": "Bart",
@@ -235,7 +271,7 @@
   },
   {
     "model": "authentication.flatteruser",
-    "pk": 9,
+    "pk": 11,
     "fields": {
       "username": "petergrifin",
       "first_name": "Peter",
