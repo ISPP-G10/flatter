@@ -1,4 +1,5 @@
 import json
+import logging
 from django.test import TestCase
 from authentication.models import FlatterUser, Tag
 from .models import Property
@@ -6,6 +7,7 @@ from backend.schema import schema
 from graphene_django.utils.testing import GraphQLTestCase
 from .types import Province, Municipality
 
+logging.disable(logging.CRITICAL)
 
 # Create your tests here.
 # Tests de models.py de inmueble
@@ -781,7 +783,3 @@ class TestsMutations(DefaultTests):
             raise e
 
         self.assertResponseNoErrors(response)
-    
-    
-    
-        

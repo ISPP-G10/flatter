@@ -1,9 +1,12 @@
+import logging
 from social.models import Group, Message, Incident, Request
 from authentication.models import FlatterUser
 from mainApp.models import Review
 from backend.schema import schema
 import json
 from graphene_django.utils.testing import GraphQLTestCase
+
+logging.disable(logging.CRITICAL)
     
 ##### MUTATIONS TESTS #####
 class TestMutations(GraphQLTestCase):
@@ -913,10 +916,3 @@ class TestMutations(GraphQLTestCase):
     #TESTS DE CAMBIAR CONTRASEÑA
     #TESTS DE AÑADIR ROL A USUARIO
     #TESTS DE ELIMINAR ROL DE USUARIO
-    
-    
-
-
-
-    
-

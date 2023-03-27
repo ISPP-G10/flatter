@@ -1,9 +1,13 @@
 import json
+import logging
 from django.db import IntegrityError
+from django.db.utils import DataError
 from django.test import TestCase
 from .models import FlatterUser, Tag
 from backend.schema import schema
 from graphene_django.utils.testing import GraphQLTestCase
+
+logging.disable(logging.CRITICAL)
 
 class MyTest(TestCase):
     
@@ -79,13 +83,13 @@ class MyTest(TestCase):
         except IntegrityError:
             pass
         
-    '''def test_invalid_phoneNumber(self):
+    def test_invalid_phoneNumber(self):
         
         try:                    
             user = FlatterUser.objects.create_user(
                                 username="Hola", 
                                 password="1234", 
-                                phone_number="123456789",
+                                phone_number="123456789000",
                                 email="asd@asd.asd", 
                                 first_name="A", 
                                 last_name="B", 
@@ -94,7 +98,7 @@ class MyTest(TestCase):
                             )
         
             self.fail("Se esperaba un error por número de teléfono inválido.")
-        except IntegrityError:
+        except DataError:
             pass
     
          
@@ -113,13 +117,8 @@ class MyTest(TestCase):
                             )
         
             self.fail("Se esperaba un error por género inválido.")
-        except IntegrityError:
-            pass    '''
-            
-
-        
-
-
+        except DataError:
+            pass
 class DefaultTests(GraphQLTestCase):
 
     def setUp(self):
@@ -423,12 +422,3 @@ class TestsMutations(DefaultTests):
             raise e
 
         self.assertResponseHasErrors(response)
-        
-   
-
-
-
-
-  
-                
-        

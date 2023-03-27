@@ -1,9 +1,12 @@
+import logging
 from django.test import TestCase
 from social.models import Group, Message
 from authentication.models import FlatterUser, Tag
 from graphene.test import Client
 from backend.schema import schema
 from django.test import TestCase
+
+logging.disable(logging.CRITICAL)
     
 ##### QUERIES TESTS #####
 class TestQueries(TestCase):
@@ -75,13 +78,3 @@ class TestQueries(TestCase):
         executed = client.execute('''query {getMessages{ text }}''')
         assert executed == {'data': {'getMessages': [{'text': 'Test de query'}]}}
         message.delete()
-
-    
-
-    
-    
-
-
-
-    
-

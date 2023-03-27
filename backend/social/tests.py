@@ -1,6 +1,9 @@
+import logging
 from django.test import TestCase
 from social.models import Group, Message, Incident, Request
 from authentication.models import FlatterUser
+
+logging.disable(logging.CRITICAL)
 
 # Create your tests here.
 
@@ -55,7 +58,7 @@ class TestModels(TestCase):
             group.save()
             group.users.add(self.user1)
             self.fail("Individual group can only have two users")
-        except:
+        except Exception:
             pass
 
 
@@ -66,7 +69,7 @@ class TestModels(TestCase):
             group.save()
             group.users.add(self.user1, self.user2)
             self.fail("Group name can't be empty")
-        except:
+        except Exception:
             pass
 
 
@@ -87,7 +90,7 @@ class TestModels(TestCase):
             group.save()
             group.users.add(self.user1)
             self.fail("Group must have at least 3 users")
-        except:
+        except Exception:
             pass
 
 
@@ -99,7 +102,7 @@ class TestModels(TestCase):
             group.users.add(self.user1, self.user2, self.user3)
             group.delete()
             self.fail("Group can not be deleted")
-        except:
+        except Exception:
             pass
 
 
@@ -119,7 +122,7 @@ class TestModels(TestCase):
             message = Message(text='Esto es una prueba negativa', user=self.user1, group=self.group1)
             message.save()
             self.fail("Message must have text")
-        except:
+        except Exception:
             pass
 
     ### Test de creación de un mensaje: usuario no pertenece al grupo  --- Caso negativo
@@ -128,5 +131,5 @@ class TestModels(TestCase):
             message = Message(text='Esto es una prueba negativa', user=self.user3, group=self.group1)
             message.save()
             self.fail("User not in group")
-        except:
+        except Exception:
             pass
