@@ -28,6 +28,9 @@ graphene-django==2.15.0
 graphene-file-upload==1.3.0
 graphql-core==2.3.2
 graphql-relay==2.0.1
+h2==4.1.0
+hpack==4.0.0
+hyperframe==6.0.1
 hyperlink==21.0.0
 idna==3.4
 incremental==22.10.0
@@ -36,6 +39,7 @@ msgpack==1.0.5
 multidict==6.0.4
 phonenumbers==8.13.7
 Pillow==9.4.0
+priority==1.3.0
 promise==2.3
 psycopg2-binary==2.9.5
 pyasn1==0.4.8
