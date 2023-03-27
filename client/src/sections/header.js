@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { loginInputs } from "../forms/loginForm";
 import { registerInputs } from "../forms/registerForm";
 import { useApolloClient } from "@apollo/client";
-
+import customAlert from "../libs/functions/customAlert";
 import PropTypes from "prop-types";
 import SolidButton from "./solidButton";
 import HeaderProfile from "../components/header/headerProfile";
@@ -64,7 +64,7 @@ const Header = ({scrollY, userLogged}) => {
             navigator(0);
 
         }).catch((error) => {
-            alert(['Usuario o contraseña incorrectos']);
+            customAlert(['Usuario o contraseña incorrectos']);
         });
 
     }
@@ -100,7 +100,7 @@ const Header = ({scrollY, userLogged}) => {
 
             navigator(0);
         }).catch((error) => {
-            alert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0]);
         });
         
     }
@@ -117,6 +117,7 @@ const Header = ({scrollY, userLogged}) => {
         if(userLogged){
             localStorage.getItem("user") ? setUser(localStorage.getItem("user")) : navigator("/");
             localStorage.getItem("token") ? setToken(localStorage.getItem("token")) : navigator("/");
+            localStorage.getItem("roles") ? setToken(localStorage.getItem("roles")) : navigator("/");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

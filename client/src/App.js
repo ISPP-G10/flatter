@@ -24,26 +24,25 @@ function App() {
         <Route exact path="/" element={
           <>
             {
-              localStorage.getItem('user') && localStorage.getItem('token') ?
+              localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
               <>
                 <MainPage/>
-                <Chat/>
               </>
               :
-              <LandingPage/>
+                <LandingPage/>
             }
           </>
         }/>
-        <Route path="/privacy" element={<> <PrivacyPage/> <Chat/> </>}/>
-        <Route path="/search" element={<> <ListProperties/> <Chat/> </>}/>
-        <Route path="/users" element={<> <SearchUsers/> <Chat/> </>}/>
-        <Route path="/properties" element={<> <OwnerProperties /> <Chat/> </>}/>
-        <Route path="/property/:id" element={<> <PropertyDetails /> <Chat/> </>}/>
-        <Route path='/property/requests' element={<> <PropertyRequests/> <Chat/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile/> <Chat/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
+        <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
+        <Route path="/search" element={<> <ListProperties/> </>}/>
+        <Route path="/users" element={<> <SearchUsers/> </>}/>
+        <Route path="/properties" element={<> <OwnerProperties /> </>}/>
+        <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
+        <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile/> </>}/>
+        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<> <AccountSettings/> </>}/>
-        <Route path='/favourites' element={<> <FavouritesProperties/> <Chat/> </>}/>
+        <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

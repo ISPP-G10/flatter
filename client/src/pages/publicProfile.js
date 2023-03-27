@@ -28,7 +28,7 @@ const PublicProfile = () => {
             setAverageRating(profile.averageRating);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data])
+    }, [data, loading])
 
     function getTotalRatings(reviews){
         let total_ratings = 0

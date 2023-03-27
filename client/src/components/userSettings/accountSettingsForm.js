@@ -1,7 +1,7 @@
 import FlatterForm from "../forms/flatterForm";
 import usersAPI from '../../api/usersAPI';
 import * as settings from '../../settings';
-
+import customAlert from "../../libs/functions/customAlert";
 import { useApolloClient } from '@apollo/client';
 import { useRef, useState } from "react";
 
@@ -37,7 +37,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
             window.location.reload();
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => customAlert(error.message));
     }
 
     function handleAccountFormSubmit({values}){
