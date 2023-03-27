@@ -14,6 +14,18 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
+  redis:
+    restart: always
+    container_name: flatter-redis
+    image: redis:alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    expose:
+      - 6379
+    networks:
+      - flatter
+
   backend:
     restart: always
     container_name: flatter-backend
@@ -40,8 +52,10 @@ services:
       - 8000
     depends_on:
       - db
+      - redis
     links:
       - db
+      - redis
     networks:
       - flatter
 
@@ -84,6 +98,8 @@ services:
 volumes:
   static:
     name: flatter-static
+  redis-data:
+    name: flatter-redis-data
   db:
     name: flatter-db
 
