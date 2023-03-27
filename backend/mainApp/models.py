@@ -13,7 +13,7 @@ class Property(models.Model):
     outstanding_start_date = models.DateTimeField(blank=True, null=True)
     title = models.CharField(validators=[MinLengthValidator(4)],max_length=50)
     description = models.CharField(max_length=1000, default="")
-    visits_counter = models.PositiveIntegerField()
+    visits_counter = models.PositiveIntegerField(default=0)
     bedrooms_number = models.PositiveIntegerField(validators=[MaxValueValidator(50)])
     bathrooms_number = models.PositiveIntegerField(validators=[MaxValueValidator(50)])
     price = models.FloatField(validators=[MaxValueValidator(500000)])
