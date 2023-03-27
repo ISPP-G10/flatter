@@ -14,11 +14,8 @@ import ListProperties from './pages/listProperties';
 import AccountSettings from './pages/accountSettings';
 import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
-import TagSelector from './components/inputs/tagSelector';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
-
-const val = [{ value: "1", label: "Amistoso", color: "#FFC107" }]
 
 function App() {
   return (
@@ -28,23 +25,25 @@ function App() {
           <>
             {
               localStorage.getItem('user') && localStorage.getItem('token') ?
-              <MainPage/>
+              <>
+                <MainPage/>
+                <Chat/>
+              </>
               :
               <LandingPage/>
             }
           </>
         }/>
-        <Route path="/privacy" element={<PrivacyPage/>}/>
-        <Route path="/search" element={<ListProperties/>}/>
-        <Route path="/users" element={<SearchUsers/>}/>
-        <Route path="/properties" element={<OwnerProperties />}/>
-        <Route path="/property/:id" element={<PropertyDetails />}/>
-        <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+        <Route path="/privacy" element={<> <PrivacyPage/> <Chat/> </>}/>
+        <Route path="/search" element={<> <ListProperties/> <Chat/> </>}/>
+        <Route path="/users" element={<> <SearchUsers/> <Chat/> </>}/>
+        <Route path="/properties" element={<> <OwnerProperties /> <Chat/> </>}/>
+        <Route path="/property/:id" element={<> <PropertyDetails /> <Chat/> </>}/>
+        <Route path='/property/requests' element={<> <PropertyRequests/> <Chat/> </>}/>
         <Route path='/profile' element={<> <PublicProfile/> <Chat/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> <Chat/> </>}/>
-        <Route path='/me' element={<AccountSettings/>}/>
-        <Route path='/favourites' element={<FavouritesProperties/>}/>
-        <Route path='/prueba' element={<TagSelector defaultValues={val}/>}/>
+        <Route path='/me' element={<> <AccountSettings/> </>}/>
+        <Route path='/favourites' element={<> <FavouritesProperties/> <Chat/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

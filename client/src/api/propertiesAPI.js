@@ -10,6 +10,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $ownerUsername: String!
       $price: Float!
       $images: [String]
@@ -24,6 +25,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
         maxCapacity: $maxCapacity
@@ -45,6 +47,7 @@ const propertiesAPI = {
       $bedroomsNumber: Int!
       $dimensions: Int!
       $location: String!
+      $municipality: String!
       $price: Float!
       $images: [String]
     ) {
@@ -57,6 +60,7 @@ const propertiesAPI = {
         bedroomsNumber: $bedroomsNumber
         bathroomsNumber: $bathroomsNumber
         province: $province
+        municipality: $municipality
         price: $price
         images: $images
       ) {
@@ -68,8 +72,8 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String, $tag: String) {
-            getFilteredPropertiesByPriceAndCityAndTags(minPrice: $minPrice, maxPrice: $maxPrice, city: $city, tag: $tag) {
+        query filterProperties($minPrice: Float, $maxPrice: Float, $city: String) {
+          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, city: $city) {
                 id
                 title
                 description
@@ -112,7 +116,12 @@ const propertiesAPI = {
         title
         price
         isOutstanding
-        province
+        province{
+          name
+        }
+        municipality{
+          name
+        }
         location
         dimensions
         bedroomsNumber
@@ -267,7 +276,12 @@ const propertiesAPI = {
             name
             color
           }
-          province
+          province{
+            name
+          }
+          municipality{
+            name
+          }
           price
           isOutstanding
           maxCapacity

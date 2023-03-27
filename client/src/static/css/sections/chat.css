@@ -7,7 +7,7 @@
 
 .class-chat-btn{
     background-size: 50px;
-    background-color: rgb(209, 110, 18);
+    background-color: #EE0856;
     transition: all 0.5s;
     width: 80px;
     height: 80px;
@@ -21,7 +21,7 @@
 }
 
 .class-chat-btn:hover{
-    background-color: rgb(255, 123, 0);
+    background-color: #9e0236;
     transition: all 0.5s;
 }
 
@@ -29,7 +29,7 @@
     display: none;
     position: absolute;
     z-index: 10000;
-    background-color: #525151;
+    background-color: #CFECFA;
     text-align: center;
     min-height: 90%;
     max-height: 90%;
@@ -42,7 +42,7 @@
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none; 
-    background-image: radial-gradient(#000000 1.15px, transparent 1.15px), radial-gradient(#000000 1.15px, #525151 1.15px);
+    background-image: radial-gradient(#9c9b9b 1.15px, transparent 1.15px), radial-gradient(#9c9b9b 1.15px, #CFECFA 1.15px);
     background-size: 46px 46px;
     background-position: 0 0,23px 23px;
 }
@@ -64,7 +64,7 @@
     padding: 10px;
     cursor: move;
     z-index: 10;
-    background-color: #343a40;
+    background-color: #EE0856;
     color: #FFFFFF;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -78,7 +78,7 @@
     padding: 10px;
     cursor: move;
     z-index: 10;
-    background-color: #343a40;
+    background-color: #EE0856;
     color: #FFFFFF;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
@@ -105,7 +105,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    max-height: 87%;
+    max-height: 88%;
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
@@ -137,7 +137,7 @@
 
 .yours .message {
     margin-left: 5px;
-    background-color: #eee;
+    background-color: #d4d1cbdf;
     position: relative;
 }
 
@@ -149,7 +149,7 @@
     left: -7px;
     height: 20px;
     width: 20px;
-    background: #eee;
+    background: #d4d1cbdf;
     border-bottom-right-radius: 15px;
 }
 .yours .message.last:after {
@@ -160,7 +160,7 @@
     left: -10px;
     width: 10px;
     height: 20px;
-    background: #525151; /*Same color as chat's background */
+    background: #CFECFA; /*Same color as chat's background */
     border-bottom-right-radius: 10px;
 }
 
@@ -171,7 +171,7 @@
 .mine .message {
     color: white;
     margin-right: 5px;
-    background: linear-gradient(to bottom, rgb(255, 151, 54) 0%, rgb(139, 68, 1) 100%);
+    background: linear-gradient(to bottom, #EE0856 0%, #9e0236 100%);
     background-attachment: fixed;
     position: relative;
 }
@@ -185,7 +185,7 @@
     height: 20px;
     width: 20px;
     /*background: linear-gradient(to bottom, #00D0EA 0%, #0085D1 100%);*/
-    background: linear-gradient(to bottom, rgb(255, 156, 63) 0%, rgb(136, 66, 0) 100%);
+    background: linear-gradient(to bottom, #EE0856 0%, #9e0236 100%);
     background-attachment: fixed;
     border-bottom-left-radius: 15px;
 }
@@ -198,7 +198,7 @@
     right: -10px;
     width: 10px;
     height: 20px;
-    background: #525151; /*Same color as chat's background */
+    background: #CFECFA; /*Same color as chat's background */
     border-bottom-left-radius: 10px;
 }
 
@@ -210,7 +210,7 @@
     padding: 10px;
     min-height: 40px;
     max-height: 12%;
-    background: #343a40;
+    background: #EE0856;
     color: #FFFFFF;
     border: none;
     outline: none;
@@ -223,7 +223,7 @@
     position: absolute;
     right: 6px;
     bottom: 6px;
-    background: rgb(209, 110, 18);
+    background: #EE0856;
     height: 37px;
     width: 37px;
     border-radius: 50%;
@@ -240,7 +240,7 @@
 }
 
 .class-button-send:hover{
-    background-color: rgb(255, 123, 0);
+    background-color: #9e0236;
     transform: rotate(45deg);
     transition: all 0.5s;
     cursor: pointer;
@@ -292,17 +292,11 @@
 
 .class-chat-date{
     font-size: 11px;
-    color: #FFFFFF;
+    color: #000000;
 }
 
 .class-chat-user{
     font-weight: bold;
-    font-size: 85%;
-    width: 100%;
-}
-
-.class-chat-message-text{
-    text-align: left;
 }
 
 .class-chat-groups{
@@ -312,7 +306,7 @@
     -ms-overflow-style: none; 
     min-height: 79%;
     max-height: 86%;
-    background-color: #525151;
+    background-color: #CFECFA;
     margin-top: 67px;
     transition: all 0.5s;
 }
@@ -324,10 +318,9 @@
 }
 
 .class-chat-group{
-    border-bottom: 1px solid #FFFFFF;
+    border-bottom: 1px solid #676767;
     cursor: pointer;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    background-color: #CFECFA;
 }
 
 .class-group-image{
@@ -339,31 +332,36 @@
 
 .class-chat-group-title{
     align-self: flex-start;
-    color: #FFFFFF;
+    color: #000000;
     font-size: 20px;
 }
 
 .class-chat-group-message{
-    align-self: flex-start;
-    color: #dadada;
+    align-self: flex-start; 
+    color: #000000;
     font-style: italic;
-    margin: 0;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    justify-self: flex-start;
 }
 
 .class-chat-group-time{
-    color: #dadada;
+    color: #000000;
     font-size: 11px;
+    width: 100%;
     text-align: right;
 }
 
 .class-chat-group:hover{
-    background-color: #808080;
+    background-color: #9fdfff;
 }
 
 .class-chat-footer{
     padding: 10px;
     z-index: 10;
-    background-color: #343a40;
+    background-color: #EE0856;
     color: #FFFFFF;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -391,11 +389,11 @@
 }
 
 .class-chat-footer-left:hover{
-    background-color:#808080;
+    background-color:#9e0236;
 }
 
 .class-chat-footer-right:hover{
-    background-color:#808080;
+    background-color:#9e0236;
 }
 
 .class-chat-search {
@@ -415,7 +413,7 @@
     padding-left: 28px;
     height: 80%;
     z-index: 15;
-    background-color: #343a40;
+    background-color: #EE0856;
     border-radius: 15px;
 }
 
@@ -435,7 +433,7 @@
 
 .class-groups-header{
     position: absolute;
-    background-color: #525151;
+    background-color: #CFECFA;
     margin-top: 67px;
     width: 100%;
     height: 50px;
@@ -443,20 +441,20 @@
 }
 
 .class-chat-settings{
-    background-color: #525151;
+    background-color: #CFECFA;
     margin-top: 67px;
     width: 100%;
     height: 86%;
 }
 
 .class-chat-settings-title{
-    color: #FFFFFF;
+    color: #000000;
     width: 100%;
     font-weight: bold;
 }
 
 .class-chat-settings-name{
-    color: #FFFFFF;
+    color: #000000;
 }
 
 input[type="checkbox"].ios-switch {
@@ -503,7 +501,7 @@ input[type="checkbox"].ios-switch:checked + label:after {
     margin-left: 16px;
 }
 input[type="checkbox"].ios-switch:checked + label:before {
-    background: rgb(255, 123, 0);
+    background: #9e0236;
 }
 
 .class-checkbox{
@@ -516,7 +514,6 @@ input[type="checkbox"].ios-switch:checked + label:before {
 
 .class-chat-title{
     font-weight: bold;
-    font-size: 30px;
 }
 
 #chatSlideHeader2 > *{
@@ -529,7 +526,7 @@ input[type="checkbox"].ios-switch:checked + label:before {
 
 .class-chat-active{
     border-radius: 50%;
-    background-color: rgb(255, 123, 0);
+    background-color: #9e0236;
     width: 10px;
     height: 10px;
     cursor: default;
@@ -537,7 +534,7 @@ input[type="checkbox"].ios-switch:checked + label:before {
 
 .class-chat-inactive{
     border-radius: 50%;
-    background-color: rgb(158, 158, 158);
+    background-color: #FFFFFF;
     width: 10px;
     height: 10px;
     cursor: default;
@@ -561,4 +558,10 @@ input[type="checkbox"].ios-switch:checked + label:before {
     display: none;
     height: 0px;
     width: 0px;
+}
+
+@media screen and (max-height: 700px) {
+    .chat{
+        max-height: 85%;
+    }
 }

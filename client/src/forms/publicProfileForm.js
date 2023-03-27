@@ -46,10 +46,10 @@ export const publicProfileFormInputs = [
         tag: "Fecha de nacimiento",
         name: "birthDate",
         type: "date",
-        defaultValue: "",
+        defaultValue: "1900-01-01",
         isRequired: false,
         validators: [
-            publicProfileValidator.notPastDate,
+            //publicProfileValidator.notPastDate,
         ]
     }
 ]

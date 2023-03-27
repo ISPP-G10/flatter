@@ -4,7 +4,7 @@ const Group = (props) => {
 
 
     return (
-        <div className="class-chat-group d-flex justify-content-between align-items-center mt-1 mb-1 w-100" onClick={props.onClick}>
+        <div className="class-chat-group d-flex justify-content-between align-items-center pt-1 pb-1 w-100" onClick={props.onClick}>
             <div className="d-flex justify-content-start align-items-center w-75">
                 <img className="class-group-image ml-2" src={props.chatPic} alt=""/>
                 <div className="d-flex flex-column ml-3 w-100">

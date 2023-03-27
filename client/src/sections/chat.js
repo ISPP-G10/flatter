@@ -79,7 +79,7 @@ const Chat = () => {
 
             if (chatInput.current.innerHTML === '' || chatInput.current.innerHTML === '<br>') {
                 chatInput.current.innerHTML = 'Escribe tu mensaje aquí...';
-                chatInput.current.style.color = "rgb(165, 165, 165)";
+                chatInput.current.style.color = "#FFFFFF)";
             }
 
             if (groups.current.style.display === "block" && groups.current.scrollHeight === groups.current.offsetHeight) {
@@ -168,7 +168,7 @@ const Chat = () => {
     const setPlaceholderOn = () => {
         if (chatInput.current.innerHTML === '' || chatInput.current.innerHTML === '<br>') {
             chatInput.current.innerHTML = 'Escribe tu mensaje aquí...';
-            chatInput.current.style.color = "rgb(165, 165, 165)";
+            chatInput.current.style.color = "#FFFFFF";
         }
     }
 
@@ -273,7 +273,7 @@ const Chat = () => {
         let searchMessage = document.createElement("h4");
         let newContent = document.createTextNode("La búsqueda no tuvo ningún resultado. Por favor, pruebe de nuevo.");
         searchMessage.appendChild(newContent);
-        searchMessage.style.color = "#FFFFFF";
+        searchMessage.style.color = "#000000";
         searchMessage.classList.add("ml-2");
         searchMessage.classList.add("mr-2");
 
@@ -321,46 +321,6 @@ const Chat = () => {
             }
         }
     }
-
-    // useEffect(() => {
-    //     if (chatId) {
-    //         chatHeaderTitle.current.innerHTML = chatId[1];
-    //         if (chatHeaderActive.current.classList.contains("class-chat-active")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-active");
-    //         } else if (chatHeaderActive.current.classList.contains("class-chat-inactive")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-inactive");
-    //         } else if (chatHeaderActive.current.classList.contains("class-chat-none")) {
-    //             chatHeaderActive.current.classList.remove("class-chat-none");
-    //         }
-    //         chatHeaderActive.current.classList.add("class-chat-" + chatId[2]);
-    //         if (chatId[2] !== "none") {
-    //             chatHeaderActive.current.title = "The user is " + chatId[2];
-    //         } else {
-    //             chatHeaderActive.current.title = "";
-    //         }
-    //     }
-    // }, [chatId])
-
-    // useEffect(() => {
-    //     if (userPreferences) {
-    //         if (chatHeaderTitle.current.innerText === userPreferences.user.username) {
-    //             if (chatHeaderActive.current.classList.contains("class-chat-active")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-active");
-    //             } else if (chatHeaderActive.current.classList.contains("class-chat-inactive")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-inactive");
-    //             } else if (chatHeaderActive.current.classList.contains("class-chat-none")) {
-    //                 chatHeaderActive.current.classList.remove("class-chat-none");
-    //             }
-    //             let status = sessionStorage.visibilityOnline === "true" ? userPreferences.visibilityOnline === true ? userPreferences.isOnline ? "active" : "inactive" : "inactive" : "none";
-    //             chatHeaderActive.current.classList.add("class-chat-" + status);
-    //             if (status !== "none") {
-    //                 chatHeaderActive.current.title = "The user is " + status;
-    //             } else {
-    //                 chatHeaderActive.current.title = "";
-    //             }
-    //         }
-    //     }
-    // }, [userPreferences])
 
     return (
         <>

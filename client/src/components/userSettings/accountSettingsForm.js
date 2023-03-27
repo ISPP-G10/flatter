@@ -26,7 +26,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
                 role: values.role,
                 profilePicture: encodedImage,
                 phone: values.phoneNumber,
-                profilePicture: data.profilePicture,
+                profilePicture: encodedImage,
 
             }
         })

@@ -1,3 +1,4 @@
+import '../../static/css/components/tagSelector.css'
 import Select from 'react-select';
 import chroma from 'chroma-js';
 import {forwardRef, useState} from 'react';
@@ -79,47 +80,6 @@ const TagSelector = forwardRef((props, tagRef) => {
       },
     }),
   };
-
-  //--------------------Style de tags 2--------------------
-
-  // const colourStyles = {
-  //   control: (styles) => ({ ...styles, backgroundColor: 'white' }),
-  //   multiValue: (styles, { data }) => {
-  //     return {
-  //       ...styles,
-  //       backgroundColor: data.color,
-  //       paddingTop: "5px;",
-  //       paddingBottom: "5px;",
-  //       paddingLeft: "10px;",
-  //       paddingRight: "10px;",
-  //       borderRadius: "25px;",
-  //       minWidth: "100px;",
-  //       alignItems: "center;",
-  //       justifyContent: "center;"
-  //     };
-  //   },
-  //   multiValueLabel: (styles, { data }) => ({
-  //     ...styles,
-  //     fontWeight: "bold;",
-  //     color: "#FFFFFF;",
-  //     letterSpacing: "1px;",
-  //     fontSize: "15px;",
-  //     textAlign: "center;"
-  //   }),
-  //   multiValueRemove: (styles, { data }) => ({
-  //     ...styles,
-  //     backgroundColor: data.color,
-  //     color: 'white',
-  //     cursor: "pointer",
-  //     ':hover': {
-  //       backgroundColor: data.color,
-  //       color: 'white',
-  //       cursor: "pointer",
-  //     },
-  //   }),
-  // };
-
-  //------------------------------------------------------
 
   const handleSelectChange = (selectedOptions) => {
     if (selectedOptions.length <= props.max) {

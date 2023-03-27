@@ -69,7 +69,7 @@ const FavouritesProperties = () => {
                           src={require("../static/files/icons/ubicacion.png")}
                           alt="Ubicacion"
                         />{" "}
-                        {property.province}
+                        {property.location}, {property.municipality.name}, {property.province.name}
                       </div>
 
                       <div className="meta-flatmates">

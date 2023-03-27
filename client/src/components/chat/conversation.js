@@ -11,6 +11,7 @@ const Conversation = (props) => {
     let chatId = props.chatId;
     let username = localStorage.getItem("user");
     const [messagesMap, setMessagesMap] = useState(undefined);
+    const [messagesChanged, setMessagesChanged] = useState(false);
 
     const {data, loading} = useQuery(chatsAPI.getMessagesByGroup, {
         variables: {
@@ -40,13 +41,26 @@ const Conversation = (props) => {
     useEffect (() => {
         if (chatId!==null && chatId!==undefined){
             if (!subscription.loading){
-                console.log(subscription.data);
-            }
-            else{
-                console.log(subscription.loading);
+                if (messagesMap){
+                    let messages = messagesMap
+                    let newMessage = subscription.data.messageSubscription.message
+                    let todayList = messages.at(-1).value
+                    let lastMessagesList = todayList.at(-1)
+                    let isFromMe = lastMessagesList.at(-1).user.username===newMessage.user.username
+                    if(isFromMe){
+                        lastMessagesList.push(newMessage)
+                    } else{
+                        todayList.push([newMessage])
+                    }
+                    setMessagesMap(messages)
+                    setMessagesChanged(!messagesChanged)
+                }
             }
         }
     }, [subscription.data, subscription.loading]);
+
+    useEffect (()=>{
+    }, [messagesChanged])
 
     return (
         <>
@@ -67,7 +81,7 @@ const Conversation = (props) => {
                 }))
                 :
                 <></>
-            };
+            }
         </>
     );
 }

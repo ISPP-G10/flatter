@@ -1,4 +1,4 @@
-from .models import Tag, Property, Province, Municipality
+from .models import Tag, Property, Province, Municipality, Petition
 from graphql import GraphQLError
 from authentication.types import FlatterUserType
 from authentication.models import FlatterUser, Role
@@ -389,8 +389,6 @@ class UpdatePropertyMutation(graphene.Mutation):
             property_edit.max_capacity = max_capacity
             
         property_edit.save()
-
-        print(images)
 
         if images:
             

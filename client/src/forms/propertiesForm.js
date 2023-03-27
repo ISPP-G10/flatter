@@ -34,6 +34,30 @@ export const propertyInputs = [
       ]
     },
     {
+      tag: 'Provincia',
+      name: 'province',
+      type: 'select',
+      values: ["-"],
+      defaultValue: "-",
+      isRequired: true,
+      validators: [
+        propertyValidators.notEmptyValidator,
+        propertyValidators.notEmptyProvinceValidator
+      ]
+    },
+    {
+      tag: 'Municipio',
+      name: 'municipality',
+      type: 'select',
+      values: ["-"],
+      defaultValue: "-",
+      isRequired: true,
+      validators: [
+        propertyValidators.notEmptyValidator,
+        propertyValidators.notEmptyMunicipalityValidator
+      ]
+    },
+    {
       tag: 'Dimensiones (m2)',
       name: 'dimensions',
       type: 'number',
