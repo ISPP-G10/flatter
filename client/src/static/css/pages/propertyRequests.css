@@ -98,6 +98,14 @@
 .content.content-list > .property-requests > .property-request > .request-data > .request-footer {
     display: flex;
     margin-top: 10px;
+    justify-content: space-between;
+    margin-right: 15px;
+}
+
+.request-user-data > span, .request-footer-element > span{
+    display: flex;
+    align-items: center;
+    gap: 1px
 }
 
 .content.content-list .request-footer > div {
@@ -165,10 +173,17 @@
     height: 25px;
 }
 
+.request-information-element{
+    text-align: justify;
+}
+
 @media all and (max-width: 768px) {
     .content.content-list {
         margin: 0 20px;
         padding: initial;
+    }
+    .request-footer{
+        margin-right: 0;
     }
 }
 

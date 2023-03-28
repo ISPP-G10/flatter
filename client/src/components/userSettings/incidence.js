@@ -3,6 +3,7 @@ import FlatterForm from "../forms/flatterForm";
 import { useRef } from "react";
 import usersAPI from "../../api/usersAPI";
 import {useApolloClient} from '@apollo/client'
+import customAlert from "../../libs/functions/customAlert";
 
 const Incidence = () => {
 
@@ -60,10 +61,10 @@ const Incidence = () => {
                 command: result,
             }
         }).then((response) => {
-            alert("Incidencia registrada correctamente");
+            customAlert("Incidencia registrada correctamente");
             window.location.reload();
         }).catch((error) => {
-            alert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0]);
         });
         
     }

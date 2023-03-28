@@ -1,7 +1,7 @@
 import { changePasswordInputs } from '../../forms/changePasswordForm';
 import { useApolloClient } from '@apollo/client';
 import { useRef } from 'react';
-
+import customAlert from '../../libs/functions/customAlert';
 import usersAPI from '../../api/usersAPI';
 import FlatterForm from '../forms/flatterForm';
 
@@ -25,7 +25,7 @@ const PasswordSettingForm = ({correctModalRef}) => {
         .then((response) => {
             correctModalRef.current.open();
         })
-        .catch((error) => alert(error.message));
+        .catch((error) => customAlert(error.message));
 
     }
 

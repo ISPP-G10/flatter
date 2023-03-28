@@ -19,7 +19,7 @@ const Error = () => {
                 <div className="error-message" style={{marginLeft: '100px'}}>
                     <h1>Ups...</h1>  
                     <p>La página que buscas no es nuestra</p>
-                    <div className="return-btn" onClick={() => navigator("/")}>{"<<<"} Volver</div>
+                    <div className="return-btn" onClick={() => window.location.href="/"}>{"<<<"} Volver</div>
                 </div>
                 <div className="aura-1"></div>
                 <div className="aura-2"></div>

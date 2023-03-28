@@ -466,7 +466,7 @@ class AddUsersToFavouritePropertyMutation(graphene.Mutation):
     if property.owner.username == username:
         raise ValueError(_("No puedes marcar tu propio inmueble como favorito"))
     
-    if property.interested_users.contains(user):
+    if user in property.interested_users.all():
         raise ValueError(_("Ya has marcado este piso como favorito"))
     else:
         # Agregar el usuario a la lista de interesados en la propiedad
@@ -499,7 +499,7 @@ class DeleteUsersToFavouritePropertyMutation(graphene.Mutation):
             raise ValueError(_("El inmueble seleccionado no existe"))
 
         # Agregar el usuario a la lista de interesados en la propiedad
-        if property.interested_users.contains(user):
+        if user in property.interested_users.all():
             property.interested_users.remove(user)
             property.save()
         else:

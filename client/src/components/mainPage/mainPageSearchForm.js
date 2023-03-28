@@ -36,7 +36,7 @@ const MainPageSearchForm = () => {
 
     function performSearch(){
         if(currentForm === 'properties'){
-            navigate(`/search?min=${minPrice}&max=${maxPrice}&city=${city}`);
+            navigate(`/search?min=${minPrice}&max=${maxPrice}&municipality=${city}`);
         }else if(currentForm === 'partners'){
             navigate(`/users?min=${minPartnerScore}&max=${maxPartnerScore}&tag=${userTag}&owner=false`);
         }else{
@@ -99,7 +99,7 @@ const MainPageSearchForm = () => {
                     <div className="properties-form-container-bg-section-1"></div>
                     <div className="properties-form-container-bg-section-2"></div>
                     <form id="properties-form">
-                        <input className="main-page-input" type="text" name="city-filter" id="city-filter" placeholder='Ciudad' onChange={(e) => setCity(e.target.value)}/>
+                        <input className="main-page-input" type="text" name="city-filter" id="city-filter" placeholder='Municipio' onChange={(e) => setCity(e.target.value)}/>
                         <div className="range-input-container">
                             <p>Precio (€)</p>
                             <MultiRangeSlider
