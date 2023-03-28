@@ -2,8 +2,8 @@ import { registerValidators } from "../libs/validators/registerValidators"
 
 export const filterInputs = [
     {
-        tag: "Ciudad",
-        name: "province",
+        tag: "Municipio",
+        name: "municipality",
         type: "text",
         defaultValue: "",
         isRequired: false,

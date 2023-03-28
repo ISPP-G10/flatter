@@ -1,4 +1,5 @@
 import chatsAPI from "../api/chatsAPI";
+import customAlert from "../libs/functions/customAlert";
 
 function getDayToString(day){
     switch (day){
@@ -23,7 +24,7 @@ const socialLib ={
                 if(text.length <= maxLength){
                     if(element.current.style.color !== "rgb(165, 165, 165)"){
                         if (chatId === null) {
-                            alert("The chat is invalid");
+                            customAlert("The chat is invalid");
                             return;
                         }
                         client.mutate({
@@ -36,14 +37,14 @@ const socialLib ={
                         }).then((response) => {
                             element.current.innerHTML = "";
                         }).catch((error) => {
-                            alert(error.message.split("\n")[0]);
+                            customAlert(error.message.split("\n")[0]);
                         });
                     }
                 }else{
-                    alert("The max length of a message must be of " + maxLength +  " characterers");
+                    customAlert("The max length of a message must be of " + maxLength +  " characterers");
                 }
             }else{
-                alert("You cannot send an empty message");
+                customAlert("You cannot send an empty message");
             }
         }
     },

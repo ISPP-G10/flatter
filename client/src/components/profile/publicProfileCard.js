@@ -10,6 +10,7 @@ import TagSelector from '../inputs/tagSelector';
 import { useEffect, useRef, useState } from 'react';
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import usersAPI from '../../api/usersAPI';
+import customAlert from '../../libs/functions/customAlert';
 
 const PublicProfileCard = (props) => {
 
@@ -35,10 +36,10 @@ const PublicProfileCard = (props) => {
                 users: [props.username, localStorage.getItem('user')]
             }
         }).then((response) => {
-            alert("Ya puedes chatear con este usuario")
+            customAlert("Ya puedes chatear con este usuario")
             window.location.reload();
         }).catch((error) => {
-            alert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0]);
         });
     }
 
@@ -65,9 +66,10 @@ const PublicProfileCard = (props) => {
         })
         .then((response) => {
             editPublicProfileModalRef.current.close();
+            window.location.reload();
             setReload(true);
         })
-        .catch((error) => alert(error.message.split("\n")[0]));
+        .catch((error) => customAlert(error.message.split("\n")[0]));
     }
 
     useEffect(() => {
@@ -115,7 +117,8 @@ const PublicProfileCard = (props) => {
                                 <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
                             (
-                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
+                                // <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
+                                <></>
                             )
                         }
                     </div>
