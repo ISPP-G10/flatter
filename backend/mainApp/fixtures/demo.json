@@ -489,7 +489,15 @@
     "fields": {
       "image": "properties/images/29.png"
     }
-  },  {
+  },  
+  {
+    "model": "mainApp.Image",
+    "pk": 30,
+    "fields": {
+      "image": "properties/images/default.png"
+    }
+  },
+  {
     "model": "mainApp.property",
     "pk": 1,
     "fields": {
@@ -517,7 +525,7 @@
     "pk": 2,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00",
+      "outstanding_start_date": "2023-03-27 12:00:00",
       "title": "Casa con piscina",
       "description": "Esta hermosa casa cuenta con una impresionante piscina para disfrutar de los días soleados. Con amplios espacios interiores y exteriores, esta propiedad es ideal para aquellos que disfrutan del lujo y la comodidad. Disfruta de una tarde relajante al sol, organiza una fiesta con amigos o simplemente relájate en la tranquilidad de tu hogar.",
       "visits_counter": 50,
@@ -564,7 +572,7 @@
     "pk": 4,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00",
+      "outstanding_start_date": "2023-03-27 12:00:00",
       "title": "Casa de campo",
       "description": "Esta hermosa casa de campo es ideal para aquellos que buscan vivir en un lugar tranquilo y alejado de la ciudad. Con amplios espacios interiores y exteriores, esta propiedad te ofrece todo lo que necesitas para disfrutar de la vida en el campo. Disfruta de tardes relajantes al sol, largos paseos por la naturaleza y noches tranquilas bajo las estrellas.",
       "visits_counter": 100,
@@ -634,7 +642,7 @@
     "pk": 7,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00",
+      "outstanding_start_date": "2023-03-27 12:00:00",
       "title": "Casa moderna",
       "description": "Esta hermosa casa moderna te ofrece todo lo que necesitas para disfrutar de la vida en un hogar moderno y elegante. Con acabados de alta calidad y amplios espacios interiores, esta propiedad es ideal para aquellos que buscan vivir en un hogar contemporáneo. Disfruta de amplias vistas, una amplia variedad de comodidades y la tranquilidad de tu hogar.",
       "visits_counter": 25,
@@ -681,7 +689,7 @@
     "pk": 9,
     "fields": {
       "is_outstanding": true,
-      "outstanding_start_date": "2023-03-09 12:00:00",
+      "outstanding_start_date": "2023-03-27 12:00:00",
       "title": "Mansión con vista al mar",
       "description": "Si buscas un hogar de lujo con impresionantes vistas al mar, esta mansión es ideal para ti. Con amplios espacios interiores y exteriores, esta propiedad te ofrece todo lo que necesitas para disfrutar de la vida en un hogar de ensueño. Disfruta de impresionantes vistas del mar",
       "visits_counter": 50,

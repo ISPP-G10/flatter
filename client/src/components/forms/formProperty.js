@@ -68,7 +68,7 @@ const FormProperty = ({ property }) => {
         if(input.name === 'province') input.defaultValue = property.province.name;
 
         if(input.name === 'municipality') {
-          input.defaultValue = property.municipality.name
+          input.defaultValue = property.municipality.name;
           client.query({
             query: provincesAPI.getMunicipalitiesByProvince,
             variables: {
