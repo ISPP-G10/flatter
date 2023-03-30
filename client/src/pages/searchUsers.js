@@ -10,6 +10,7 @@ import usersAPI from "../api/usersAPI";
 import UserCard from "../components/users/userCards";
 import FlatterForm from "../components/forms/flatterForm";
 import SolidButton from "../sections/solidButton";
+import customAlert from "../libs/functions/customAlert";
 
 const SearchUsers = () => {
 
@@ -53,6 +54,7 @@ const SearchUsers = () => {
     client.query({
       query: usersAPI.filteredUsersByTagAndReview,
       variables: {
+        username: localStorage.getItem('user'),
         tag: filterValues.tag,
         owner: filterValues.owner
       }
@@ -63,7 +65,7 @@ const SearchUsers = () => {
         let maxValue = isNaN(filterValues.max) ? 5 : filterValues.max;
         setUsers(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
     })
-    .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+    .catch((error) => customAlert("No hay usuarios que coincidan con la búsqueda"));
     //eslint-disable-next-line
   }, [filterValues]);
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../static/css/components/favouriteButton.css";
 import { useApolloClient } from "@apollo/client";
 import propertiesAPI from "../../api/propertiesAPI";
+import customAlert from "../../libs/functions/customAlert";
 
 const FavouriteButton = ({ isFavourite, propertyId }) => {
   const [favourite, setFavourite] = useState(isFavourite);
@@ -21,7 +22,7 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        alert(error.message);
+        customAlert(error.message);
       });
   }
 
@@ -38,7 +39,7 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        alert(error.message);
+        customAlert(error.message);
       });
   }
 
