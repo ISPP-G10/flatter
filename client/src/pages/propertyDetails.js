@@ -10,7 +10,7 @@ import * as settings from "../settings";
 import propertiesAPI from "../api/propertiesAPI";
 import FlatterForm from "../components/forms/flatterForm";
 import FavouriteButton from "../components/property/favouriteButton";
-
+import customAlert from "../libs/functions/customAlert";
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
@@ -65,7 +65,7 @@ const PropertyDetails = () => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => customAlert(error.message));
   };
 
   const handleCancelRequest = (e) => {
@@ -80,7 +80,7 @@ const PropertyDetails = () => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => customAlert(error.message));
   };
   return (
     <FlatterPage withBackground userLogged>
@@ -172,34 +172,35 @@ const PropertyDetails = () => {
                 <></>
               )}
 
-              <button
-                className="property-btn"
-                onClick={() => {
-                  setProperty(propertyData.getPropertyById);
-                  editPropertyModalRef.current.open();
-                }}
-              >
+              
                 {localStorage.getItem("user") ===
                 propertyData.getPropertyById.owner.username ? (
-                  <>
+                  <button
+                    className="property-btn"
+                    onClick={() => {
+                      setProperty(propertyData.getPropertyById);
+                      editPropertyModalRef.current.open();
+                    }}
+                  >
                     <img
                       className="property-img"
                       src={require("../static/files/icons/lapiz.png")}
                       alt="lapiz icon"
                     />
                     EDITAR
-                  </>
+                  </button>
                 ) : (
-                  <>
+                  <button
+                    className="property-btn"
+                  >
                     <img
                       className="property-img"
                       src={require("../static/files/icons/chat-icon.png")}
                       alt="chat icon"
                     />
                     CONTACTAR
-                  </>
+                  </button>
                 )}
-              </button>
             </div>
           </div>
         </section>

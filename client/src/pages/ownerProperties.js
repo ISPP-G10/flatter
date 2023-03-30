@@ -7,7 +7,7 @@ import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 import propertiesAPI from '../api/propertiesAPI';
 import * as settings from "../settings";
-
+import customAlert from "../libs/functions/customAlert";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from '@apollo/client';
 import { useState, useRef } from 'react';
@@ -49,7 +49,7 @@ const OwnerProperties = ({}) => {
       }).then((response) => {
           window.location.reload();
       }).catch((error) => {
-          alert(error.message);
+          customAlert(error.message);
       });
   
     }
@@ -73,12 +73,9 @@ const OwnerProperties = ({}) => {
                 addPropertyModalRef.current.open();
             } } />
             </div>
-            <Link to="/property/requests">
             <div className="filterview-element" >
-                       <SolidButton text="Ver Solicitudes" type="" onClick={ () => { 
-            } } />
+                       <SolidButton text="Ver Solicitudes" type="" onClick={ () => {  navigate('/property/requests')} } />
             </div>
-            </Link>
 
           </div>
 

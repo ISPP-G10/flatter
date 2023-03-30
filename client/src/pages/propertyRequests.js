@@ -3,7 +3,7 @@ import '../static/css/pages/listProperties.css'
 import FlatterPage from "../sections/flatterPage";
 import propertyRequestsAPI from '../api/propertyRequestsAPI';
 import * as settings from "../settings";
-
+import customAlert from "../libs/functions/customAlert";
 import { useQuery } from '@apollo/client';
 import SolidButton from '../sections/solidButton';
 import FlatterForm from '../components/forms/flatterForm';
@@ -31,7 +31,7 @@ const PropertyRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            alert(error.message);
+            customAlert(error.message);
         });
     
       }
@@ -47,7 +47,7 @@ const PropertyRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            alert(error.message);
+            customAlert(error.message);
         });
     
     }
@@ -103,7 +103,7 @@ const PropertyRequests = () => {
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByStatusAndUsernameAndDates))
-        .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
     
       }, [filterValues]);
       
@@ -162,7 +162,7 @@ const PropertyRequests = () => {
 
                                             <div className="request-user-data">
                                                 <span>{request.requester.firstName} {request.requester.lastName}</span>
-                                                <span>{request.requester.averageRating}/5 
+                                                <span>{parseFloat(request.requester.averageRating).toFixed(2)}/5.00
                                                 <img className='icon-img' src={require("../static/files/icons/yellow-star.png")} alt="Icono estrella"/>
                                                 </span>
                                             </div>
@@ -188,7 +188,7 @@ const PropertyRequests = () => {
                                     (<div className="request-actions">
                                         <SolidButton onClick={ () => {acceptPetition(request.id)}} text="Aceptar" className="accept" />
 
-                                        <SolidButton onClick={ () => {rejectPetition(request.id)}} text="Cancelar" className="reject" />
+                                        <SolidButton onClick={ () => {rejectPetition(request.id)}} text="Rechazar" className="reject" />
                                     </div>)
                                 : request.status === "A" ?
                                 (

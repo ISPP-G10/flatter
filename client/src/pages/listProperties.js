@@ -12,7 +12,7 @@ import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
 import {useNavigate} from 'react-router-dom';
 import {useApolloClient} from '@apollo/client';
-
+import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
 
 const ListProperties = () => {
@@ -25,7 +25,7 @@ const ListProperties = () => {
   let [filterValues, setFilterValues] = useState({
     min: parseInt(query.get("min")),
     max: parseInt(query.get("max")),
-    city: query.get("city") ?? '',
+    municipality: query.get("municipality") ?? '',
   });
 
   let [sharedProperty, setSharedProperty] = useState({});
@@ -41,7 +41,7 @@ const ListProperties = () => {
     setFilterValues({
       min: values.min_price,
       max: values.max_price,
-      city: values.province
+      municipality: values.municipality
     })
 
   }
@@ -53,26 +53,27 @@ const ListProperties = () => {
       variables: {
         minPrice: filterValues.min,
         maxPrice: filterValues.max,
-        city: filterValues.city
+        municipality: filterValues.municipality
       }
     })
     .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
-    .catch((error) => alert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+    .catch((error) => customAlert("No hay propiedades disponibles para esa búsqueda"));
 
     filterInputs.map((input) => {
       if(input.name === 'price'){
        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
       }
-      if(input.name === 'province') input.defaultValue = filterValues.city ?? '';
+      if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
 
   }, [filterValues]);
 
   const copyShareInputClipboard = () => {
     const input = document.querySelector('#share-modal-input');
-    input.select();
-    document.execCommand('copy');
+    window.navigator.clipboard.writeText(input.value)
+      .then(customAlert("¡Ya puedes compartir la propiedad!"))
+      .catch(error => console.log(error));;
   }
 
 
@@ -98,7 +99,7 @@ const ListProperties = () => {
               setFilterValues({
                 min: 0,
                 max: 2000,
-                city: '',
+                municipality: '',
               })
             }}/>
           </div>
@@ -157,12 +158,12 @@ const ListProperties = () => {
         </div>
       </section>
 
-      <FlatterModal maxWidth={350} ref={modalRef}>
+      <FlatterModal maxWidth={500} ref={modalRef}>
         <div className="info-modal share-property-modal">
           <h3>¿Conoces a alguien a quién le puede interesar?</h3>
           <p>Comparte este alquiler con quien tú quieras. Puedes copiar el siguiente enlace y la persona que lo reciba podrá entrar directamente a ver la información de la propiedad.</p>
           <div className="share-input">
-            <input id="share-modal-input" type="text" value={`https://${window.location.host}/property/${sharedProperty.id}`} placeholder="Aquí aparecerá el enlace para compartir del alquiler que selecciones" readOnly={ true } /><button onClick={ function(e) {
+            <input id="share-modal-input" type="text" value={`${window.location.protocol}//${window.location.host}/property/${sharedProperty.id}`} placeholder="Aquí aparecerá el enlace para compartir del alquiler que selecciones" readOnly={ true } /><button onClick={ function(e) {
             
               copyShareInputClipboard();
               e.target.innerText = '¡Copiado!';
