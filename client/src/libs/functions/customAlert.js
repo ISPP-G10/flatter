@@ -1,8 +1,9 @@
-import FlatterModal from "../../components/flatterModal";
-
-import {render} from "react-dom";
-
 import {useEffect, useRef} from "react";
+
+import FlatterModal from "../../components/flatterModal";
+import ReactDOM from 'react-dom/client';
+
+const alert = ReactDOM.createRoot(document.getElementById('alert'));
 
 function customAlert(string) {
 
@@ -15,13 +16,13 @@ function customAlert(string) {
         }, []);
 
         return (
-            <FlatterModal maxHeight={250} ref={alertRef}>
+            <FlatterModal maxHeight={250} ref={alertRef} border={"2px solid black"}>
                 <h3 style={{textAlign: 'center'}}>{string}</h3>
             </FlatterModal>
         );
     }
 
-    render(<Alert/>, document.getElementById('alert'));
+    alert.render(<Alert/>);
 }
 
 export default customAlert;
