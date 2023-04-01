@@ -115,9 +115,7 @@ class SocialQueries(object):
         if len(relationships) == 0:
             relationships = ['Amigo', 'Excompañero']
 
-        # user = FlatterUser.objects.get(pk=6)
-        # piso = Property.objects.get(pk=3)
-        # piso.flatmates.add(user)
+
 
         return relationships
 
