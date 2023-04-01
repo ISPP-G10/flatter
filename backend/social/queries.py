@@ -1,6 +1,6 @@
 import graphene
 from django.utils.translation import ugettext_lazy as _
-from authentication.models import Tag, Role
+from authentication.models import Tag
 from authentication.types import TagType
 from mainApp.models import Property
 from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
