@@ -2,6 +2,7 @@ import graphene
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
 from authentication.types import TagType
+from mainApp.models import Property
 from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
 from .models import Group, Message
 from authentication.models import FlatterUser
@@ -14,6 +15,7 @@ class SocialQueries(object):
     get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
     get_messages = graphene.List(MessageType)
+    get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String())
 
     def resolve_get_all_tag(self, info):
         return Tag.objects.all()
@@ -83,3 +85,36 @@ class SocialQueries(object):
         parsed_tag = 'P' if tag_type == "property" else "U"
         
         return Tag.objects.filter(entity=parsed_tag)
+
+    def resolve_get_relationships_between_users(self, info, user_login, user_valued):
+        relationships = []
+        user_login = FlatterUser.objects.get(username=user_login)
+        user_valued = FlatterUser.objects.get(username=user_valued)
+
+        if user_login == user_valued:
+            raise ValueError(_('No puedes tener una relación contigo mismo'))
+
+
+
+        if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
+            properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Propietario')
+
+        if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='OWNER').exists():
+            properties = Property.objects.filter(owner=user_valued).filter(flatmates__in=[user_login])
+            if properties.exists():
+                relationships.append('Inquilino')
+
+        if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='RENTER').exists():
+            properties = Property.objects.filter(flatmates__in=[user_login]).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Compañero')
+
+        if len(relationships) == 0:
+            relationships = ['Amigo', 'Excompañero']
+
+
+
+        return relationships
+
