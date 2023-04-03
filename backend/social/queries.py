@@ -1,4 +1,5 @@
 import graphene
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
 from authentication.types import TagType
@@ -94,23 +95,22 @@ class SocialQueries(object):
         if user_login == user_valued:
             raise ValueError(_('No puedes tener una relación contigo mismo'))
 
+
+
         if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
-            properties = Property.objects.filter(owner=user_login)
-            for property in properties:
-                if property.flatmates.filter(id=user_valued.id).exists():
-                    relationships.append('Propietario')
+            properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Propietario')
 
         if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='OWNER').exists():
-            properties = Property.objects.filter(owner=user_valued)
-            for property in properties:
-                if property.flatmates.filter(id=user_login.id).exists():
-                    relationships.append('Inquilino')
+            properties = Property.objects.filter(owner=user_valued).filter(flatmates__in=[user_login])
+            if properties.exists():
+                relationships.append('Inquilino')
 
         if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='RENTER').exists():
-            properties = Property.objects.all()
-            for property in properties:
-                if property.flatmates.filter(id=user_login.id).exists() and property.flatmates.filter(id=user_valued.id).exists():
-                    relationships.append('Compañero')
+            properties = Property.objects.filter(flatmates__in=[user_login]).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Compañero')
 
         if len(relationships) == 0:
             relationships = ['Amigo', 'Excompañero']
