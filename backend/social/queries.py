@@ -1,5 +1,4 @@
 import graphene
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
 from authentication.types import TagType
