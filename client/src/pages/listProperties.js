@@ -28,6 +28,8 @@ const ListProperties = () => {
     municipality: query.get("municipality") ?? '',
   });
 
+  const [formKey, setFormKey] = useState(0);
+
   let [sharedProperty, setSharedProperty] = useState({});
 
   let [properties, setProperties] = useState([]);
@@ -61,8 +63,8 @@ const ListProperties = () => {
 
     filterInputs.map((input) => {
       if(input.name === 'price'){
-       input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
-       input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
+       input.min = 0;
+       input.max = 2000;
       }
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
@@ -76,7 +78,15 @@ const ListProperties = () => {
       .catch(error => console.log(error));;
   }
 
+  const handleCleanFilters = () => {
+    setFilterValues({
+      min: 0,
+      max: 2000,
+      municipality: "",
+    });
 
+    setFormKey((prevKey) => prevKey + 1);
+  }
 
   return (
     <FlatterPage withBackground userLogged>
@@ -90,18 +100,11 @@ const ListProperties = () => {
             <div className="filters">
               <h3>Filtrar por:</h3>
 
-              <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
+              <FlatterForm key={formKey} ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
             </div>
           </div>
           <div style={{marginTop: '20px'}}>
-            <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
-              navigator('/search')
-              setFilterValues({
-                min: 0,
-                max: 2000,
-                municipality: '',
-              })
-            }}/>
+            <SolidButton type="featured" text="Limpiar filtros" onClick={() => handleCleanFilters()}/>
           </div>
         </div>
   
