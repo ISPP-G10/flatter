@@ -18,7 +18,7 @@ const PricingPage = () => {
   }
 
   return (
-    <FlatterPage withBackground>
+    <FlatterPage withBackground userLogged>
       <section>
           <div className="pricing-container">
               <div className="pricing-card text-center">
