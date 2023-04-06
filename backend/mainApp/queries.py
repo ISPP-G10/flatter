@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
+from django.core.paginator import Paginator
 
 
 class MainAppQuery(object):
@@ -14,13 +15,13 @@ class MainAppQuery(object):
     get_property_tags = graphene.List(TagType, property=graphene.Int())
     get_property_by_title = graphene.Field(PropertyType, title=graphene.String())
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
-    get_properties = graphene.List(PropertyType)
+    get_properties = graphene.List(PropertyType, page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
     get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
-                                                              location=graphene.String(), province=graphene.String())
+                                                              location=graphene.String(), province=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
     get_filtered_properties_by_province_municipality_location = graphene.List(PropertyType, province=graphene.String(),
                                                                               municipality=graphene.String(),
-                                                                              location=graphene.String())
+                                                                              location=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
     get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
@@ -36,8 +37,11 @@ class MainAppQuery(object):
     def resolve_get_property_by_id(self, info, id):
         return Property.objects.get(id=id)
 
-    def resolve_get_properties(self, info):
-        return Property.objects.all()
+    def resolve_get_properties(self, info, page_number, page_size):
+        properties =  Property.objects.all()
+        paginator = Paginator(properties,page_size)
+        properties = paginator.get_page(page_number)
+        return properties
 
     def resolve_get_all_tags(self, info):
         return Tag.objects.filter(entity='P')
@@ -46,7 +50,7 @@ class MainAppQuery(object):
         property = Property.objects.get(id=property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self, info, max_price=None, min_price=None, municipality=None,
+    def resolve_get_filtered_properties_by_price_and_city(self, info, page_number,page_size,max_price=None, min_price=None, municipality=None,
                                                           location=None, province=None):
         q = Q()
 
@@ -77,10 +81,13 @@ class MainAppQuery(object):
             q &= Q(location=location)
 
         properties = Property.objects.filter(q)
-
+        paginator = Paginator(properties,page_size)
+        properties = paginator.get_page(page_number)
         return properties
 
-    def resolve_get_filtered_properties_by_province_municipality_location(self, info, province=None,
+        
+
+    def resolve_get_filtered_properties_by_province_municipality_location(self, info, page_size, page_number,province=None,
                                                                           municipality=None, location=None):
         q = Q()
         if province and not Province.objects.filter(name=province).exists():
@@ -102,7 +109,8 @@ class MainAppQuery(object):
             q &= Q(location__icontains=location)
 
         properties = Property.objects.filter(q)
-
+        paginator = Paginator(properties,page_size)
+        properties = paginator.get_page(page_number)
         return properties
 
     def resolve_get_properties_by_owner(self, info, username):
