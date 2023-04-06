@@ -1,45 +1,12 @@
 import FlatterPage from "../sections/flatterPage";
 import "../static/css/pages/pricingPage.css";
 import PricingOption from "../components/pricingOption";
-import { useEffect, useState, useRef } from "react";
 import SolidButton from "../sections/solidButton";
 import customAlert from "../libs/functions/customAlert";
-import FlatterModal from "../components/flatterModal";
-import FlatterForm from "../components/forms/flatterForm";
-import { registerInputs } from "../forms/registerForm";
-import { useApolloClient } from "@apollo/client";
-import usersAPI from "../api/usersAPI";
 import customConfirm from "../libs/functions/customConfirm";
 import { FaCheck, FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 const PricingPage = () => {
-  const navigator = useNavigate();
-
-  const client = useApolloClient();
-
-  const [user, setUser] = useState(null);
-
-  const registerModalRef = useRef(null);
-  const registerFormRef = useRef(null);
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  function handleRegisterButtonClick() {
-    isMenuOpen && toggleMenu();
-    registerModalRef.current.open();
-  }
-
-  function toggleMenu() {
-    setIsMenuOpen(!isMenuOpen);
-  }
-
-  useEffect(() => {
-    if (localStorage.getItem("user")) {
-      setUser(localStorage.getItem("user"));
-    }
-  }, []);
-
   function handleConfirm(price) {
     customConfirm(`Vas a pagar ${price} FlatterCoins, ¿quieres continuar?`)
       .then((response) => {
@@ -50,40 +17,8 @@ const PricingPage = () => {
       });
   }
 
-  function handleRegisterSubmit({ values }) {
-    if (!registerFormRef.current.validate()) return;
-
-    client
-      .mutate({
-        mutation: usersAPI.createUser,
-        variables: {
-          firstName: values.first_name,
-          lastName: values.last_name,
-          username: values.username,
-          password: values.password,
-          email: values.email,
-          genre: values.genre,
-          roles: values.role,
-        },
-      })
-      .then((response) => {
-        let token = response.data.tokenAuth.token;
-        let username = response.data.tokenAuth.user.username;
-        let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", username);
-        localStorage.setItem("roles", roles);
-
-        navigator(0);
-      })
-      .catch((error) => {
-        customAlert(error.message.split("\n")[0]);
-      });
-  }
-
   return (
-    <FlatterPage withBackground>
+    <FlatterPage withBackground userLogged>
       <div className="pricing-container">
         <h1>Planes y Precios</h1>
         <section className="pricing-options">
@@ -111,13 +46,6 @@ const PricingPage = () => {
                 <FaTimes color="red" /> Ver perfiles que opinaron
               </li>
             </ul>
-            {!user && (
-              <SolidButton
-                type="featured"
-                text="Registrarse"
-                onClick={handleRegisterButtonClick}
-              />
-            )}
           </PricingOption>
           <PricingOption color="purple" selectedOption daysLeft={3}>
             <div className="recommended-tag">
@@ -161,22 +89,18 @@ const PricingPage = () => {
                 <FaCheck color="green" /> Ver perfiles que opinaron
               </li>
             </ul>
-            {user ? (
-              <div className="pricing-btn-group">
-                <SolidButton
-                  type="featured"
-                  text="Comprar 3 días"
-                  onClick={() => handleConfirm(85)}
-                />
-                <SolidButton
-                  type="featured"
-                  text="Comprar 7 días"
-                  onClick={() => handleConfirm(150)}
-                />
-              </div>
-            ) : (
-              <SolidButton type="featured" text="Registrarse" onClick={handleRegisterButtonClick} />
-            )}
+            <div className="pricing-btn-group">
+              <SolidButton
+                type="featured"
+                text="Comprar 3 días"
+                onClick={() => handleConfirm(85)}
+              />
+              <SolidButton
+                type="featured"
+                text="Comprar 7 días"
+                onClick={() => handleConfirm(150)}
+              />
+            </div>
           </PricingOption>
           <PricingOption color="orange">
             <h2>Pro</h2>
@@ -217,35 +141,20 @@ const PricingPage = () => {
                 <FaCheck color="green" /> Ver perfiles que opinaron
               </li>
             </ul>
-            {user ? (
-              <div className="pricing-btn-group">
-                <SolidButton
-                  type="featured"
-                  text="Comprar 3 días"
-                  onClick={() => handleConfirm(190)}
-                />
-                <SolidButton
-                  type="featured"
-                  text="Comprar 7 días"
-                  onClick={() => handleConfirm(375)}
-                />
-              </div>
-            ) : (
-              <SolidButton type="featured" text="Registrarse" onClick={handleRegisterButtonClick} />
-            )}
+            <div className="pricing-btn-group">
+              <SolidButton
+                type="featured"
+                text="Comprar 3 días"
+                onClick={() => handleConfirm(190)}
+              />
+              <SolidButton
+                type="featured"
+                text="Comprar 7 días"
+                onClick={() => handleConfirm(375)}
+              />
+            </div>
           </PricingOption>
         </section>
-        <FlatterModal maxWidth={700} ref={registerModalRef}>
-          <h1 className="auth-form-title">Regístrate</h1>
-          <FlatterForm
-            buttonText="Regístrate"
-            showSuperAnimatedButton
-            numberOfColumns={2}
-            inputs={registerInputs}
-            onSubmit={handleRegisterSubmit}
-            ref={registerFormRef}
-          />
-        </FlatterModal>
       </div>
     </FlatterPage>
   );
