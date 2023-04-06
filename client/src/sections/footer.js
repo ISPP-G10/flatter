@@ -34,6 +34,7 @@ const Footer = () => {
                     localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
                     <li className='menu-item'><Link className='menu-link' to="/properties">Mis viviendas</Link></li>
                 }
+                <li className='menu-item'><Link className='menu-link' to="/pricing">Precios</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>       
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>

@@ -1,0 +1,151 @@
+.pricing-border-red {
+  border: 2px solid var(--flatter-red-color);
+}
+
+.pricing-border-orange {
+  border: 2px solid var(--flatter-orange-color);
+}
+
+.pricing-border-purple {
+  border: 2px solid var(--flatter-purple-color);
+}
+
+.pricing-option {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+  margin: 0 10px 20px;
+  padding: 20px;
+  width: 350px;
+  position: relative;
+}
+
+.selected-pricing-option {
+  color: #fff;
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 5px;
+  width: fit-content;
+  font-size: 0.8em;
+  font-weight: 600;
+  border-radius: 5px;
+}
+
+.selected-red {
+  background-color: var(--flatter-red-color);
+}
+
+.selected-orange {
+  background-color: var(--flatter-orange-color);
+}
+
+.selected-purple {
+  background-color: var(--flatter-purple-color);
+}
+
+@media screen and (max-width: 1024px) {
+  .pricing-option {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .pricing-option {
+    width: 100%;
+  }
+}
+
+.pricing-option > ul > li {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+}
+
+.pricing-option > ul > li:last-child {
+  border-bottom: none;
+}
+
+.pricing-option button {
+  background-color: var(--flatter-blue-color);
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2em;
+  margin: 20px 0;
+  padding: 10px 0;
+  width: 100%;
+  transition: transform 0.2s ease-in-out;
+}
+
+.pricing-option button:hover {
+  transform: scale(0.95);
+}
+
+.pricing-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pricing-option > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.recommended-tag {
+  background-color: var(--flatter-purple-color);
+  border-radius: 5px;
+  color: #fff;
+  font-size: 0.8em;
+  margin: 0;
+  padding: 5px 10px;
+  float: right;
+}
+
+.pricing-options {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  overflow-x: visible;
+}
+
+.pricing-option > h2 {
+  font-size: 1.5em;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.pricing-option > h2 > img {
+  display: inline-block;
+  width: 18px;
+  vertical-align: middle;
+}
+
+.prices-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  height: 20px;
+}
+
+.prices-group > p {
+  font-size: 1.2em;
+  font-weight: 600;
+  padding: 0;
+}
+
+.prices-group > p > img {
+  display: inline-block;
+  width: 18px;
+  vertical-align: middle;
+}
