@@ -139,7 +139,7 @@ section {
   color: #fff;
   font-size: 16px;
 }
-.pricing-card a {
+.pricing-card button {
   position: relative;
   z-index: 2;
   background: #fff;
@@ -148,6 +148,7 @@ section {
   height: 40px;
   line-height: 40px;
   border-radius: 40px;
+  border: none;
   display: block;
   text-align: center;
   margin: 20px auto 0;
@@ -161,7 +162,7 @@ section {
   transition: .5s all;
 }
 
-.pricing-card a:hover {
+.pricing-card button:hover {
   -webkit-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
   -moz-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
   box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
