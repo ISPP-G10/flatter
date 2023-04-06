@@ -11,14 +11,28 @@ import { useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
 import customConfirm from "../libs/functions/customConfirm";
 import { FaCheck, FaTimes } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const PricingPage = () => {
+  const navigator = useNavigate();
+
   const client = useApolloClient();
 
   const [user, setUser] = useState(null);
 
   const registerModalRef = useRef(null);
   const registerFormRef = useRef(null);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  function handleRegisterButtonClick() {
+    isMenuOpen && toggleMenu();
+    registerModalRef.current.open();
+  }
+
+  function toggleMenu() {
+    setIsMenuOpen(!isMenuOpen);
+  }
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -97,7 +111,13 @@ const PricingPage = () => {
                 <FaTimes color="red" /> Ver perfiles que opinaron
               </li>
             </ul>
-            {!user && <SolidButton type="featured" text="Registrarse" />}
+            {!user && (
+              <SolidButton
+                type="featured"
+                text="Registrarse"
+                onClick={handleRegisterButtonClick}
+              />
+            )}
           </PricingOption>
           <PricingOption color="purple" selectedOption daysLeft={3}>
             <div className="recommended-tag">
@@ -155,7 +175,7 @@ const PricingPage = () => {
                 />
               </div>
             ) : (
-              <SolidButton type="featured" text="Registrarse" />
+              <SolidButton type="featured" text="Registrarse" onClick={handleRegisterButtonClick} />
             )}
           </PricingOption>
           <PricingOption color="orange">
@@ -211,7 +231,7 @@ const PricingPage = () => {
                 />
               </div>
             ) : (
-              <SolidButton type="featured" text="Registrarse" />
+              <SolidButton type="featured" text="Registrarse" onClick={handleRegisterButtonClick} />
             )}
           </PricingOption>
         </section>
