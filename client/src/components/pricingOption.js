@@ -3,7 +3,11 @@ import "../static/css/components/pricingOption.css";
 
 const PricingOption = (props) => {
   return (
-    <div className={`pricing-option ${"pricing-border-" + props.color} `}>
+    <div
+      className={`pricing-option ${"pricing-border-" + props.color} ${
+        props.selectedOption ? "pricing-option-shadow-" + props.color : ""
+      } `}
+    >
       {props.selectedOption && (
         <p className={`selected-pricing-option selected-${props.color}`}>
           Seleccionado {props.daysLeft && `(${props.daysLeft} días restantes)`}

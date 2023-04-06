@@ -3,13 +3,22 @@ import "../static/css/pages/pricingPage.css";
 import PricingOption from "../components/pricingOption";
 import { useEffect, useState, useRef } from "react";
 import SolidButton from "../sections/solidButton";
-import PaymentModal from "../components/paymentModal";
 import customAlert from "../libs/functions/customAlert";
+import FlatterModal from "../components/flatterModal";
+import FlatterForm from "../components/forms/flatterForm";
+import { registerInputs } from "../forms/registerForm";
+import { useApolloClient } from "@apollo/client";
+import usersAPI from "../api/usersAPI";
+import customConfirm from "../libs/functions/customConfirm";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const PricingPage = () => {
+  const client = useApolloClient();
+
   const [user, setUser] = useState(null);
-  const [price, setPrice] = useState(0);
-  const paymentModal = useRef(null);
+
+  const registerModalRef = useRef(null);
+  const registerFormRef = useRef(null);
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
@@ -17,17 +26,46 @@ const PricingPage = () => {
     }
   }, []);
 
-  function handlePayment(price) {
-    setPrice(price);
-    paymentModal.current.open();
+  function handleConfirm(price) {
+    customConfirm(`Vas a pagar ${price} FlatterCoins, ¿quieres continuar?`)
+      .then((response) => {
+        customAlert("Has aceptado la confirmación");
+      })
+      .catch((error) => {
+        customAlert("Has rechazado la confirmación");
+      });
   }
 
-  function handleCorrectPayment() {
-    customAlert("El pago se ha realizado correctamente");
-  }
+  function handleRegisterSubmit({ values }) {
+    if (!registerFormRef.current.validate()) return;
 
-  function handleBadPayment() {
-    customAlert("El pago no se ha realizado correctamente");
+    client
+      .mutate({
+        mutation: usersAPI.createUser,
+        variables: {
+          firstName: values.first_name,
+          lastName: values.last_name,
+          username: values.username,
+          password: values.password,
+          email: values.email,
+          genre: values.genre,
+          roles: values.role,
+        },
+      })
+      .then((response) => {
+        let token = response.data.tokenAuth.token;
+        let username = response.data.tokenAuth.user.username;
+        let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", username);
+        localStorage.setItem("roles", roles);
+
+        navigator(0);
+      })
+      .catch((error) => {
+        customAlert(error.message.split("\n")[0]);
+      });
   }
 
   return (
@@ -43,15 +81,25 @@ const PricingPage = () => {
             <ul>
               <li>5 visitas al perfil por día</li>
               <li>6 etiquetas</li>
-              <li>Sin prioridad en alquiler</li>
-              <li>Con anuncios</li>
-              <li>Sin chats</li>
-              <li>Soporte estándar</li>
-              <li>Sin ver perfiles que opinaron</li>
+              <li>
+                <FaTimes color="red" /> Prioridad en alquiler
+              </li>
+              <li>
+                <FaTimes color="red" /> Sin anuncios
+              </li>
+              <li>
+                <FaTimes color="red" /> Chats
+              </li>
+              <li>
+                <FaTimes color="red" /> Soporte premium
+              </li>
+              <li>
+                <FaTimes color="red" /> Ver perfiles que opinaron
+              </li>
             </ul>
             {!user && <SolidButton type="featured" text="Registrarse" />}
           </PricingOption>
-          <PricingOption color="purple">
+          <PricingOption color="purple" selectedOption daysLeft={3}>
             <div className="recommended-tag">
               <p>Recomendado</p>
             </div>
@@ -77,16 +125,34 @@ const PricingPage = () => {
             <ul>
               <li>15 visitas al perfil por día</li>
               <li>10 etiquetas</li>
-              <li>Sin prioridad en alquiler</li>
-              <li>Sin anuncios</li>
-              <li>Con 5 chats simultáneos como máximo</li>
-              <li>Soporte premium</li>
-              <li>Ver perfiles que opinaron</li>
+              <li>
+                <FaTimes color="red" /> Prioridad en alquiler
+              </li>
+              <li>
+                <FaCheck color="green" /> Sin anuncios
+              </li>
+              <li>
+                <FaCheck color="orange" /> Chats (5 máximo)
+              </li>
+              <li>
+                <FaCheck color="green" /> Soporte premium
+              </li>
+              <li>
+                <FaCheck color="green" /> Ver perfiles que opinaron
+              </li>
             </ul>
             {user ? (
               <div className="pricing-btn-group">
-                <SolidButton type="featured" text="Comprar 3 días" onClick={() => handlePayment(85)} />
-                <SolidButton type="featured" text="Comprar 7 días" onClick={() => handlePayment(150)} />
+                <SolidButton
+                  type="featured"
+                  text="Comprar 3 días"
+                  onClick={() => handleConfirm(85)}
+                />
+                <SolidButton
+                  type="featured"
+                  text="Comprar 7 días"
+                  onClick={() => handleConfirm(150)}
+                />
               </div>
             ) : (
               <SolidButton type="featured" text="Registrarse" />
@@ -115,28 +181,51 @@ const PricingPage = () => {
             <ul>
               <li>Visitas al perfil ilimitadas</li>
               <li>10 etiquetas</li>
-              <li>Con prioridad en alquiler</li>
-              <li>Sin anuncios</li>
-              <li>Con chats ilimitados</li>
-              <li>Soporte premium</li>
-              <li>Ver perfiles que opinaron</li>
+              <li>
+                <FaCheck color="green" /> Prioridad en alquiler
+              </li>
+              <li>
+                <FaCheck color="green" /> Sin anuncios
+              </li>
+              <li>
+                <FaCheck color="green" /> Chats ilimitados
+              </li>
+              <li>
+                <FaCheck color="green" /> Soporte premium
+              </li>
+              <li>
+                <FaCheck color="green" /> Ver perfiles que opinaron
+              </li>
             </ul>
             {user ? (
               <div className="pricing-btn-group">
-                <SolidButton type="featured" text="Comprar 3 días" onClick={() => handlePayment(190)} />
-                <SolidButton type="featured" text="Comprar 7 días" onClick={() => handlePayment(375)} />
+                <SolidButton
+                  type="featured"
+                  text="Comprar 3 días"
+                  onClick={() => handleConfirm(190)}
+                />
+                <SolidButton
+                  type="featured"
+                  text="Comprar 7 días"
+                  onClick={() => handleConfirm(375)}
+                />
               </div>
             ) : (
               <SolidButton type="featured" text="Registrarse" />
             )}
           </PricingOption>
         </section>
-        <PaymentModal
-          price={price}
-          resolve={handleCorrectPayment}
-          reject={handleBadPayment}
-          ref={paymentModal}
-        />
+        <FlatterModal maxWidth={700} ref={registerModalRef}>
+          <h1 className="auth-form-title">Regístrate</h1>
+          <FlatterForm
+            buttonText="Regístrate"
+            showSuperAnimatedButton
+            numberOfColumns={2}
+            inputs={registerInputs}
+            onSubmit={handleRegisterSubmit}
+            ref={registerFormRef}
+          />
+        </FlatterModal>
       </div>
     </FlatterPage>
   );
