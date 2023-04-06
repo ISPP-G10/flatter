@@ -20,7 +20,7 @@ const PricingPage = () => {
   return (
     <FlatterPage withBackground userLogged>
       <div className="pricing-container">
-        <h1>Planes y Precios</h1>
+        <h1>Mis planes</h1>
         <section className="pricing-options">
           <PricingOption color="red" selectedOption>
             <h2>Básico</h2>

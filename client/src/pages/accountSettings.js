@@ -101,6 +101,9 @@ const AccountSettings = () => {
                         <div className='settings-section' onClick={() => navigator(`/profile/${localStorage.getItem("user", "")}`)}>
                             <h4>Ver mi perfil público</h4>
                         </div>
+                        <div className='settings-section' onClick={() => navigator(`/pricing`)}>
+                            <h4>Mis planes</h4>
+                        </div>
                         <div className='settings-section' onClick={logout}>
                             <h4>Cerrar sesión</h4>
                         </div>
