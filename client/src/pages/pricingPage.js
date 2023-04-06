@@ -10,8 +10,12 @@ import { registerInputs } from "../forms/registerForm";
 import { useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
 import customConfirm from "../libs/functions/customConfirm";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { IconContext } from "react-icons";
+import { FaCheck, FaTimes, FaPaperPlane } from "react-icons/fa";
+import { ImAirplane } from "react-icons/im";
+import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import SuperAnimatedButton from "../components/superAnimatedButton/superAnimatedButton";
 
 const PricingPage = () => {
   const navigator = useNavigate();
@@ -50,46 +54,146 @@ const PricingPage = () => {
       });
   }
 
-  function handleRegisterSubmit({ values }) {
-    if (!registerFormRef.current.validate()) return;
-
-    client
-      .mutate({
-        mutation: usersAPI.createUser,
-        variables: {
-          firstName: values.first_name,
-          lastName: values.last_name,
-          username: values.username,
-          password: values.password,
-          email: values.email,
-          genre: values.genre,
-          roles: values.role,
-        },
-      })
-      .then((response) => {
-        let token = response.data.tokenAuth.token;
-        let username = response.data.tokenAuth.user.username;
-        let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", username);
-        localStorage.setItem("roles", roles);
-
-        navigator(0);
-      })
-      .catch((error) => {
-        customAlert(error.message.split("\n")[0]);
-      });
-  }
-
   return (
     <FlatterPage withBackground>
-      <div className="pricing-container">
+      <section>
+          <div className="pricing-container">
+              <div className="pricing-card text-center">
+                <div className="title">
+                  <div className="icon">
+                    <FaPaperPlane color="white" />
+                  </div>
+                  <h2>Básico</h2>
+                </div>
+                <div className="plan-price">
+                  <h4>0</h4>
+                  <img
+                    src={require("../static/files/icons/flattercoins-icon.png")}
+                    alt="Logo Flatter Coins"
+                  />
+                  <div className="d-flex" style={{height: '60px', alignItems: 'end'}}>
+                    <h5>/día</h5>
+                  </div>
+                </div>
+                <div className="option">
+                  <ul>
+                    <li>
+                      <BsDot color="white"/> 10 visitas al perfil por día
+                    </li>
+                    <li>
+                      <BsDot color="white"/> 6 etiquetas
+                    </li>
+                    <li>
+                      <FaTimes color="red" /> Sin anuncios
+                    </li>
+                    <li>
+                      <FaTimes color="red" /> Crear chats
+                    </li>
+                    <li>
+                      <FaTimes color="red" /> Soporte
+                    </li>
+                    <li>
+                      <FaTimes color="red" /> Ver perfiles que opinaron
+                    </li>
+                  </ul>
+                </div>
+                <a href="#"> Activado </a>
+              </div>
+              {/* END Col one */}
+              <div className="pricing-card text-center">
+                <div className="title">
+                  <div className="icon">
+                    <ImAirplane color="white" />
+                  </div>
+                  <h2>Avanzado</h2>
+                </div>
+                <div className="plan-price">
+                  <h4>30</h4>
+                  <img
+                    src={require("../static/files/icons/flattercoins-icon.png")}
+                    alt="Logo Flatter Coins"
+                  />
+                  <div className="d-flex" style={{height: '60px', alignItems: 'end'}}>
+                    <h5>/día</h5>
+                  </div>
+                </div>
+                <div className="option">
+                <ul>
+                  <li>
+                    <BsDot color="white"/> 30 visitas al perfil por día
+                  </li>
+                  <li>
+                    <BsDot color="white"/> 10 etiquetas
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Sin anuncios
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Crear chats
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Soporte
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Ver perfiles que opinaron
+                  </li>
+                </ul>
+                </div>
+                <a href="#"> Mejorar </a>
+              </div>
+              {/* END Col two */}
+              <div className="pricing-card text-center">
+                <div className="title">
+                  <div className="icon">
+                    <BsFillRocketTakeoffFill color="white" />
+                  </div>
+                  <h2>Pro</h2>
+                </div>
+                <div className="plan-price">
+                  <h4>65</h4>
+                  <img
+                    src={require("../static/files/icons/flattercoins-icon.png")}
+                    alt="Logo Flatter Coins"
+                  />
+                  <div className="d-flex" style={{height: '60px', alignItems: 'end'}}>
+                    <h5>/día</h5>
+                  </div>
+                </div>
+                <div className="option">
+                <ul>
+                  <li>
+                    <BsDot color="white"/> Visitas al perfil ilimitadas
+                  </li>
+                  <li>
+                    <BsDot color="white"/> 10 etiquetas
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Sin anuncios
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Crear chats
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Soporte
+                  </li>
+                  <li>
+                    <FaCheck color="green" /> Ver perfiles que opinaron
+                  </li>
+                </ul>
+                </div>
+                <a href="#"> Mejorar </a>
+              </div>
+              {/* END Col three */}
+          </div>
+      </section>
+
+
+      {/* <div className="pricing-container">
         <h1>Planes y Precios</h1>
         <section className="pricing-options">
           <PricingOption color="red" selectedOption>
             <h2>Básico</h2>
-            <div className="prices-group">
+            <div className="plan-prices-group">
               <p>Gratis</p>
             </div>
             <ul>
@@ -124,7 +228,7 @@ const PricingPage = () => {
               <p>Recomendado</p>
             </div>
             <h2>Avanzado</h2>
-            <div className="prices-group">
+            <div className="plan-prices-group">
               <p>
                 85{" "}
                 <img
@@ -180,7 +284,7 @@ const PricingPage = () => {
           </PricingOption>
           <PricingOption color="orange">
             <h2>Pro</h2>
-            <div className="prices-group">
+            <div className="plan-prices-group">
               <p>
                 190{" "}
                 <img
@@ -246,7 +350,7 @@ const PricingPage = () => {
             ref={registerFormRef}
           />
         </FlatterModal>
-      </div>
+      </div> */}
     </FlatterPage>
   );
 };

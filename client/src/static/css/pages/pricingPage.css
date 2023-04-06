@@ -1,13 +1,205 @@
-.pricing-container {
-  margin: 0 auto;
-  max-width: 1200px;
-  padding: 0 20px;
+section {
   width: 100%;
-  margin-top: 40px;
+  height: 100vh;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 140px 0;
 }
 
-.pricing-container > h1 {
-  font-size: 2em;
+.pricing-container{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pricing-card {
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  height: 600px;
+  background: linear-gradient(-45deg, #fe0847, #feae3f);
+  border-radius: 15px;
+  padding: 40px 20px;
+  -webkit-box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+.pricing-card:hover {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.pricing-container .pricing-card:nth-child(1),
+.pricing-container .pricing-card:nth-child(1) .title .icon {
+  background: linear-gradient(-45deg, #f403d1, #64b5f6);
+}
+.pricing-container .pricing-card:nth-child(2),
+.pricing-container .pricing-card:nth-child(2) .title .icon {
+  background: linear-gradient(-45deg, #ffec61, #f321d7);
+}
+
+.pricing-container .pricing-card:nth-child(2){
+  height: 650px;
+  max-width: 350px;
+}
+
+.pricing-container .pricing-card:nth-child(2) .icon{
+  transform: rotate(90deg);
+}
+
+.pricing-container .pricing-card:nth-child(3),
+.pricing-container .pricing-card:nth-child(3) .title .icon {
+  background: linear-gradient(-45deg, #24ff72, #9a4eff);
+}
+.pricing-card::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+  -webkit-transform: skewY(-5deg) scale(1.5);
+  transform: skewY(-5deg) scale(1.5);
+}
+.title .icon {
+  color: #fff;
+  font-size: 60px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 100px;
+  -webkit-box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.icon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title h2 {
+  position: relative;
+  margin: 20px 0 0;
+  padding: 0;
+  color: #fff;
+  font-size: 28px;
+  z-index: 2;
+  text-align: center;
+}
+
+.plan-price{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.plan-price img{
+  height: 30px;
+  width: 30px;
+  margin-left: 10px;
+}
+
+.plan-price,
+.option {
+  position: relative;
+  z-index: 2;
+}
+.plan-price h4 {
+  margin: 0;
+  padding: 20px 0;
+  color: #fff;
+  font-size: 60px;
+}
+
+.plan-price h5 {
+  margin: 0;
+  color: #fff;
+  font-size: 30px;
+}
+
+.option ul {
   margin: 0;
   padding: 0;
+}
+.option ul li {
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+  color: #fff;
+  font-size: 16px;
+}
+.pricing-card a {
+  position: relative;
+  z-index: 2;
+  background: #fff;
+  color: black;
+  width: 150px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 40px;
+  display: block;
+  text-align: center;
+  margin: 20px auto 0;
+  font-size: 16px;
+  font-weight: bolder;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  transition: .5s all;
+}
+
+.pricing-card a:hover {
+  -webkit-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
+  -moz-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
+  box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
+  transition: .5s all;
+}
+
+@media screen and (min-width: 576px) {
+  .pricing-container{
+    max-width: 540px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .pricing-container{
+    max-width: 720px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .pricing-container{
+    max-width: 960px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .pricing-container{
+    max-width: 1140px;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .pricing-container{
+    max-width: 1320px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .pricing-container{
+    max-width: 100%;
+  }
 }
