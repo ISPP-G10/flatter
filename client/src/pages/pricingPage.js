@@ -11,18 +11,30 @@ import SolidButton from "../sections/solidButton";
 
 const PricingPage = () => {
   const [clickedPlanPrice, setClickedPlanPrice] = useState(0);
-  const [planDays, setPlanDays] = useState(0);
+  const [planDays, setPlanDays] = useState(1);
+  const [discount, setDiscount] = useState(0);
 
   const modalRef = useRef();
 
   function handleModal(price) {
     setClickedPlanPrice(price);
     setPlanDays(1);
+    setDiscount(0);
     modalRef.current.open();
   }
 
   function handleOnChangeSelect(e) {
-    setPlanDays(e.target.value);
+    const days = parseInt(e.target.value);
+    if (days === 7) {
+      // 10% discount with no decimals
+      setDiscount(Math.floor(clickedPlanPrice * 0.1 * days));
+    } else if (days > 7) {
+      // 20% discount with no decimals
+      setDiscount(Math.floor(clickedPlanPrice * 0.2 * days));
+    } else {
+      setDiscount(0);
+    }
+    setPlanDays(days);
   }
 
   function handleConfirm(price) {
@@ -186,6 +198,11 @@ const PricingPage = () => {
             <h2 className="modal-title">¿Quieres mejorar tu plan?</h2>
           </div>
           <div className="modal-body">
+            <ul>
+              <li>Con 7 días tienes un 10% de descuento.</li>
+              <li>Con más de 7 días tienes un 20% de descuento.</li>
+            </ul>
+            <br />
             <p>¿Durante cuánto tiempo quieres mejorar tu plan?</p>
             <select
               name="time-plan"
@@ -199,13 +216,28 @@ const PricingPage = () => {
               <option value="90">90 días</option>
               <option value="180">180 días</option>
             </select>
-            <p style={{display: "flex", alignItems: "center", gap: 4}}>
-              Precio total: {clickedPlanPrice * planDays}{" "}
+            <p style={{ display: "flex", alignItems: "center", gap: 4 }}>
+              {clickedPlanPrice}{" "}
               <img
                 src={require("../static/files/icons/flattercoins-icon.png")}
                 alt="Logo Flatter Coins"
                 style={{ width: "20px" }}
               />{" "}
+              x {planDays} días
+              {discount > 0 && ` - ${discount}`}
+              {discount > 0 && (
+                <img
+                  src={require("../static/files/icons/flattercoins-icon.png")}
+                  alt="Logo Flatter Coins"
+                  style={{ width: "20px" }}
+                />
+              )}{" "}
+              = {clickedPlanPrice * planDays - discount}{" "}
+              <img
+                src={require("../static/files/icons/flattercoins-icon.png")}
+                alt="Logo Flatter Coins"
+                style={{ width: "20px" }}
+              />
             </p>
           </div>
           <div className="modal-footer">
@@ -218,7 +250,9 @@ const PricingPage = () => {
               type="featured"
               text="Continuar"
               className="btn btn-primary"
-              onClick={() => handleConfirm(clickedPlanPrice * planDays)}
+              onClick={() =>
+                handleConfirm(clickedPlanPrice * planDays - discount)
+              }
             />
           </div>
         </div>
