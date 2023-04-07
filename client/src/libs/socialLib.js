@@ -41,10 +41,8 @@ const socialLib ={
                         });
                     }
                 }else{
-                    customAlert("The max length of a message must be of " + maxLength +  " characterers");
+                    customAlert("La longitud máxima del mensaje debe ser de " + maxLength +  " caracteres");
                 }
-            }else{
-                customAlert("You cannot send an empty message");
             }
         }
     },

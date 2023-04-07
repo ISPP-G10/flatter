@@ -6,7 +6,7 @@ import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
 import { useApolloClient } from "@apollo/client";
 
-const Chat = () => {
+const Chat = (props) => {
 
     const [showChat, setShowChat] = useState(true);
     const [showGroups, setShowGroups] = useState(false);
@@ -48,7 +48,16 @@ const Chat = () => {
 
         setShowChat(!showChat);
 
-        if (showChat) {
+    };
+
+    const handleShowGroup = () => {
+
+        setShowGroups(!showGroups);
+
+    };
+
+    useEffect(() => {
+        if (!showChat) {
             chatSlide.current.style.display = "block";
             chatSlide.current.style.top = (window.scrollY+75) + "px";
             if (window.innerWidth > 1300) {
@@ -96,13 +105,10 @@ const Chat = () => {
         } else {
             chatSlide.current.style.display = "none";
         }
-    };
+    }, [showChat]);
 
-    const handleShowGroup = () => {
-
-        setShowGroups(!showGroups);
-
-        if (showGroups) {
+    useEffect(() => {
+        if (!showGroups) {
             chat.current.style.display = "none";
             chatWrite.current.style.display = "none";
             chatSlideHeader.current.style.display = "none";
@@ -130,7 +136,7 @@ const Chat = () => {
             groups.current.style.maxHeight = "79%";
             groups.current.style.marginTop = "130px";
         }
-    };
+    }, [showGroups]);
 
     const setInputHeight = (e) => {
         let chatInputHeight = chatInput.current.offsetHeight;
@@ -282,9 +288,9 @@ const Chat = () => {
         }
 
         if (groups.current.hasChildNodes()) {
-            for (let i = 0; i < nodesList.length; i++) {
-                parent.appendChild(nodesList[i]);
-                if (nodesList[i] === nodesList[nodesList.length - 1]) {
+            for (let node of nodesList) {
+                parent.appendChild(node);
+                if (node === nodesList[nodesList.length - 1]) {
                     nodesList = [];
                 }
             }
@@ -353,7 +359,7 @@ const Chat = () => {
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation chatId={chatId} />
+                    <Conversation chatId={chatId} parentRef={chat} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -363,7 +369,7 @@ const Chat = () => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups setChatId={setChatId} />
+                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">

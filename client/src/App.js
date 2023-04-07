@@ -2,6 +2,7 @@ import './static/css/globals.css';
 import "./static/css/legacyBootstrap.css";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 
 import LandingPage from './pages/landingPage';
 import Error from './pages/error';
@@ -18,6 +19,9 @@ import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
 
 function App() {
+
+  const [activateChat, setActivateChat] = useState(false);
+
   return (
     <Router>
       <Routes>
@@ -39,8 +43,8 @@ function App() {
         <Route path="/properties" element={<> <OwnerProperties /> </>}/>
         <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
         <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
+        <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
+        <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
         <Route path='/me' element={<> <AccountSettings/> </>}/>
         <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
         <Route path="*" element={<Error/>}/>
