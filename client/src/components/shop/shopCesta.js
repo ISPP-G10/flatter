@@ -46,19 +46,19 @@ const ShopCesta = ({
           </ul>
         </div>
         <div className="shop-cesta-total">
-          <h3 style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ display: "flex", alignItems: "center" }}>
             <span style={{ marginLeft: 0, marginRight: 0 }}>
-              Cantidad total: {totalAmount}{" "}
+              <strong>Cantidad total:</strong> {totalAmount}{" "}
             </span>
             <img
               src={require("../../static/files/icons/flattercoins-icon.png")}
               alt="Logo Flatter Coins"
               style={{ width: "20px", marginLeft: 4, marginRight: 0 }}
             />
-          </h3>
-          <h3>
-            Precio total: {(Math.round(totalPrice * 100) / 100).toFixed(2)}€
-          </h3>
+          </p>
+          <p>
+            <strong>Precio total:</strong> {(Math.round(totalPrice * 100) / 100).toFixed(2)}€
+          </p>
         </div>
         <div className="shop-cesta-buttons">
           <SolidButton text="Vaciar" type="featured" onClick={onEmpty} />

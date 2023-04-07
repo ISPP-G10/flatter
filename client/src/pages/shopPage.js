@@ -74,27 +74,28 @@ const ShopPage = () => {
         <div className="shop-page-content">
           <div className="shop-options">
             <ShopOption
-              name="100"
+              name={100}
               price={1}
+              extra={0}
               onClick={() => handleAdd(100, 1)}
             />
             <ShopOption
-              name="275"
+              name={275}
               extra={25}
               price={2.5}
-              onClick={() => handleAdd(275, 2.5)}
+              onClick={() => handleAdd(300, 2.5)}
             />
             <ShopOption
-              name="575"
+              name={575}
               extra={75}
               price={5}
-              onClick={() => handleAdd(575, 5)}
+              onClick={() => handleAdd(650, 5)}
             />
             <ShopOption
-              name="1200"
+              name={1200}
               extra={200}
               price={10}
-              onClick={() => handleAdd(1200, 10)}
+              onClick={() => handleAdd(1400, 10)}
             />
           </div>
           <ShopCesta
