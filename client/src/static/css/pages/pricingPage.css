@@ -1,4 +1,4 @@
-section {
+.section-pricing {
   width: 100%;
   height: 100vh;
   -webkit-box-sizing: border-box;
@@ -6,7 +6,7 @@ section {
   padding: 140px 0;
 }
 
-.pricing-container{
+.pricing-container {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
@@ -15,7 +15,6 @@ section {
 }
 
 .pricing-card {
-
   position: relative;
   display: flex;
   flex-direction: column;
@@ -45,12 +44,12 @@ section {
   background: linear-gradient(-45deg, #ffec61, #f321d7);
 }
 
-.pricing-container .pricing-card:nth-child(2){
+.pricing-container .pricing-card:nth-child(2) {
   height: 650px;
   max-width: 350px;
 }
 
-.pricing-container .pricing-card:nth-child(2) .icon{
+.pricing-container .pricing-card:nth-child(2) .icon {
   transform: rotate(90deg);
 }
 
@@ -82,7 +81,7 @@ section {
   box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
 }
 
-.icon{
+.icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,13 +97,13 @@ section {
   text-align: center;
 }
 
-.plan-price{
+.plan-price {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
-.plan-price img{
+.plan-price img {
   height: 30px;
   width: 30px;
   margin-left: 10px;
@@ -159,48 +158,89 @@ section {
   -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   text-decoration: none;
-  transition: .5s all;
+  transition: 0.5s all;
 }
 
 .pricing-card button:hover {
-  -webkit-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
-  -moz-box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
-  box-shadow: 0px 0px 16px 5px rgba(255,255,255,1);
-  transition: .5s all;
+  -webkit-box-shadow: 0px 0px 16px 5px rgba(255, 255, 255, 1);
+  -moz-box-shadow: 0px 0px 16px 5px rgba(255, 255, 255, 1);
+  box-shadow: 0px 0px 16px 5px rgba(255, 255, 255, 1);
+  transition: 0.5s all;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-body > select {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 0 10px;
+}
+
+.modal-body > select:focus {
+  outline: none;
+  border: 1px solid var(--flatter-blue-color);
+}
+
+.modal-body > select:hover {
+  border: 1px solid var(--flatter-blue-color);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-footer > button {
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+}
+
+.modal-footer > button:hover {
+  scale: 1.1;
 }
 
 @media screen and (min-width: 576px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 540px;
   }
 }
 
 @media screen and (min-width: 768px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 720px;
   }
 }
 
 @media screen and (min-width: 992px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 960px;
   }
 }
 
 @media screen and (min-width: 1200px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 1140px;
   }
 }
 
 @media screen and (min-width: 1400px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 1320px;
   }
 }
 
 @media screen and (max-width: 576px) {
-  .pricing-container{
+  .pricing-container {
     max-width: 100%;
   }
 }
