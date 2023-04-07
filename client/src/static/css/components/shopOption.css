@@ -3,7 +3,6 @@
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  background-color: #fff;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 45%;
@@ -32,7 +31,7 @@
 .shop-option__content > span {
   font-size: 1.2em;
   font-weight: 600;
-  color: var(--flatter-blue-color);
+  color: #fff;
 }
 
 .extra-amount {
@@ -46,13 +45,14 @@
   position: absolute;
   top: 0;
   right: 0;
-  padding: 5px;
+  padding: 10px;
+  color: #fff;
 }
 
 .shop-option-footer {
   margin-top: 20px;
   text-align: center;
-  background-color: #cccccc79;
+  background-color: rgba(255, 255, 255, 0.8);
   width: 100%;
   margin-left: 0;
   padding: 10px;
@@ -66,5 +66,5 @@
 }
 
 .extra-amount {
-  color: var(--flatter-blue-color);
+  color: var(--flatter-orange-color);
 }

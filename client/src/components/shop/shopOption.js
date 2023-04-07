@@ -1,8 +1,8 @@
 import "../../static/css/components/shopOption.css";
 
-const ShopOption = ({ name, extra, price, onClick }) => {
+const ShopOption = ({ name, extra, price, onClick, style }) => {
   return (
-    <div className="shop-option" onClick={onClick}>
+    <div className="shop-option" style={style} onClick={onClick}>
       <h3 className="price">{(Math.round(price * 100) / 100).toFixed(2)}€</h3>
       <br />
       <br />

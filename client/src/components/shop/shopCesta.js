@@ -46,7 +46,7 @@ const ShopCesta = ({
           </ul>
         </div>
         <div className="shop-cesta-total">
-          <p style={{ display: "flex", alignItems: "center" }}>
+          <p style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
             <span style={{ marginLeft: 0, marginRight: 0 }}>
               <strong>Cantidad total:</strong> {totalAmount}{" "}
             </span>

@@ -75,27 +75,63 @@ const ShopPage = () => {
           <div className="shop-options">
             <ShopOption
               name={100}
-              price={1}
+              price={2.5}
               extra={0}
-              onClick={() => handleAdd(100, 1)}
+              style={{
+                background:
+                  "linear-gradient(90deg, #7dd3fc 0%, #38bdf8 100%)",
+              }}
+              onClick={() => handleAdd(100, 2.5)}
             />
             <ShopOption
               name={275}
               extra={25}
-              price={2.5}
-              onClick={() => handleAdd(300, 2.5)}
+              price={5.55}
+              style={{
+                background:
+                  "linear-gradient(90deg, #38bdf8 0%, #0ea5e9 100%)",
+              }}
+              onClick={() => handleAdd(300, 5.55)}
             />
             <ShopOption
               name={575}
               extra={75}
-              price={5}
-              onClick={() => handleAdd(650, 5)}
+              price={9.99}
+              style={{
+                background:
+                  "linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%)",
+              }}
+              onClick={() => handleAdd(650, 9.99)}
             />
             <ShopOption
               name={1200}
               extra={200}
-              price={10}
-              onClick={() => handleAdd(1400, 10)}
+              price={19.99}
+              style={{
+                background:
+                  "linear-gradient(90deg, #0284c7 0%, #0369a1 100%)",
+              }}
+              onClick={() => handleAdd(1400, 19.99)}
+            />
+            <ShopOption
+              name={2500}
+              extra={500}
+              price={39.99}
+              style={{
+                background:
+                  "linear-gradient(90deg, #0369a1 0%, #075985 100%)",
+              }}
+              onClick={() => handleAdd(3000, 39.99)}
+            />
+            <ShopOption
+              name={5000}
+              extra={1000}
+              price={69.99}
+              style={{
+                background:
+                  "linear-gradient(90deg, #075985 0%, #0c4a6e 100%)",
+              }}
+              onClick={() => handleAdd(6000, 69.99)}
             />
           </div>
           <ShopCesta
