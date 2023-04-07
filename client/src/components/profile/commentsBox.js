@@ -7,9 +7,11 @@ import Comment from './comment';
 import ReactStars from "react-rating-stars-component";
 import PropTypes from 'prop-types';
 import { API_SERVER_MEDIA } from '../../settings';
-import {useApolloClient} from '@apollo/client'
+import {useApolloClient, useQuery} from '@apollo/client'
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
+import FlatterPage from "../../sections/flatterPage";
+
 
 function getTagName(tag, genre) {
     let final_letter = "e"
@@ -51,6 +53,12 @@ const CommentsBox = (props) => {
     let [rating, setRating] = useState(null);
     let [comments, setComments] = useState(props.comments)
     const client = useApolloClient();
+
+    const { data : dataRelations, loading : loadingRelations } = useQuery( usersAPI.getRelationships,
+        { variables: { userLogin: localStorage.getItem('user',''),
+                        userValued: props.username  } } );
+
+    console.log(dataRelations);
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
@@ -96,6 +104,14 @@ const CommentsBox = (props) => {
         });
         
     }
+
+    if(loadingRelations) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
+
+    commentsInputs.map((input) => {
+        if(input.name === 'relationship') {
+          input.values = dataRelations.getRelationshipsBetweenUsers;
+        }
+    });
 
     return(
         <>
