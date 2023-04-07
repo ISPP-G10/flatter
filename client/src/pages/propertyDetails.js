@@ -12,11 +12,30 @@ import FlatterForm from "../components/forms/flatterForm";
 import FavouriteButton from "../components/property/favouriteButton";
 import customAlert from "../libs/functions/customAlert";
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery, useApolloClient } from "@apollo/client";
+import usersAPI from '../api/usersAPI';
 
 const PropertyDetails = () => {
+  const [userData, setUserData] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+      username: localStorage.getItem("user")
+  }});
+  
+  useEffect(() => {
+      if (!loading && data && data.getUserByUsername) {
+          setUserData(data.getUserByUsername);
+      }
+  }, [loading, data]);
+  
+  useEffect(() => {
+      if (userData) {
+          setProfile(userData);
+      }
+  }, [userData]);
+
   let [property, setProperty] = useState({});
   const editPropertyModalRef = useRef(null);
 
@@ -247,7 +266,7 @@ const PropertyDetails = () => {
           buttonText="Solicitar"
           showSuperAnimatedButton
           numberOfColumns={1}
-          inputs={propertyRequestsInputs}
+          inputs={propertyRequestsInputs(profile.firstName+" "+profile.lastName, profile.age, profile.profession)}
           onSubmit={handlePropertyRequest}
           ref={propertyRequestFormRef}
         ></FlatterForm>
