@@ -63,8 +63,8 @@ const ListProperties = () => {
 
     filterInputs.map((input) => {
       if(input.name === 'price'){
-       input.min = 0;
-       input.max = 2000;
+        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
       }
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
