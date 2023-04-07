@@ -50,6 +50,7 @@ const Groups = (props) => {
                     setGroups([groupAndLastMessage,...groups])
                     setAllGroups([groupAndLastMessage,...allGroups])
                 } else{
+                    setAllGroups([groupAndLastMessage,...allGroups])
                     // setGroups([groupAndLastMessage,...groups])
                     // if (props.activateChat === true){
                     //     props.setShowChat(false)
