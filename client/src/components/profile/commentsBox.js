@@ -10,8 +10,6 @@ import { API_SERVER_MEDIA } from '../../settings';
 import {useApolloClient, useQuery} from '@apollo/client'
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
-import FlatterPage from "../../sections/flatterPage";
-
 
 function getTagName(tag, genre) {
     let final_letter = "e"
@@ -105,15 +103,13 @@ const CommentsBox = (props) => {
         
     }
 
-    if(loadingRelations) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
+    useEffect(() => { 
+        if (!loadingRelations && props.username!==localStorage.getItem("user")) { 
+            commentsInputs.map((input) => { 
+                if(input.name === 'relationship') { input.values = dataRelations.getRelationshipsBetweenUsers; } }); 
+            } 
+        }, [loadingRelations, dataRelations, props.username])
 
-    if (props.username!==localStorage.getItem("user")) {
-        commentsInputs.map((input) => {
-            if(input.name === 'relationship') {
-                input.values = dataRelations.getRelationshipsBetweenUsers;
-            }
-        });
-    }
     return(
         <>
             <div className='comments-box'>
