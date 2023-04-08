@@ -1,6 +1,7 @@
 import '../../static/css/components/userCard.css';
 import * as settings from "../../settings";
 import { useNavigate } from "react-router-dom";
+import Tag from '../tag';
 
 const UserCard = ({ user }) => {
 
@@ -18,6 +19,19 @@ const UserCard = ({ user }) => {
                 <div className='average-rating-bubble'>
                     <span>{user.averageRating !== 0 ? user.averageRating.toFixed(2) : '-'}</span>
                 </div>
+                <div className='tags-container'>
+                        {
+                            user.tags.length !== 0 ? (
+                                user.tags.map((tag, i) => { 
+                                    return(
+                                        <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                    )
+                                })
+                            ) : (
+                                <></>
+                            )
+                        }
+                    </div>
             </div>
         </div>
     );
