@@ -7,7 +7,7 @@ import Comment from './comment';
 import ReactStars from "react-rating-stars-component";
 import PropTypes from 'prop-types';
 import { API_SERVER_MEDIA } from '../../settings';
-import {useApolloClient} from '@apollo/client'
+import {useApolloClient, useQuery} from '@apollo/client'
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
 
@@ -26,6 +26,8 @@ function getTagName(tag, genre) {
             return "Compañer" + final_letter;
         case "E":
             return "Excompañer" + final_letter;
+        case "I": 
+            return "Inquilin" + final_letter;
         default:
             return "Propietari" + final_letter;
     }
@@ -51,6 +53,10 @@ const CommentsBox = (props) => {
     let [rating, setRating] = useState(null);
     let [comments, setComments] = useState(props.comments)
     const client = useApolloClient();
+
+    const { data : dataRelations, loading : loadingRelations } = useQuery( usersAPI.getRelationships,
+        { variables: { userLogin: localStorage.getItem('user',''),
+                        userValued: props.username  } } );
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
@@ -96,6 +102,13 @@ const CommentsBox = (props) => {
         });
         
     }
+
+    useEffect(() => { 
+        if (!loadingRelations && props.username!==localStorage.getItem("user")) { 
+            commentsInputs.map((input) => { 
+                if(input.name === 'relationship') { input.values = dataRelations.getRelationshipsBetweenUsers; } }); 
+            } 
+        }, [loadingRelations, dataRelations, props.username])
 
     return(
         <>

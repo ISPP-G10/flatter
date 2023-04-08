@@ -204,6 +204,12 @@ const usersAPI = {
             }
         }
     `,
-}   
+
+    getRelationships: gql`
+        query getRelationships($userLogin: String!, $userValued: String!){
+            getRelationshipsBetweenUsers(userLogin: $userLogin, userValued: $userValued)
+        }
+    `,
+}
 
 export default usersAPI;
