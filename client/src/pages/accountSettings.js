@@ -103,6 +103,7 @@ const AccountSettings = () => {
                         </div>
                         <div className='settings-section' onClick={() => navigator(`/pricing`)}>
                             <h4>Mis planes</h4>
+                        </div>
                         <div className='settings-section' onClick={() => navigator(`/shop`)}>
                             <h4>Tienda</h4>
                         </div>

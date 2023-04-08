@@ -1,6 +1,5 @@
 .section-pricing {
   width: 100%;
-  height: 100vh;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 140px 0;
@@ -8,6 +7,7 @@
 
 .pricing-container {
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
@@ -207,6 +207,24 @@
 
 .modal-footer > button:hover {
   scale: 1.1;
+}
+
+@media screen and (max-width: 1000px) {
+  
+  .pricing-container{
+    flex-direction: column;
+  }
+
+  .pricing-container .pricing-card:nth-child(2) {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .pricing-card {
+    margin: 20px;
+    width: 80%;
+    max-width: 450px;
+  }
 }
 
 @media screen and (min-width: 576px) {
