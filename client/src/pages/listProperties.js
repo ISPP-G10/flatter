@@ -14,6 +14,7 @@ import {useNavigate} from 'react-router-dom';
 import {useApolloClient} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
+import Pagination from "../components/pagination";
 
 const ListProperties = () => {
 
@@ -53,7 +54,9 @@ const ListProperties = () => {
       variables: {
         minPrice: filterValues.min,
         maxPrice: filterValues.max,
-        municipality: filterValues.municipality
+        municipality: filterValues.municipality,
+        pageNumber: 0,
+        pageSize: 10
       }
     })
     .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
@@ -76,7 +79,22 @@ const ListProperties = () => {
       .catch(error => console.log(error));;
   }
 
-
+  const handlePagination = (paginationIndex) => {
+    client.query({
+      query: propertiesAPI.filterProperties,
+      variables: {
+        minPrice: filterValues.min,
+        maxPrice: filterValues.max,
+        municipality: filterValues.municipality,
+        pageNumber: paginationIndex,
+        pageSize: 10
+      }
+    })
+    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
+    .catch((error) => {
+      customAlert("No hay propiedades disponibles para esa búsqueda");
+    });
+  }
 
   return (
     <FlatterPage withBackground userLogged>
@@ -155,6 +173,8 @@ const ListProperties = () => {
               );
               }
             )}
+
+          <Pagination isNextPage={() => properties.length === 10} callback = {handlePagination} />
         </div>
       </section>
 

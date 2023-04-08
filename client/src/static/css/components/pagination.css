@@ -1,0 +1,22 @@
+.pagination {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    width: 100%;
+}
+
+.pagination > div:nth-child(2) {
+    flex: 1;
+}
+
+.pagination button {
+    background: #05a8ff;
+    border: 0;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.pagination button img {
+    height: 25px;
+    width: 25px;
+}
