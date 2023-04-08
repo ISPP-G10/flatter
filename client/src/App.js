@@ -19,7 +19,9 @@ import FavouritesProperties from './pages/favouritesProperties';
 import Example from './pages/example';
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 import PricingPage from './pages/pricingPage';
+import ShopPage from './pages/shopPage';
 
 function App() {
 
@@ -55,6 +57,7 @@ function App() {
           <Route path='/me' element={<> <AccountSettings/> </>}/>
           <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
           <Route path='/pricing' element={<> <PricingPage /> </>} />
+          <Route path='/shop' element={<> <ShopPage /> </>} />
           <Route path='/ejemplo' element={<> <Example/> </>}/>
           <Route path="*" element={<Error/>}/>
         </Routes>
