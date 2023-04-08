@@ -28,6 +28,8 @@ function getTagName(tag, genre) {
             return "Compañer" + final_letter;
         case "E":
             return "Excompañer" + final_letter;
+        case "I": 
+            return "Inquilin" + final_letter;
         default:
             return "Propietari" + final_letter;
     }
@@ -57,8 +59,6 @@ const CommentsBox = (props) => {
     const { data : dataRelations, loading : loadingRelations } = useQuery( usersAPI.getRelationships,
         { variables: { userLogin: localStorage.getItem('user',''),
                         userValued: props.username  } } );
-
-    console.log(dataRelations);
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
@@ -107,12 +107,13 @@ const CommentsBox = (props) => {
 
     if(loadingRelations) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
 
-    commentsInputs.map((input) => {
-        if(input.name === 'relationship') {
-          input.values = dataRelations.getRelationshipsBetweenUsers;
-        }
-    });
-
+    if (props.username!==localStorage.getItem("user")) {
+        commentsInputs.map((input) => {
+            if(input.name === 'relationship') {
+                input.values = dataRelations.getRelationshipsBetweenUsers;
+            }
+        });
+    }
     return(
         <>
             <div className='comments-box'>
