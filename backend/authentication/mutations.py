@@ -101,7 +101,8 @@ class EditPlan(graphene.Mutation):
                         chat_creation=chatCreation,
                         premium_support=premiumSupport,
                         view_opinion_profiles=viewOpinionProfiles,
-                        plan_type=planType).exists():
+                        plan_type=planType,
+                        obsolete=False).exists():
       raise Exception("Ya existe un plan con estos valores")
 
     last_plan = Plan.objects.latest('id')
