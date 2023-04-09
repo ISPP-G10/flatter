@@ -11,9 +11,11 @@ import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
 import {useNavigate} from 'react-router-dom';
-import {useApolloClient} from '@apollo/client';
+import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
+import provincesAPI from "../api/provincesAPI";
+import tagsAPI from "../api/tagsAPI";
 
 const ListProperties = () => {
 
@@ -21,11 +23,23 @@ const ListProperties = () => {
   const navigator = useNavigate();
   const client = useApolloClient();
   const filterFormRef = useRef(null);
+  const {data: provincesData, loading: provincesLoading} = useQuery(provincesAPI.getAllProvinces);
+  const [ optionMunicipality, setOptionMunicipality ] = useState([]);
+  const [configured, setConfigured] = useState(false);
+  const [inputsChanged, setInputsChanged] = useState(false);
+  const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
+    variables: {
+        type: "property"
+    }
+  }); 
+
 
   let [filterValues, setFilterValues] = useState({
     min: parseInt(query.get("min")),
     max: parseInt(query.get("max")),
     municipality: query.get("municipality") ?? '',
+    province: query.get("province") ?? '',
+    tag: query.get("tag") ?? '',
   });
 
   let [sharedProperty, setSharedProperty] = useState({});
@@ -41,10 +55,23 @@ const ListProperties = () => {
     setFilterValues({
       min: values.min_price,
       max: values.max_price,
-      municipality: values.municipality
+      municipality: values.municipality==='-' ? '' : values.municipality,
+      province: values.province === '-' ? '' : values.province,
+      tag: values.tag === '-'? null : values.tag,
     })
 
   }
+
+  useEffect(() => { 
+    if (!propertyTagsLoading) { 
+        filterInputs.map((input) => { 
+            if(input.name === 'tag') { 
+              const tagNames = propertyTagsData.getTagsByType.map(tag => tag.name);
+              input.values = ['-'].concat(tagNames);            
+            } 
+        }) 
+      }
+    }, [propertyTagsLoading, propertyTagsData]);
 
   useEffect(() => {
 
@@ -53,7 +80,9 @@ const ListProperties = () => {
       variables: {
         minPrice: filterValues.min,
         maxPrice: filterValues.max,
-        municipality: filterValues.municipality
+        municipality: filterValues.municipality,
+        province: filterValues.province,
+        tag: filterValues.tag,
       }
     })
     .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
@@ -75,6 +104,56 @@ const ListProperties = () => {
       .then(customAlert("¡Ya puedes compartir la propiedad!"))
       .catch(error => console.log(error));;
   }
+
+  useEffect(() => { 
+    if(!provincesLoading){
+      filterInputs.map((input) => {
+        if(input.name === 'province') input.values = ['-'].concat(provincesData.getProvinces.map(province => province.name));
+      });
+    }
+
+  }, [provincesLoading]);
+
+    useEffect(() => {
+      if(optionMunicipality.length > 0){
+        filterInputs.map((input) => {
+          if(input.name === 'municipality') {
+            input.values = ["-"].concat(optionMunicipality);
+          }
+        });
+        setInputsChanged(!inputsChanged);
+      }
+    }, [optionMunicipality]);
+  
+
+    useEffect(() => {
+      if(!configured){
+        setTimeout(() => {
+          let provinceInput = document.querySelector('select#province');
+    
+          provinceInput.addEventListener('change', () => {
+    
+            client.query({
+              query: provincesAPI.getMunicipalitiesByProvince,
+              variables: {
+                province: provinceInput.value
+              }
+            })
+            .then(response => {
+              if(provinceInput.value !== "-"){
+                setOptionMunicipality(response.data.getMunicipalitiesByProvince.map(municipality => municipality.name));
+              }else{
+                setOptionMunicipality(["-"]);
+              }
+            })
+            .catch(error => console.log(error));
+    
+          });
+  
+          setConfigured(true);
+        }, 1000);
+      }
+    }, [inputsChanged]);
 
 
 
