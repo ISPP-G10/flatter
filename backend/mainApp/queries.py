@@ -1,6 +1,6 @@
 import graphene
 from authentication.models import Tag, FlatterUser
-from .types import PropertyType, PetitionType, ProvinceType, MunicipalityType
+from .types import PropertyType, PetitionType, ProvinceType, MunicipalityType, PropertyPageType
 from authentication.types import TagType
 from .models import Property, Petition, Province, Municipality
 from django.utils.translation import gettext_lazy as _
@@ -10,16 +10,18 @@ from datetime import datetime
 from django.core.paginator import Paginator
 
 
+
+
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
     get_property_tags = graphene.List(TagType, property=graphene.Int())
     get_property_by_title = graphene.Field(PropertyType, title=graphene.String())
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
-    get_properties = graphene.List(PropertyType, page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
-    get_filtered_properties_by_price_and_city = graphene.List(PropertyType, min_price=graphene.Float(),
+    get_properties = graphene.Field(PropertyPageType, page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
+    get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
                                                               location=graphene.String(), province=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
-    get_filtered_properties_by_province_municipality_location = graphene.List(PropertyType, province=graphene.String(),
+    get_filtered_properties_by_province_municipality_location = graphene.Field(PropertyPageType, province=graphene.String(),
                                                                               municipality=graphene.String(),
                                                                               location=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
@@ -40,8 +42,14 @@ class MainAppQuery(object):
     def resolve_get_properties(self, info, page_number, page_size):
         properties =  Property.objects.all()
         paginator = Paginator(properties,page_size)
-        properties = paginator.get_page(page_number)
-        return properties
+        properties_page = paginator.get_page(page_number)
+        result = PropertyPageType(
+            properties = properties_page,
+            total_count = len(properties),
+            has_previous = True if page_number>1 else False,
+            has_next = True if (page_number*page_size)<len(properties) else False)
+        return result
+        
 
     def resolve_get_all_tags(self, info):
         return Tag.objects.filter(entity='P')
@@ -82,8 +90,14 @@ class MainAppQuery(object):
 
         properties = Property.objects.filter(q)
         paginator = Paginator(properties,page_size)
-        properties = paginator.get_page(page_number)
-        return properties
+        properties_page = paginator.get_page(page_number)
+        result = PropertyPageType(
+            properties = properties_page,
+            total_count = len(properties),
+            has_previous = True if page_number>1 else False,
+            has_next = True if (page_number*page_size)<len(properties) else False)
+        return result
+       
 
         
 
@@ -110,8 +124,13 @@ class MainAppQuery(object):
 
         properties = Property.objects.filter(q)
         paginator = Paginator(properties,page_size)
-        properties = paginator.get_page(page_number)
-        return properties
+        properties_page = paginator.get_page(page_number)
+        result = PropertyPageType(
+            properties = properties_page,
+            total_count = len(properties),
+            has_previous = True if page_number>1 else False,
+            has_next = True if (page_number*page_size)<len(properties) else False)
+        return result
 
     def resolve_get_properties_by_owner(self, info, username):
         user = FlatterUser.objects.get(username=username)
