@@ -353,9 +353,10 @@ const Chat = (props) => {
                     </div>
                 </div>
                 <div ref={groupsHeader}>
-                    <div className="class-groups-header d-flex justify-content-center align-items-center">
+                    <div className="class-groups-header d-flex justify-content-around align-items-center pl-3 pr-3">
                         <input ref={search} id="chat-search" className="class-chat-search" type="Search"
                             placeholder="Busca tus chats" title="Busca tus chats por nombre" onKeyUp={searchGroups} required />
+                        <button className="ml-3 class-button-new-group">Nuevo grupo</button>
                     </div>
                 </div>
                 <div ref={chat} className="chat">

@@ -8,8 +8,6 @@ import { useEffect, useState } from "react"
 
 const Groups = (props) => {
 
-    const MAX_LEN = 32;
-
     let username = localStorage.getItem('user');
 
     const [openGroup, setOpenGroup] = useState(false);
@@ -91,7 +89,7 @@ const Groups = (props) => {
             {
             groups && groups.map(data => {
                 let filter_user = data.group.users.filter(u => u.username !== username)[0]
-                let lastMessage = data.lastMessage?data.lastMessage.text.length>MAX_LEN?data.lastMessage.text.trim().substring(0, MAX_LEN-1)+"…":data.lastMessage.text:"";
+                let lastMessage = data.lastMessage?data.lastMessage.text:"";
                 let lastTime = data.lastMessage?socialLib.getTimeToString(data.lastMessage.timestamp):"";
                 return(
                     <Group onClick={()=>{props.setChatId(parseInt(data.group.id))}} name={data.group.individual?filter_user.username:data.group.name} chatPic={data.group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} key={`chat-${data.group.id}`}/>
