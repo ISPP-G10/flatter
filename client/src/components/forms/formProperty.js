@@ -174,6 +174,7 @@ const FormProperty = ({ property }) => {
         onSubmit={createPropertySubmit}
         ref={createPropertyFormRef}
         scrollable
+        childrenPosition={6}
     >
       <div className='tag-input'>
           {
