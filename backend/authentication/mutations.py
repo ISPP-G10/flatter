@@ -1,8 +1,136 @@
+import datetime
 import graphene, graphql_jwt, json, base64, os
-from .models import FlatterUser, Role
-from .types import FlatterUserType
+from graphql import GraphQLError
+from .models import FlatterUser, Plan, Role, Contract
+from .types import ContractType, FlatterUserType, PlanType
 from django.utils.translation import gettext_lazy as _
 from django.core.files.storage import default_storage
+from datetime import datetime, timedelta
+from graphql_jwt.decorators import login_required
+
+class ChangeContract(graphene.Mutation):
+  class Input:
+    userName = graphene.String(required=True)
+    planType = graphene.String(required=True)
+    token = graphene.String(required=True)
+    numDaysSelected = graphene.Int(required=True)
+  contract = graphene.Field(ContractType)
+  user = graphene.Field(FlatterUserType)
+
+  @staticmethod
+  #@login_required
+  def mutate(self, info, userName, planType, token, numDaysSelected):
+    user = FlatterUser.objects.get(username=userName)
+    current_contract = Contract.objects.filter(user=user, obsolete=False).first()
+    current_plan_type = current_contract.plan.plan_type
+
+    try:
+      new_plan = Plan.objects.get(plan_type=planType)
+
+    except Plan.DoesNotExist:
+      raise Exception("El plan seleccionado no existe")
+        
+    if user.flatter_coins < new_plan.flatter_coins:
+      raise Exception('No tiene suficientes Flatter Coins en su cuenta')
+
+    if planType == current_plan_type:
+      raise Exception("Este plan es su plan actual")
+    
+    choices_values = [x[0] for x in Contract.choices_days]
+    if numDaysSelected not in choices_values:
+      raise Exception("El número de días seleccionado no es válido")
+
+    current_contract.end_date = datetime.now()
+    current_contract.obsolete=True
+    current_contract.save()
+
+    last_contract = Contract.objects.latest('id')
+    new_contract_id = last_contract.pk + 1 if last_contract else 1
+
+    new_contract = Contract.objects.create(
+      id=new_contract_id,
+      initial_date=datetime.now(),
+      end_date = datetime.now() + timedelta(days=numDaysSelected),
+      choices = numDaysSelected,
+      plan=new_plan,
+      user=user,
+    )
+    user.flatter_coins -= new_plan.flatter_coins
+    user.save()
+      
+    return ChangeContract(contract=new_contract)
+  
+class EditPlan(graphene.Mutation):
+  class Input:
+    userName = graphene.String(required=True)
+    token = graphene.String(required=True)
+    planType = graphene.String(required=True)
+    flatterCoins = graphene.Int(required=False)
+    visitsNumber = graphene.Int(required=False)
+    tagsNumber = graphene.Int(required=False)
+    advertisement = graphene.Boolean(required=False)
+    chatCreation = graphene.Boolean(required=False)
+    premiumSupport = graphene.Boolean(required=False)
+    viewOpinionProfiles = graphene.Boolean(required=False)
+
+  plan = graphene.Field(PlanType)
+  user = graphene.Field(FlatterUserType)
+
+  @staticmethod
+  #@login_required
+  def mutate(self, info, userName, planType, token, flatterCoins, visitsNumber, tagsNumber, advertisement, chatCreation, premiumSupport, viewOpinionProfiles):
+    user = FlatterUser.objects.get(username=userName) #Hará falta para los permisos de edición
+    current_plan = Plan.objects.filter(plan_type=planType, obsolete=False).first()
+    contracts = Contract.objects.filter(plan=current_plan)
+
+    #Descomentar y editar para dar permisos de usuario:
+    '''if not user.is_superuser and not user.is_staff:
+      raise GraphQLError('No tienes permisos para realizar esta acción.')'''
+    
+    choices_values = [x[0] for x in Plan.choices_type]
+    if planType not in choices_values:
+      raise Exception("El plan seleccionado no existe")
+
+    if flatterCoins < 0:
+      raise Exception("No puede introducir una cantidad negativa")
+    
+    if Plan.objects.filter(flatter_coins=flatterCoins,
+                        visits_number=visitsNumber,
+                        tags_number=tagsNumber,
+                        advertisement=advertisement,
+                        chat_creation=chatCreation,
+                        premium_support=premiumSupport,
+                        view_opinion_profiles=viewOpinionProfiles,
+                        plan_type=planType).exists():
+      raise Exception("Ya existe un plan con estos valores")
+
+    last_plan = Plan.objects.latest('id')
+    new_plan_id = last_plan.pk + 1 if last_plan else 1
+
+    new_plan = Plan.objects.create(
+      id=new_plan_id,
+      flatter_coins=flatterCoins,
+      visits_number=visitsNumber,
+      tags_number=tagsNumber,
+      advertisement=advertisement,
+      chat_creation=chatCreation,
+      premium_support=premiumSupport,
+      view_opinion_profiles=viewOpinionProfiles,
+      plan_type=planType
+    )
+
+    if current_plan:
+      current_plan.obsolete = True
+      current_plan.end_date = datetime.now()
+      current_plan.save()
+
+      for contract in contracts:
+        if contract.obsolete == False:
+          contract.plan = new_plan
+          contract.save()
+
+    return EditPlan(plan=new_plan)
+    
 
 class CreateUserMutation(graphene.Mutation):
 
@@ -109,6 +237,8 @@ class AuthenticationMutation(graphene.ObjectType):
   refresh_token = graphql_jwt.Refresh.Field()
   create_user = CreateUserMutation.Field()
   delete_user = DeleteUserMutation.Field()
+  change_contract = ChangeContract.Field()
+  edit_plan = EditPlan.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
