@@ -124,6 +124,6 @@ class SocialQueries(object):
         user = FlatterUser.objects.get(username=username)
         users = FlatterUser.objects.all().exclude(id=user.id)
         matrix = build_similarity_matrix(users, user)
-        return recommend_similar_users(user.id, matrix)
+        return recommend_similar_users(matrix)
 
 

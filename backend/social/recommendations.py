@@ -33,7 +33,7 @@ def build_similarity_matrix(users, user_login):
 
     # Calcular la similitud entre los conjuntos de etiquetas de cada par de usuarios
 
-    for j, user in enumerate(users):
+    for user in users:
         tags1 = user_login.tags.all()
         tags2 = user.tags.all()
         similarity_tags = jaccard_similarity(set(tags1), set(tags2))
@@ -54,15 +54,16 @@ def build_similarity_matrix(users, user_login):
     return similarity_list
 
 
-def recommend_similar_users(user_id, similarity_matrix, n=10):
+def recommend_similar_users(similarity_matrix, n=10):
 
 
     # Obtener los usuarios más similares
     similar_users = sorted(similarity_matrix.items(), key=lambda x: x[1], reverse=True)[:n]
     # Crear una lista de usuarios similares con sus respectivas puntuaciones de similitud
     recommended_users = []
-    for user_id, similarity_score in similar_users:
-        recommended_users.append(FlatterUser.objects.get(id=user_id))
+    print(similar_users)
+    for tuple in similar_users:
+        recommended_users.append(FlatterUser.objects.get(id=tuple[0]))
 
     return recommended_users
 
