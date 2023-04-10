@@ -1,5 +1,5 @@
 from graphene_django.types import DjangoObjectType
-from .models import Property, Image, Petition, Province, Municipality, Carrousel
+from .models import Property, Image, Petition, Province, Municipality
 import graphene, os, base64
 
 class PropertyType(DjangoObjectType):
@@ -23,8 +23,4 @@ class MunicipalityType(DjangoObjectType):
 class PetitionType(DjangoObjectType):
   class Meta:
     model = Petition 
-
-class CarrouselType(DjangoObjectType):
-    class Meta:
-        model = Carrousel
 
