@@ -2,7 +2,7 @@ import '../static/css/pages/listProperties.css'
 import '../static/css/pages/propertyRequests.css'
 
 import FlatterPage from "../sections/flatterPage";
-import propertyRequestsAPI from '../api/propertyRequestsAPI';
+import personalRequestsAPI from '../api/personalRequestsAPI';
 import * as settings from "../settings";
 import customAlert from "../libs/functions/customAlert";
 import { useQuery } from '@apollo/client';
@@ -14,44 +14,12 @@ import { useNavigate } from "react-router-dom";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 
-const PropertyRequests = () => {
+const PersonalRequests = () => {
 
     const navigate = useNavigate();
     const client = useApolloClient();
     const query = useURLQuery();
     const filterFormRef = useRef(null);
-
-    function acceptPetition(petitionId){
-
-        client.mutate({
-            mutation: propertyRequestsAPI.updateStatusPetition,
-            variables: {
-                petitionId: parseInt(petitionId),
-                statusPetition: true
-            }
-        }).then((response) => {
-            window.location.reload();
-        }).catch((error) => {
-            customAlert(error.message);
-        });
-    
-      }
-
-    function rejectPetition(petitionId){
-
-        client.mutate({
-            mutation: propertyRequestsAPI.updateStatusPetition,
-            variables: {
-                petitionId: parseInt(petitionId),
-                statusPetition: false
-            }
-        }).then((response) => {
-            window.location.reload();
-        }).catch((error) => {
-            customAlert(error.message);
-        });
-    
-    }
 
     let [filterValues, setFilterValues] = useState({
         username : localStorage.getItem('user',''),
@@ -90,12 +58,12 @@ const PropertyRequests = () => {
         startdate: values.startdate,
         enddate: values.enddate
     })
-}
+    }
     
     useEffect(() => {
 
         client.query({
-          query: propertyRequestsAPI.getPetitions,
+          query: personalRequestsAPI.getPersonalPetitions,
           variables: {
             username: filterValues.username,
             status: filterValues.status,
@@ -103,16 +71,19 @@ const PropertyRequests = () => {
             endDate: filterValues.enddate
           }
         })
-        .then((response) => setRequests(response.data.getPetitionsByStatusAndUsernameAndDates))
+        .then((response) => setRequests(response.data.getPetitionsByRequesterAndStatusAndDates))
         .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
     
       }, [filterValues]);
       
+      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago.
+      function handleRequestPay(price){
+        console.log(price)
+      }
 
 
 
-
-    const {data, loading} = useQuery(propertyRequestsAPI.getPetitions, {variables: {
+    const {data, loading} = useQuery(personalRequestsAPI.getPersonalPetitions, {variables: {
         username: localStorage.getItem('user','')
       }});
 
@@ -121,7 +92,7 @@ const PropertyRequests = () => {
         : (
             <FlatterPage withBackground userLogged>
                 <div>
-                    <h1 className="properties-title">Solicitudes de Alquiler</h1>
+                    <h1 className="properties-title">Tus Solicitudes a otros Pisos</h1>
                 </div>
                 
                 <section className="site-content-sidebar">
@@ -142,60 +113,71 @@ const PropertyRequests = () => {
                     <div className="content content-list">
                         <div className="property-requests card">
                         
-                            {/* {requests.map((values, index) => {
-                                return(
-                                    {}
-                                );
-                                })}
-                                */}
                     {
                     requests.map((request, index) => {
                         return(
-                            <div key = {index} className="property-request">
-                                <div className="request-data">
+                            <div className="property-request" key = {index}>
+                                 <div className="request-data"> 
                                     <h2>{request.property.title}</h2>
 
                                     <div className="request-footer">
                                         <div className="request-footer-element">
-                                            <div className="request-user-picture" onClick={() => navigate(`/profile/${request.requester.username}`)}>
-                                                <img src={settings.API_SERVER_MEDIA + request.requester.profilePicture} alt="Avatar"/>
-                                            </div>
+                                            <div className="request-property-picture" onClick={() => navigate(`/property/${request.property.id}`)}>
+                                                <img src={`${settings.API_SERVER_MEDIA}${request.property.images[0].image}`} alt="Inmueble"/>
+                                             </div>
 
                                             <div className="request-user-data">
-                                                <span>{request.requester.firstName} {request.requester.lastName}</span>
-                                                <span>{parseFloat(request.requester.averageRating).toFixed(2)}/5.00
-                                                <img className='icon-img' src={require("../static/files/icons/yellow-star.png")} alt="Icono estrella"/>
-                                                </span>
+                                                <span className='request-price'>{request.property.price}/mes</span>
+                                                <span>{request.property.province.name}
+                                                 <img className='icon-img' src={require("../static/files/icons/ubicacion.png")} alt="Ubicacion"/>
+                                                 </span>
                                             </div>
-                                        </div>
-
-                                        <div className="request-footer-element">
-                                            <span>{request.property.maxCapacity} 
-                                                <img className='icon-img' src={require("../static/files/icons/partners.png")} alt="Icono Capacidad vivienda"/>
-                                            </span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className='request-information'> 
                                     <div className='request-information-header'>
-                                        <h4>Mensaje del Solicitante</h4>
+                                        <h4>Mensaje del Propietario</h4>
                                     </div>
-                                    <div className='request-information-element'>
-                                        {request.message}
-                                    </div>
+                                    
+                                {
+                                    request.status === "P" ?
+                                    (
+                                        <div className='request-information-element'>
+                                            Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición está a la espera de
+                                            ser respondida por el Propietario del inmueble. Manténgase a la espera. 
+                                        </div>
+                                    )
+                                    : request.status === "A" ?
+                                    (
+                                        <div className='request-information-element'>
+                                            Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido aceptada
+                                            por el propietario del inmueble.Tiene x dias para abonar el primer pago de {request.property.price}€.
+                                        </div>
+                                    ) 
+
+                                    : request.status === "D" ?
+                                    (
+                                        <div className='request-information-element'>
+                                            Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido rechazada. 
+                                            Lo sentimos.
+                                        </div>
+                                    )
+                                    : (<div></div>)
+                                    }
+                                    
                                 </div>
                                 {
                                 request.status === "P" ? 
                                     (<div className="request-actions">
-                                        <SolidButton onClick={ () => {acceptPetition(request.id)}} text="Aceptar" className="accept" />
-
-                                        <SolidButton onClick={ () => {rejectPetition(request.id)}} text="Rechazar" className="reject" />
-                                    </div>)
+                                        <div className='pending-status'>Pendiente</div>
+                                    </div>
+                                    )
                                 : request.status === "A" ?
                                 (
                                     <div className="request-actions">
-                                        <div className='accepted-status'>Aceptada</div>
-                                    </div>  
+                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price)}} text="Pagar" className="pay" />
+                                      </div> 
                                 )
                                 : request.status === "D" ?
                                 (
@@ -205,6 +187,10 @@ const PropertyRequests = () => {
                                 )
                                 : (<div></div>)
                                 }    
+
+                                        
+                                
+
                             </div>
                         );})}
                         </div>
@@ -216,4 +202,4 @@ const PropertyRequests = () => {
         );
 }
 
-export default PropertyRequests;
+export default PersonalRequests;

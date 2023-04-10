@@ -16,6 +16,7 @@ import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
+import PersonalRequests from './pages/personalRequests';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
         <Route path="/properties" element={<> <OwnerProperties /> </>}/>
         <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
         <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+        <Route path='/requests' element={<> <PersonalRequests/> </>}/>
         <Route path='/profile' element={<> <PublicProfile/> </>}/>
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<> <AccountSettings/> </>}/>
