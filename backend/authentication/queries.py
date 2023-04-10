@@ -1,7 +1,8 @@
 import graphene
 from .types import FlatterUserType, RoleType
-from .models import FlatterUser, Role
+from .models import Contract, FlatterUser, Plan, Role
 from django.db.models import Q
+from django.utils import timezone
 
 class AuthenticationQuery(object):
   
@@ -10,6 +11,26 @@ class AuthenticationQuery(object):
   get_filtered_users_by_tag_and_review = graphene.List(FlatterUserType, username=graphene.String(), tag = graphene.String(), owner = graphene.Boolean())
 
   def resolve_get_user_by_username(self, info, username):
+    
+    user = FlatterUser.objects.get(username=username)
+    current_contract = Contract.objects.filter(user=user, obsolete=False).first()
+    
+    if timezone.now().date() > current_contract.end_date:
+      if user.flatter_coins > current_contract.plan.flatter_coins:
+        user.flatter_coins -= current_contract.plan.flatter_coins
+        user.save()
+        current_contract.end_date = current_contract.end_date + timezone.timedelta(days=current_contract.choices)
+        current_contract.save()
+      else:
+        current_contract.obsolete = True
+        current_contract.save()
+        Contract.objects.create(user=user, 
+                                plan=Plan.objects.get(plan_type='B'), 
+                                choices=None, 
+                                initial_date=timezone.now(), 
+                                end_date=None,
+                                obsolete=False)
+    
     return FlatterUser.objects.get(username=username)
   
   def resolve_get_filtered_users_by_tag_and_review(self,info,username,tag=None,owner=False):

@@ -1,60 +1,72 @@
 import datetime
 import graphene, graphql_jwt, json, base64, os
-from graphql import GraphQLError
 from .models import FlatterUser, Plan, Role, Contract
 from .types import ContractType, FlatterUserType, PlanType
 from django.utils.translation import gettext_lazy as _
-from django.core.files.storage import default_storage
+from django.utils import timezone
 from datetime import datetime, timedelta
-from graphql_jwt.decorators import login_required
 
 class ChangeContract(graphene.Mutation):
   class Input:
-    userName = graphene.String(required=True)
-    planType = graphene.String(required=True)
+    username = graphene.String(required=True)
+    plan_type = graphene.String(required=True)
     token = graphene.String(required=True)
-    numDaysSelected = graphene.Int(required=True)
+    num_days_selected = graphene.Int(required=True)
+    
   contract = graphene.Field(ContractType)
   user = graphene.Field(FlatterUserType)
 
   @staticmethod
-  #@login_required
-  def mutate(self, info, userName, planType, token, numDaysSelected):
-    user = FlatterUser.objects.get(username=userName)
+  def mutate(self, info, **kwargs):
+    
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get("token", "").strip()
+    plan_type = kwargs.get("plan_type", '').strip()
+    num_days_selected = kwargs.get("num_days_selected", None)
+    
+    try:
+      user = FlatterUser.objects.get(username=username)
+    except FlatterUser.DoesNotExist:
+      raise FlatterUser.DoesNotExist("El usuario no existe")
+    
     current_contract = Contract.objects.filter(user=user, obsolete=False).first()
     current_plan_type = current_contract.plan.plan_type
 
     try:
-      new_plan = Plan.objects.get(plan_type=planType)
-
+      new_plan = Plan.objects.get(plan_type=plan_type, end_date=None)
     except Plan.DoesNotExist:
-      raise Exception("El plan seleccionado no existe")
+      raise Plan.DoesNotExist("El plan seleccionado no existe")
         
     if user.flatter_coins < new_plan.flatter_coins:
-      raise Exception('No tiene suficientes Flatter Coins en su cuenta')
+      raise ValueError('No tiene suficientes Flatter Coins en su cuenta')
 
-    if planType == current_plan_type:
-      raise Exception("Este plan es su plan actual")
+    if plan_type == current_plan_type:
+      raise ValueError("Este plan es su plan actual")
     
     choices_values = [x[0] for x in Contract.choices_days]
-    if numDaysSelected not in choices_values:
-      raise Exception("El número de días seleccionado no es válido")
+    if num_days_selected not in choices_values:
+      raise ValueError("El número de días seleccionado no es válido")
 
     current_contract.end_date = datetime.now()
     current_contract.obsolete=True
     current_contract.save()
 
-    last_contract = Contract.objects.latest('id')
-    new_contract_id = last_contract.pk + 1 if last_contract else 1
-
+    if plan_type == 'B':
+      new_contract_end_date = None
+      new_contract_choices = None
+    else:
+      new_contract_end_date = timezone.now() + timedelta(days=num_days_selected)
+      new_contract_choices = num_days_selected
+      
+    
     new_contract = Contract.objects.create(
-      id=new_contract_id,
-      initial_date=datetime.now(),
-      end_date = datetime.now() + timedelta(days=numDaysSelected),
-      choices = numDaysSelected,
+      initial_date=timezone.now(),
+      end_date = new_contract_end_date,
+      choices = new_contract_choices,
       plan=new_plan,
       user=user,
     )
+    
     user.flatter_coins -= new_plan.flatter_coins
     user.save()
       
@@ -62,25 +74,38 @@ class ChangeContract(graphene.Mutation):
   
 class EditPlan(graphene.Mutation):
   class Input:
-    userName = graphene.String(required=True)
+    username = graphene.String(required=True)
     token = graphene.String(required=True)
-    planType = graphene.String(required=True)
-    flatterCoins = graphene.Int(required=False)
-    visitsNumber = graphene.Int(required=False)
-    tagsNumber = graphene.Int(required=False)
+    plan_type = graphene.String(required=True)
+    flatter_coins = graphene.Int(required=False)
+    visits_number = graphene.Int(required=False)
+    tags_number = graphene.Int(required=False)
     advertisement = graphene.Boolean(required=False)
-    chatCreation = graphene.Boolean(required=False)
-    premiumSupport = graphene.Boolean(required=False)
-    viewOpinionProfiles = graphene.Boolean(required=False)
+    chat_creation = graphene.Boolean(required=False)
+    standard_support = graphene.Boolean(required=False)
+    premium_support = graphene.Boolean(required=False)
+    view_self_profile_opinions = graphene.Boolean(required=False)
 
   plan = graphene.Field(PlanType)
-  user = graphene.Field(FlatterUserType)
 
   @staticmethod
   #@login_required
-  def mutate(self, info, userName, planType, token, flatterCoins, visitsNumber, tagsNumber, advertisement, chatCreation, premiumSupport, viewOpinionProfiles):
-    user = FlatterUser.objects.get(username=userName) #Hará falta para los permisos de edición
-    current_plan = Plan.objects.filter(plan_type=planType, obsolete=False).first()
+  def mutate(self, info, **kwargs):
+    
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get("token", "").strip()
+    plan_type = kwargs.get("plan_type", '').strip()
+    flatter_coins = kwargs.get("flatter_coins", None)
+    visits_number = kwargs.get("visits_number", None)
+    tags_number = kwargs.get("tags_number", None)
+    advertisement = kwargs.get("advertisement", None)
+    chat_creation = kwargs.get("chat_creation", None)
+    standard_support = kwargs.get("standard_support", None)
+    premium_support = kwargs.get("premium_support", None)
+    view_self_profile_opinions = kwargs.get("view_self_profile_opinions", None)
+    
+    #user = FlatterUser.objects.get(username=username) #Hará falta para los permisos de edición
+    current_plan = Plan.objects.filter(plan_type=plan_type, end_date=None).first()
     contracts = Contract.objects.filter(plan=current_plan)
 
     #Descomentar y editar para dar permisos de usuario:
@@ -88,41 +113,39 @@ class EditPlan(graphene.Mutation):
       raise GraphQLError('No tienes permisos para realizar esta acción.')'''
     
     choices_values = [x[0] for x in Plan.choices_type]
-    if planType not in choices_values:
-      raise Exception("El plan seleccionado no existe")
+    if plan_type not in choices_values:
+      raise ValueError("El plan seleccionado no existe")
 
-    if flatterCoins < 0:
-      raise Exception("No puede introducir una cantidad negativa")
+    if flatter_coins < 0:
+      raise ValueError("No puede introducir una cantidad negativa")
     
-    if Plan.objects.filter(flatter_coins=flatterCoins,
-                        visits_number=visitsNumber,
-                        tags_number=tagsNumber,
-                        advertisement=advertisement,
-                        chat_creation=chatCreation,
-                        premium_support=premiumSupport,
-                        view_opinion_profiles=viewOpinionProfiles,
-                        plan_type=planType,
-                        obsolete=False).exists():
-      raise Exception("Ya existe un plan con estos valores")
-
-    last_plan = Plan.objects.latest('id')
-    new_plan_id = last_plan.pk + 1 if last_plan else 1
+    if Plan.objects.filter(flatter_coins=flatter_coins if flatter_coins is not None else current_plan.flatter_coins,
+                            visits_number=visits_number if visits_number is not None else current_plan.visits_number,
+                            tags_number=tags_number if tags_number is not None else current_plan.tags_number,
+                            advertisement=advertisement if advertisement is not None else current_plan.advertisement,
+                            chat_creation=chat_creation if chat_creation is not None else current_plan.chat_creation,
+                            standard_support=standard_support if standard_support is not None else current_plan.standard_support,
+                            premium_support=premium_support if premium_support is not None else current_plan.premium_support,
+                            view_self_profile_opinions=view_self_profile_opinions if view_self_profile_opinions is not None else current_plan.view_self_profile_opinions,
+                            plan_type=plan_type,
+                            end_date=None).exists():
+      
+      raise ValueError("Ya existe un plan con estos valores")
 
     new_plan = Plan.objects.create(
-      id=new_plan_id,
-      flatter_coins=flatterCoins,
-      visits_number=visitsNumber,
-      tags_number=tagsNumber,
-      advertisement=advertisement,
-      chat_creation=chatCreation,
-      premium_support=premiumSupport,
-      view_opinion_profiles=viewOpinionProfiles,
-      plan_type=planType
+      flatter_coins=flatter_coins if flatter_coins is not None else current_plan.flatter_coins,
+      visits_number=visits_number if visits_number is not None else current_plan.visits_number,
+      tags_number=tags_number if tags_number is not None else current_plan.tags_number,
+      advertisement=advertisement if advertisement is not None else current_plan.advertisement,
+      chat_creation=chat_creation if chat_creation is not None else current_plan.chat_creation,
+      standard_support=standard_support if standard_support is not None else current_plan.standard_support,
+      premium_support=premium_support if premium_support is not None else current_plan.premium_support,
+      view_self_profile_opinions=view_self_profile_opinions if view_self_profile_opinions is not None else current_plan.view_self_profile_opinions,
+      plan_type=plan_type
     )
 
     if current_plan:
-      current_plan.obsolete = True
-      current_plan.end_date = datetime.now()
+      current_plan.end_date = timezone.now()
       current_plan.save()
 
       for contract in contracts:
@@ -146,6 +169,7 @@ class CreateUserMutation(graphene.Mutation):
     roles = graphene.String(required=True)
 
   user = graphene.Field(FlatterUserType)
+  contract = graphene.Field(ContractType)
 
   @staticmethod
   def mutate(root, info, **kwargs):
@@ -203,8 +227,18 @@ class CreateUserMutation(graphene.Mutation):
                                           )
         
     obj.roles.add(*roles)
+    
+    # Create user contract
+    
+    new_user_contract = Contract.objects.create(
+      initial_date=datetime.now(),
+      end_date = None,
+      choices = None,
+      plan=Plan.objects.get(plan_type=Plan.choices_type[0][0], end_date=None),
+      user=obj,
+    )
         
-    return CreateUserMutation(user=obj)
+    return CreateUserMutation(user=obj, contract=new_user_contract)
 
 class DeleteUserMutation(graphene.Mutation):
 
