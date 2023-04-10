@@ -122,8 +122,8 @@ class SocialQueries(object):
 
     def resolve_get_users_recommendations(self, info, username):
         user = FlatterUser.objects.get(username=username)
-        users = FlatterUser.objects.all()
-        matrix = build_similarity_matrix(users)
+        users = FlatterUser.objects.all().exclude(id=user.id)
+        matrix = build_similarity_matrix(users, user)
         return recommend_similar_users(user.id, matrix)
 
 
