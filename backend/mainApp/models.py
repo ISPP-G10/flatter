@@ -32,7 +32,7 @@ class Property(models.Model):
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
     flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
     interested_users = models.ManyToManyField(FlatterUser, related_name=_('interested_users'))
-    carrousel = models.ForeignKey(Carrousel, on_delete=models.CASCADE, related_name='carrousel', null=True, blank=True, default=1)
+    carrousel = models.ForeignKey(Carrousel, on_delete=models.CASCADE, related_name='carrousel', null=True, blank=True)
 
 class Review(models.Model):
 

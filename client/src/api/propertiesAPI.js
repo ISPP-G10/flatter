@@ -143,10 +143,9 @@ const propertiesAPI = {
     }
   `,
   outstandPropertyById: gql`
-    mutation makePropertyOutstanding($propertyId: Int!, $username: String!) {
-      makePropertyOutstanding(propertyId: $propertyId, username: $username) {
+    mutation makePropertyOutstanding($propertyId: Int!) {
+      makePropertyOutstanding(propertyId: $propertyId) {
         property {
-          id
           isOutstanding
           title
         }
