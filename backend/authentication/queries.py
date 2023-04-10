@@ -12,7 +12,7 @@ class AuthenticationQuery(object):
   def resolve_get_user_by_username(self, info, username):
     return FlatterUser.objects.get(username=username)
   
-  def resolve_get_filtered_users_by_tag_and_review(self,info,username,tag=None,owner=False):
+  def resolve_get_filtered_users_by_tag_and_review(self,info,username,tag=None,owner=None):
 
     username = username.strip()
     
