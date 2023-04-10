@@ -167,6 +167,7 @@ class CreateUserMutation(graphene.Mutation):
     phone = graphene.String(required=False)
     genre = graphene.String(required=True)
     roles = graphene.String(required=True)
+    flatter_coins = graphene.Int(required=False)
 
   user = graphene.Field(FlatterUserType)
   contract = graphene.Field(ContractType)
@@ -181,6 +182,7 @@ class CreateUserMutation(graphene.Mutation):
     phone = kwargs.get("phone", "").strip()
     genre = kwargs.get("genre", "").strip()
     roles = kwargs.get("roles", [])
+    flatter_coins = kwargs.get("flatter_coins", 0)
     
     if not username or len(username) < 6 or len(username) > 25:
       raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
@@ -222,7 +224,7 @@ class CreateUserMutation(graphene.Mutation):
                                           email=email, 
                                           phone_number=phone, 
                                           profile_picture="users/images/default.jpg",
-                                          flatter_coins=0,
+                                          flatter_coins=flatter_coins,
                                           genre=genre,
                                           )
         
