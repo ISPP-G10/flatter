@@ -81,10 +81,12 @@ class TestProperty(TestCase):
         query = '''
             query test{
                 getProperties(pageSize:1, pageNumber:1){
-                    title
-                    province {
-                        name
+                    properties{
+                        title
                     }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''
@@ -144,7 +146,12 @@ class TestProperty(TestCase):
         query = '''
             query test{
                 getFilteredPropertiesByPriceAndCity(minPrice: 90, maxPrice:200, pageSize:1, pageNumber:1){
-                    title
+                    properties{
+                        title
+                    }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''
@@ -155,7 +162,12 @@ class TestProperty(TestCase):
         query = '''
             query test{
                 getFilteredPropertiesByPriceAndCity(province: "Sevilla", pageSize:1, pageNumber:1){
-                    title
+                    properties{
+                        title
+                    }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''

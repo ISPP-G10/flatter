@@ -1,5 +1,5 @@
 import graphene
-from .types import FlatterUserType, RoleType
+from .types import FlatterUserType, RoleType, FlatterUserPageType
 from .models import FlatterUser, Role
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -8,7 +8,7 @@ class AuthenticationQuery(object):
   
   get_user_by_username = graphene.Field(FlatterUserType, username=graphene.String())
   get_roles = graphene.List(RoleType)
-  get_filtered_users_by_tag_and_review = graphene.List(FlatterUserType, username=graphene.String(), tag = graphene.String(), owner = graphene.Boolean(), page_size = graphene.Int(required=True), page_number = graphene
+  get_filtered_users_by_tag_and_review = graphene.Field(FlatterUserPageType, username=graphene.String(), tag = graphene.String(), owner = graphene.Boolean(), page_size = graphene.Int(required=True), page_number = graphene
                                                        .Int(required=True))
 
   def resolve_get_user_by_username(self, info, username):
@@ -32,8 +32,14 @@ class AuthenticationQuery(object):
       q &= Q(roles__in = [Role.objects.get(role="RENTER").pk])
     users = FlatterUser.objects.filter(q).exclude(username__exact = username)
     paginator = Paginator(users,page_size)
-    users = paginator.get_page(page_number)
-    return users
+    users_page = paginator.get_page(page_number)
+    result = FlatterUserPageType(
+            flatter_users = users_page,
+            total_count = len(users),
+            has_previous = True if page_number>1 else False,
+            has_next = True if (page_number*page_size)<len(users) else False)
+    return result
+      
      
   
   def resolve_get_roles(self, info):
