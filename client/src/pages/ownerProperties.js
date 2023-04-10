@@ -45,6 +45,7 @@ const OwnerProperties = ({}) => {
           mutation: propertiesAPI.outstandPropertyById,
           variables: {
               propertyId: parseInt(idPiso),
+              username: localStorage.getItem('user','')
           }
       }).then((response) => {
           window.location.reload();
