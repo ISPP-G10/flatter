@@ -8,6 +8,7 @@ from .types import PropertyType, PetitionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene, jwt
+from datetime import datetime
 
 
 class DeleteImageFromProperty(graphene.Mutation):
@@ -253,6 +254,7 @@ class UpdatePetitionStatus(graphene.Mutation):
 
         if status_petition:
             petition.status = "A"
+            petition.date_of_petition_acepted = datetime.now()
         else:
             petition.status = "D"
         petition.save()
