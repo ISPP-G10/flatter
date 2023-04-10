@@ -15,7 +15,7 @@ class AuthenticationQuery(object):
     user = FlatterUser.objects.get(username=username)
     current_contract = Contract.objects.filter(user=user, obsolete=False).first()
     
-    if timezone.now().date() > current_contract.end_date:
+    if current_contract.end_date and timezone.now().date() > current_contract.end_date:
       if user.flatter_coins > current_contract.plan.flatter_coins:
         user.flatter_coins -= current_contract.plan.flatter_coins
         user.save()
