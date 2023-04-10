@@ -117,6 +117,13 @@ const chatsAPI = {
             }
         }
     `,
+    getInappropiateLanguage: gql`
+        query getInappropiateLanguage($username: String!) {
+            getInappropiateLanguage(username: $username) {
+                word
+            }
+        }
+    `,
 }
 
 export default chatsAPI;

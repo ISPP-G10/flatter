@@ -67,21 +67,17 @@ class TagType(DjangoObjectType):
     model = Tag
     
 class UserPreferencesType(DjangoObjectType):
-  
   class Meta:
     model = UserPreferences
     
 class PlanType(DjangoObjectType):
-  
   class Meta:
     model = Plan
     
 class IncidentType(DjangoObjectType):
-  
   class Meta:
     model = Incident
     
 class RequestType(DjangoObjectType):
-  
   class Meta:
     model = Request

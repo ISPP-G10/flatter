@@ -16,6 +16,9 @@ const usersAPI = {
                           roles{
                             role
                           }
+                          userpreferences{
+                            inappropiateLanguage
+                          }
                         }
                       }
                 }
@@ -42,6 +45,9 @@ const usersAPI = {
                           username
                           roles{
                             role
+                          }
+                          userpreferences{
+                            inappropiateLanguage
                           }
                         }
                       }
@@ -204,6 +210,16 @@ const usersAPI = {
             }
         }
     `,
+    updateUserPreferences: gql`
+        mutation editUserPreferences($username: String!, $inappropiateLanguage: Boolean!){
+            editUserPreferences(username: $username, inappropiateLanguage: $inappropiateLanguage){
+                userPreferences{
+                    inappropiateLanguage
+                }
+            }
+        }
+    `,
+
 }   
 
 export default usersAPI;

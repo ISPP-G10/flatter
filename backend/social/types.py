@@ -1,6 +1,6 @@
 from graphene_django.types import DjangoObjectType
 from mainApp.models import Review
-from .models import Group, Message
+from .models import Group, Message, InappropiateLanguage
 import graphene
 
 class ReviewType(DjangoObjectType):
@@ -14,6 +14,10 @@ class GroupType(DjangoObjectType):
 class MessageType(DjangoObjectType):
     class Meta:
         model = Message
+
+class InappropiateLanguageType(DjangoObjectType):
+    class Meta:
+        model = InappropiateLanguage
         
 class GroupedMessagesType(graphene.ObjectType):
     key = graphene.DateTime()

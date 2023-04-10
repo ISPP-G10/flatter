@@ -2,11 +2,9 @@ import FlatterForm from './flatterForm';
 import provincesAPI from "../../api/provincesAPI";
 import propertiesAPI from "../../api/propertiesAPI";
 
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import { propertyInputs } from '../../forms/propertiesForm';
-import { useEffect, useRef } from 'react';
-import { useQuery } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 const FormProperty = ({ property }) => {
 

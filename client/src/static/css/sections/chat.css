@@ -5,15 +5,6 @@
     bottom:0;
 }
 
-.class-button-new-group{
-    cursor: pointer;
-    white-space: nowrap;
-    font-size: 14px;
-    background-color: transparent;
-    outline: none;
-    border: none;
-}
-
 .class-button-new-group:hover{
     background-color: none;
     border: none;

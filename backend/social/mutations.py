@@ -1,8 +1,8 @@
 import base64, os, re, jwt, graphene
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
-from authentication.models import FlatterUser, Tag, Role
-from authentication.types import FlatterUserType, IncidentType, RequestType
+from authentication.models import FlatterUser, Tag, Role, UserPreferences
+from authentication.types import FlatterUserType, IncidentType, RequestType, UserPreferencesType
 from mainApp.models import Review
 from social.models import Group, Message
 from social.models import Incident, Request
@@ -582,6 +582,29 @@ class CreateReview(graphene.Mutation):
 
         return CreateReview(review=review)
 
+class EditUserPreferencesMutation(graphene.Mutation):
+    class Input():
+        username = graphene.String(required=True)
+        inappropiate_language = graphene.Boolean(required=False)
+    
+    user_preferences = graphene.Field(UserPreferencesType)
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        username = kwargs.get('username', '').strip()
+        inappropiate_language = kwargs.get('inappropiate_language', False)
+        
+        if not username or not FlatterUser.objects.filter(username=username).exists():
+            raise ValueError(_("El usuario no existe"))
+        
+        user_selected = FlatterUser.objects.get(username=username)
+        
+        user_preferences = UserPreferences.objects.get(user=user_selected)
+        user_preferences.inappropiate_language = inappropiate_language
+        user_preferences.save()
+        
+        return EditUserPreferencesMutation(user_preferences=user_preferences)
+    
 
 class SocialMutation(graphene.ObjectType):
     edit_user_public = EditUserPublicMutation.Field()
@@ -596,6 +619,7 @@ class SocialMutation(graphene.ObjectType):
     create_message = CreateMessageMutation.Field()
     leave_group = LeaveGroupMutation.Field()
     add_users_group = AddUsersGroupMutation.Field()
+    edit_user_preferences = EditUserPreferencesMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

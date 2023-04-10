@@ -4,13 +4,15 @@ import Groups from "../components/chat/groups";
 import Settings from "../components/chat/settings";
 import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
+import chatsAPI from "../api/chatsAPI";
 
 const Chat = (props) => {
 
     const [showChat, setShowChat] = useState(true);
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
+    const [inappropiateWords, setInappropiateWords] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
     const [chatId, setChatId] = useState(null);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
@@ -31,6 +33,13 @@ const Chat = (props) => {
     let chatHeaderTitle = useRef();
     let chatHeaderActive = useRef();
     let nodesList = [];
+
+    const {data, loading} = useQuery(chatsAPI.getInappropiateLanguage, {
+        variables: {
+            username: localStorage.getItem('user')
+        }
+    });
+
 
     const sendMessage = () => {
         socialLib.sendMessage(client, chatInput, chatId, MAX_LEN);
@@ -328,6 +337,12 @@ const Chat = (props) => {
         }
     }
 
+    useEffect(() => {
+        if(!loading) {
+            setInappropiateWords(data.getInappropiateLanguage.map(w => w.word.toLowerCase().trim()));
+        }
+    }, [loading, data]);
+
     return (
         <>
             <div className="class-button-chat d-flex justify-content-center align-items-center" ref={chatBtn}>
@@ -353,14 +368,13 @@ const Chat = (props) => {
                     </div>
                 </div>
                 <div ref={groupsHeader}>
-                    <div className="class-groups-header d-flex justify-content-around align-items-center pl-3 pr-3">
+                    <div className="class-groups-header d-flex justify-content-center align-items-center">
                         <input ref={search} id="chat-search" className="class-chat-search" type="Search"
                             placeholder="Busca tus chats" title="Busca tus chats por nombre" onKeyUp={searchGroups} required />
-                        <button className="ml-3 class-button-new-group">Nuevo grupo</button>
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation chatId={chatId} parentRef={chat} />
+                    <Conversation chatId={chatId} parentRef={chat} inappropiateWords={inappropiateWords} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -370,7 +384,7 @@ const Chat = (props) => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} />
+                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} inappropiateWords={inappropiateWords} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">

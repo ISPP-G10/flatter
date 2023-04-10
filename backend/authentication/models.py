@@ -86,6 +86,7 @@ class Plan(models.Model):
 class UserPreferences(models.Model):
     public = models.BooleanField(default=True)
     add_group = models.BooleanField(default=True)
+    inappropiate_language = models.BooleanField(default=True)
     user = models.OneToOneField(FlatterUser, on_delete=models.CASCADE)
     
 def add_roles(sender=None, **kwargs):

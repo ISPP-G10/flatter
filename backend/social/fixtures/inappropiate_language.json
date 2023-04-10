@@ -1,0 +1,12 @@
+[
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 1,
+    "fields": {
+      "word": "puto"
+    }
+  }
+]
+
+
+

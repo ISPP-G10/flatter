@@ -10,7 +10,6 @@ const Groups = (props) => {
 
     let username = localStorage.getItem('user');
 
-    const [openGroup, setOpenGroup] = useState(false);
     const [newGroupId, setNewGroupId] = useState(undefined);
     let [allGroups, setAllGroups] = useState(undefined);
     let [groups, setGroups] = useState(undefined);
@@ -49,13 +48,6 @@ const Groups = (props) => {
                     setAllGroups([groupAndLastMessage,...allGroups])
                 } else{
                     setAllGroups([groupAndLastMessage,...allGroups])
-                    // setGroups([groupAndLastMessage,...groups])
-                    // if (props.activateChat === true){
-                    //     props.setShowChat(false)
-                    //     props.setShowGroups(true)
-                    //     props.setChatId(parseInt(group.id))
-                    //     props.setActivateChat(false)
-                    // }
                     setNewGroupId(group.id)
                 }
             }
@@ -84,12 +76,23 @@ const Groups = (props) => {
     useEffect (() => {
     }, [groups]);
 
+    function parseMessage(message){
+        let words = message.split(" ")
+        for (let i = 0; i < words.length; i++){
+            if (props.inappropiateWords.includes(words[i].toLowerCase().trim())){
+                message = message.replace(words[i], "****")
+
+            }
+        }
+        return message
+    }
+
     return(
         <>
             {
             groups && groups.map(data => {
                 let filter_user = data.group.users.filter(u => u.username !== username)[0]
-                let lastMessage = data.lastMessage?data.lastMessage.text:"";
+                let lastMessage = data.lastMessage?localStorage.getItem("inappropiateLanguage")?localStorage.getItem("inappropiateLanguage")==="false"?parseMessage(data.lastMessage.text):data.lastMessage.text:data.lastMessage.text:"";
                 let lastTime = data.lastMessage?socialLib.getTimeToString(data.lastMessage.timestamp):"";
                 return(
                     <Group onClick={()=>{props.setChatId(parseInt(data.group.id))}} name={data.group.individual?filter_user.username:data.group.name} chatPic={data.group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} key={`chat-${data.group.id}`}/>
@@ -101,10 +104,12 @@ const Groups = (props) => {
 
 PropTypes.propTypes = {
     setChatId: PropTypes.func,
+    inappropiateWords: PropTypes.array,
 }
 
 PropTypes.defaultProps = {
     setChatId: () => {},
+    inappropiateWords: [],
 }
 
 export default Groups;

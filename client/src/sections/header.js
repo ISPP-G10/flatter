@@ -56,10 +56,12 @@ const Header = ({scrollY, userLogged}) => {
             let token = response.data.tokenAuth.token;
             let username = response.data.tokenAuth.user.username;
             let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+            let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
+            localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
 
             navigator(0);
 
@@ -93,10 +95,12 @@ const Header = ({scrollY, userLogged}) => {
             let token = response.data.tokenAuth.token;
             let username = response.data.tokenAuth.user.username;
             let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+            let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
+            localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
 
             navigator(0);
         }).catch((error) => {

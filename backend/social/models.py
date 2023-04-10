@@ -13,6 +13,9 @@ class Message(models.Model):
     user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     
+class InappropiateLanguage(models.Model):
+    word = models.CharField(max_length=140, blank=False, null=False, unique=True)
+    
 class Incident(models.Model):
     command = models.TextField()
     

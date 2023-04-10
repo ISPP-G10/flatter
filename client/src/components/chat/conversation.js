@@ -80,7 +80,7 @@ const Conversation = (props) => {
                             {
                                 dict.value.map((messagesList, messageIndex) => {
                                     return (
-                                        <Messages key={`messages-list-${messageIndex}`} messagesList={messagesList} whose={messagesList[0].user.username===username?"mine":"yours"} />
+                                        <Messages key={`messages-list-${messageIndex}`} messagesList={messagesList} whose={messagesList[0].user.username===username?"mine":"yours"} inappropiateWords={props.inappropiateWords}/>
                                     )
                                 }
                             )}
@@ -96,12 +96,14 @@ const Conversation = (props) => {
 
 PropTypes.propTypes = {
     chatId: PropTypes.number,
-    parentRef: PropTypes.object
+    parentRef: PropTypes.object,
+    inappropiateWords: PropTypes.array
 }
 
 PropTypes.defaultProps = {
     chatId: undefined,
-    parentRef: undefined
+    parentRef: undefined,
+    inappropiateWords: []
 }
 
 export default Conversation;

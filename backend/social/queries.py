@@ -2,8 +2,8 @@ import graphene
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
 from authentication.types import TagType
-from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
-from .models import Group, Message
+from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType, InappropiateLanguageType
+from .models import Group, Message, InappropiateLanguage
 from authentication.models import FlatterUser
 
 class SocialQueries(object):
@@ -14,6 +14,7 @@ class SocialQueries(object):
     get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
     get_messages = graphene.List(MessageType)
+    get_inappropiate_language = graphene.List(InappropiateLanguageType, username=graphene.String())
 
     def resolve_get_all_tag(self, info):
         return Tag.objects.all()
@@ -39,8 +40,8 @@ class SocialQueries(object):
             else:
                 last_message = None
             result.append(GroupAndLastMessageType(group=group, last_message=last_message))
-        
-        return result
+
+        return sorted(result, key=lambda x: x.last_message.timestamp.timestamp() if x.last_message else 0, reverse=True)
     
     def resolve_get_messages_by_group(self, info, username, group_id):
         username = username.strip()
@@ -83,3 +84,11 @@ class SocialQueries(object):
         parsed_tag = 'P' if tag_type == "property" else "U"
         
         return Tag.objects.filter(entity=parsed_tag)
+    
+    def resolve_get_inappropiate_language(self, info, username):
+        username = username.strip()
+        
+        if not username or not FlatterUser.objects.filter(username=username).exists():
+            raise ValueError(_('El usuario no es válido'))
+        
+        return InappropiateLanguage.objects.all()

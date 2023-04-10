@@ -1,24 +1,31 @@
 import { useEffect, useRef} from "react";
+import { useApolloClient } from "@apollo/client";
+import usersAPI from "../../api/usersAPI";
+import customAlert from "../../libs/functions/customAlert";
 
 const Settings = () => {
 
-    let addToGroupsInput = useRef();
-    let explicitContentInput = useRef();
+    let inappropiateLanguageRef = useRef();
+    const client = useApolloClient();
 
     useEffect(() => {
-        if(sessionStorage.explicitContent === "true"){
-            explicitContentInput.current.checked = true;
-        }
-        if(sessionStorage.addToGroups === "true"){
-            addToGroupsInput.current.checked = true;
+        if(localStorage.getItem("inappropiateLanguage") === "true" || localStorage.getItem("inappropiateLanguage") === undefined || localStorage.getItem("inappropiateLanguage") === null){
+            inappropiateLanguageRef.current.checked = true;
         }
     }, [])
 
-
-    const handleAddToGroups = () => {
-    }
-
-    const handleExplicitContent = () => {
+    const handleInappropiateLanguage = () => {
+        client.mutate({
+            mutation: usersAPI.updateUserPreferences,
+            variables: {
+                username: localStorage.getItem("user"),
+                inappropiateLanguage: inappropiateLanguageRef.current.checked
+            }
+        }).then((response) => {
+            localStorage.setItem("inappropiateLanguage", response.data.editUserPreferences.userPreferences.inappropiateLanguage)
+        }).catch((error) => {
+            customAlert(error.message.split("\n")[0]);
+        });
     }
 
 
@@ -27,14 +34,9 @@ const Settings = () => {
             <h4 className="class-chat-settings-title mt-3">Preferencias</h4>
             <div className="class-chat-settings-box">
                 <div className="d-flex justify-content-between align-items-center mt-5">
-                    <span className="class-chat-settings-name">Permitir ser añadido a grupos</span>
-                    <input type="checkbox" className="ios-switch ios-switch class-checkbox" id="chat-checkbox-1" ref={addToGroupsInput} onChange={handleAddToGroups}></input>
-                    <label htmlFor="chat-checkbox-1"></label>
-                </div>
-                <div className="d-flex justify-content-between align-items-center mt-4">
                     <span className="class-chat-settings-name">Permitir lenguaje inapropiado</span>
-                    <input type="checkbox" className="ios-switch ios-switch class-checkbox" id="chat-checkbox-2" ref={explicitContentInput} onChange={handleExplicitContent}></input>
-                    <label htmlFor="chat-checkbox-2"></label>
+                    <input type="checkbox" className="ios-switch ios-switch class-checkbox" id="chat-checkbox-1" ref={inappropiateLanguageRef} onChange={handleInappropiateLanguage}></input>
+                    <label htmlFor="chat-checkbox-1"></label>
                 </div>
             </div>
         </div>
