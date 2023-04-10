@@ -7,6 +7,7 @@ const personalRequestsAPI = {
       getPetitionsByRequesterAndStatusAndDates(username: $username, status: $status, startDate: $startDate, endDate: $endDate){
         id
         status
+        dateOfPetitionAcepted
         requester{
           firstName
           lastName

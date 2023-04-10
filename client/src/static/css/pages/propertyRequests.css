@@ -225,6 +225,14 @@
     min-width: 100%;
 }
 
+.content.content-list > .property-requests > .property-request .request-information > .request-information-element2 {
+    display: flex;
+    margin-top: 10px;
+    min-width: 100%;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 .icon-img{
     margin: 0;
     width: 25px;

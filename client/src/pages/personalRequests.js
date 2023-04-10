@@ -30,6 +30,17 @@ const PersonalRequests = () => {
     
     let [requests, setRequests] = useState([]);
 
+    //Actualmente tiene 7 dias de deadline, pero puede cambiarse si fuese preciso.
+    function paymentDeadline(dateString) {
+        const date = new Date(dateString);
+        console.log("este es el date"+date)
+        date.setDate(date.getDate() + 7);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+      }
+
     function handleRequestFilter({values}){
 
         if(!filterFormRef.current.validate()) return;
@@ -143,22 +154,22 @@ const PersonalRequests = () => {
                                 {
                                     request.status === "P" ?
                                     (
-                                        <div className='request-information-element'>
+                                        <div className='request-information-element2'>
                                             Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición está a la espera de
                                             ser respondida por el Propietario del inmueble. Manténgase a la espera. 
                                         </div>
                                     )
                                     : request.status === "A" ?
                                     (
-                                        <div className='request-information-element'>
+                                        <div className='request-information-element2'>
                                             Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido aceptada
-                                            por el propietario del inmueble.Tiene x dias para abonar el primer pago de {request.property.price}€.
+                                            .Tiene hasta el día {paymentDeadline(request.dateOfPetitionAcepted)} para abonar el primer pago de {request.property.price}€.
                                         </div>
                                     ) 
 
                                     : request.status === "D" ?
                                     (
-                                        <div className='request-information-element'>
+                                        <div className='request-information-element2'>
                                             Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido rechazada. 
                                             Lo sentimos.
                                         </div>
