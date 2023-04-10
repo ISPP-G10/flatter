@@ -8,6 +8,10 @@ from authentication.models import FlatterUser, Tag
 class Image(models.Model):
     image = models.ImageField(upload_to='properties/images/', blank=True, null=True)
 
+class Carrousel(models.Model):
+    size = models.PositiveIntegerField(default=1)
+    limit = models.PositiveIntegerField(default=1)
+
 class Property(models.Model):
     is_outstanding = models.BooleanField(default=False)
     outstanding_start_date = models.DateTimeField(blank=True, null=True)
@@ -28,6 +32,7 @@ class Property(models.Model):
     owner = models.ForeignKey(FlatterUser, related_name=_('property_owner'), on_delete=models.CASCADE)
     flatmates = models.ManyToManyField(FlatterUser, related_name=_('property_flatmates'))
     interested_users = models.ManyToManyField(FlatterUser, related_name=_('interested_users'))
+    carrousel = models.ForeignKey(Carrousel, on_delete=models.CASCADE, related_name='carrousel', null=True, blank=True)
 
 class Review(models.Model):
 

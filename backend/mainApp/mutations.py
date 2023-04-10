@@ -9,6 +9,57 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene, jwt
 
+class MakePropertyOutstandingMutation(graphene.Mutation):
+
+    class Input:
+        property_id = graphene.Int(required=True)
+        username = graphene.String(required=True)
+    property = graphene.Field(PropertyType)
+    user = graphene.Field(FlatterUserType)
+    @staticmethod
+    def mutate(self,info, **kwargs):
+        username = kwargs.get('username', '').strip()
+        property_id = kwargs.get('property_id', '')
+        precio_destacar=1000
+        
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise FlatterUser.DoesNotExist("El usuario no existe")
+
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise Property.DoesNotExist("La propiedad no existe")
+        
+        carrousel_size=property.carrousel.size
+        carrousel_limit = property.carrousel.limit
+
+        if(user.flatter_coins < precio_destacar):
+            raise Exception("No tiene suficientes flatter coins")
+        
+        if property.is_outstanding == True:
+            raise GraphQLError("La propiedad ya está destacada")
+        
+        if(carrousel_size >=  carrousel_limit):
+            raise Exception("El carrusel está completo")
+        
+        if(property.owner != user):
+            raise Exception("No eres el propietario de la propiedad")
+        
+        if property.owner==user and user.flatter_coins >= precio_destacar and carrousel_size < carrousel_limit:
+            
+            user.flatter_coins -= precio_destacar
+            user.save()
+
+            property.is_outstanding = True
+            property.carrousel.size += 1
+            property.outstanding_start_date = timezone.now()
+            property.save()
+            property.carrousel.save()
+
+            return MakePropertyOutstandingMutation(property=property, user=user)
+
 
 class DeleteImageFromProperty(graphene.Mutation):
     class Input:
@@ -409,36 +460,6 @@ class UpdatePropertyMutation(graphene.Mutation):
             property_edit.images.add(*images_to_add)
 
         return UpdatePropertyMutation(property=property_edit)
-
-
-class MakePropertyOutstandingMutation(graphene.Mutation):
-    class Input:
-        property_id = graphene.Int(required=True)
-
-    property = graphene.Field(PropertyType)
-
-    @staticmethod
-    def mutate(root, info, **kwargs):
-        property_id = kwargs.get('property_id', 0)
-
-        try:
-            selected_property = Property.objects.get(id=property_id)
-        except Property.DoesNotExist:
-            raise ValueError(_("El inmueble seleccionado no existe"))
-
-        if selected_property.is_outstanding:
-            raise ValueError(_("El inmueble ya es destacado"))
-        
-        outstanding_properties = Property.objects.filter(is_outstanding=True)
-        
-        if outstanding_properties.count() >= 5:
-            raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
-        
-        selected_property.is_outstanding = True
-        selected_property.outstanding_start_date = timezone.now()
-        selected_property.save()
-
-        return MakePropertyOutstandingMutation(property=selected_property)
 class AddUsersToFavouritePropertyMutation(graphene.Mutation):
 
   class Input:
@@ -514,12 +535,12 @@ class PropertyMutation(graphene.ObjectType):
     add_tag_to_property = AddTagToProperty.Field()
     delete_image_to_property = DeleteImageFromProperty.Field()
     delete_property = DeletePropertyMutation.Field()
-    make_property_outstanding = MakePropertyOutstandingMutation.Field()
     create_petition = CreatePetitionMutation.Field()
     update_status_petition = UpdatePetitionStatus.Field()
     delete_petition = DeletePetition.Field()
     add_users_to_favourite_property=AddUsersToFavouritePropertyMutation.Field()
     delete_users_to_favourite_property=DeleteUsersToFavouritePropertyMutation.Field()
+    make_property_outstanding = MakePropertyOutstandingMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
