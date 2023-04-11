@@ -456,10 +456,15 @@
     height: 86%;
 }
 
+.class-chat-message-text{
+    text-align: left;
+}
+
 .class-chat-settings-title{
     color: #000000;
     width: 100%;
     font-weight: bold;
+    font-size: 25px;
 }
 
 .class-chat-settings-name{
@@ -519,6 +524,10 @@ input[type="checkbox"].ios-switch:checked + label:before {
 
 .class-chat-settings-box{
     width: 90%;
+}
+
+.class-chat-settings-box > * >*{
+    margin: 0;
 }
 
 .class-chat-title{

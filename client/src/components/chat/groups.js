@@ -10,6 +10,7 @@ import notification from "../../libs/functions/notification"
 const Groups = (props) => {
 
     let username = localStorage.getItem('user');
+    let notificationsAllowed = localStorage.getItem('notificationsAllowed');
 
     const [newGroupId, setNewGroupId] = useState(undefined);
     let [allGroups, setAllGroups] = useState(undefined);
@@ -44,8 +45,7 @@ const Groups = (props) => {
                     let groups_filtered = groups.filter(g => g.group.id !== group.id)
                     setGroups([groupAndLastMessage,...groups_filtered])
                     setAllGroups([groupAndLastMessage,...allGroups.filter(g => g.group.id !== group.id)])
-                    if (lastMessage.user.username !== username){
-                        //[200, 100, 200, 100, 200, 100, 200]
+                    if (notificationsAllowed==="true" && lastMessage.user.username !== username){
                         notification(lastMessage.text, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username)
                     }
                 } else if(!group.individual){

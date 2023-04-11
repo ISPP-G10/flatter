@@ -49,7 +49,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <ApolloProvider client={client}>
-    <div><Toaster/></div>
+    <Toaster position="top-center" reverseOrder={false}/>
     <App />
   </ApolloProvider>
 );

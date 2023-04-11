@@ -1,10 +1,10 @@
 .animate-enter {
-    animation-duration: 0.4s;
+    animation-duration: 1s;
     animation-name: slide-in;
 }
 
 .animate-leave {
-    animation-duration: 0.4s;
+    animation-duration: 1s;
     animation-name: slide-out;
 }
 
@@ -31,37 +31,92 @@
 }
 
 .class-notification-box{
-
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 475px;
+    max-height: 125px;
 }
 
 .class-notification-left{
-
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
 }
 
 .class-notification-right{
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    width: 100%;
 }
 
 .class-notification-img-div{
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .class-notification-img{
-
+    width: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .class-notification-info{
-
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-left: 10px;
 }
 
 .class-notification-user{
-
+    font-weight: bolder;
+    width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 10px;
+    text-overflow: ellipsis;
 }
 
 .class-notification-text{
-
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
+    width: 100%;
+    height: 80px;
+    flex-wrap: wrap;
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .class-notification-btn{
+    color: #3b5998;
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid #3b5998;
+    max-width: 75px;
+}
 
+.class-notification-btn:hover{
+    background-color: rgb(240, 240, 240);
 }

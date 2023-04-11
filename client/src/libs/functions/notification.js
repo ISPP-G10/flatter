@@ -26,16 +26,16 @@ function notification(message, image, name, surname, username) {
               </p>
             </div>
           </div>
-          <div className="class-notification-right">
-            <button
+          <button
               onClick={() => toast.dismiss(t.id)}
               className="class-notification-btn"
-            >
-              Cerrar
-            </button>
-          </div>
+          >
+            Cerrar
+          </button>
         </div>
     ));
+    
+    window.navigator.vibrate && window.navigator.vibrate([200, 100, 200, 100, 200, 100, 200]);
 }
 
 export default notification

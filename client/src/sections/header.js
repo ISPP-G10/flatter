@@ -62,6 +62,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
             localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
+            localStorage.setItem('notificationsAllowed', true);
 
             navigator(0);
 
@@ -101,6 +102,7 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
             localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
+            localStorage.setItem('notificationsAllowed', true);
 
             navigator(0);
         }).catch((error) => {
