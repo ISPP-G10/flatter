@@ -13,7 +13,7 @@ import FavouriteButton from "../components/property/favouriteButton";
 import customAlert from "../libs/functions/customAlert";
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
 import { useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useApolloClient } from "@apollo/client";
 
 const PropertyDetails = () => {
@@ -21,6 +21,7 @@ const PropertyDetails = () => {
   const editPropertyModalRef = useRef(null);
 
   const client = useApolloClient();
+  const navigator = useNavigate();
 
   const propertyRequestModalRef = useRef(null);
   const propertyRequestFormRef = useRef(null);
@@ -112,7 +113,9 @@ const PropertyDetails = () => {
             </div>
             <div className="property-tags-row">
               {propertyData.getPropertyById.tags.map((tag, index) => (
-                <Tag key={index} name={tag.name} color={tag.color} />
+                <div className="tagDiv" onClick={() => navigator(`/search?tag=${tag.name}`)}>
+                  <Tag key={index} name={tag.name} color={tag.color} />
+                </div>
               ))}
             </div>
 
