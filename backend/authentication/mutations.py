@@ -37,7 +37,7 @@ class ChangeContract(graphene.Mutation):
     except Plan.DoesNotExist:
       raise Plan.DoesNotExist("El plan seleccionado no existe")
         
-    if user.flatter_coins < new_plan.flatter_coins:
+    if user.flatter_coins < new_plan.flatter_coins * num_days_selected:
       raise ValueError('No tiene suficientes Flatter Coins en su cuenta')
 
     if plan_type == current_plan_type:
@@ -67,7 +67,7 @@ class ChangeContract(graphene.Mutation):
       user=user,
     )
     
-    user.flatter_coins -= new_plan.flatter_coins
+    user.flatter_coins -= new_plan.flatter_coins * num_days_selected
     user.save()
       
     return ChangeContract(contract=new_contract)

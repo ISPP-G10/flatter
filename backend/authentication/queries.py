@@ -18,8 +18,8 @@ class AuthenticationQuery(object):
     current_contract = Contract.objects.filter(user=user, obsolete=False).first()
     
     if current_contract.end_date and timezone.now().date() > current_contract.end_date:
-      if user.flatter_coins > current_contract.plan.flatter_coins:
-        user.flatter_coins -= current_contract.plan.flatter_coins
+      if user.flatter_coins > current_contract.plan.flatter_coins * current_contract.choices:
+        user.flatter_coins -= current_contract.plan.flatter_coins * current_contract.choices
         user.save()
         current_contract.end_date = current_contract.end_date + timezone.timedelta(days=current_contract.choices)
         current_contract.save()
