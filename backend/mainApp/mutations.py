@@ -79,6 +79,7 @@ class CreatePropertyMutation(graphene.Mutation):
         owner_username = graphene.String(required=True)
         images = graphene.List(graphene.String, required=False)
         max_capacity = graphene.Int(required=True)
+        tags = graphene.List(graphene.String, required=True)
 
     property = graphene.Field(PropertyType)
 
@@ -95,6 +96,7 @@ class CreatePropertyMutation(graphene.Mutation):
         dimensions = kwargs.get("dimensions", "")
         owner_username = kwargs.get("owner_username", "")
         max_capacity = kwargs.get("max_capacity", "")
+        tags = kwargs.get("tags", [])
        
 
         if not title or len(title) < 4 or len(title) > 50:
@@ -143,6 +145,16 @@ class CreatePropertyMutation(graphene.Mutation):
         if not owner.roles.filter(role="OWNER").exists():
             raise ValueError(_("El usuario debe ser propietario"))
 
+        if len(tags)>8:
+            raise ValueError(_("No se pueden añadir más de 8 tags"))
+
+        user_tags = []
+        for tag in tags:
+            if not _exists_tag(tag):
+                raise ValueError(_(f"La etiqueta {tag} no existe"))
+            user_tags.append(Tag.objects.get(name=tag, entity='P'))
+
+
         obj = Property.objects.create(
             title=title,
             description=description,
@@ -177,6 +189,10 @@ class CreatePropertyMutation(graphene.Mutation):
         else:
             image = Image.objects.get(image="properties/images/default.png")
             obj.images.add(image)
+
+        obj.tags.set(user_tags)
+
+        obj.save()
 
         return CreatePropertyMutation(property=obj)
 
@@ -292,6 +308,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         dimensions = graphene.Int(required=False)
         images = graphene.List(graphene.String, required=False)
         max_capacity = graphene.Int(required=False)
+        tags = graphene.List(graphene.String, required=True)
 
     property = graphene.Field(PropertyType)
 
@@ -309,6 +326,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         property_id = kwargs.get("property_id", 0)
         images = kwargs.get('images', [])
         max_capacity = kwargs.get("max_capacity", "")
+        tags = kwargs.get("tags", [])
 
         if title and (len(title) < 4 or len(title) > 50):
             raise ValueError(_("El título debe tener entre 4 y 50 caracteres"))
@@ -407,6 +425,19 @@ class UpdatePropertyMutation(graphene.Mutation):
                 images_to_add.append(image)
 
             property_edit.images.add(*images_to_add)
+
+        if len(tags) > 8:
+            raise ValueError(_("No se pueden añadir más de 8 tags"))
+
+        user_tags = []
+        for tag in tags:
+            if not _exists_tag(tag):
+                raise ValueError(_(f"La etiqueta {tag} no existe"))
+            user_tags.append(Tag.objects.get(name=tag, entity='P'))
+
+        property_edit.tags.set(user_tags)
+
+        property_edit.save()
 
         return UpdatePropertyMutation(property=property_edit)
 
@@ -533,3 +564,7 @@ def random_string(atributo):
     random_string = prefijo + sufijo
 
     return random_string
+
+
+def _exists_tag(tag):
+    return Tag.objects.filter(name=tag, entity='P').exists()

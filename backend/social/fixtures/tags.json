@@ -696,36 +696,288 @@
     "model": "authentication.tag",
     "pk": 78,
     "fields": {
-      "name": "Familiar",
+      "name": "Piscina",
       "entity": "P",
-      "color": "#FF9800"
+      "color": "#673AB7"
     }
   },
   {
     "model": "authentication.tag",
     "pk": 79,
     "fields": {
-      "name": "Estudiantes",
-      "entity": "P",
-      "color": "#9C27B0"
-    }
-  },
-  {
-    "model": "authentication.tag",
-    "pk": 80,
-    "fields": {
-      "name": "Rural",
+      "name": "Espacioso",
       "entity": "P",
       "color": "#FF5722"
     }
   },
   {
     "model": "authentication.tag",
+    "pk": 80,
+    "fields": {
+      "name": "Céntrico",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
     "pk": 81,
     "fields": {
-      "name": "Ciudad",
+      "name": "Cómodo",
+      "entity": "P",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 82,
+    "fields": {
+      "name": "Lujoso",
       "entity": "P",
       "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 83,
+    "fields": {
+      "name": "Barato",
+      "entity": "P",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 84,
+    "fields": {
+      "name": "Moderno",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 85,
+    "fields": {
+      "name": "Antiguo",
+      "entity": "P",
+      "color": "#9E9E9E"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 86,
+    "fields": {
+      "name": "Cálido",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 87,
+    "fields": {
+      "name": "Rústico",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 88,
+    "fields": {
+      "name": "Amplio",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 89,
+    "fields": {
+      "name": "Luminoso",
+      "entity": "P",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 90,
+    "fields": {
+      "name": "Con garaje",
+      "entity": "P",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 91,
+    "fields": {
+      "name": "Con jacuzzi",
+      "entity": "P",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 92,
+    "fields": {
+      "name": "Con trastero",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 93,
+    "fields": {
+      "name": "Con ascensor",
+      "entity": "P",
+      "color": "#9E9E9E"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 94,
+    "fields": {
+      "name": "Con conserje",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 95,
+    "fields": {
+      "name": "Silencioso",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 96,
+    "fields": {
+      "name": "Jardín",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 97,
+    "fields": {
+      "name": "Con terraza",
+      "entity": "P",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 98,
+    "fields": {
+      "name": "Con patio",
+      "entity": "P",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 99,
+    "fields": {
+      "name": "Económico",
+      "entity": "P",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 100,
+    "fields": {
+      "name": "Clásico",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 101,
+    "fields": {
+      "name": "Con chimenea",
+      "entity": "P",
+      "color": "#9E9E9E"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 102,
+    "fields": {
+      "name": "Aire acondicionado",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 103,
+    "fields": {
+      "name": "Con calefacción",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 104,
+    "fields": {
+      "name": "Renovado",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 105,
+    "fields": {
+      "name": "Nuevo",
+      "entity": "P",
+      "color": "#4CAF50"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 106,
+    "fields": {
+      "name": "Comunitario",
+      "entity": "P",
+      "color": "#FFC107"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 107,
+    "fields": {
+      "name": "Sofisticado",
+      "entity": "P",
+      "color": "#FFEB3B"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 108,
+    "fields": {
+      "name": "Con vistas",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 109,
+    "fields": {
+      "name": "Playa",
+      "entity": "P",
+      "color": "#9E9E9E"
     }
   }
 ]
