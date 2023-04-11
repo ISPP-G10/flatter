@@ -82,6 +82,12 @@ const chatsAPI = {
                     lastMessage {
                         text
                         timestamp
+                        user{
+                            username
+                            profilePicture
+                            firstName
+                            lastName
+                        }
                     }
                 }
             }

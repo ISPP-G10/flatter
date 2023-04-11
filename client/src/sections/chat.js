@@ -54,15 +54,11 @@ const Chat = (props) => {
     }
 
     const handleShowChat = () => {
-
         setShowChat(!showChat);
-
     };
 
     const handleShowGroup = () => {
-
         setShowGroups(!showGroups);
-
     };
 
     useEffect(() => {

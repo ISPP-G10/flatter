@@ -9,6 +9,7 @@ import { split, HttpLink } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
+import { Toaster } from 'react-hot-toast';
 
 function parseWSLink(uri) {
   if (uri.startsWith('ws')) return uri;
@@ -48,6 +49,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <ApolloProvider client={client}>
+    <div><Toaster/></div>
     <App />
   </ApolloProvider>
 );

@@ -5,6 +5,7 @@ import { API_SERVER_MEDIA } from "../../settings"
 import socialLib from "../../libs/socialLib"
 import PropTypes from "prop-types"
 import { useEffect, useState } from "react"
+import notification from "../../libs/functions/notification"
 
 const Groups = (props) => {
 
@@ -43,6 +44,10 @@ const Groups = (props) => {
                     let groups_filtered = groups.filter(g => g.group.id !== group.id)
                     setGroups([groupAndLastMessage,...groups_filtered])
                     setAllGroups([groupAndLastMessage,...allGroups.filter(g => g.group.id !== group.id)])
+                    if (lastMessage.user.username !== username){
+                        //[200, 100, 200, 100, 200, 100, 200]
+                        notification(lastMessage.text, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username)
+                    }
                 } else if(!group.individual){
                     setGroups([groupAndLastMessage,...groups])
                     setAllGroups([groupAndLastMessage,...allGroups])

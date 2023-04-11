@@ -1,0 +1,67 @@
+.animate-enter {
+    animation-duration: 0.4s;
+    animation-name: slide-in;
+}
+
+.animate-leave {
+    animation-duration: 0.4s;
+    animation-name: slide-out;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.class-notification-box{
+
+}
+
+.class-notification-left{
+
+}
+
+.class-notification-right{
+
+}
+
+.class-notification-img-div{
+
+}
+
+.class-notification-img{
+
+}
+
+.class-notification-info{
+
+}
+
+.class-notification-user{
+
+}
+
+.class-notification-text{
+
+}
+
+.class-notification-btn{
+
+}
