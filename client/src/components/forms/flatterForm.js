@@ -103,7 +103,7 @@ const FlatterForm = forwardRef((props, ref) => {
                         Object.keys(formValues).length > 0 && props.inputs.map((input, index) => {
                             return(
                                 <>
-                                {index === props.childrenPosition && props.children}
+                                {props.childrenPosition !== -1 && index === props.childrenPosition && props.children}
                                 <FormInput  key={index} 
                                             tag={input.tag}
                                             name={input.name}
@@ -121,9 +121,9 @@ const FlatterForm = forwardRef((props, ref) => {
                                             />
                                 </>
                             )
-                            
                         })
                     }
+                    {props.childrenPosition === -1 && props.children}
             </form>
             {
                 props.showSuperAnimatedButton ?

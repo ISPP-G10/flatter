@@ -6,13 +6,13 @@
   border: 1px solid rgb(0, 57, 85);
   margin: 0 5%;
   padding: 20px;
-  cursor: pointer;
 }
 
 .user-card__avatar{
   width: 100%;
   display: flex;
   justify-content: center;
+  cursor: pointer;
 }
 
 .user-card__avatar img{
@@ -65,4 +65,8 @@
 
 .user-card:hover .user-card__avatar img{
   border: 3px solid green;
+}
+
+.tagDiv{
+  cursor: pointer;
 }

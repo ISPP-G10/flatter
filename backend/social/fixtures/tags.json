@@ -691,6 +691,42 @@
       "entity": "U",
       "color": "#FF5722"
     }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 78,
+    "fields": {
+      "name": "Familiar",
+      "entity": "P",
+      "color": "#FF9800"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 79,
+    "fields": {
+      "name": "Estudiantes",
+      "entity": "P",
+      "color": "#9C27B0"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 80,
+    "fields": {
+      "name": "Rural",
+      "entity": "P",
+      "color": "#FF5722"
+    }
+  },
+  {
+    "model": "authentication.tag",
+    "pk": 81,
+    "fields": {
+      "name": "Ciudad",
+      "entity": "P",
+      "color": "#FFC107"
+    }
   }
 ]
 
