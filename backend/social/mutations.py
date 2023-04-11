@@ -3,7 +3,7 @@ from datetime import datetime
 from django.utils.translation import gettext_lazy as _
 from authentication.models import FlatterUser, Tag, Role
 from authentication.types import FlatterUserType, IncidentType, RequestType
-from mainApp.models import Review
+from mainApp.models import Review, Property
 from social.models import Group, Message
 from social.models import Incident, Request
 from social.types import ReviewType, GroupType, MessageType
@@ -547,6 +547,8 @@ class CreateReview(graphene.Mutation):
         relationship = kwargs.get('relationship', '').strip()
         user_token = kwargs.get('user_token', '').strip()
 
+
+
         try:
             evaluator_user = FlatterUser.objects.get(username=evaluator_user)
         except Exception:
@@ -565,14 +567,16 @@ class CreateReview(graphene.Mutation):
         except Exception:
             raise ValueError(_("El usuario valorado no existe"))
 
+
         if valued_user == evaluator_user:
             raise ValueError(_("No puedes valorarte a ti mismo"))
 
         if len(relationship) > 1:
-            relationship = _parse_relationship(relationship.lower().strip())
-
-        if not relationship:
-            raise ValueError(_("La relación entre usuarios no es válida"))
+            relationships = get_relationships_between_users(evaluator_user.username, valued_user.username)
+            if relationship not in relationships:
+                raise ValueError(_("La relación entre usuarios no es válida"))
+            else:
+                relationship = _parse_relationship(relationship.lower().strip())
 
         if Review.objects.filter(valued_user=valued_user, evaluator_user=evaluator_user).exists():
             raise ValueError(_("Ya has valorado a este usuario"))
@@ -664,3 +668,35 @@ def check_token(user_token: str, user: FlatterUser):
                 raise ValueError(_("El token no es válido"))
         except jwt.exceptions.DecodeError:
             raise ValueError(_("El token no es válido"))
+
+def get_relationships_between_users(user_login, user_valued):
+    relationships = []
+    user_login = FlatterUser.objects.get(username=user_login)
+    user_valued = FlatterUser.objects.get(username=user_valued)
+
+    if user_login == user_valued:
+        raise ValueError(_('No puedes tener una relación contigo mismo'))
+
+
+
+    if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
+        properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
+        if properties.exists():
+            relationships.append('Propietario')
+
+    if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='OWNER').exists():
+        properties = Property.objects.filter(owner=user_valued).filter(flatmates__in=[user_login])
+        if properties.exists():
+            relationships.append('Inquilino')
+
+    if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='RENTER').exists():
+        properties = Property.objects.filter(flatmates__in=[user_login]).filter(flatmates__in=[user_valued])
+        if properties.exists():
+            relationships.append('Compañero')
+
+    if len(relationships) == 0:
+        relationships = ['Amigo', 'Excompañero']
+
+
+
+    return relationships

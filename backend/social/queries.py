@@ -1,8 +1,9 @@
 import graphene
 from django.utils.translation import ugettext_lazy as _
 from authentication.models import Tag
-from authentication.types import TagType
+from authentication.types import TagType, FlatterUserType
 from mainApp.models import Property
+from .recommendations import recommend_similar_users, build_similarity_matrix
 from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
 from .models import Group, Message
 from authentication.models import FlatterUser
@@ -16,7 +17,7 @@ class SocialQueries(object):
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
     get_messages = graphene.List(MessageType)
     get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String())
-
+    get_users_recommendations = graphene.List(FlatterUserType, username=graphene.String())
     def resolve_get_all_tag(self, info):
         return Tag.objects.all()
     
@@ -117,4 +118,17 @@ class SocialQueries(object):
 
 
         return relationships
+
+
+    def resolve_get_users_recommendations(self, info, username):
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise ValueError(_('El usuario no existe'))
+        users = FlatterUser.objects.all().exclude(id=user.id)
+        if len(users) == 0:
+            raise ValueError(_('No hay usuarios para recomendar'))
+        matrix = build_similarity_matrix(users, user)
+        return recommend_similar_users(matrix)
+
 
