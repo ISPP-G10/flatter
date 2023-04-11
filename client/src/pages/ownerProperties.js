@@ -12,6 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from '@apollo/client';
 import { useState, useRef } from 'react';
 import { useApolloClient } from '@apollo/client';
+import customConfirm from "../libs/functions/customConfirm";
 
 
 const OwnerProperties = ({}) => {
@@ -53,6 +54,16 @@ const OwnerProperties = ({}) => {
       });
   
     }
+
+    function handleConfirm(idPiso){
+      customConfirm("Estás a punto de destacar por 1000 FlatterCoins, ¿quieres continuar?")
+      .then((response) => {
+          standOutProperty(idPiso);
+      })
+      .catch((error) => {
+          customAlert("Has rechazado la operación");
+      });
+  }
 
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
       username: localStorage.getItem('user','')
@@ -145,7 +156,7 @@ const OwnerProperties = ({}) => {
                       <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
                     </div>
                     <div className="btnindv">
-                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id)}}>Destacar Piso</button>
+                      <button className="styled-info-button"onClick={()=>{handleConfirm(prop.id)}}>Destacar Piso</button>
                     </div>
 
                   </div>
