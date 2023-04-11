@@ -657,7 +657,7 @@ def parse_roles(roles):
 
 
 def _exists_tag(tag):
-    return Tag.objects.filter(name=tag).exists()
+    return Tag.objects.filter(name=tag).filter(entity='U').exists()
 
 
 def check_token(user_token: str, user: FlatterUser):

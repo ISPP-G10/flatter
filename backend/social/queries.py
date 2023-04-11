@@ -83,9 +83,12 @@ class SocialQueries(object):
 
     def resolve_get_tags_by_type(self, info, tag_type=None):
         
-        parsed_tag = 'P' if tag_type == "property" else "U"
-        
-        return Tag.objects.filter(entity=parsed_tag)
+        if tag_type=="U":
+            return Tag.objects.filter(entity="U")
+        elif tag_type=="P":
+            return Tag.objects.filter(entity="P")
+        else:
+            raise ValueError(_('El tipo de etiqueta no es válido'))
 
     def resolve_get_relationships_between_users(self, info, user_login, user_valued):
         relationships = []
