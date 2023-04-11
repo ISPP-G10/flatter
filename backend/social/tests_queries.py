@@ -51,6 +51,7 @@ class TestQueries(TestCase):
         assert executed == {'data': {'getAllTag': [{'name': 'test_tag_1', 'color': 'red'}]}}
 
 
+
     ### Test de query de grupos  +++ Caso positivo: obtener todos los grupos
     def test_get_groups_returns_correct_data(self):
         client = Client(schema)
@@ -58,9 +59,13 @@ class TestQueries(TestCase):
         assert executed == {'data': {'getGroups': [{'name': 'test_query_group_1'}]}}
 
 
-    ### Test de query de grupos  +++ Caso positivo: obtener todos los grupos de un usuario
+
+    ### Test de query de grupos de un usuario +++ Caso positivo: obtener todos los grupos de un usuario
     def test_get_groups_by_user_returns_correct_data(self):
-        pass
+        client = client = Client(schema)
+        executed = client.execute('''query {getMyGroups(username: "test_user"){ name }}''')
+        assert executed == {'data': {'getMyGroups': [{'name': 'test_query_group_1'}]}}
+
 
 
     ### Test de query de mensajes  +++ Caso positivo: no hay mensajes
@@ -78,3 +83,10 @@ class TestQueries(TestCase):
         executed = client.execute('''query {getMessages{ text }}''')
         assert executed == {'data': {'getMessages': [{'text': 'Test de query'}]}}
         message.delete()
+
+
+    ### Test de query de relaciones entre usuarios  +++ Caso positivo: obtener todas las relaciones entre usuarios
+    def test_get_user_relations_returns_correct_data(self):
+        client = Client(schema)
+        executed = client.execute('''query {getRelationsBetweenUsers{ user_login, user_valued }}''')
+        assert executed == {'data': {'getRelationsBetweenUsers': []}}
