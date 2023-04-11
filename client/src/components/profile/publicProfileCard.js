@@ -11,10 +11,12 @@ import { useEffect, useRef, useState } from 'react';
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
+import { useNavigate } from 'react-router-dom';
 
 const PublicProfileCard = (props) => {
 
     const client = useApolloClient()
+    const navigate = useNavigate();
 
     const [reload, setReload] = useState(false);
 
@@ -138,7 +140,9 @@ const PublicProfileCard = (props) => {
                             props.tags.length !== 0 ? (
                                 props.tags.map((tag, i) => { 
                                     return(
-                                        <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        <div className='tagDiv' onClick={() => navigate(`/users?tag=${tag.name}`)}>
+                                            <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        </div>
                                     )
                                 })
                             ) : (
