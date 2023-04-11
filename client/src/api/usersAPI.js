@@ -204,6 +204,40 @@ const usersAPI = {
             }
         }
     `,
+    getPlans: gql`
+    query {
+        getPlans {
+          id
+          flatterCoins
+          visitsNumber
+          tagsNumber
+          advertisement
+          chatCreation
+          standardSupport
+          premiumSupport
+          viewSelfProfileOpinions
+          planType
+        }
+      }
+    `,
+    getContractByUsername: gql`
+        query getContractByUsername($username: String!){
+            getContractByUsername(username: $username){
+                plan {
+                    planType
+                }
+            }
+        }
+    `,
+    changeContract: gql`
+        mutation changeContract($numDaysSelected: Int!, $planType: String!, $token: String!, $username: String!) {
+            changeContract(numDaysSelected: $numDaysSelected, planType: $planType, token: $token, username: $username) {
+                contract {
+                    endDate
+                }         
+            }
+        }
+    `,      
 }   
 
 export default usersAPI;
