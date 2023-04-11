@@ -89,6 +89,7 @@ class Plan(models.Model):
     initial_date = models.DateField(default=datetime.now)
     end_date = models.DateField(null=True)
     plan_type = models.CharField(max_length=1, choices=choices_type)
+    compensation = models.PositiveIntegerField(default=0)
 
 class Contract(models.Model):
     choices_days = (

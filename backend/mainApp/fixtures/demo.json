@@ -288,6 +288,191 @@
     }
   },
   {
+    "model":"authentication.plan",
+    "pk":1,
+    "fields":{
+      "flatter_coins": 0,
+      "visits_number": 10,
+      "tags_number": 6,
+      "advertisement": true,
+      "chat_creation": false,
+      "standard_support": true,
+      "premium_support": false,
+      "view_self_profile_opinions": false,
+      "initial_date": "2023-04-11",
+      "end_date": null,
+      "plan_type": "B",
+      "compensation": 0
+    }
+  },
+  {
+    "model":"authentication.plan",
+    "pk":2,
+    "fields":{
+      "flatter_coins": 30,
+      "visits_number": 30,
+      "tags_number": 10,
+      "advertisement": false,
+      "chat_creation": true,
+      "standard_support": false,
+      "premium_support": true,
+      "view_self_profile_opinions": true,
+      "initial_date": "2023-04-11",
+      "end_date": null,
+      "plan_type": "A",
+      "compensation": 0
+    }
+  },
+  {
+    "model":"authentication.plan",
+    "pk":3,
+    "fields":{
+      "flatter_coins": 65,
+      "visits_number": 10,
+      "tags_number": 6,
+      "advertisement": false,
+      "chat_creation": true,
+      "standard_support": false,
+      "premium_support": true,
+      "view_self_profile_opinions": true,
+      "initial_date": "2023-04-11",
+      "end_date": null,
+      "plan_type": "P",
+      "compensation": 0
+    }
+  },{
+    "model": "authentication.contract",
+    "pk": 1,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-12",
+      "choices": 1,
+      "obsolete": false,
+      "user_id": 1,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 2,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-12",
+      "choices": 1,
+      "obsolete": false,
+      "user_id": 2,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 3,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-14",
+      "choices": 3,
+      "obsolete": false,
+      "user_id": 3,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 4,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-18",
+      "choices": 7,
+      "obsolete": false,
+      "user_id": 4,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 5,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-12",
+      "choices": 1,
+      "obsolete": false,
+      "user_id": 5,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 6,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-05-10",
+      "choices": 30,
+      "obsolete": false,
+      "user_id": 6,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 7,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-07-11",
+      "choices": 90,
+      "obsolete": false,
+      "user_id": 7,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 8,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-14",
+      "choices": 3,
+      "obsolete": false,
+      "user_id": 8,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 9,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-18",
+      "choices": 7,
+      "obsolete": false,
+      "user_id": 9,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 10,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-10-11",
+      "choices": 180,
+      "obsolete": false,
+      "user_id": 10,
+      "plan_id": 1 
+    }
+  },
+  {
+    "model": "authentication.contract",
+    "pk": 11,
+    "fields":{
+      "initial_date": "2023-04-11",
+      "end_date": "2023-04-18",
+      "choices": 7,
+      "obsolete": false,
+      "user_id": 11,
+      "plan_id": 1 
+    }
+  },
+  {
     "model": "mainApp.Image",
     "pk": 1,
     "fields": {
