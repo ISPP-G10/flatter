@@ -103,3 +103,26 @@ section {
 .flatter-coins-row > span {
   margin: 0 10px;
 }
+
+.ad {
+  position: fixed;
+  width: 10%;
+  height: 840px;
+  padding: 10px;
+  background-color: white;
+  border: solid 2px red;
+}
+
+.ad > img {
+  width: 100%;
+}
+
+.ad-izq {
+  top: 100px;
+  left: 10px;
+}
+
+.ad-der {
+  top: 100px;
+  right: 20px;
+}

@@ -12,7 +12,7 @@ const MainPage = () => {
     const {loading, data} = useQuery(propertiesAPI.getOutstandingProperties);
 
     return (
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withAds withBackground userLogged>
             {
                 loading ? 
                     <div className='carrousel-container'>Loading...</div>
