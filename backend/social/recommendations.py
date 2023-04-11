@@ -59,20 +59,20 @@ def recommend_similar_users(similarity_matrix, n=10):
     similar_users = sorted(similarity_matrix.items(), key=lambda x: x[1], reverse=True)[:n]
 
     # Obtener la lista de usuarios con puntuación 0
-    zero_similarity_users = [FlatterUser.objects.get(id=tuple[0]) for tuple in similarity_matrix.items() if
-                             tuple[1] == 0]
+    zero_similarity_users = [user_id for user_id, similarity in similarity_matrix.items() if similarity == 0]
 
     # Si hay usuarios con puntuación 0 entre los n primeros, seleccionar uno aleatoriamente y reemplazarlo en la lista de usuarios similares
-    for i in range(n):
-        if i >= len(similar_users):
-            break
-        if similar_users[i][1] == 0 and zero_similarity_users:
-            random_user = random.choice(zero_similarity_users)
-            similar_users[i] = (random_user.id, 0.0)
-            zero_similarity_users.remove(random_user)
-
     # Crear una lista de usuarios similares con sus respectivas puntuaciones de similitud
-    return [FlatterUser.objects.get(id=tuple[0]) for tuple in similar_users]
+    result = []
+    for user_id, similarity in similar_users:
+        if similarity != 0:
+            result.append(FlatterUser.objects.get(user_id))
+        else:
+            random_user_id = random.choice(zero_similarity_users)
+            result.append(FlatterUser.objects.get(random_user_id))
+            zero_similarity_users.remove(random_user_id)
+
+    return result
 
 
 

@@ -126,8 +126,8 @@ class SocialQueries(object):
         except FlatterUser.DoesNotExist:
             raise ValueError(_('El usuario no existe'))
         users = FlatterUser.objects.all().exclude(id=user.id)
-        if len(users) < 2:
-            return ValueError(_('No hay suficientes usuarios para recomendar'))
+        if len(users) == 0:
+            raise ValueError(_('No hay usuarios para recomendar'))
         matrix = build_similarity_matrix(users, user)
         return recommend_similar_users(matrix)
 
