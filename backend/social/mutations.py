@@ -421,7 +421,7 @@ class EditUserPublicMutation(graphene.Mutation):
         for tag in tags:
             if not _exists_tag(tag):
                 raise ValueError(_(f"La etiqueta {tag} no existe"))
-            user_tags.append(Tag.objects.get(name=tag))
+            user_tags.append(Tag.objects.get(name=tag, entity='U'))
 
         user_selected.tags.set(user_tags)
         
@@ -657,7 +657,7 @@ def parse_roles(roles):
 
 
 def _exists_tag(tag):
-    return Tag.objects.filter(name=tag).filter(entity='U').exists()
+    return Tag.objects.filter(name=tag, entity='U').exists()
 
 
 def check_token(user_token: str, user: FlatterUser):
