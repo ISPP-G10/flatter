@@ -79,7 +79,7 @@ const Groups = (props) => {
     function parseMessage(message){
         let words = message.split(" ")
         for (let i = 0; i < words.length; i++){
-            if (props.inappropiateWords.includes(words[i].toLowerCase().trim())){
+            if (props.inappropiateWords.includes(words[i].toLowerCase().trim()) || props.inappropiateWords.includes(words[i].toLowerCase().trim()+"s")){
                 message = message.replace(words[i], "****")
 
             }
