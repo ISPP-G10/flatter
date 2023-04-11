@@ -72,8 +72,8 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String) {
-          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
+        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String) {
+          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag) {
                 id
                 title
                 description
