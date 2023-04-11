@@ -10,7 +10,7 @@ import propertiesAPI from "../api/propertiesAPI";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
@@ -47,6 +47,19 @@ const ListProperties = () => {
   let [properties, setProperties] = useState([]);
 
   const modalRef = useRef(null);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const min = parseInt(searchParams.get("min")) || 0;
+    const max = parseInt(searchParams.get("max")) || 2000;
+    const tag = searchParams.get("tag") || "";
+    const province = searchParams.get("province") || "";
+    const municipality = searchParams.get("municipality") || "";
+
+    setFilterValues({ min, max, tag, province, municipality });
+  }, [location]);
 
   function handleFilterForm({values}) {
 
@@ -206,7 +219,9 @@ const ListProperties = () => {
                   <div className="property-meta">
                     <div className="meta-right">
                       {property.tags && property.tags.map((tag, index) => (
-                        <Tag key={ index } name={tag.name} color={tag.color}></Tag>
+                        <div className="tagDiv" onClick={() => navigator(`/search?tag=${tag.name}`)}>
+                          <Tag key={ index } name={tag.name} color={tag.color}></Tag>
+                        </div>
                       ))}
                     </div>
     
