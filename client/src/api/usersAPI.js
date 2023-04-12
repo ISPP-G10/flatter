@@ -145,6 +145,10 @@ const usersAPI = {
                 profilePicture
                 profession
                 averageRating
+                tags{
+                    name
+                    color
+                }
             }
         }
     `,
