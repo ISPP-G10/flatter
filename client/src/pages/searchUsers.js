@@ -36,7 +36,7 @@ const SearchUsers = () => {
         max: values.max_rating,
         tag: values.province,
         owner: values.role === 'Propietario' ? true : values.role === 'Inquilino' ? false : null
-    })
+    });
 
   }
 
@@ -49,6 +49,8 @@ const SearchUsers = () => {
         }
         if(input.name === 'tag') input.defaultValue = filterValues.tag ?? '';
     })
+
+    paginationRef.current.reset();
 
     //eslint-disable-next-line
   }, [filterValues]);
@@ -85,7 +87,7 @@ const SearchUsers = () => {
   const [currentPageData, setCurrentPageData] = useState([]);
 
   useEffect(() => {
-    paginationRef.current.init();
+    paginationRef.current.handle();
   }, [paginationRef])
 
   return (

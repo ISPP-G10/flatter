@@ -41,7 +41,7 @@ const ListProperties = () => {
       min: values.min_price,
       max: values.max_price,
       municipality: values.municipality
-    })
+    });
   }
 
   useEffect(() => {
@@ -52,6 +52,8 @@ const ListProperties = () => {
       }
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
+
+    paginationRef.current.reset();
 
   }, [filterValues]);
 
@@ -67,7 +69,7 @@ const ListProperties = () => {
   const [currentPageData, setCurrentPageData] = useState([]);
 
   useEffect(() => {
-    paginationRef.current.init();
+    paginationRef.current.handle();
   }, [paginationRef])
 
   const handlePagination = (pageIndex, resultsPerPage) => {

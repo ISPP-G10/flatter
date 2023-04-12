@@ -18,12 +18,24 @@ const Pagination = forwardRef(({queryCallback, resultsPerPage}, ref) => {
   useImperativeHandle(ref, () => {
     return {
         data: pageData,
-        init: handlePagination
+        handle: handlePagination,
+        set: setPagination,
+        reset: () => setPagination(1)
     };
   });
 
-  const handlePagination = async (indexAlter = 0) => {
+  const setPagination = async (index) => {
+    const pageResult = await queryCallback(index, resultsPerPage);
+    
+    setPageData({
+      index: index,
+      next: pageResult.next,
+      prev: pageResult.prev
+    });
+  }
 
+  const handlePagination = async (indexAlter = 0) => {
+    
     if(!pageData.prev && indexAlter<0) {
       customAlert("No hay resultados anteriores");
     } else if(!pageData.next && indexAlter>0) {
