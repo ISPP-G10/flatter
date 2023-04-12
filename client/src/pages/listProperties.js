@@ -11,7 +11,7 @@ import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
 import {useNavigate} from 'react-router-dom';
-import {useApolloClient} from '@apollo/client';
+import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
 
@@ -84,9 +84,21 @@ const ListProperties = () => {
       max: 2000,
       municipality: "",
     });
-
+    
     setFormKey((prevKey) => prevKey + 1);
   }
+
+  const { loading, data } = useQuery(
+    propertiesAPI.getFavouritePropertiesByUser,
+    {
+      variables: {
+        username: localStorage.getItem("user"),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
@@ -111,6 +123,7 @@ const ListProperties = () => {
         <div className="content">
           {
             properties.map((property, index) => {
+              const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
               return(
               <article key={ index } className="property-card card">
                 <div className="property-gallery">
@@ -154,6 +167,12 @@ const ListProperties = () => {
                     } }/>
                   </footer>
                 </div>
+                { isFavourite ? (
+                  <div className="favourite-badge"><img
+                  src={require("../static/files/icons/estrella.png")}
+                  alt="fav icon"
+                /> Favorito</div>
+                ) : "" }
               </article>
               );
               }
