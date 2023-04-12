@@ -296,7 +296,7 @@
       "tags_number": 6,
       "advertisement": true,
       "chat_creation": false,
-      "standard_support": true,
+      "standard_support": false,
       "premium_support": false,
       "view_self_profile_opinions": false,
       "initial_date": "2023-04-11",
@@ -314,8 +314,8 @@
       "tags_number": 10,
       "advertisement": false,
       "chat_creation": true,
-      "standard_support": false,
-      "premium_support": true,
+      "standard_support": true,
+      "premium_support": false,
       "view_self_profile_opinions": true,
       "initial_date": "2023-04-11",
       "end_date": null,
@@ -332,7 +332,7 @@
       "tags_number": 6,
       "advertisement": false,
       "chat_creation": true,
-      "standard_support": false,
+      "standard_support": true,
       "premium_support": true,
       "view_self_profile_opinions": true,
       "initial_date": "2023-04-11",
@@ -345,8 +345,8 @@
     "pk": 1,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-12",
-      "choices": 1,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 1,
       "plan_id": 1 
@@ -357,8 +357,8 @@
     "pk": 2,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-12",
-      "choices": 1,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 2,
       "plan_id": 1 
@@ -369,8 +369,8 @@
     "pk": 3,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-14",
-      "choices": 3,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 3,
       "plan_id": 1 
@@ -381,8 +381,8 @@
     "pk": 4,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-18",
-      "choices": 7,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 4,
       "plan_id": 1 
@@ -393,8 +393,8 @@
     "pk": 5,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-12",
-      "choices": 1,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 5,
       "plan_id": 1 
@@ -405,8 +405,8 @@
     "pk": 6,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-05-10",
-      "choices": 30,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 6,
       "plan_id": 1 
@@ -417,8 +417,8 @@
     "pk": 7,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-07-11",
-      "choices": 90,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 7,
       "plan_id": 1 
@@ -429,8 +429,8 @@
     "pk": 8,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-14",
-      "choices": 3,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 8,
       "plan_id": 1 
@@ -441,8 +441,8 @@
     "pk": 9,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-18",
-      "choices": 7,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 9,
       "plan_id": 1 
@@ -453,8 +453,8 @@
     "pk": 10,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-10-11",
-      "choices": 180,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 10,
       "plan_id": 1 
@@ -465,8 +465,8 @@
     "pk": 11,
     "fields":{
       "initial_date": "2023-04-11",
-      "end_date": "2023-04-18",
-      "choices": 7,
+      "end_date": null,
+      "choices": null,
       "obsolete": false,
       "user_id": 11,
       "plan_id": 1 
