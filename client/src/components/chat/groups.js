@@ -74,7 +74,7 @@ const Groups = (props) => {
             props.setChangeTab(true)
             //TODO: Solucionar más adelante
             setTimeout(() => {
-                props.setShowChat(false)
+                props.setShowChat(true)
                 props.setShowGroups(true)
                 if (props.activateChat === true){
                     props.setChatId(newGroupId)
@@ -88,6 +88,7 @@ const Groups = (props) => {
     }, [props.activateChat]);
 
     useEffect (() => {
+        console.log(groups)
     }, [groups]);
 
     function parseMessage(message){
