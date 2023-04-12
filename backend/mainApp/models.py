@@ -77,7 +77,8 @@ class Petition(models.Model):
     status_choices = (
         ('A','Accepted'),
         ('P','Pending'),
-        ('D', 'Denied')
+        ('D', 'Denied'),
+        ('I', 'Paid')
     )
     status = models.CharField(max_length=1,choices=status_choices)
     date_of_petition_acepted = models.DateTimeField(null=True, blank=True)

@@ -56,6 +56,9 @@ const PersonalRequests = () => {
             case 'Rechazadas':
                 newStatus = 'D';
                 break;
+            case 'Pagadas':
+                newStatus = 'I';
+                break;
             case 'Todas':
                 newStatus = '';
                 break;
@@ -87,9 +90,21 @@ const PersonalRequests = () => {
     
       }, [filterValues]);
       
-      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago.
-      function handleRequestPay(price){
+      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago. También el metodo para que pase a estado pagada.
+      function handleRequestPay(price, petitionId){
         console.log(price)
+
+        client.mutate({
+            mutation: personalRequestsAPI.updateStatusPetition,
+            variables: {
+                petitionId: parseInt(petitionId),
+                statusPetition: "I"
+            }
+        }).then((response) => {
+            window.location.reload();
+        }).catch((error) => {
+            customAlert(error.message);
+        });
       }
 
 
@@ -162,8 +177,8 @@ const PersonalRequests = () => {
                                     : request.status === "A" ?
                                     (
                                         <div className='request-information-element2'>
-                                            Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido aceptada
-                                            .Tiene hasta el día {paymentDeadline(request.dateOfPetitionAcepted)} para abonar el primer pago de {request.property.price}€.
+                                            Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido aceptada.
+                                            Tiene hasta el día {paymentDeadline(request.dateOfPetitionAcepted)} para abonar el primer pago de {request.property.price}€.
                                         </div>
                                     ) 
 
@@ -172,6 +187,13 @@ const PersonalRequests = () => {
                                         <div className='request-information-element2'>
                                             Buenas, {request.requester.firstName} {request.requester.lastName}. Su petición ha sido rechazada. 
                                             Lo sentimos.
+                                        </div>
+                                    )
+                                    : request.status === "I" ?
+                                    (
+                                        <div className='request-information-element2'>
+                                            Enhorabuena {request.requester.firstName} {request.requester.lastName}. Su petición ha sido aceptada y ha realizado el pago correctamente,
+                                            bienvenido al piso {request.property.title}!
                                         </div>
                                     )
                                     : (<div></div>)
@@ -187,13 +209,19 @@ const PersonalRequests = () => {
                                 : request.status === "A" ?
                                 (
                                     <div className="request-actions">
-                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price)}} text="Pagar" className="pay" />
+                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price, request.id)}} text="Pagar" className="pay" />
                                       </div> 
                                 )
                                 : request.status === "D" ?
                                 (
                                     <div className="request-actions">
                                         <div className='rejected-status'>Rechazada</div>
+                                    </div>
+                                )
+                                : request.status === "I" ?
+                                (
+                                    <div className="request-actions">
+                                        <div className='paid-status'>Pagada</div>
                                     </div>
                                 )
                                 : (<div></div>)

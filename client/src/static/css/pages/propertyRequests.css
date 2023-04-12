@@ -74,6 +74,19 @@
     border: 1px solid;
 }
 
+.content.content-list > .property-requests > .property-request .request-actions > .paid-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #006800;
+    color: #006800;
+    padding: 18px;
+    padding-left: 31px;
+    padding-right: 31px;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
 .content.content-list > .property-requests > .property-request .request-actions > button {
     border-radius: 8px;
     color: #fff;
