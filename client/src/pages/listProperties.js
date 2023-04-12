@@ -14,6 +14,7 @@ import {useNavigate} from 'react-router-dom';
 import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
+import Pagination from "../components/pagination";
 
 const ListProperties = () => {
 
@@ -30,9 +31,7 @@ const ListProperties = () => {
 
   const [formKey, setFormKey] = useState(0);
 
-  let [sharedProperty, setSharedProperty] = useState({});
-
-  let [properties, setProperties] = useState([]);
+  const [sharedProperty, setSharedProperty] = useState({});
 
   const modalRef = useRef(null);
 
@@ -44,48 +43,7 @@ const ListProperties = () => {
       min: values.min_price,
       max: values.max_price,
       municipality: values.municipality
-    })
-
-  }
-
-  useEffect(() => {
-
-    client.query({
-      query: propertiesAPI.filterProperties,
-      variables: {
-        minPrice: filterValues.min,
-        maxPrice: filterValues.max,
-        municipality: filterValues.municipality
-      }
-    })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
-    .catch((error) => customAlert("No hay propiedades disponibles para esa búsqueda"));
-
-    filterInputs.map((input) => {
-      if(input.name === 'price'){
-        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
-        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
-      }
-      if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
-    })
-
-  }, [filterValues]);
-
-  const copyShareInputClipboard = () => {
-    const input = document.querySelector('#share-modal-input');
-    window.navigator.clipboard.writeText(input.value)
-      .then(customAlert("¡Ya puedes compartir la propiedad!"))
-      .catch(error => console.log(error));;
-  }
-
-  const handleCleanFilters = () => {
-    setFilterValues({
-      min: 0,
-      max: 2000,
-      municipality: "",
     });
-    
-    setFormKey((prevKey) => prevKey + 1);
   }
 
   const { loading, data } = useQuery(
@@ -98,7 +56,73 @@ const ListProperties = () => {
     }
   );
 
-  if (loading) return <p>Loading...</p>;
+  useEffect(() => {
+    filterInputs.map((input) => {
+      if(input.name === 'price'){
+        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
+      }
+      if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
+    })
+
+    if(!loading)
+      paginationRef.current.reset();
+
+  }, [filterValues, loading]);
+
+  const copyShareInputClipboard = () => {
+    const input = document.querySelector('#share-modal-input');
+    window.navigator.clipboard.writeText(input.value)
+      .then(customAlert("¡Ya puedes compartir la propiedad!"))
+      .catch(error => console.log(error));;
+  }
+
+  const paginationRef = useRef(null);
+
+  const [currentPageData, setCurrentPageData] = useState([]);
+
+  useEffect(() => {
+    if(!loading)
+      paginationRef.current.handle();
+  }, [paginationRef, loading])
+
+  const handlePagination = (pageIndex, resultsPerPage) => {
+
+    return client.query({
+      query: propertiesAPI.filterProperties,
+      variables: {
+        minPrice: filterValues.min,
+        maxPrice: filterValues.max,
+        municipality: filterValues.municipality,
+        pageNumber: pageIndex,
+        pageSize: resultsPerPage
+      }
+    })
+    .then((response) => {
+      setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
+
+      return {
+        next: response.data.getFilteredPropertiesByPriceAndCity.hasNext,
+        prev: response.data.getFilteredPropertiesByPriceAndCity.hasPrevious
+      }
+    })
+    .catch((error) => {
+      customAlert("No hay propiedades disponibles para esa búsqueda");
+    });
+  }
+  
+  const handleCleanFilters = () => {
+    setFilterValues({
+      min: 0,
+      max: 2000,
+      municipality: "",
+    });
+    
+    setFormKey((prevKey) => prevKey + 1);
+  }
+
+  if (loading) 
+    return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
@@ -122,8 +146,9 @@ const ListProperties = () => {
   
         <div className="content">
           {
-            properties.map((property, index) => {
+            currentPageData.map((property, index) => {
               const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
+
               return(
               <article key={ index } className="property-card card">
                 <div className="property-gallery">
@@ -177,6 +202,8 @@ const ListProperties = () => {
               );
               }
             )}
+
+          <Pagination ref = {paginationRef} queryCallback = {handlePagination} resultsPerPage = {10} />
         </div>
       </section>
 

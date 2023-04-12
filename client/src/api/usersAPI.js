@@ -136,8 +136,9 @@ const usersAPI = {
         }
     `,
     filteredUsersByTagAndReview: gql`
-        query getFilteredUsersByTagAndReview($username: String!, $tag: String, $owner: Boolean){
-            getFilteredUsersByTagAndReview(username: $username, tag: $tag, owner: $owner){
+        query getFilteredUsersByTagAndReview($pageNumber: Int!, $pageSize: Int!, $username: String!, $tag: String, $owner: Boolean){
+            getFilteredUsersByTagAndReview(pageNumber: $pageNumber, pageSize: $pageSize, username: $username, tag: $tag, owner: $owner){
+            flatterUsers {  
                 id
                 firstName
                 lastName
@@ -145,6 +146,9 @@ const usersAPI = {
                 profilePicture
                 profession
                 averageRating
+            },
+                hasNext,
+                hasPrevious
             }
         }
     `,

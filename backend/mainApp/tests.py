@@ -80,11 +80,13 @@ class TestProperty(TestCase):
     def test_resolve_get_properties(self):
         query = '''
             query test{
-                getProperties{
-                    title
-                    province {
-                        name
+                getProperties(pageSize:1, pageNumber:1){
+                    properties{
+                        title
                     }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''
@@ -143,8 +145,13 @@ class TestProperty(TestCase):
     def test_resolve_get_filtered_properties_by_price_and_city(self):
         query = '''
             query test{
-                getFilteredPropertiesByPriceAndCity(minPrice: 90, maxPrice:200){
-                    title
+                getFilteredPropertiesByPriceAndCity(minPrice: 90, maxPrice:200, pageSize:1, pageNumber:1){
+                    properties{
+                        title
+                    }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''
@@ -154,8 +161,13 @@ class TestProperty(TestCase):
     def test_resolve_get_filtered_properties_by_province_municipality_location(self):
         query = '''
             query test{
-                getFilteredPropertiesByPriceAndCity(province: "Sevilla"){
-                    title
+                getFilteredPropertiesByPriceAndCity(province: "Sevilla", pageSize:1, pageNumber:1){
+                    properties{
+                        title
+                    }
+                    hasNext
+                    hasPrevious
+                    totalCount
                 }
             }
         '''

@@ -72,37 +72,41 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String) {
-          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
-                id
-                title
-                description
-                dimensions
-                location
-                bedroomsNumber
-                bathroomsNumber
-                tags {
-                    name
-                    color
-                }
-                province{
-                    name
-                }
-                price
-                isOutstanding
-                maxCapacity
-                owner {
-                    username
-                }
-                images{
-                    image
-                }
-                flatmates{
-                    firstName
-                    lastName
-                }
-            }
+    query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String) {
+      getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
+        hasNext,
+        hasPrevious,
+        properties {
+          id
+          title
+          description
+          dimensions
+          location
+          bedroomsNumber
+          bathroomsNumber
+          tags {
+              name
+              color
+          }
+          province{
+              name
+          }
+          price
+          isOutstanding
+          maxCapacity
+          owner {
+              username
+          }
+          images{
+              image
+          }
+          flatmates{
+              firstName
+              lastName
+          }
         }
+      }
+    }
   `,
   getPropertiesByOwner: gql`
     query getPropertiesByOwner($username: String!) {
