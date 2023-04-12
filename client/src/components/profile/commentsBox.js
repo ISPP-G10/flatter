@@ -48,9 +48,10 @@ const CommentsBox = (props) => {
 
     const commentsModalRef = useRef(null)
     const commentsFormRef = useRef(null);
+    const client = useApolloClient();
     let [rating, setRating] = useState(null);
     let [comments, setComments] = useState(props.comments)
-    const client = useApolloClient();
+    let username = localStorage.getItem("user");
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
@@ -105,7 +106,7 @@ const CommentsBox = (props) => {
                         <img className="comments-box-star" src={require("../../static/files/icons/star.png")} alt="Icono estrella"></img>
                         <h3 className='comments-box-title'>Reseñas</h3>
                     </div>
-                    <button className={`comments-btn ${props.username===localStorage.getItem("user") ? 'no-comments-btn' : ''}`} title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
+                    <button className={`comments-btn ${props.username===username || comments.filter(c => c.evaluatorUser.username === username).length > 0 ? 'no-comments-btn' : ''}`} title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
                         <span className="comments-btn-text">Escribe tu reseña...</span>
                     </button>
                 </div>
