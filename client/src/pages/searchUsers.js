@@ -23,7 +23,7 @@ const SearchUsers = () => {
   const filterFormRef = useRef(null);
   const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "user"
+        type: "U"
     }
   }); 
 

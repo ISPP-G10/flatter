@@ -29,7 +29,7 @@ const ListProperties = () => {
   const [inputsChanged, setInputsChanged] = useState(false);
   const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "property"
+        type: "P"
     }
   }); 
 

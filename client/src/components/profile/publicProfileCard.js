@@ -26,7 +26,7 @@ const PublicProfileCard = (props) => {
 
     const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
         variables: {
-            type: "user"
+            type: "U"
         }
     });
 
