@@ -1,6 +1,6 @@
 import math
 from datetime import datetime
-from random import random
+import random
 
 from authentication.models import FlatterUser
 from sklearn.metrics.pairwise import euclidean_distances
@@ -59,17 +59,17 @@ def recommend_similar_users(similarity_matrix, n=10):
     similar_users = sorted(similarity_matrix.items(), key=lambda x: x[1], reverse=True)[:n]
 
     # Obtener la lista de usuarios con puntuación 0
-    zero_similarity_users = [user_id for user_id, similarity in similarity_matrix.items() if similarity == 0]
+    zero_similarity_users = [user_id for user_id, similarity in list(similarity_matrix.items()) if similarity == 0]
 
     # Si hay usuarios con puntuación 0 entre los n primeros, seleccionar uno aleatoriamente y reemplazarlo en la lista de usuarios similares
     # Crear una lista de usuarios similares con sus respectivas puntuaciones de similitud
     result = []
     for user_id, similarity in similar_users:
         if similarity != 0:
-            result.append(FlatterUser.objects.get(user_id))
+            result.append(FlatterUser.objects.get(pk=user_id))
         else:
             random_user_id = random.choice(zero_similarity_users)
-            result.append(FlatterUser.objects.get(random_user_id))
+            result.append(FlatterUser.objects.get(pk=random_user_id))
             zero_similarity_users.remove(random_user_id)
 
     return result
