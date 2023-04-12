@@ -90,19 +90,32 @@ const OwnerProperties = ({}) => {
             (
               data.getPropertiesByOwner.map ((prop, index) => { 
                 return(
-            <div className={`listview${prop.isOutstanding ? ' favourite' : ''}`} key={ index }>
+            <div className={`listview`} key={ index }>
+
               <div className="listview-header" onClick={() => navigate(`/property/${prop.id}`)}>
                 <h3>{prop.title}</h3>
               </div>
+
+              <div className="upper">
+                <p className = "team">{prop.price} €/mes</p>
+
+                {
+                  prop.isOutstanding ? 
+                    <div className="outstanding-badge">
+                      <span>✓</span> Destacado
+                    </div>
+                    :
+                    ''
+                }
+              </div>
               
               <div className="attrcontainer"> 
+              
                 <div className="attrindv">
                   <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
                   <p className = "location" style={{fontSize: '12px', overflowY: 'scroll', maxHeight: '30px', maxWidth: '215px'}}>{prop.location}, {prop.municipality.name}, {prop.province.name}</p>  
                 </div>
-                <div className="attrindv">
-                  <p className = "team">{prop.price} €/mes</p>
-                </div>
+
               </div>
               
 
