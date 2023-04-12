@@ -210,6 +210,24 @@ const usersAPI = {
             getRelationshipsBetweenUsers(userLogin: $userLogin, userValued: $userValued)
         }
     `,
+
+    getRecomendedUsers: gql`
+        query getRecomendedUsers($username: String!){
+            getUsersRecommendations(username: $username){
+                id
+                username
+                profilePicture
+                firstName
+                lastName
+                profession
+                averageRating
+                tags{
+                    name
+                    color
+                }
+            }
+        }
+    `,
 }
 
 export default usersAPI;
