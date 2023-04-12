@@ -1,6 +1,6 @@
 import graphene
 from django.utils.translation import ugettext_lazy as _
-from authentication.models import Tag
+from authentication.models import Tag, Role
 from authentication.types import TagType, FlatterUserType
 from mainApp.models import Property
 from .recommendations import recommend_similar_users, build_similarity_matrix
@@ -125,7 +125,9 @@ class SocialQueries(object):
             user = FlatterUser.objects.get(username=username)
         except FlatterUser.DoesNotExist:
             raise ValueError(_('El usuario no existe'))
-        users = FlatterUser.objects.all().exclude(id=user.id)
+        role = Role.objects.get(role="RENTER")
+        users = FlatterUser.objects.filter(roles__in=[role]).exclude(id=user.id)
+        users = []
         if len(users) == 0:
             raise ValueError(_('No hay usuarios para recomendar'))
         matrix = build_similarity_matrix(users, user)

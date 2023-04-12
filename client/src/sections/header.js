@@ -144,7 +144,7 @@ const Header = ({scrollY, userLogged}) => {
                                         localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
                                         <li><Link to="/properties">Mis viviendas</Link></li>
                                     }
-                                    <li><Link to="/recommendedUsers">Usuarios recomendados</Link></li>
+                                    <li><Link to="/recommendations">Usuarios recomendados</Link></li>
                                 </>
                             }
                         </div>

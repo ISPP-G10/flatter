@@ -44,7 +44,7 @@ function App() {
         <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
         <Route path='/me' element={<> <AccountSettings/> </>}/>
         <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
-        <Route path="/recommendedUsers" element={<> <RecommendedUsers/> </>}/>
+        <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>
