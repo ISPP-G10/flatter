@@ -67,10 +67,15 @@ const SearchUsers = () => {
       }
     })
     .then((response) => {
-        let responseUsers = response.data.getFilteredUsersByTagAndReview;
+        let responseUsers = response.data.getFilteredUsersByTagAndReview.flatterUsers;
         let minValue = isNaN(filterValues.min) ? 0 : filterValues.min;
         let maxValue = isNaN(filterValues.max) ? 5 : filterValues.max;
         setCurrentPageData(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
+
+        return {
+          next: response.data.getFilteredUsersByTagAndReview.hasNext,
+          prev: response.data.getFilteredUsersByTagAndReview.hasPrevious
+        }
     })
     .catch((error) => customAlert("No hay usuarios que coincidan con la búsqueda"));
   }
@@ -116,9 +121,9 @@ const SearchUsers = () => {
                     );
                 })
             }
-        </div>
 
-        <Pagination ref = {paginationRef} queryCallback = {handlePagination} />
+          <Pagination ref = {paginationRef} queryCallback = {handlePagination} resultsPerPage = {10} />
+        </div>
       </section>
           
     </FlatterPage>

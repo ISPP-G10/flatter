@@ -173,7 +173,7 @@ const ListProperties = () => {
               }
             )}
 
-          <Pagination ref = {paginationRef} queryCallback = {handlePagination} />
+          <Pagination ref = {paginationRef} queryCallback = {handlePagination} resultsPerPage = {10} />
         </div>
       </section>
 

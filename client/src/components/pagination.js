@@ -10,7 +10,7 @@ import customAlert from "../libs/functions/customAlert";
 
 const Pagination = forwardRef(({queryCallback, resultsPerPage}, ref) => {
   const [pageData, setPageData] = useState({
-    index: 0,
+    index: 1,
     next: false,
     true: false
   });
@@ -49,7 +49,7 @@ const Pagination = forwardRef(({queryCallback, resultsPerPage}, ref) => {
           </button>
 
           <div>
-            Página { pageData.index+1 }
+            Página { pageData.index }
           </div>
 
           <button onClick={() => { handlePagination(1) }}>
