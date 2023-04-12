@@ -3,6 +3,7 @@ import usersAPI from "../api/usersAPI";
 import FlatterPage from "../sections/flatterPage";
 import { useEffect, useState } from "react";
 import UserCard from "../components/users/userCards";
+import customAlert from "../libs/functions/customAlert";
 
 const RecommendedUsers = () => {
 
@@ -10,12 +11,14 @@ const RecommendedUsers = () => {
     const {data, loading} = useQuery(usersAPI.getRecomendedUsers, {
         variables: {
             username: localStorage.getItem('user')
+        },
+        onError: (error) => {
+            customAlert("No se han encontrado recomendaciones");
         }
     });
 
     useEffect(() => {
         if(!loading && data){
-            console.log(data)
             setUsers(data.getUsersRecommendations);
         }
     }, [data, loading]);
