@@ -22,7 +22,7 @@ const FormProperty = ({ property }) => {
 
   const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "property"
+        type: "P"
     }
   });
   const tagsInput = useRef(null);
