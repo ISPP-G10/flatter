@@ -3,7 +3,7 @@ from django.core.asgi import get_asgi_application
 
 from channels.staticfiles import StaticFilesHandler
 
-environment = os.environ.get("DJANGO_ENV", "development")
+environment = os.environ.get("DJANGO_ENV", "production")
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings.' + environment)
 # Initialize Django ASGI application early to ensure the AppRegistry
 # is populated before importing code that may import ORM models.
@@ -21,10 +21,8 @@ websocket_urlPattern = [
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
-            AuthMiddlewareStack(
-                URLRouter(
-                    websocket_urlPattern
-                )
+            URLRouter(
+                websocket_urlPattern
             )
         )
             
