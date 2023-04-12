@@ -31,7 +31,7 @@ const ListProperties = () => {
 
   const [formKey, setFormKey] = useState(0);
 
-  let [sharedProperty, setSharedProperty] = useState({});
+  const [sharedProperty, setSharedProperty] = useState({});
 
   const modalRef = useRef(null);
 
@@ -46,6 +46,16 @@ const ListProperties = () => {
     });
   }
 
+  const { loading, data } = useQuery(
+    propertiesAPI.getFavouritePropertiesByUser,
+    {
+      variables: {
+        username: localStorage.getItem("user"),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
+
   useEffect(() => {
     filterInputs.map((input) => {
       if(input.name === 'price'){
@@ -55,9 +65,10 @@ const ListProperties = () => {
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
 
-    paginationRef.current.reset();
+    if(!loading)
+      paginationRef.current.reset();
 
-  }, [filterValues]);
+  }, [filterValues, loading]);
 
   const copyShareInputClipboard = () => {
     const input = document.querySelector('#share-modal-input');
@@ -71,8 +82,9 @@ const ListProperties = () => {
   const [currentPageData, setCurrentPageData] = useState([]);
 
   useEffect(() => {
-    paginationRef.current.handle();
-  }, [paginationRef])
+    if(!loading)
+      paginationRef.current.handle();
+  }, [paginationRef, loading])
 
   const handlePagination = (pageIndex, resultsPerPage) => {
 
@@ -109,17 +121,8 @@ const ListProperties = () => {
     setFormKey((prevKey) => prevKey + 1);
   }
 
-  const { loading, data } = useQuery(
-    propertiesAPI.getFavouritePropertiesByUser,
-    {
-      variables: {
-        username: localStorage.getItem("user"),
-      },
-      fetchPolicy: "no-cache",
-    }
-  );
-
-  if (loading) return <p>Loading...</p>;
+  if (loading) 
+    return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
