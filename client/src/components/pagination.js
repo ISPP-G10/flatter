@@ -1,22 +1,45 @@
-import { useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import "../static/css/components/pagination.css";
 
 import leftArrow from "../static/files/icons/left-arrow.svg";
 import rightArrow from "../static/files/icons/right-arrow.svg";
 
-const Pagination = ({isNextPage, callback, resultsPerPage}) => {
-  const [page, setPage] = useState(0);
+import PropTypes from "prop-types";
+import customAlert from "../libs/functions/customAlert";
 
-  
+const Pagination = forwardRef(({queryCallback, resultsPerPage}, ref) => {
+  const [pageData, setPageData] = useState({
+    index: 0,
+    next: false,
+    true: false
+  });
 
-  const handlePagination = (indexAlter) => {
+  useImperativeHandle(ref, () => {
+    return {
+        data: pageData,
+        init: handlePagination
+    };
+  });
 
-    let paginationIndex = indexAlter>0 && isNextPage === true ? page + 1 : (page!==0 && indexAlter < 0 ? page - 1 : page);
+  const handlePagination = async (indexAlter = 0) => {
 
-    setPage(paginationIndex);
+    if(!pageData.prev && indexAlter<0) {
+      customAlert("No hay resultados anteriores");
+    } else if(!pageData.next && indexAlter>0) {
+      customAlert("No hay resultados posteriores");
+    } else {
+      const newIndex = pageData.index + indexAlter;
+      
+      const pageResult = await queryCallback(newIndex, resultsPerPage);
+      
+      setPageData({
+        index: newIndex,
+        next: pageResult.next,
+        prev: pageResult.prev
+      });
 
-    callback(paginationIndex);
+    }
   }
   
   return (
@@ -26,7 +49,7 @@ const Pagination = ({isNextPage, callback, resultsPerPage}) => {
           </button>
 
           <div>
-            Página { page+1 }
+            Página { pageData.index+1 }
           </div>
 
           <button onClick={() => { handlePagination(1) }}>
@@ -34,6 +57,15 @@ const Pagination = ({isNextPage, callback, resultsPerPage}) => {
           </button>
         </div>
   );
+});
+
+Pagination.propTypes = {
+  resultsPerPage: PropTypes.number,
+  queryCallback: PropTypes.func
+}
+
+Pagination.defaultProps = {
+  resultsPerPage: 1
 }
 
 export default Pagination;

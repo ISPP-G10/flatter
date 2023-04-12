@@ -31,8 +31,6 @@ const ListProperties = () => {
 
   let [sharedProperty, setSharedProperty] = useState({});
 
-  let [properties, setProperties] = useState([]);
-
   const modalRef = useRef(null);
 
   function handleFilterForm({values}) {
@@ -44,24 +42,9 @@ const ListProperties = () => {
       max: values.max_price,
       municipality: values.municipality
     })
-
   }
 
   useEffect(() => {
-
-    client.query({
-      query: propertiesAPI.filterProperties,
-      variables: {
-        minPrice: filterValues.min,
-        maxPrice: filterValues.max,
-        municipality: filterValues.municipality,
-        pageNumber: 0,
-        pageSize: 10
-      }
-    })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
-    .catch((error) => customAlert("No hay propiedades disponibles para esa búsqueda"));
-
     filterInputs.map((input) => {
       if(input.name === 'price'){
        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
@@ -79,18 +62,34 @@ const ListProperties = () => {
       .catch(error => console.log(error));;
   }
 
-  const handlePagination = (paginationIndex) => {
-    client.query({
+  const paginationRef = useRef(null);
+
+  const [currentPageData, setCurrentPageData] = useState([]);
+
+  useEffect(() => {
+    paginationRef.current.init();
+  }, [paginationRef])
+
+  const handlePagination = (pageIndex, resultsPerPage) => {
+
+    return client.query({
       query: propertiesAPI.filterProperties,
       variables: {
         minPrice: filterValues.min,
         maxPrice: filterValues.max,
         municipality: filterValues.municipality,
-        pageNumber: paginationIndex,
-        pageSize: 10
+        pageNumber: pageIndex,
+        pageSize: resultsPerPage
       }
     })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
+    .then((response) => {
+      setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
+
+      return {
+        next: response.data.getFilteredPropertiesByPriceAndCity.hasNext,
+        prev: response.data.getFilteredPropertiesByPriceAndCity.hasPrevious
+      }
+    })
     .catch((error) => {
       customAlert("No hay propiedades disponibles para esa búsqueda");
     });
@@ -125,7 +124,7 @@ const ListProperties = () => {
   
         <div className="content">
           {
-            properties.map((property, index) => {
+            currentPageData.map((property, index) => {
               return(
               <article key={ index } className="property-card card">
                 <div className="property-gallery">
@@ -174,7 +173,7 @@ const ListProperties = () => {
               }
             )}
 
-          <Pagination isNextPage={() => properties.length === 10} callback = {handlePagination} />
+          <Pagination ref = {paginationRef} queryCallback = {handlePagination} />
         </div>
       </section>
 

@@ -11,6 +11,7 @@ import UserCard from "../components/users/userCards";
 import FlatterForm from "../components/forms/flatterForm";
 import SolidButton from "../sections/solidButton";
 import customAlert from "../libs/functions/customAlert";
+import Pagination from "../components/pagination";
 
 const SearchUsers = () => {
 
@@ -25,8 +26,6 @@ const SearchUsers = () => {
     tag: query.get("tag") ?? '',
     owner: query.get("owner") ? (query.get("owner") === 'true' ? true : false) : null,
   });
-
-  let [users, setUsers] = useState([]);
 
   function handleFilterForm({values}) {
 
@@ -51,25 +50,38 @@ const SearchUsers = () => {
         if(input.name === 'tag') input.defaultValue = filterValues.tag ?? '';
     })
 
-    client.query({
+    //eslint-disable-next-line
+  }, [filterValues]);
+
+
+  const handlePagination = (pageIndex, resultsPerPage) => {
+
+    return client.query({
       query: usersAPI.filteredUsersByTagAndReview,
       variables: {
         username: localStorage.getItem('user'),
         tag: filterValues.tag,
-        owner: filterValues.owner
+        owner: filterValues.owner,
+        pageNumber: pageIndex,
+        pageSize: resultsPerPage
       }
     })
     .then((response) => {
         let responseUsers = response.data.getFilteredUsersByTagAndReview;
         let minValue = isNaN(filterValues.min) ? 0 : filterValues.min;
         let maxValue = isNaN(filterValues.max) ? 5 : filterValues.max;
-        setUsers(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
+        setCurrentPageData(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
     })
     .catch((error) => customAlert("No hay usuarios que coincidan con la búsqueda"));
-    //eslint-disable-next-line
-  }, [filterValues]);
+  }
 
+  const paginationRef = useRef(null);
 
+  const [currentPageData, setCurrentPageData] = useState([]);
+
+  useEffect(() => {
+    paginationRef.current.init();
+  }, [paginationRef])
 
   return (
     <FlatterPage withBackground userLogged>
@@ -98,13 +110,15 @@ const SearchUsers = () => {
         </div>
         <div className="content">
             {
-                users.length >0 && users.map((user) => {
+                currentPageData.length >0 && currentPageData.map((user) => {
                     return(
                         <UserCard user={user} key={user.id}/>
                     );
                 })
             }
         </div>
+
+        <Pagination ref = {paginationRef} queryCallback = {handlePagination} />
       </section>
           
     </FlatterPage>
