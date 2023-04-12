@@ -34,7 +34,7 @@ const SearchUsers = () => {
     setFilterValues({
         min: values.min_rating,
         max: values.max_rating,
-        tag: values.province,
+        tag: values.tag,
         owner: values.role === 'Propietario' ? true : values.role === 'Inquilino' ? false : null
     });
 
