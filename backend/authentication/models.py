@@ -79,7 +79,7 @@ class Plan(models.Model):
         ('P','Pro')
     )
     flatter_coins = models.PositiveIntegerField(default = 0)
-    visits_number = models.PositiveBigIntegerField(default = 10)
+    visits_number = models.FloatField(default = 10)
     tags_number = models.PositiveIntegerField(default = 6)
     advertisement = models.BooleanField(default=False)
     chat_creation = models.BooleanField(default=False)

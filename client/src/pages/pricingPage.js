@@ -8,16 +8,32 @@ import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
 import FlatterModal from "../components/flatterModal";
 import { useRef, useState } from "react";
 import SolidButton from "../sections/solidButton";
+import { useQuery, useApolloClient } from "@apollo/client";
+import usersAPI from "../api/usersAPI";
 
 const PricingPage = () => {
+  const { data, loading } = useQuery(usersAPI.getPlans);
+
+  const userPlanQuery = useQuery(usersAPI.getContractByUsername, {
+    variables: {
+      username: localStorage.getItem("user", ""),
+    },
+  });
+
+  const userPlan = userPlanQuery.data?.getContractByUsername.plan.planType;
+  const userPlanLoading = userPlanQuery.loading;
+
   const [clickedPlanPrice, setClickedPlanPrice] = useState(0);
+  const [clickedPlan, setClickedPlan] = useState("");
   const [planDays, setPlanDays] = useState(1);
   const [discount, setDiscount] = useState(0);
 
   const modalRef = useRef();
+  const client = useApolloClient();
 
-  function handleModal(price) {
+  function handleModal(price, plan) {
     setClickedPlanPrice(price);
+    setClickedPlan(plan);
     setPlanDays(1);
     setDiscount(0);
     modalRef.current.open();
@@ -37,16 +53,63 @@ const PricingPage = () => {
     setPlanDays(days);
   }
 
-  function handleConfirm(price) {
-    customConfirm(`Vas a pagar ${price} FlatterCoins, ¿quieres continuar?`)
+  function handleCancel() {
+    customConfirm("¿Estás seguro de que quieres cancelar tu suscripción?")
       .then((response) => {
-        customAlert("Has aceptado la confirmación");
-        modalRef.current.close();
+        client
+          .mutate({
+            mutation: usersAPI.changeContract,
+            variables: {
+              username: localStorage.getItem("user", ""),
+              planType: "B",
+              token: localStorage.getItem("token", ""),
+              numDaysSelected: 1,
+            },
+          })
+          .then((response) => {
+            userPlanQuery.refetch();
+            modalRef.current.close();
+            customAlert(`Has cancelado tu suscripción correctamente.`);
+          })
+          .catch((error) => {
+            customAlert(error.message);
+          });
       })
       .catch((error) => {
         customAlert("Has cancelado la confirmación");
       });
   }
+
+  function handleConfirm(price, clickedPlan) {
+    customConfirm(`Vas a pagar ${price} FlatterCoins, ¿quieres continuar?`)
+      .then((response) => {
+        client
+          .mutate({
+            mutation: usersAPI.changeContract,
+            variables: {
+              username: localStorage.getItem("user", ""),
+              planType: clickedPlan,
+              numDaysSelected: parseInt(planDays),
+              token: localStorage.getItem("token", ""),
+            },
+          })
+          .then((response) => {
+            userPlanQuery.refetch();
+            modalRef.current.close();
+            customAlert(
+              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`
+            );
+          })
+          .catch((error) => {
+            customAlert(error.message);
+          });
+      })
+      .catch((error) => {
+        customAlert("Has cancelado la confirmación");
+      });
+  }
+
+  if (loading || userPlanLoading) return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
@@ -63,7 +126,7 @@ const PricingPage = () => {
               <h2>Básico</h2>
             </div>
             <div className="plan-price">
-              <h4>0</h4>
+              <h4>{data.getPlans[0].flatterCoins}</h4>
               <img
                 src={require("../static/files/icons/flattercoins-icon.png")}
                 alt="Logo Flatter Coins"
@@ -78,26 +141,60 @@ const PricingPage = () => {
             <div className="option">
               <ul>
                 <li>
-                  <BsDot color="white" /> 10 visitas al perfil por día
+                  <BsDot color="white" /> {data.getPlans[0].visitsNumber}{" "}
+                  visitas al perfil por día
                 </li>
                 <li>
-                  <BsDot color="white" /> 6 etiquetas
+                  <BsDot color="white" /> {data.getPlans[0].tagsNumber}{" "}
+                  etiquetas
                 </li>
                 <li>
-                  <FaTimes color="red" /> Sin anuncios
+                  {data.getPlans[0].advertisement ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    <FaCheck color="green" />
+                  )}{" "}
+                  Sin anuncios
                 </li>
                 <li>
-                  <FaTimes color="red" /> Crear chats
+                  {data.getPlans[0].chatCreation ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Crear chats
                 </li>
                 <li>
-                  <FaTimes color="red" /> Soporte
+                  {data.getPlans[0].standardSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
                 </li>
                 <li>
-                  <FaTimes color="red" /> Ver perfiles que opinaron
+                  {data.getPlans[0].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte premium
+                </li>
+                <li>
+                  {data.getPlans[0].viewSelfProfileOpinions ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Ver perfiles que opinaron
                 </li>
               </ul>
             </div>
-            <button disabled> Activado </button>
+            {userPlan === "B" ? (
+              <button disabled> Activado </button>
+            ) : (
+              <button onClick={handleCancel}> Cancelar </button>
+            )}
           </div>
           {/* END Col one */}
           <div className="pricing-card text-center">
@@ -108,7 +205,7 @@ const PricingPage = () => {
               <h2>Avanzado</h2>
             </div>
             <div className="plan-price">
-              <h4>30</h4>
+              <h4>{data.getPlans[1].flatterCoins}</h4>
               <img
                 src={require("../static/files/icons/flattercoins-icon.png")}
                 alt="Logo Flatter Coins"
@@ -123,26 +220,70 @@ const PricingPage = () => {
             <div className="option">
               <ul>
                 <li>
-                  <BsDot color="white" /> 30 visitas al perfil por día
+                  <BsDot color="white" /> {data.getPlans[1].visitsNumber}{" "}
+                  visitas al perfil por día
                 </li>
                 <li>
-                  <BsDot color="white" /> 10 etiquetas
+                  <BsDot color="white" /> {data.getPlans[1].tagsNumber}{" "}
+                  etiquetas
                 </li>
                 <li>
-                  <FaCheck color="green" /> Sin anuncios
+                  {data.getPlans[1].advertisement ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    <FaCheck color="green" />
+                  )}{" "}
+                  Sin anuncios
                 </li>
                 <li>
-                  <FaCheck color="green" /> Crear chats
+                  {data.getPlans[1].chatCreation ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Crear chats
                 </li>
                 <li>
-                  <FaCheck color="green" /> Soporte
+                  {data.getPlans[1].standardSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
                 </li>
                 <li>
-                  <FaCheck color="green" /> Ver perfiles que opinaron
+                  {data.getPlans[1].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte premium
+                </li>
+                <li>
+                  {data.getPlans[1].viewSelfProfileOpinions ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Ver perfiles que opinaron
                 </li>
               </ul>
             </div>
-            <button onClick={() => handleModal(30)}> Mejorar </button>
+            {userPlan === "A" ? (
+              <button disabled> Activado </button>
+            ) : (
+              <button
+                onClick={() =>
+                  handleModal(
+                    data.getPlans[1].flatterCoins,
+                    data.getPlans[1].planType
+                  )
+                }
+              >
+                {" "}
+                Activar{" "}
+              </button>
+            )}
           </div>
           {/* END Col two */}
           <div className="pricing-card text-center">
@@ -153,7 +294,7 @@ const PricingPage = () => {
               <h2>Pro</h2>
             </div>
             <div className="plan-price">
-              <h4>65</h4>
+              <h4>{data.getPlans[2].flatterCoins}</h4>
               <img
                 src={require("../static/files/icons/flattercoins-icon.png")}
                 alt="Logo Flatter Coins"
@@ -168,26 +309,73 @@ const PricingPage = () => {
             <div className="option">
               <ul>
                 <li>
-                  <BsDot color="white" /> Visitas al perfil ilimitadas
+                  <BsDot color="white" />
+                  {data.getPlans[2].visitsNumber > 100000
+                    ? "Visitas ilimitadas"
+                    : data.getPlans[2].visitsNumber +
+                      " visitas al perfil por día"}
                 </li>
                 <li>
-                  <BsDot color="white" /> 10 etiquetas
+                  <BsDot color="white" /> {data.getPlans[2].tagsNumber}{" "}
+                  etiquetas
                 </li>
                 <li>
-                  <FaCheck color="green" /> Sin anuncios
+                  {data.getPlans[2].advertisement ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    <FaCheck color="green" />
+                  )}{" "}
+                  Sin anuncios
                 </li>
                 <li>
-                  <FaCheck color="green" /> Crear chats
+                  {data.getPlans[2].chatCreation ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Crear chats
                 </li>
                 <li>
-                  <FaCheck color="green" /> Soporte
+                  {data.getPlans[2].standardSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
                 </li>
                 <li>
-                  <FaCheck color="green" /> Ver perfiles que opinaron
+                  {data.getPlans[2].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte premium
+                </li>
+                <li>
+                  {data.getPlans[2].viewSelfProfileOpinions ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Ver perfiles que opinaron
                 </li>
               </ul>
             </div>
-            <button onClick={() => handleModal(65)}> Mejorar </button>
+            {userPlan === "P" ? (
+              <button disabled> Activado </button>
+            ) : (
+              <button
+                onClick={() =>
+                  handleModal(
+                    data.getPlans[2].flatterCoins,
+                    data.getPlans[2].planType
+                  )
+                }
+              >
+                {" "}
+                Activar{" "}
+              </button>
+            )}
           </div>
           {/* END Col three */}
         </div>
@@ -251,7 +439,10 @@ const PricingPage = () => {
               text="Continuar"
               className="btn btn-primary"
               onClick={() =>
-                handleConfirm(clickedPlanPrice * planDays - discount)
+                handleConfirm(
+                  clickedPlanPrice * planDays - discount,
+                  clickedPlan
+                )
               }
             />
           </div>

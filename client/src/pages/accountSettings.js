@@ -69,7 +69,7 @@ const AccountSettings = () => {
     }, [data, loading, setting]);
 
     return(
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withBackground userLogged withAds={false}>
             <div className='settings-page-container'>
                 <div className='settings-title'>
                     <h1>Configuración de la cuenta</h1>
