@@ -151,6 +151,15 @@
   justify-content: space-between;
 }
 
+#informationView > .listview.favourite {
+  background: var(--flatter-yellow-color);
+}
+
+#informationView > .listview.favourite .btnindv button {
+  background: #fff;
+  color: #000;
+}
+
 #informationView > .listview > .listview-header {
   display: flex;
   flex-direction: column;

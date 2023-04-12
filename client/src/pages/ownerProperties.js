@@ -90,14 +90,8 @@ const OwnerProperties = ({}) => {
             (
               data.getPropertiesByOwner.map ((prop, index) => { 
                 return(
-            <div className="listview" key={ index }>
+            <div className={`listview${prop.isOutstanding ? ' favourite' : ''}`} key={ index }>
               <div className="listview-header" onClick={() => navigate(`/property/${prop.id}`)}>
-                {
-                  prop.isOutstanding ? 
-                    <img src={require('../static/files/icons/yellow-star.png')} className="outstanding-icon"></img>
-                    :
-                    <div className="outstanding-icon" style={{marginTop: '50px'}}></div>
-                }
                 <h3>{prop.title}</h3>
               </div>
               
