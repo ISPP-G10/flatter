@@ -73,6 +73,17 @@ const socialLib ={
         // eslint-disable-next-line react-hooks/exhaustive-deps
         
         return hours + ":" + minutes;
+    },
+
+    parseMessageInappropiateWords: (message, inappropiateWords) =>{
+        let words = message.split(" ")
+        for (let i = 0; i < words.length; i++){
+            if (inappropiateWords.includes(words[i].toLowerCase().trim()) || inappropiateWords.includes(words[i].toLowerCase().trim()+"s")){
+                message = message.replace(words[i], "****")
+
+            }
+        }
+        return message
     }
 }
 
