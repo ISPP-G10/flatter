@@ -233,14 +233,14 @@ class CreatePetitionMutation(graphene.Mutation):
 class UpdatePetitionStatus(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
-        status_petition = graphene.Boolean(required=True)
+        status_petition = graphene.String(required=True)
 
     petition = graphene.Field(PetitionType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         petition_id = kwargs.get('petition_id', '')
-        status_petition = kwargs.get('status_petition', False)
+        status_petition = kwargs.get('status_petition', '')
         
         try:
             petition = Petition.objects.get(id=petition_id)
@@ -249,14 +249,16 @@ class UpdatePetitionStatus(graphene.Mutation):
 
         user = petition.property.owner
         
-        if petition.status != "P":
-            raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
+        if (petition.status == "D" or petition.status == "I") :
+            raise GraphQLError(f"No se puede actualizar una solicitud que denegada o ya pagada")
 
-        if status_petition:
+        if status_petition == "A":
             petition.status = "A"
             petition.date_of_petition_acepted = datetime.now()
-        else:
+        elif status_petition == "D":
             petition.status = "D"
+        elif status_petition == "I":
+            petition.status = "I"
         petition.save()
         return UpdatePetitionStatus(petition=petition)
 
@@ -275,8 +277,8 @@ class DeletePetition(graphene.Mutation):
         except Petition.DoesNotExist:
             raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
         
-        if petition.status == "A":
-            raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada")
+        if petition.status == "A" or petition.status == "I":
+            raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada o pagada")
         petition.delete()
         return DeletePetition(petition=petition)
 
@@ -535,11 +537,11 @@ class AddUserToPropertyMutation(graphene.Mutation):
         if user in property.flatmates.all():
             raise ValueError(_(f"El usuario {username} ya se encuentra asociado a este piso"))
         
-        if property.max_capacity< len(property.flatmates.all()):
+        if len(property.flatmates.all()) < property.max_capacity:
             property.flatmates.add(user)
             property.save()
         else:
-            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el numero máximo de inquilinos"))
+            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el numero máximo de inquilinos {property.max_capacity}"))
         return AddUserToPropertyMutation(user=user, property=property)
 class PropertyMutation(graphene.ObjectType):
     create_property = CreatePropertyMutation.Field()

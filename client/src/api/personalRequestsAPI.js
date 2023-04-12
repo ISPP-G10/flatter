@@ -11,6 +11,7 @@ const personalRequestsAPI = {
         requester{
           firstName
           lastName
+          username
         }
         property{
           maxCapacity
@@ -38,6 +39,20 @@ const personalRequestsAPI = {
       }
     }
 `,
-}
+
+    addUserToProperty: gql`
+    mutation addUserToProperty($propertyId: Int!, $username: String!){
+      addUserToProperty(propertyId: $propertyId, username: $username){
+        user{
+          username
+        }
+    		property{
+          title
+          id
+        }    				
+      }
+    }
+`,
+};
 
 export default personalRequestsAPI;

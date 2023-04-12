@@ -90,15 +90,31 @@ const PersonalRequests = () => {
     
       }, [filterValues]);
       
-      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago. También el metodo para que pase a estado pagada.
-      function handleRequestPay(price, petitionId){
+      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago.
+      function handleRequestPay(price, petitionId, username, propertyId){
+        
+        //aqui te devuelvo el precio
         console.log(price)
 
+        //Para actualizar el estado de la petición a pagada.
         client.mutate({
             mutation: personalRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
                 statusPetition: "I"
+            }
+        }).then((response) => {
+            window.location.reload();
+        }).catch((error) => {
+            customAlert(error.message);
+        });
+
+        //Aqui añadimos al usuario al inmueble en cuestion
+        client.mutate({
+            mutation: personalRequestsAPI.addUserToProperty,
+            variables: {
+                propertyId: parseInt(propertyId),
+                username: username
             }
         }).then((response) => {
             window.location.reload();
@@ -209,7 +225,8 @@ const PersonalRequests = () => {
                                 : request.status === "A" ?
                                 (
                                     <div className="request-actions">
-                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price, request.id)}} text="Pagar" className="pay" />
+                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}} 
+                                          text="Pagar" className="pay" />
                                       </div> 
                                 )
                                 : request.status === "D" ?
