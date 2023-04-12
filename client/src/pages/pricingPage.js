@@ -166,9 +166,17 @@ const PricingPage = () => {
                 </li>
                 <li>
                   {data.getPlans[0].standardSupport ? (
-                    <FaTimes color="red" />
-                  ) : (
                     <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
+                </li>
+                <li>
+                  {data.getPlans[0].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
                   )}{" "}
                   Soporte premium
                 </li>
@@ -237,9 +245,17 @@ const PricingPage = () => {
                 </li>
                 <li>
                   {data.getPlans[1].standardSupport ? (
-                    <FaTimes color="red" />
-                  ) : (
                     <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
+                </li>
+                <li>
+                  {data.getPlans[1].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
                   )}{" "}
                   Soporte premium
                 </li>
@@ -321,9 +337,17 @@ const PricingPage = () => {
                 </li>
                 <li>
                   {data.getPlans[2].standardSupport ? (
-                    <FaTimes color="red" />
-                  ) : (
                     <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
+                  )}{" "}
+                  Soporte estándar
+                </li>
+                <li>
+                  {data.getPlans[2].premiumSupport ? (
+                    <FaCheck color="green" />
+                  ) : (
+                    <FaTimes color="red" />
                   )}{" "}
                   Soporte premium
                 </li>

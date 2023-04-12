@@ -65,6 +65,7 @@ section {
 }
 
 .site-content {
+  position: relative;
   width: 100vw;
   height: 100vh;
   padding-top: 70px;
@@ -107,22 +108,48 @@ section {
 .ad {
   position: fixed;
   width: 10%;
-  height: 840px;
+  height: 87.5vh;
   padding: 10px;
-  background-color: white;
-  border: solid 2px red;
-}
-
-.ad > img {
-  width: 100%;
+  border: solid 1px black;
+  z-index: 1001;
+  cursor: pointer;
 }
 
 .ad-izq {
   top: 100px;
   left: 10px;
+  background-image: url('../files/images/anuncio-1.jpg');
+  background-size: 100% 100%;
 }
 
 .ad-der {
   top: 100px;
-  right: 20px;
+  right: 10px;
+  background-image: url('../files/images/anuncio-2.jpg');
+  background-size: 100% 100%;
 }
+
+@media screen and (max-width: 1300px) {
+  .ad {
+    position: static;
+    width: 97.5%;
+    height: 40vh;
+  }
+
+  .ad-izq {
+    margin-top: 10px;
+    background-image: url('../files/images/anuncio-3.jpeg');
+  }
+  
+  .ad-der {
+    display: none;
+  }
+  
+}
+
+/* @media screen and (max-width: 1000px) {
+  .ad {
+    width: 15%;
+  }
+  
+} */

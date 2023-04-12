@@ -67,7 +67,12 @@ class ChangeContract(graphene.Mutation):
       user=user,
     )
     
-    user.flatter_coins -= new_plan.flatter_coins * num_days_selected
+    if num_days_selected >= 7 and num_days_selected < 30:
+      user.flatter_coins -= new_plan.flatter_coins * num_days_selected * 0.9
+    elif num_days_selected >= 30:
+      user.flatter_coins -= new_plan.flatter_coins * num_days_selected * 0.8
+    else:
+      user.flatter_coins -= new_plan.flatter_coins * num_days_selected
     user.save()
       
     return ChangeContract(contract=new_contract)

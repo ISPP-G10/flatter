@@ -16,6 +16,19 @@ const FlatterPage = (props) => {
     },
   });
 
+  function navigateToAdLeft(){
+
+    if (window.innerWidth > 1300){
+      window.open("https://mcdonalds.es/", "_blank");
+    }else{
+      window.open("https://www.bmw.com/", "_blank");
+    }
+  }
+
+  function navigateToAdRight(){
+    window.open("https://www.ikea.es/", "_blank");
+  }
+
   useEffect(() => {
     document.addEventListener("scroll", (e) => {
       setScrollY(window.scrollY);
@@ -35,16 +48,8 @@ const FlatterPage = (props) => {
         <div className="site-content">
           {props.withAds && data.getContractByUsername.plan.planType === "B" ? (
             <>
-              <div className="ad ad-izq">
-                <img src="https://th.bing.com/th/id/R.235c4bae8aeaaf6ec8f16002c005c349?rik=EV6p3K7faGVHzQ&pid=ImgRaw&r=0" alt="etsii us" />
-                <p>Aprueban a todos los alumnos de ISPP</p>
-                <a href="https://ev.us.es">Leer más</a>
-              </div>
-              <div className="ad ad-der">
-                <img src="https://th.bing.com/th/id/OIP.dRyxyidVi-zBEvAvz6f9lAHaFj?pid=ImgDet&rs=1" alt="metro sevilla" />
-                <p>¡Nueva línea de metro en Sevilla!</p>
-                <a href="https://www.sevilla.org/">¡Visítanos!</a>
-              </div>
+              <div className="ad ad-izq" onClick={navigateToAdLeft}></div>
+              <div className="ad ad-der" onClick={navigateToAdRight}></div>
             </>
           ) : (
             <></>
@@ -94,7 +99,7 @@ FlatterPage.propTypes = {
 
 FlatterPage.defaultProps = {
   withBackground: false,
-  withAds: false,
+  withAds: true,
 };
 
 export default FlatterPage;

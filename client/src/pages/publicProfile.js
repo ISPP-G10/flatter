@@ -40,14 +40,14 @@ const PublicProfile = () => {
         return total_ratings
     }
 
-    if(loading) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
+    if(loading) return <FlatterPage withBackground userLogged withAds={false}><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
 
     const profile = data.getUserByUsername;
 
     let roles = profile.roles.map((role) => role.role);
 
     return(
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withBackground userLogged withAds={false}>
             <div className="profile-grid">
                 <PublicProfileCard 
                     username={username} 
