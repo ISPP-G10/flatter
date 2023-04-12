@@ -61,6 +61,32 @@
     border: 1px solid;
 }
 
+.content.content-list > .property-requests > .property-request .request-actions > .pending-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #4e514e;
+    color: #4e514e;
+    padding: 18px;
+    padding-left: 22px;
+    padding-right: 22px;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > .paid-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #006800;
+    color: #006800;
+    padding: 18px;
+    padding-left: 31px;
+    padding-right: 31px;
+    border-radius: 8px;
+    border: 1px solid;
+}
+
 .content.content-list > .property-requests > .property-request .request-actions > button {
     border-radius: 8px;
     color: #fff;
@@ -76,6 +102,22 @@
 }
 
 .content.content-list > .property-requests > .property-request .request-actions > button.accept:hover {
+    background: #51ef39;
+    bottom: 6px;
+    box-shadow: 0px 5px 3px #00000035;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.pay {
+    background: #44D12D;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.content.content-list > .property-requests > .property-request .request-actions > button.pay:hover {
     background: #51ef39;
     bottom: 6px;
     box-shadow: 0px 5px 3px #00000035;
@@ -125,6 +167,11 @@
     max-width: 200px;
 }
 
+.content.content-list .request-footer .request-user-data > .request-price {
+    font-weight: bolder;
+    color: var(--flatter-blue-color);
+}
+
 .content.content-list .request-footer .request-user-data > * {
     margin: initial;
 }
@@ -142,6 +189,19 @@
     border: 3px solid green;
 }
 
+.content.content-list .request-footer > div > .request-property-picture > img {
+    width: 125px;
+    height: 75px;
+    border-radius: 10%;
+    border: 2px solid #05a8ff;
+    box-shadow: 0px 2px 3px #0000004a;
+    display: block;
+}
+
+.content.content-list .request-footer > div > .request-property-picture:hover > img  {
+    border: 3px solid green;
+}
+
 .content.content-list > .property-requests > .property-request .request-information {
     padding: 10px;
     padding-top: 18px;
@@ -150,6 +210,17 @@
     flex-direction: column;
     flex:2;
     max-height: 120px;
+    max-width: 400px;
+}
+
+.content.content-list > .property-requests > .property-request .request-information-long {
+    padding: 10px;
+    padding-top: 18px;
+    margin: initial;
+    display: flex;
+    flex-direction: column;
+    flex:2;
+    max-height: 175px;
     max-width: 400px;
 }
 
@@ -165,6 +236,14 @@
     overflow-y: scroll;
     overflow-x: hidden;
     min-width: 100%;
+}
+
+.content.content-list > .property-requests > .property-request .request-information > .request-information-element2 {
+    display: flex;
+    margin-top: 10px;
+    min-width: 100%;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .icon-img{
