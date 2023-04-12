@@ -8,6 +8,7 @@ from .types import PropertyType, PetitionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene, jwt
+from datetime import datetime
 
 
 class DeleteImageFromProperty(graphene.Mutation):
@@ -253,6 +254,7 @@ class UpdatePetitionStatus(graphene.Mutation):
 
         if status_petition:
             petition.status = "A"
+            petition.date_of_petition_acepted = datetime.now()
         else:
             petition.status = "D"
         petition.save()
@@ -506,7 +508,39 @@ class DeleteUsersToFavouritePropertyMutation(graphene.Mutation):
             raise ValueError(_("Ya has eliminado este usuario"))
         return DeleteUsersToFavouritePropertyMutation(user=user, property=property)
 
+class AddUserToPropertyMutation(graphene.Mutation):
+    class Input:
+        property_id = graphene.Int(required=True)
+        username = graphene.String(required=True)
 
+    user = graphene.Field(FlatterUserType)
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+        property_id = kwargs.get('property_id', 0)
+        username=kwargs.get('username')
+        
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise ValueError(_(f"El usuario con nombre de usuario {username} no existe"))
+    
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise ValueError(_("El inmueble seleccionado no existe"))
+        if not FlatterUser.objects.filter(username=username,roles__in = [Role.objects.get(role="RENTER").pk]).exists():
+            raise ValueError(_(f"El usuario {username} no tiene el rol de renter"))
+        if user in property.flatmates.all():
+            raise ValueError(_(f"El usuario {username} ya se encuentra asociado a este piso"))
+        
+        if property.max_capacity< len(property.flatmates.all()):
+            property.flatmates.add(user)
+            property.save()
+        else:
+            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el numero máximo de inquilinos"))
+        return AddUserToPropertyMutation(user=user, property=property)
 class PropertyMutation(graphene.ObjectType):
     create_property = CreatePropertyMutation.Field()
     update_property = UpdatePropertyMutation.Field()
@@ -520,6 +554,7 @@ class PropertyMutation(graphene.ObjectType):
     delete_petition = DeletePetition.Field()
     add_users_to_favourite_property=AddUsersToFavouritePropertyMutation.Field()
     delete_users_to_favourite_property=DeleteUsersToFavouritePropertyMutation.Field()
+    add_user_to_property= AddUserToPropertyMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

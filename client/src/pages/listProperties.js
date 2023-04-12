@@ -11,7 +11,7 @@ import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
 import {useNavigate} from 'react-router-dom';
-import {useApolloClient} from '@apollo/client';
+import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
 import Pagination from "../components/pagination";
@@ -28,6 +28,8 @@ const ListProperties = () => {
     max: parseInt(query.get("max")),
     municipality: query.get("municipality") ?? '',
   });
+
+  const [formKey, setFormKey] = useState(0);
 
   let [sharedProperty, setSharedProperty] = useState({});
 
@@ -47,8 +49,8 @@ const ListProperties = () => {
   useEffect(() => {
     filterInputs.map((input) => {
       if(input.name === 'price'){
-       input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
-       input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
+        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
       }
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
@@ -96,6 +98,28 @@ const ListProperties = () => {
       customAlert("No hay propiedades disponibles para esa búsqueda");
     });
   }
+  
+  const handleCleanFilters = () => {
+    setFilterValues({
+      min: 0,
+      max: 2000,
+      municipality: "",
+    });
+    
+    setFormKey((prevKey) => prevKey + 1);
+  }
+
+  const { loading, data } = useQuery(
+    propertiesAPI.getFavouritePropertiesByUser,
+    {
+      variables: {
+        username: localStorage.getItem("user"),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
@@ -109,24 +133,19 @@ const ListProperties = () => {
             <div className="filters">
               <h3>Filtrar por:</h3>
 
-              <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
+              <FlatterForm key={formKey} ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
             </div>
           </div>
           <div style={{marginTop: '20px'}}>
-            <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
-              navigator('/search')
-              setFilterValues({
-                min: 0,
-                max: 2000,
-                municipality: '',
-              })
-            }}/>
+            <SolidButton type="featured" text="Limpiar filtros" onClick={() => handleCleanFilters()}/>
           </div>
         </div>
   
         <div className="content">
           {
             currentPageData.map((property, index) => {
+              const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
+
               return(
               <article key={ index } className="property-card card">
                 <div className="property-gallery">
@@ -170,6 +189,12 @@ const ListProperties = () => {
                     } }/>
                   </footer>
                 </div>
+                { isFavourite ? (
+                  <div className="favourite-badge"><img
+                  src={require("../static/files/icons/estrella.png")}
+                  alt="fav icon"
+                /> Favorito</div>
+                ) : "" }
               </article>
               );
               }

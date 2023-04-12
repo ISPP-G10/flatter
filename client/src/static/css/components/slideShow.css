@@ -7,6 +7,7 @@
   max-width: 1000px;
   position: relative;
   margin: auto;
+  overflow: hidden;
 }
 
 /* Hide the images by default */
@@ -80,4 +81,26 @@
   to {
     opacity: 1;
   }
+}
+
+.image-zoom {
+  position: absolute;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+  display: none;
+  background-repeat: no-repeat;
+  background-size: 300% 300%;
+}
+
+.magnifier {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  display: none;
 }
