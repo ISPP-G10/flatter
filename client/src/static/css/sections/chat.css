@@ -22,6 +22,23 @@
     cursor: pointer;
 }
 
+.class-chat-btn-new-messages::before{
+    content: attr(data-before);
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-width: 17.5px;
+    background: var(--flatter-orange-color);
+    border-radius: 50%;
+    padding: 2.5px;
+    color: white;
+    font-size: .75em;
+    aspect-ratio: 1/1;
+}
+
 
 
 .class-chat-img{
@@ -576,6 +593,45 @@ input[type="checkbox"].ios-switch:checked + label:before {
     display: none;
     height: 0px;
     width: 0px;
+}
+
+.class-chat-icon-number{
+    margin-top: 5px;
+    position: flex;
+    width: 25px;
+    height: 25px;
+}
+
+.class-chat-icon-number::before{
+    content: attr(data-before);
+    display: flex;
+    top: -10px;
+    right: -10px;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-width: 17.5px;
+    background: red;
+    border-radius: 50%;
+    padding: 2.5px;
+    color: white;
+    font-size: .75em;
+    aspect-ratio: 1/1;
+}
+
+.class-chat-icon-number-dissappear{
+    display: none;
+}
+
+.class-chat-group-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.class-chat-group > *{
+    margin: 0;
 }
 
 @media screen and (max-height: 700px) {

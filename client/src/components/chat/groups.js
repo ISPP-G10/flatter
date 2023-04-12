@@ -46,7 +46,16 @@ const Groups = (props) => {
                     setGroups([groupAndLastMessage,...groups_filtered])
                     setAllGroups([groupAndLastMessage,...allGroups.filter(g => g.group.id !== group.id)])
                     if (notificationsAllowed==="true" && lastMessage.user.username !== username){
-                        notification(lastMessage.text, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username)
+                        let messageText = localStorage.getItem("inappropiateLanguage")?localStorage.getItem("inappropiateLanguage")==="false"?parseMessage(lastMessage.text):lastMessage.text:lastMessage.text;
+                        if (parseInt(group.id)!==props.chatId){
+                            notification(messageText, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username)
+                            if (props.newMessages.get(group.id)) {
+                                props.newMessages.set(group.id, props.newMessages.get(group.id)+1) 
+                            } else {
+                                props.newMessages.set(group.id, 1)
+                            }
+                            props.setNewMessages(new Map(props.newMessages))
+                        }
                     }
                 } else if(!group.individual){
                     setGroups([groupAndLastMessage,...groups])
@@ -99,8 +108,16 @@ const Groups = (props) => {
                 let filter_user = data.group.users.filter(u => u.username !== username)[0]
                 let lastMessage = data.lastMessage?localStorage.getItem("inappropiateLanguage")?localStorage.getItem("inappropiateLanguage")==="false"?parseMessage(data.lastMessage.text):data.lastMessage.text:data.lastMessage.text:"";
                 let lastTime = data.lastMessage?socialLib.getTimeToString(data.lastMessage.timestamp):"";
+                let newMessages = props.newMessages.get(data.group.id)?props.newMessages.get(data.group.id):0;
+                function handleGroupClick(){
+                    props.setChatId(parseInt(data.group.id));
+                    if (props.newMessages.get(data.group.id)){
+                        props.newMessages.delete(data.group.id);
+                        props.setNewMessages(new Map(props.newMessages));
+                    }
+                }
                 return(
-                    <Group onClick={()=>{props.setChatId(parseInt(data.group.id))}} name={data.group.individual?filter_user.username:data.group.name} chatPic={data.group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} key={`chat-${data.group.id}`}/>
+                    <Group onClick={handleGroupClick} name={data.group.individual?filter_user.username:data.group.name} chatPic={data.group.individual?API_SERVER_MEDIA+filter_user.profilePicture:require("../../static/files/images/default-user.png")} lastMessage={lastMessage} lastTime={lastTime} newMessages={newMessages} key={`chat-${data.group.id}`}/>
             )} 
             )}         
         </>
@@ -110,11 +127,17 @@ const Groups = (props) => {
 PropTypes.propTypes = {
     setChatId: PropTypes.func,
     inappropiateWords: PropTypes.array,
+    chatId: PropTypes.number,
+    newMessages: PropTypes.object,
+    setNewMessages: PropTypes.func,
 }
 
 PropTypes.defaultProps = {
     setChatId: () => {},
     inappropiateWords: [],
+    chatId: null,
+    newMessages: {},
+    setNewMessages: () => {},
 }
 
 export default Groups;

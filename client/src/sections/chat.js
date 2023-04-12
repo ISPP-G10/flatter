@@ -9,12 +9,14 @@ import chatsAPI from "../api/chatsAPI";
 
 const Chat = (props) => {
 
-    const [showChat, setShowChat] = useState(true);
+    const [showChat, setShowChat] = useState(false);
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
     const [inappropiateWords, setInappropiateWords] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
     const [chatId, setChatId] = useState(null);
+    let [newMessages, setNewMessages] = useState(new Map());
+    const [totalNewMessages, setTotalNewMessages] = useState(0);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
     const client = useApolloClient();
 
@@ -40,10 +42,17 @@ const Chat = (props) => {
         }
     });
 
-
     const sendMessage = () => {
         socialLib.sendMessage(client, chatInput, chatId, MAX_LEN);
     }
+
+    useEffect(() => {
+        let sum = 0;
+        if (newMessages.size > 0) {
+            newMessages.forEach(value => sum += value)
+        }
+        setTotalNewMessages(sum);
+    }, [newMessages])
 
     const setChangeTabTrue = () => {
         setChangeTab(true);
@@ -62,7 +71,7 @@ const Chat = (props) => {
     };
 
     useEffect(() => {
-        if (!showChat) {
+        if (showChat) {
             chatSlide.current.style.display = "block";
             chatSlide.current.style.top = (window.scrollY+75) + "px";
             if (window.innerWidth > 1300) {
@@ -109,6 +118,8 @@ const Chat = (props) => {
             }
         } else {
             chatSlide.current.style.display = "none";
+            if (chatId) setShowGroups(false);
+            setChatId(null);
         }
     }, [showChat]);
 
@@ -342,7 +353,7 @@ const Chat = (props) => {
     return (
         <>
             <div className="class-button-chat d-flex justify-content-center align-items-center" ref={chatBtn}>
-                <div className="class-chat-btn d-flex justify-content-center align-items-center mb-2 mr-2" onClick={handleShowChat}>
+                <div className={`class-chat-btn d-flex justify-content-center align-items-center mb-2 mr-2 ${newMessages.size !== 0 ? 'class-chat-btn-new-messages' : ''}`} onClick={handleShowChat} data-before={totalNewMessages}>
                     <img className="class-chat-img " src={require("../static/files/icons/chat.png")} alt="Chat button" />
                 </div>
             </div>
@@ -380,7 +391,7 @@ const Chat = (props) => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} inappropiateWords={inappropiateWords} />
+                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} inappropiateWords={inappropiateWords} chatId={chatId} newMessages={newMessages} setNewMessages={setNewMessages} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">
