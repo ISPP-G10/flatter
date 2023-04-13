@@ -15,6 +15,7 @@ const propertiesAPI = {
       $price: Float!
       $images: [String]
       $maxCapacity: Int!
+      $tags: [String]!
     ) {
       createProperty(
         title: $title
@@ -29,6 +30,7 @@ const propertiesAPI = {
         price: $price
         images: $images
         maxCapacity: $maxCapacity
+        tags: $tags
       ) {
         property {
           title
@@ -50,6 +52,7 @@ const propertiesAPI = {
       $municipality: String!
       $price: Float!
       $images: [String]
+      $tags: [String]!
     ) {
       updateProperty(
         propertyId: $id
@@ -63,6 +66,7 @@ const propertiesAPI = {
         municipality: $municipality
         price: $price
         images: $images
+        tags: $tags
       ) {
         property {
           title
@@ -72,40 +76,40 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-    query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String) {
-      getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
-        properties{
-          id
-          title
-          description
-          dimensions
-          location
-          bedroomsNumber
-          bathroomsNumber
-          tags {
-              name
-              color
+      query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String) {
+        getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag) {
+          properties{
+            id
+            title
+            description
+            dimensions
+            location
+            bedroomsNumber
+            bathroomsNumber
+            tags {
+                name
+                color
+            }
+            province{
+                name
+            }
+            price
+            isOutstanding
+            maxCapacity
+            owner {
+                username
+            }
+            images{
+                image
+            }
+            flatmates{
+                firstName
+                lastName
+            }
           }
-          province{
-              name
-          }
-          price
-          isOutstanding
-          maxCapacity
-          owner {
-              username
-          }
-          images{
-              image
-          }
-          flatmates{
-              firstName
-              lastName
-          }
+          totalCount
         }
-        totalCount
       }
-    }
   `,
   getPropertiesByOwner: gql`
     query getPropertiesByOwner($username: String!) {

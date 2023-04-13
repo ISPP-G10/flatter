@@ -11,10 +11,12 @@ import { useEffect, useRef, useState } from 'react';
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
+import { useNavigate } from 'react-router-dom';
 
 const PublicProfileCard = (props) => {
 
     const client = useApolloClient()
+    const navigate = useNavigate();
 
     const [reload, setReload] = useState(false);
 
@@ -24,7 +26,7 @@ const PublicProfileCard = (props) => {
 
     const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
         variables: {
-            type: "user"
+            type: "U"
         }
     });
 
@@ -36,10 +38,13 @@ const PublicProfileCard = (props) => {
                 users: [props.username, localStorage.getItem('user')]
             }
         }).then((response) => {
-            customAlert("Ya puedes chatear con este usuario")
-            window.location.reload();
+            props.setActivateChat(props.username);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            if (error.message.split("\n")[0].trim() === "The group already exists") {
+                props.setActivateChat(props.username);
+            } else {
+                customAlert(error.message.split("\n")[0]);
+            }
         });
     }
 
@@ -117,8 +122,7 @@ const PublicProfileCard = (props) => {
                                 <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
                             (
-                                // <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
-                                <></>
+                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
                             )
                         }
                     </div>
@@ -138,7 +142,9 @@ const PublicProfileCard = (props) => {
                             props.tags.length !== 0 ? (
                                 props.tags.map((tag, i) => { 
                                     return(
-                                        <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        <div className='tagDiv' onClick={() => navigate(`/users?tag=${tag.name}`)}>
+                                            <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        </div>
                                     )
                                 })
                             ) : (

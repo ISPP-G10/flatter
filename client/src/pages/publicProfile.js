@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { API_SERVER_MEDIA } from "../settings";
 import { useEffect, useState } from "react";
 
-const PublicProfile = () => {
+const PublicProfile = (props) => {
 
     let username = useParams().username;
 
@@ -62,6 +62,7 @@ const PublicProfile = () => {
                     tags={profile.tags} 
                     pic={API_SERVER_MEDIA+profile.profilePicture}
                     refetchUser = {refetch}
+                    setActivateChat={props.setActivateChat}
                 />
                 <ReviewsBox average={averageRating} total={totalRatings} />
                 <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} canSeeSelfComments={canSeeSelfComments} isMe={username===localStorage.getItem("user")}/>

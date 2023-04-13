@@ -1,12 +1,20 @@
 import base64, os, re, jwt, graphene
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
-from authentication.models import FlatterUser, Tag, Role
-from authentication.types import FlatterUserType, IncidentType, RequestType
-from mainApp.models import Review
+from authentication.models import FlatterUser, Tag, Role, UserPreferences
+from authentication.types import FlatterUserType, IncidentType, RequestType, UserPreferencesType
+from mainApp.models import Review, Property
 from social.models import Group, Message
 from social.models import Incident, Request
 from social.types import ReviewType, GroupType, MessageType
+
+
+environment = os.environ.get("DJANGO_ENV", "development")
+
+if environment == 'development':
+    from backend.settings.development import GRAPHQL_JWT
+else:
+    from backend.settings.production import GRAPHQL_JWT
 
 GROUP_DOES_NOT_EXIST = 'Group does not exist'
 
@@ -421,7 +429,7 @@ class EditUserPublicMutation(graphene.Mutation):
         for tag in tags:
             if not _exists_tag(tag):
                 raise ValueError(_(f"La etiqueta {tag} no existe"))
-            user_tags.append(Tag.objects.get(name=tag))
+            user_tags.append(Tag.objects.get(name=tag, entity='U'))
 
         user_selected.tags.set(user_tags)
         
@@ -547,6 +555,8 @@ class CreateReview(graphene.Mutation):
         relationship = kwargs.get('relationship', '').strip()
         user_token = kwargs.get('user_token', '').strip()
 
+
+
         try:
             evaluator_user = FlatterUser.objects.get(username=evaluator_user)
         except Exception:
@@ -565,14 +575,16 @@ class CreateReview(graphene.Mutation):
         except Exception:
             raise ValueError(_("El usuario valorado no existe"))
 
+
         if valued_user == evaluator_user:
             raise ValueError(_("No puedes valorarte a ti mismo"))
 
         if len(relationship) > 1:
-            relationship = _parse_relationship(relationship.lower().strip())
-
-        if not relationship:
-            raise ValueError(_("La relación entre usuarios no es válida"))
+            relationships = get_relationships_between_users(evaluator_user.username, valued_user.username)
+            if relationship not in relationships:
+                raise ValueError(_("La relación entre usuarios no es válida"))
+            else:
+                relationship = _parse_relationship(relationship.lower().strip())
 
         if Review.objects.filter(valued_user=valued_user, evaluator_user=evaluator_user).exists():
             raise ValueError(_("Ya has valorado a este usuario"))
@@ -582,6 +594,33 @@ class CreateReview(graphene.Mutation):
 
         return CreateReview(review=review)
 
+class EditUserPreferencesMutation(graphene.Mutation):
+    class Input():
+        username = graphene.String(required=True)
+        inappropiate_language = graphene.Boolean(required=False)
+        user_token = graphene.String(required=False)
+    
+    user_preferences = graphene.Field(UserPreferencesType)
+    
+    @staticmethod
+    def mutate(root, info, **kwargs):
+        username = kwargs.get('username', '').strip()
+        inappropiate_language = kwargs.get('inappropiate_language', False)
+        user_token = kwargs.get('user_token', '').strip()
+        
+        if not username or not FlatterUser.objects.filter(username=username).exists():
+            raise ValueError(_("El usuario no existe"))
+        
+        user_selected = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user_selected)
+        
+        user_preferences = UserPreferences.objects.get(user=user_selected)
+        user_preferences.inappropiate_language = inappropiate_language
+        user_preferences.save()
+        
+        return EditUserPreferencesMutation(user_preferences=user_preferences)
+    
 
 class SocialMutation(graphene.ObjectType):
     edit_user_public = EditUserPublicMutation.Field()
@@ -596,6 +635,7 @@ class SocialMutation(graphene.ObjectType):
     create_message = CreateMessageMutation.Field()
     leave_group = LeaveGroupMutation.Field()
     add_users_group = AddUsersGroupMutation.Field()
+    edit_user_preferences = EditUserPreferencesMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
@@ -653,14 +693,61 @@ def parse_roles(roles):
 
 
 def _exists_tag(tag):
-    return Tag.objects.filter(name=tag).exists()
+    return Tag.objects.filter(name=tag, entity='U').exists()
 
 
 def check_token(user_token: str, user: FlatterUser):
     if user_token:
         try:
-            user_token = jwt.decode(user_token, 'my_secret', algorithms=['HS256'])
+            user_token = jwt.decode(user_token, GRAPHQL_JWT['JWT_SECRET_KEY'], algorithms=['HS256'])
             if user_token['username'] != user.username:
                 raise ValueError(_("El token no es válido"))
+
+            date_exp = datetime.utcfromtimestamp(user_token['exp'])
+
+            now = datetime.utcnow()
+
+            if now > date_exp:
+                raise ValueError(_("El token ha expirado"))
+
+            date_cre = datetime.utcfromtimestamp(user_token['origIat'])
+
+            time_delta = GRAPHQL_JWT['JWT_EXPIRATION_DELTA']
+
+            if date_exp - date_cre > time_delta:
+                raise ValueError(_("El token no es válido"))
+
         except jwt.exceptions.DecodeError:
             raise ValueError(_("El token no es válido"))
+
+def get_relationships_between_users(user_login, user_valued):
+    relationships = []
+    user_login = FlatterUser.objects.get(username=user_login)
+    user_valued = FlatterUser.objects.get(username=user_valued)
+
+    if user_login == user_valued:
+        raise ValueError(_('No puedes tener una relación contigo mismo'))
+
+
+
+    if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
+        properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
+        if properties.exists():
+            relationships.append('Propietario')
+
+    if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='OWNER').exists():
+        properties = Property.objects.filter(owner=user_valued).filter(flatmates__in=[user_login])
+        if properties.exists():
+            relationships.append('Inquilino')
+
+    if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='RENTER').exists():
+        properties = Property.objects.filter(flatmates__in=[user_login]).filter(flatmates__in=[user_valued])
+        if properties.exists():
+            relationships.append('Compañero')
+
+    if len(relationships) == 0:
+        relationships = ['Amigo', 'Excompañero']
+
+
+
+    return relationships

@@ -4,22 +4,29 @@ import FlatterPage from "../sections/flatterPage";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterUsersForm";
-import {useNavigate} from 'react-router-dom';
-import {useApolloClient} from '@apollo/client';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useApolloClient, useQuery} from '@apollo/client';
 import usersAPI from "../api/usersAPI";
 import UserCard from "../components/users/userCards";
 import FlatterForm from "../components/forms/flatterForm";
 import SolidButton from "../sections/solidButton";
 import customAlert from "../libs/functions/customAlert";
+import tagsAPI from "../api/tagsAPI";
 
 const SearchUsers = () => {
 
+  const location = useLocation();
   const PAGE_SIZE = 5;
 
   const query = useURLQuery();
   const navigator = useNavigate();
   const client = useApolloClient();
   const filterFormRef = useRef(null);
+  const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
+    variables: {
+        type: "U"
+    }
+  }); 
 
   let [paginationIndex, setPaginationIndex] = useState(query.get("page") && parseInt(query.get("page")) > 0 ? parseInt(query.get("page")) : 1);
   
@@ -33,6 +40,22 @@ const SearchUsers = () => {
     owner: query.get("owner") ? (query.get("owner") === 'true' ? true : false) : null,
   });
 
+  let [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const min = parseInt(searchParams.get("min")) || 0;
+    const max = parseInt(searchParams.get("max")) || 5;
+    const tag = searchParams.get("tag") || "";
+    const owner = searchParams.get("owner")
+      ? searchParams.get("owner") === "true"
+        ? true
+        : false
+      : null;
+
+    setFilterValues({ min, max, tag, owner });
+  }, [location]);
+
   function handleFilterForm({values}) {
 
     if(!filterFormRef.current.validate()) return;
@@ -40,7 +63,7 @@ const SearchUsers = () => {
     setFilterValues({
         min: values.min_rating,
         max: values.max_rating,
-        tag: values.tag,
+        tag: values.tag === '-'? null : values.tag,
         owner: values.role === 'Propietario' ? true : values.role === 'Inquilino' ? false : null
     });
 
@@ -81,8 +104,19 @@ const SearchUsers = () => {
       customAlert("¡Ups! No se han encontrado usuarios que cumplan con estos requisitos");
     })
   }, [filterValues, paginationIndex]);
+  
+  
+  useEffect(() => { 
+    if (!userTagsLoading) { 
+        filterInputs.map((input) => { 
+            if(input.name === 'tag') { 
+              const tagNames = userTagsData.getTagsByType.map(tag => tag.name);
+              input.values = ['-'].concat(tagNames);            
+            } 
+        }) 
+      }
+    }, [userTagsLoading, userTagsData]);
 
-  return (
     <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Buscar a otros usuarios</h1>

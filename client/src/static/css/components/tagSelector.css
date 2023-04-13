@@ -2,3 +2,27 @@
     height: 50px;
     overflow: scroll !important;
 }
+
+.css-12pdijm-control:hover{
+    border-color: var(--flatter-purple-color) !important;
+}
+
+.css-1jqq78o-placeholder{
+    color: var(--color-label) !important;
+}
+
+.css-1xc3v61-indicatorContainer{
+    color: var(--color-label) !important;
+}
+
+.css-1xc3v61-indicatorContainer:hover{
+    color: var(--color-label) !important;
+}
+
+.css-1u9des2-indicatorSeparator{
+    background-color: var(--color-label) !important;
+}
+
+.css-1u9des2-indicatorSeparator:hover{
+    background-color: var(--color-label) !important;
+}

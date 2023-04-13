@@ -4,8 +4,8 @@ export const filterInputs = [
     {
         tag: "Etiqueta",
         name: "tag",
-        type: "text",
-        defaultValue: "",
+        type: "select",
+        values: [],
         isRequired: false,
         validators: [
             registerValidators.noNumbersValidator,

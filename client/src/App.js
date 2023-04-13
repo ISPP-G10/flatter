@@ -2,6 +2,7 @@ import './static/css/globals.css';
 import "./static/css/legacyBootstrap.css";
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useState } from 'react';
 
 import LandingPage from './pages/landingPage';
 import Error from './pages/error';
@@ -21,6 +22,7 @@ import Example from './pages/example';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';
+import RecommendedUsers from './pages/recommendedUsers';
 
 function App() {
 
@@ -28,6 +30,8 @@ function App() {
     "client-id": `${process.env.REACT_APP_PAYPAL_CLIENT_ID}`,
     currency: "EUR",
   };
+  
+  const [activateChat, setActivateChat] = useState(false);
 
   return (
     <PayPalScriptProvider options={initialOptions}>
@@ -52,12 +56,13 @@ function App() {
           <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
           <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
           <Route path='/requests' element={<> <PersonalRequests/> </>}/>
-          <Route path='/profile' element={<> <PublicProfile/> </>}/>
-          <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
+          <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
+          <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
           <Route path='/me' element={<> <AccountSettings/> </>}/>
           <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
           <Route path='/pricing' element={<> <PricingPage /> </>} />
           <Route path='/shop' element={<> <ShopPage /> </>} />
+          <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
           <Route path='/ejemplo' element={<> <Example/> </>}/>
           <Route path="*" element={<Error/>}/>
         </Routes>

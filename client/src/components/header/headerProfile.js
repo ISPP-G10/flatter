@@ -19,7 +19,10 @@ const HeaderProfile = ({user}) => {
     if (loading) return <p>Loading...</p>
 
     if (error) {
-        localStorage.clear();
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("inappropiateLanguage");
+        localStorage.removeItem("roles");
         navigator("/ups");
     }
 

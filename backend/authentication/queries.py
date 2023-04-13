@@ -48,9 +48,9 @@ class AuthenticationQuery(object):
 
     q = Q()
 
-    if tag:
-      q &= Q(tags__icontains = tag)
-    
+    if tag:    
+      q &= Q(tags__name__icontains = tag)
+     
     if owner is not None and owner:
       q &= Q(roles__in = [Role.objects.get(role="OWNER").pk])
     elif owner is not None:

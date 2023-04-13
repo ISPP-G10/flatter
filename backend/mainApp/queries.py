@@ -16,7 +16,8 @@ class MainAppQuery(object):
     get_properties = graphene.Field(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
-                                                              location=graphene.String(), province=graphene.String(), page_number = graphene.Int(), page_size = graphene.Int())
+                                                              location=graphene.String(), province=graphene.String(), 
+                                                              page_number = graphene.Int(), page_size = graphene.Int())
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
     get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
@@ -44,8 +45,7 @@ class MainAppQuery(object):
         return property.tags.all()
 
     def resolve_get_filtered_properties_by_price_and_city(self, info, page_number=1, page_size=10 ,max_price=None, min_price=None, municipality=None,
-                                                          location=None, province=None):
-        
+                                                          location=None, province=None, tag=None):
         q = Q()
 
         if min_price and max_price and max_price < min_price:
@@ -79,7 +79,10 @@ class MainAppQuery(object):
 
         if location:
             q &= Q(location=location)
-        
+
+        if tag:
+            q &= Q(tags__name__icontains = tag)
+            
         properties = Property.objects.filter(q)
         total_count = len(properties)
 

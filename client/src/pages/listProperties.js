@@ -11,10 +11,12 @@ import propertiesAPI from "../api/propertiesAPI";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
 import { filterInputs } from "../forms/filterPropertiesForm";
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
+import provincesAPI from "../api/provincesAPI";
+import tagsAPI from "../api/tagsAPI";
 
 const ListProperties = () => {
 
@@ -24,11 +26,23 @@ const ListProperties = () => {
   const navigator = useNavigate();
   const client = useApolloClient();
   const filterFormRef = useRef(null);
+  const {data: provincesData, loading: provincesLoading} = useQuery(provincesAPI.getAllProvinces);
+  const [ optionMunicipality, setOptionMunicipality ] = useState([]);
+  const [configured, setConfigured] = useState(false);
+  const [inputsChanged, setInputsChanged] = useState(false);
+  const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
+    variables: {
+        type: "P"
+    }
+  }); 
+
 
   let [filterValues, setFilterValues] = useState({
     min: parseInt(query.get("min")),
     max: parseInt(query.get("max")),
     municipality: query.get("municipality") ?? '',
+    province: query.get("province") ?? '',
+    tag: query.get("tag") ?? '',
   });
 
   let [paginationIndex, setPaginationIndex] = useState(query.get("page") && parseInt(query.get("page")) > 0 ? parseInt(query.get("page")) : 1);
@@ -39,6 +53,19 @@ const ListProperties = () => {
   const [numberOfFilteredProperties, setNumberOfFilteredProperties] = useState(0);
 
   const modalRef = useRef(null);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const min = parseInt(searchParams.get("min")) || 0;
+    const max = parseInt(searchParams.get("max")) || 2000;
+    const tag = searchParams.get("tag") || "";
+    const province = searchParams.get("province") || "";
+    const municipality = searchParams.get("municipality") || "";
+
+    setFilterValues({ min, max, tag, province, municipality });
+  }, [location]);
 
   function handleFilterForm({values}) {
 
@@ -47,7 +74,9 @@ const ListProperties = () => {
     setFilterValues({
       min: values.min_price,
       max: values.max_price,
-      municipality: values.municipality
+      municipality: values.municipality==='-' ? '' : values.municipality,
+      province: values.province === '-' ? '' : values.province,
+      tag: values.tag === '-'? null : values.tag,
     });
   }
 
@@ -72,6 +101,17 @@ const ListProperties = () => {
 
   }, [filterValues, loading]);
 
+  useEffect(() => { 
+    if (!propertyTagsLoading) { 
+        filterInputs.map((input) => { 
+            if(input.name === 'tag') { 
+              const tagNames = propertyTagsData.getTagsByType.map(tag => tag.name);
+              input.values = ['-'].concat(tagNames);            
+            } 
+        }) 
+      }
+    }, [propertyTagsLoading, propertyTagsData]);
+
   useEffect(() => {
 
     client.query({
@@ -80,6 +120,8 @@ const ListProperties = () => {
         minPrice: filterValues.min,
         maxPrice: filterValues.max,
         municipality: filterValues.municipality,
+        province: filterValues.province,
+        tag: filterValues.tag,
         pageNumber: paginationIndex,
         pageSize: PAGE_SIZE
       }
@@ -106,6 +148,56 @@ const ListProperties = () => {
     
     setFormKey((prevKey) => prevKey + 1);
   }
+
+  useEffect(() => { 
+    if(!provincesLoading){
+      filterInputs.map((input) => {
+        if(input.name === 'province') input.values = ['-'].concat(provincesData.getProvinces.map(province => province.name));
+      });
+    }
+
+  }, [provincesLoading]);
+
+    useEffect(() => {
+      if(optionMunicipality.length > 0){
+        filterInputs.map((input) => {
+          if(input.name === 'municipality') {
+            input.values = ["-"].concat(optionMunicipality);
+          }
+        });
+        setInputsChanged(!inputsChanged);
+      }
+    }, [optionMunicipality]);
+  
+
+    useEffect(() => {
+      if(!configured){
+        setTimeout(() => {
+          let provinceInput = document.querySelector('select#province');
+    
+          provinceInput.addEventListener('change', () => {
+    
+            client.query({
+              query: provincesAPI.getMunicipalitiesByProvince,
+              variables: {
+                province: provinceInput.value
+              }
+            })
+            .then(response => {
+              if(provinceInput.value !== "-"){
+                setOptionMunicipality(response.data.getMunicipalitiesByProvince.map(municipality => municipality.name));
+              }else{
+                setOptionMunicipality(["-"]);
+              }
+            })
+            .catch(error => console.log(error));
+    
+          });
+  
+          setConfigured(true);
+        }, 1000);
+      }
+    }, [inputsChanged]);
 
   if (loading) 
     return <p>Loading...</p>;
@@ -154,7 +246,9 @@ const ListProperties = () => {
                   <div className="property-meta">
                     <div className="meta-right">
                       {property.tags && property.tags.map((tag, index) => (
-                        <Tag key={ index } name={tag.name} color={tag.color}></Tag>
+                        <div className="tagDiv" onClick={() => navigator(`/search?tag=${tag.name}`)}>
+                          <Tag key={ index } name={tag.name} color={tag.color}></Tag>
+                        </div>
                       ))}
                     </div>
     

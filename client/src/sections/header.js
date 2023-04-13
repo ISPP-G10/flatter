@@ -56,10 +56,13 @@ const Header = ({scrollY, userLogged}) => {
             let token = response.data.tokenAuth.token;
             let username = response.data.tokenAuth.user.username;
             let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+            let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
+            localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
+            localStorage.setItem('notificationsAllowed', true);
 
             navigator(0);
 
@@ -93,10 +96,13 @@ const Header = ({scrollY, userLogged}) => {
             let token = response.data.tokenAuth.token;
             let username = response.data.tokenAuth.user.username;
             let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+            let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', username);
             localStorage.setItem('roles', roles);
+            localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
+            localStorage.setItem('notificationsAllowed', true);
 
             navigator(0);
         }).catch((error) => {
@@ -144,6 +150,7 @@ const Header = ({scrollY, userLogged}) => {
                                         localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
                                         <li><Link to="/properties">Mis viviendas</Link></li>
                                     }
+                                    <li><Link to="/recommendations">Usuarios recomendados</Link></li>
                                     {
                                         localStorage.getItem("roles") && localStorage.getItem("roles").includes("RENTER") &&
                                         <li><Link to="/requests">Notificaciones</Link></li>

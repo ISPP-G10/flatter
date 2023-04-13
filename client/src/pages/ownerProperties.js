@@ -139,7 +139,9 @@ const OwnerProperties = ({}) => {
                 {prop && prop.tags.map((tag,index) => {
                   return(
                     <div className="etiquetaindv" key={index}>
-                      <Tag name={tag.name} color={tag.color}/>
+                      <div className="tagDiv" onClick={() => navigate(`/search?tag=${tag.name}`)}>
+                        <Tag name={tag.name} color={tag.color}/>
+                      </div>
                     </div> 
                   ); 
                 })

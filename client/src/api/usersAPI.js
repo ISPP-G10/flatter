@@ -16,6 +16,9 @@ const usersAPI = {
                           roles{
                             role
                           }
+                          userpreferences{
+                            inappropiateLanguage
+                          }
                         }
                       }
                 }
@@ -42,6 +45,9 @@ const usersAPI = {
                           username
                           roles{
                             role
+                          }
+                          userpreferences{
+                            inappropiateLanguage
                           }
                         }
                       }
@@ -151,6 +157,10 @@ const usersAPI = {
                     profilePicture
                     profession
                     averageRating
+                    tags{
+                        name
+                        color
+                    }
                 },
                 totalCount
             }
@@ -212,6 +222,30 @@ const usersAPI = {
             }
         }
     `,
+    getRelationships: gql`
+        query getRelationships($userLogin: String!, $userValued: String!){
+            getRelationshipsBetweenUsers(userLogin: $userLogin, userValued: $userValued)
+        }
+    `,
+
+    getRecomendedUsers: gql`
+        query getRecomendedUsers($username: String!){
+            getUsersRecommendations(username: $username){
+                id
+                username
+                profilePicture
+                firstName
+                lastName
+                profession
+                averageRating
+                tags{
+                    name
+                    color
+                }
+            }
+        }
+    `,
+
     getPlans: gql`
     query {
         getPlans {
@@ -237,6 +271,17 @@ const usersAPI = {
             }
         }
     `,
+
+    updateUserPreferences: gql`
+        mutation editUserPreferences($username: String!, $inappropiateLanguage: Boolean!){
+            editUserPreferences(username: $username, inappropiateLanguage: $inappropiateLanguage){
+                userPreferences{
+                    inappropiateLanguage
+                }   
+            }
+        }
+    `,
+
     changeContract: gql`
         mutation changeContract($numDaysSelected: Int!, $planType: String!, $token: String!, $username: String!) {
             changeContract(numDaysSelected: $numDaysSelected, planType: $planType, token: $token, username: $username) {
@@ -257,6 +302,6 @@ const usersAPI = {
             }
         }
     `,
-}   
+}
 
 export default usersAPI;

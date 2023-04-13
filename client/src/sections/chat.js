@@ -4,15 +4,19 @@ import Groups from "../components/chat/groups";
 import Settings from "../components/chat/settings";
 import "../static/css/sections/chat.css";
 import socialLib from "../libs/socialLib";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
+import chatsAPI from "../api/chatsAPI";
 
-const Chat = () => {
+const Chat = (props) => {
 
-    const [showChat, setShowChat] = useState(true);
+    const [showChat, setShowChat] = useState(false);
     const [showGroups, setShowGroups] = useState(false);
     const [listHeights, setListHeights] = useState([]);
+    const [inappropiateWords, setInappropiateWords] = useState([]);
     const [changeTab, setChangeTab] = useState(true);
     const [chatId, setChatId] = useState(null);
+    let [newMessages, setNewMessages] = useState(new Map());
+    const [totalNewMessages, setTotalNewMessages] = useState(0);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
     const client = useApolloClient();
 
@@ -32,9 +36,27 @@ const Chat = () => {
     let chatHeaderActive = useRef();
     let nodesList = [];
 
+    const {data, loading} = useQuery(chatsAPI.getInappropiateLanguage, {
+        variables: {
+            username: localStorage.getItem('user')
+        }
+    });
+
     const sendMessage = () => {
         socialLib.sendMessage(client, chatInput, chatId, MAX_LEN);
     }
+
+    useEffect(() => {
+        let sum = 0;
+        if (newMessages.size > 0) {
+            newMessages.forEach(value => sum += value)
+        }
+        setTotalNewMessages(sum);
+    }, [newMessages])
+
+    useEffect(() => {
+        console.log(props.activateChat)
+    }, [props.activateChat])
 
     const setChangeTabTrue = () => {
         setChangeTab(true);
@@ -45,9 +67,14 @@ const Chat = () => {
     }
 
     const handleShowChat = () => {
-
         setShowChat(!showChat);
+    };
 
+    const handleShowGroup = () => {
+        setShowGroups(!showGroups);
+    };
+
+    useEffect(() => {
         if (showChat) {
             chatSlide.current.style.display = "block";
             chatSlide.current.style.top = (window.scrollY+75) + "px";
@@ -95,14 +122,13 @@ const Chat = () => {
             }
         } else {
             chatSlide.current.style.display = "none";
+            if (chatId) setShowGroups(false);
+            setChatId(null);
         }
-    };
+    }, [showChat]);
 
-    const handleShowGroup = () => {
-
-        setShowGroups(!showGroups);
-
-        if (showGroups) {
+    useEffect(() => {
+        if (!showGroups) {
             chat.current.style.display = "none";
             chatWrite.current.style.display = "none";
             chatSlideHeader.current.style.display = "none";
@@ -130,7 +156,7 @@ const Chat = () => {
             groups.current.style.maxHeight = "79%";
             groups.current.style.marginTop = "130px";
         }
-    };
+    }, [showGroups]);
 
     const setInputHeight = (e) => {
         let chatInputHeight = chatInput.current.offsetHeight;
@@ -282,9 +308,9 @@ const Chat = () => {
         }
 
         if (groups.current.hasChildNodes()) {
-            for (let i = 0; i < nodesList.length; i++) {
-                parent.appendChild(nodesList[i]);
-                if (nodesList[i] === nodesList[nodesList.length - 1]) {
+            for (let node of nodesList) {
+                parent.appendChild(node);
+                if (node === nodesList[nodesList.length - 1]) {
                     nodesList = [];
                 }
             }
@@ -322,10 +348,16 @@ const Chat = () => {
         }
     }
 
+    useEffect(() => {
+        if(!loading) {
+            setInappropiateWords(data.getInappropiateLanguage.map(w => w.word.toLowerCase().trim()));
+        }
+    }, [loading, data]);
+
     return (
         <>
             <div className="class-button-chat d-flex justify-content-center align-items-center" ref={chatBtn}>
-                <div className="class-chat-btn d-flex justify-content-center align-items-center mb-2 mr-2" onClick={handleShowChat}>
+                <div className={`class-chat-btn d-flex justify-content-center align-items-center mb-2 mr-2 ${newMessages.size !== 0 ? 'class-chat-btn-new-messages' : ''}`} onClick={handleShowChat} data-before={totalNewMessages}>
                     <img className="class-chat-img " src={require("../static/files/icons/chat.png")} alt="Chat button" />
                 </div>
             </div>
@@ -353,7 +385,7 @@ const Chat = () => {
                     </div>
                 </div>
                 <div ref={chat} className="chat">
-                    <Conversation chatId={chatId} />
+                    <Conversation chatId={chatId} parentRef={chat} inappropiateWords={inappropiateWords} />
                 </div>
                 <div ref={chatWrite}>
                     <div className="d-flex justify-content-center align-items-center mt-3">
@@ -363,7 +395,7 @@ const Chat = () => {
                 </div>
                 <div ref={groups} className="class-chat-groups" onScroll={searchScroll}>
                     <div onClick={handleShowGroup}>
-                        <Groups setChatId={setChatId} />
+                        <Groups activateChat={props.activateChat} setActivateChat={props.setActivateChat} setChatId={setChatId} setShowGroups={setShowGroups} setShowChat={setShowChat} setChangeTab={setChangeTab} inappropiateWords={inappropiateWords} chatId={chatId} newMessages={newMessages} setNewMessages={setNewMessages} />
                     </div>
                 </div>
                 <div ref={settings} className="class-chat-settings">
