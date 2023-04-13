@@ -187,6 +187,7 @@
 
 .content.content-list .request-footer > div > .request-user-picture:hover > img  {
     border: 3px solid green;
+    cursor: pointer;
 }
 
 .content.content-list .request-footer > div > .request-property-picture > img {
@@ -200,6 +201,7 @@
 
 .content.content-list .request-footer > div > .request-property-picture:hover > img  {
     border: 3px solid green;
+    cursor: pointer;
 }
 
 .content.content-list > .property-requests > .property-request .request-information {
