@@ -1,6 +1,6 @@
 import logging
-from social.models import Group, Message, Incident, Request
-from authentication.models import FlatterUser
+from social.models import Group, Message
+from authentication.models import FlatterUser, Role
 from mainApp.models import Review
 from backend.schema import schema
 import json
@@ -49,6 +49,7 @@ class TestMutations(GraphQLTestCase):
         cls.review1 = Review.objects.create(text="Test review", rating=5, evaluator_user=cls.user1, valued_user=cls.user2, relationship='A')
         cls.review1.save()
         
+        cls.role1 = Role.objects.create(role='U')
         
 
     @classmethod
@@ -62,10 +63,12 @@ class TestMutations(GraphQLTestCase):
         Group.objects.filter(name='test_mutations_group_1').delete()
         Group.objects.filter(name='Grupo añade usuarios').delete()
         Group.objects.filter(name='Grupo elimina usuarios').delete()
+        Review.objects.filter(text='Test review').delete()
+        Role.objects.filter(role='U').delete()
         
 
         
-    #TESTS DE GRUPOS    
+    #TESTS DE GRUPOS INDIVIDUALES
     ### Test de mutación de crear grupo  +++ Caso positivo: se crea un grupo individual con dos usuarios
     def test_create_individual_group_positive(self):
         response = self.query('''
@@ -90,44 +93,10 @@ class TestMutations(GraphQLTestCase):
         try:
             content = json.loads(response.content)
         except json.JSONDecodeError as e:
-            print(response.content)
             raise e
         
         self.assertResponseNoErrors(response)
         #Group.objects.filter(users=[self.user1.id, self.user2.id]).delete()
-
-    
-    ### Test de mutación de crear grupo  +++ Caso positivo: se crea un grupo no individual con tres usuarios
-    def test_create_non_individual_group_positive(self):
-        return None #No se pueden crear grupos con más de 2 usuarios con la mutation de crear grupo
-        response = self.query('''
-            mutation test{
-                createIndividualGroup(
-                    username: "%s"
-                    users: ["%s", "%s", "%s"]
-                ){
-                    group{
-                        name
-                        individual
-                        users{
-                            id
-                            username
-                        }
-                    }
-                }
-            }
-        ''' % (self.user1.username, self.user1.username, self.user2.username, self.user3.username)
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseNoErrors(response)
-        Group.objects.filter(users=[self.user1.id, self.user2.id, self.user3.id]).delete()
-        
 
 
     ### Test de mutación de crear grupo  --- Caso negativo: se intenta crear un grupo con un nombre de más de 30 caracteres
@@ -155,7 +124,6 @@ class TestMutations(GraphQLTestCase):
         try:
             content = json.loads(response.content)
         except json.JSONDecodeError as e:
-            print(response.content)
             raise e
         
         self.assertResponseHasErrors(response)
@@ -186,13 +154,43 @@ class TestMutations(GraphQLTestCase):
         try:
             content = json.loads(response.content)
         except json.JSONDecodeError as e:
-            print(response.content)
             raise e
         
         self.assertResponseHasErrors(response)
         self.assertEqual(content['errors'][0]['message'], 'Some users do not exist')
 
 
+
+    #TESTS DE GRUPOS NO INDIVIDUALES
+    ### Test de mutación de crear grupo  +++ Caso positivo: se crea un grupo no individual con tres usuarios
+    def test_create_non_individual_group_positive(self):
+        return None #Aun no existe la mutación de crear grupo no individual
+        response = self.query('''
+            mutation test{
+                createIndividualGroup(
+                    username: "%s"
+                    users: ["%s", "%s", "%s"]
+                ){
+                    group{
+                        name
+                        individual
+                        users{
+                            id
+                            username
+                        }
+                    }
+                }
+            }
+        ''' % (self.user1.username, self.user1.username, self.user2.username, self.user3.username)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        
 
 
     #TESTS DE MENSAJES
@@ -909,10 +907,334 @@ class TestMutations(GraphQLTestCase):
 
 
 
-    #TESTS DE EDITAR USUARIO
+    #TESTS DE EDITAR USUARIO PRIVADO
     ### Test de mutación de editar usuario  +++ Caso positivo: se edita el perfil privado de un usuario
+    def test_edit_user_private_positive(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.user1.email, self.user1.first_name, self.user1.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['editUserPrivate']['user']['username'], self.user1.username)
+        self.assertEqual(content['data']['editUserPrivate']['user']['email'], self.user1.email)
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un email que ya existe
+    def test_edit_user_private_negative_email_already_exists(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user1.email, self.user2.first_name, self.user2.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Este email ya está registrado. Por favor, elige otro.')
+
+
+
+    #TESTS DE EDITAR USUARIO PÚBLICO
+    ### Test de mutación de editar usuario  +++ Caso positivo: se edita el perfil público de un usuario
+    def test_edit_user_public_positive(self):
+        response = self.query('''
+            mutation test{
+                editUserPublic(
+                username: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                tags: []
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['editUserPublic']['user']['username'], self.user1.username)
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un nombre muy largo
+    def test_edit_user_public_negative_long_name(self):
+        response = self.query('''
+            mutation test{
+                editUserPublic(
+                username: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                tags: []
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user1.username, 'a'*51, 'a'*51)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El nombre debe tener entre 3 y 50 caracteres')
+
+    
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un tag que no existe
+    def test_edit_user_public_negative_tag_does_not_exist(self):
+        response = self.query('''
+            mutation test{
+                editUserPublic(
+                username: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                tags: ["%s"]
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name, 'tag')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'La etiqueta tag no existe')
 
 
     #TESTS DE CAMBIAR CONTRASEÑA
+    ### Test de mutación de cambiar contraseña  +++ Caso positivo: se cambia la contraseña de un usuario
+    def test_change_password_positive(self):
+        response = self.query('''
+            mutation test{
+                changeUserPassword(
+                username: "%s"
+                oldPassword: "%s"
+                newPassword: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, "1234", "new_password")
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['changeUserPassword']['user']['username'], self.user1.username)
+
+
+    ### Test de mutación de cambiar contraseña  --- Caso negativo: se intenta cambiar la contraseña de un usuario con una contraseña antigua incorrecta
+    def test_change_password_negative_wrong_old_password(self):
+        response = self.query('''
+            mutation test{
+                changeUserPassword(
+                username: "%s"
+                oldPassword: "%s"
+                newPassword: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, "wrong_password", self.user1.password)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'La contraseña actual no es correcta')
+
+
+
     #TESTS DE AÑADIR ROL A USUARIO
+    ### Test de mutación de añadir rol a usuario  +++ Caso positivo: se añade un rol a un usuario
+    def test_add_role_positive(self):
+        response = self.query('''
+            mutation test{
+                addRoleToUser(
+                username: "%s"
+                role: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.role1.role)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['addRoleToUser']['user']['username'], self.user1.username)
+
+
+    ### Test de mutación de añadir rol a usuario  --- Caso negativo: se intenta añadir un rol que no existe a un usuario
+    def test_add_role_negative_role_does_not_exist(self):
+        response = self.query('''
+            mutation test{
+                addRoleToUser(
+                username: "%s"
+                role: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, 'role')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El rol no existe')
+
+
+
     #TESTS DE ELIMINAR ROL DE USUARIO
+    ### Test de mutación de eliminar rol de usuario  +++ Caso positivo: se elimina un rol de un usuario
+    def test_remove_role_positive(self):
+        response = self.query('''
+            mutation test{
+                deleteRoleToUser(
+                username: "%s"
+                role: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, self.role1.role)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseNoErrors(response)
+        self.assertEqual(content['data']['deleteRoleToUser']['user']['username'], self.user1.username)
+
+
+    ### Test de mutación de eliminar rol de usuario  --- Caso negativo: se intenta eliminar un rol que no existe de un usuario
+    def test_remove_role_negative_role_does_not_exist(self):
+        response = self.query('''
+            mutation test{
+                deleteRoleToUser(
+                username: "%s"
+                role: "%s"
+                ){
+                    user{
+                        id
+                        username
+                    }
+                }
+            }
+            ''' % (self.user1.username, 'role')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El rol no existe')
