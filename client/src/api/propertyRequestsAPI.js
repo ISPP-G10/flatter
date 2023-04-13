@@ -24,7 +24,7 @@ const propertyRequestsAPI = {
       }
 `,
     updateStatusPetition: gql`
-    mutation updateStatusPetition($petitionId: Int!, $statusPetition: Boolean!){
+    mutation updateStatusPetition($petitionId: Int!, $statusPetition: String!){
         updateStatusPetition(petitionId: $petitionId, statusPetition: $statusPetition){
             petition{
               status

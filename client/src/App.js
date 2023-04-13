@@ -16,10 +16,9 @@ import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
+import PersonalRequests from './pages/personalRequests';
 import Example from './pages/example';
-
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
 import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';
 
@@ -52,6 +51,7 @@ function App() {
           <Route path="/properties" element={<> <OwnerProperties /> </>}/>
           <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
           <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+          <Route path='/requests' element={<> <PersonalRequests/> </>}/>
           <Route path='/profile' element={<> <PublicProfile/> </>}/>
           <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
           <Route path='/me' element={<> <AccountSettings/> </>}/>

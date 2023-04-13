@@ -7,7 +7,7 @@ export const filterRequestsValidators = {
 
     validStatus: {
         validate: (value) => {
-            let validStatus = ['Aceptadas', 'Rechazadas', 'Pendientes', 'Todas'];
+            let validStatus = ['Aceptadas', 'Rechazadas', 'Pendientes', 'Todas', 'Pagadas'];
             return validStatus.includes(value);
         },
         message: "El campo debe ser un estado válido",

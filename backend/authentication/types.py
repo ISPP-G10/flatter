@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import graphene
+from graphene import ObjectType, List, Int, Boolean
 from graphene_django.types import DjangoObjectType
 from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract
 from social.models import Incident, Request
@@ -57,6 +58,12 @@ class FlatterUserType(DjangoObjectType):
 
     today = datetime.now()
     return today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
+
+class FlatterUserPageType(ObjectType):
+    flatter_users = List(FlatterUserType)
+    total_count = Int()
+    has_next = Boolean()
+    has_previous = Boolean()
     
 class RoleType(DjangoObjectType):
   class Meta:
