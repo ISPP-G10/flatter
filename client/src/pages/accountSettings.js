@@ -16,12 +16,13 @@ import Request from '../components/userSettings/request';
 const AccountSettings = () => {
 
     let [setting, setSetting] = useState('account');
+    let userToken = localStorage.getItem("token", '');
     
     const navigator = useNavigate();
     const correctModalRef = useRef(null);
 
     const { loading, data } = useQuery(usersAPI.getUserByUsernameSettings, {
-        variables: {username: localStorage.getItem('user', '')}
+        variables: {username: localStorage.getItem('user', ''), userToken: userToken},
     });
 
     function logout(){

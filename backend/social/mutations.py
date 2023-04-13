@@ -35,10 +35,6 @@ class CreateIndividualGroupMutation(graphene.Mutation):
         username = kwargs.get('username', '').strip()
         users = kwargs.get('users', [])
         user_token = kwargs.get('user_token', '').strip()
-
-        user = FlatterUser.objects.get(username=username)
-
-        check_token(user_token, user)
         
         if not username and not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(USER_DOES_NOT_EXIST)
@@ -53,6 +49,13 @@ class CreateIndividualGroupMutation(graphene.Mutation):
             
         if len(users) != 2:
             raise ValueError('The group must have 2 users')
+        
+        real_user = users[1] if users.copy().index(username) == 0 else users[2]
+        
+        if not FlatterUser.objects.filter(username=real_user).exists():
+            raise ValueError('The user does not exist')
+        
+        check_token(user_token, FlatterUser.objects.get(username=real_user))
         
         if FlatterUser.objects.filter(username__in=users).count() != len(users):
             raise ValueError('Some users do not exist')

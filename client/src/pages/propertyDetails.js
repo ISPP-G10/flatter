@@ -20,8 +20,10 @@ import usersAPI from '../api/usersAPI';
 const PropertyDetails = () => {
   const [userData, setUserData] = useState(null);
   const [profile, setProfile] = useState(null);
+  let userToken = localStorage.getItem("token", '');
   const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
-      username: localStorage.getItem("user")
+      username: localStorage.getItem("user"),
+      userToken: userToken
   }});
   
   useEffect(() => {
@@ -52,6 +54,7 @@ const PropertyDetails = () => {
     {
       variables: {
         id: parseInt(id),
+        userToken: userToken,
       },
       fetchPolicy: "no-cache",
     }
@@ -62,6 +65,7 @@ const PropertyDetails = () => {
       variables: {
         requesterUsername: localStorage.getItem("user"),
         propertyId: parseInt(id),
+        userToken: userToken,
       },
     });
 
@@ -79,6 +83,7 @@ const PropertyDetails = () => {
           requesterUsername: localStorage.getItem("user"),
           propertyId: parseInt(id),
           message: values.message,
+          userToken: userToken,
         },
       })
       .then((response) => {
@@ -94,6 +99,7 @@ const PropertyDetails = () => {
         mutation: propertiesAPI.removePropertyRequest,
         variables: {
           requestId: parseInt(userRequest.id),
+          userToken: userToken,
         },
       })
       .then((response) => {

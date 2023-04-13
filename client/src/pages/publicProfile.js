@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 const PublicProfile = (props) => {
 
     let username = useParams().username;
+    let userToken = localStorage.getItem("token", '');
 
     if (username === undefined){
         username = localStorage.getItem("user");
@@ -20,11 +21,13 @@ const PublicProfile = (props) => {
     let [totalRatings, setTotalRatings] = useState(0);
 
     const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
-        username: username
+        username: username,
+        userToken: userToken
     }});
 
     const {data: contractData, loading: contractLoading} = useQuery(usersAPI.getContractByUsername, {variables: {
-        username: localStorage.getItem("user")
+        username: localStorage.getItem("user"),
+        userToken: userToken
     }});
 
     useEffect (() => {

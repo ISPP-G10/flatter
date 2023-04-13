@@ -54,10 +54,12 @@ const CommentsBox = (props) => {
     let [rating, setRating] = useState(null);
     let [comments, setComments] = useState(props.comments)
     let username = localStorage.getItem("user");
+    let userToken = localStorage.getItem("token", '');
 
     const { data : dataRelations, loading : loadingRelations } = useQuery( usersAPI.getRelationships,
         { variables: { userLogin: username,
-                        userValued: props.username  } } );
+                        userValued: props.username, 
+                        userToken:  userToken} } );
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
@@ -89,7 +91,8 @@ const CommentsBox = (props) => {
                 evaluatorUser: localStorage.getItem("user"),
                 text: values.comment,
                 rating: rating ? rating : null,
-                relationship: values.relationship
+                relationship: values.relationship,
+                userToken: userToken
             }
         }).then((response) => {
             commentsModalRef.current.close();

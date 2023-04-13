@@ -8,10 +8,10 @@ from django.utils.translation import gettext_lazy as _
 class AuthenticationQuery(object):
   
   get_user_by_username = graphene.Field(FlatterUserType, username=graphene.String())
-  get_roles = graphene.List(RoleType)
-  get_filtered_users_by_tag_and_review = graphene.Field(FlatterUserPageType, username=graphene.String(required=True), tag = graphene.String(), owner = graphene.Boolean(), min_rating = graphene.Int(), max_rating = graphene.Int(), page_size = graphene.Int(), page_number = graphene.Int())
+  get_roles = graphene.List(RoleType, user_token = graphene.String(required=True))
+  get_filtered_users_by_tag_and_review = graphene.Field(FlatterUserPageType, username=graphene.String(required=True), tag = graphene.String(), owner = graphene.Boolean(), min_rating = graphene.Int(), max_rating = graphene.Int(), page_size = graphene.Int(), page_number = graphene.Int(), user_token = graphene.String(required=True))
   get_plans = graphene.List(PlanType)
-  get_contract_by_username = graphene.Field(ContractType, username=graphene.String())
+  get_contract_by_username = graphene.Field(ContractType, username=graphene.String(), user_token = graphene.String(required=True))
 
   def resolve_get_user_by_username(self, info, username):
     
@@ -36,7 +36,7 @@ class AuthenticationQuery(object):
     
     return FlatterUser.objects.get(username=username)
   
-  def resolve_get_filtered_users_by_tag_and_review(self,info, page_number=1, page_size=5, username=None, tag=None, owner=None, min_rating=0, max_rating=5):
+  def resolve_get_filtered_users_by_tag_and_review(self,info, page_number=1, page_size=5, username=None, tag=None, owner=None, min_rating=0, max_rating=5, user_token=''):
 
     username = username.strip()
     
@@ -95,12 +95,12 @@ class AuthenticationQuery(object):
       
      
   
-  def resolve_get_roles(self, info):
+  def resolve_get_roles(self, info, user_token=''):
     return Role.objects.all()
   
   def resolve_get_plans(self, info):
     return Plan.objects.filter(end_date=None).order_by('flatter_coins')
 
-  def resolve_get_contract_by_username(self, info, username):
+  def resolve_get_contract_by_username(self, info, username, user_token=''):
     user = FlatterUser.objects.get(username=username)
     return Contract.objects.filter(user=user, obsolete=False).first()

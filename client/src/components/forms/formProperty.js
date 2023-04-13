@@ -18,9 +18,12 @@ const FormProperty = ({ property }) => {
   const [configured, setConfigured] = useState(false);
   const [inputsChanged, setInputsChanged] = useState(false);
 
+  let userToken = localStorage.getItem('token', '')
+
   const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "P"
+        type: "P",
+        userToken: userToken
     }
   });
   const tagsInput = useRef(null);
@@ -46,7 +49,8 @@ const FormProperty = ({ property }) => {
         images: values.images,
         maxCapacity: parseInt(values.maxCapacity),
         location: values.location,
-        tags: tagsValues
+        tags: tagsValues,
+        userToken: userToken
       }
     } : {
       mutation: propertiesAPI.updateProperty,
@@ -64,7 +68,8 @@ const FormProperty = ({ property }) => {
         price: parseFloat(values.price),
         images: values.images,
         maxCapacity: parseInt(values.maxCapacity),
-        tags: tagsValues
+        tags: tagsValues,
+        userToken: userToken
       }
     })
     .then(response => window.location.reload())
@@ -83,7 +88,8 @@ const FormProperty = ({ property }) => {
            client.query({
              query: provincesAPI.getMunicipalitiesByProvince,
              variables: {
-               province: property.province.name
+               province: property.province.name,
+                userToken: userToken
              }
            })
            .then(response => {
@@ -142,7 +148,8 @@ const FormProperty = ({ property }) => {
           client.query({
             query: provincesAPI.getMunicipalitiesByProvince,
             variables: {
-              province: provinceInput.value
+              province: provinceInput.value,
+              userToken: userToken
             }
           })
           .then(response => {

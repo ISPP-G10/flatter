@@ -19,6 +19,7 @@ const PropertyRequests = () => {
     const client = useApolloClient();
     const query = useURLQuery();
     const filterFormRef = useRef(null);
+    let userToken = localStorage.getItem("token", '');
 
     function acceptPetition(petitionId){
 
@@ -26,7 +27,8 @@ const PropertyRequests = () => {
             mutation: propertyRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: 'A'
+                statusPetition: 'A',
+                userToken: userToken,
             }
         }).then((response) => {
             window.location.reload();
@@ -42,7 +44,8 @@ const PropertyRequests = () => {
             mutation: propertyRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: "D"
+                statusPetition: "D",
+                userToken: userToken,
             }
         }).then((response) => {
             window.location.reload();
@@ -102,25 +105,16 @@ const PropertyRequests = () => {
             username: filterValues.username,
             status: filterValues.status,
             startDate: filterValues.startdate,
-            endDate: filterValues.enddate
+            endDate: filterValues.enddate,
+            userToken: userToken
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByStatusAndUsernameAndDates))
         .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
     
       }, [filterValues]);
-      
 
-
-
-
-    const {data, loading} = useQuery(propertyRequestsAPI.getPetitions, {variables: {
-        username: localStorage.getItem('user','')
-      }});
-
-    return loading ? 
-            <div className='carrousel-container'>Loading...</div>
-        : (
+    return (
             <FlatterPage withBackground userLogged>
                 <div>
                     <h1 className="properties-title">Solicitudes de Alquiler</h1>

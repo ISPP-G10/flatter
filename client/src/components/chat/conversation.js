@@ -10,6 +10,7 @@ const Conversation = (props) => {
     
     let chatId = props.chatId;
     let username = localStorage.getItem('user');
+    let userToken = localStorage.getItem('token', '');
 
     const [messagesMap, setMessagesMap] = useState(undefined);
     const [messagesChanged, setMessagesChanged] = useState(false);
@@ -17,7 +18,8 @@ const Conversation = (props) => {
     const {data, loading} = useQuery(chatsAPI.getMessagesByGroup, {
         variables: {
             username: username,
-            chatId: chatId
+            chatId: chatId,
+            userToken: userToken
         },
         fetchPolicy: "no-cache"
     });
@@ -25,7 +27,8 @@ const Conversation = (props) => {
     const {data: subscriptionData, loading: subscriptionLoading} = useSubscription(chatsAPI.newMessages, {
         variables: {
             username: username,
-            chatId: chatId
+            chatId: chatId,
+            userToken: userToken
         }
     });
 

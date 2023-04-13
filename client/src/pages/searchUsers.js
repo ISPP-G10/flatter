@@ -17,6 +17,7 @@ const SearchUsers = () => {
 
   const location = useLocation();
   const PAGE_SIZE = 5;
+  let userToken = localStorage.getItem("token", '');
 
   const query = useURLQuery();
   const navigator = useNavigate();
@@ -24,7 +25,8 @@ const SearchUsers = () => {
   const filterFormRef = useRef(null);
   const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "U"
+        type: "U",
+        userToken: userToken
     }
   }); 
 
@@ -39,8 +41,6 @@ const SearchUsers = () => {
     tag: query.get("tag") ?? '',
     owner: query.get("owner") ? (query.get("owner") === 'true' ? true : false) : null,
   });
-
-  let [users, setUsers] = useState([]);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -94,7 +94,8 @@ const SearchUsers = () => {
         maxRating: filterValues.max,
         owner: filterValues.owner,
         pageNumber: paginationIndex,
-        pageSize: PAGE_SIZE
+        pageSize: PAGE_SIZE,
+        userToken: userToken
       }
     }).then(response => {
       setCurrentPageData(response.data.getFilteredUsersByTagAndReview.users);

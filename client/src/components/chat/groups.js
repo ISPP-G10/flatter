@@ -11,6 +11,7 @@ const Groups = (props) => {
 
     let username = localStorage.getItem('user');
     let notificationsAllowed = localStorage.getItem('notificationsAllowed');
+    let userToken = localStorage.getItem('token', '');
 
     const [newGroupId, setNewGroupId] = useState(undefined);
     let [allGroups, setAllGroups] = useState(undefined);
@@ -18,13 +19,15 @@ const Groups = (props) => {
 
     const {data, loading} = useQuery(chatsAPI.getMyGroups, {
         variables: {
-            username: username
+            username: username,
+            userToken: userToken
         }
     });
 
     const {data: subscriptionData, loading: subscriptionLoading} = useSubscription(chatsAPI.newGroups, {
         variables: {
-            username: username
+            username: username,
+            userToken: userToken
         }
     });
     

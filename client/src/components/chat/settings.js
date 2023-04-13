@@ -23,7 +23,8 @@ const Settings = () => {
             mutation: usersAPI.updateUserPreferences,
             variables: {
                 username: localStorage.getItem("user"),
-                inappropiateLanguage: inappropiateLanguageRef.current.checked
+                inappropiateLanguage: inappropiateLanguageRef.current.checked,
+                userToken: localStorage.getItem("token")
             }
         }).then((response) => {
             localStorage.setItem("inappropiateLanguage", response.data.editUserPreferences.userPreferences.inappropiateLanguage)

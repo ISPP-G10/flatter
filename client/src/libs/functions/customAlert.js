@@ -4,6 +4,7 @@ import FlatterModal from "../../components/flatterModal";
 import ReactDOM from 'react-dom/client';
 
 const alert = ReactDOM.createRoot(document.getElementById('alert'));
+let environment = process.env.NODE_ENV
 
 function customAlert(string) {
 

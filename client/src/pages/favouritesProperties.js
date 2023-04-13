@@ -11,12 +11,14 @@ import propertiesAPI from "../api/propertiesAPI";
 
 const FavouritesProperties = () => {
   const navigator = useNavigate();
+  let userToken = localStorage.getItem("token", '');
 
   const { loading, data } = useQuery(
     propertiesAPI.getFavouritePropertiesByUser,
     {
       variables: {
         username: localStorage.getItem("user"),
+        userToken: userToken,
       },
       fetchPolicy: "no-cache",
     }

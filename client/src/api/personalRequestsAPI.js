@@ -3,8 +3,8 @@ import {gql} from 'apollo-boost';
 const personalRequestsAPI = {
 
     getPersonalPetitions: gql`
-    query getPetitions($username: String!, $status: String, $startDate: String, $endDate: String){
-      getPetitionsByRequesterAndStatusAndDates(username: $username, status: $status, startDate: $startDate, endDate: $endDate){
+    query getPetitions($username: String!, $status: String, $startDate: String, $endDate: String, $userToken: String!){
+      getPetitionsByRequesterAndStatusAndDates(username: $username, status: $status, startDate: $startDate, endDate: $endDate, userToken: $userToken){
         id
         status
         dateOfPetitionAcepted
@@ -30,8 +30,8 @@ const personalRequestsAPI = {
     }
 `,
     updateStatusPetition: gql`
-    mutation updateStatusPetition($petitionId: Int!, $statusPetition: String!){
-      updateStatusPetition(petitionId: $petitionId, statusPetition: $statusPetition){
+    mutation updateStatusPetition($petitionId: Int!, $statusPetition: String!, $userToken: String!){
+      updateStatusPetition(petitionId: $petitionId, statusPetition: $statusPetition, userToken: $userToken){
         petition{
           status
           id
@@ -41,8 +41,8 @@ const personalRequestsAPI = {
 `,
 
     addUserToProperty: gql`
-    mutation addUserToProperty($propertyId: Int!, $username: String!){
-      addUserToProperty(propertyId: $propertyId, username: $username){
+    mutation addUserToProperty($propertyId: Int!, $username: String!, $userToken: String!){
+      addUserToProperty(propertyId: $propertyId, username: $username, userToken: $userToken){
         user{
           username
         }

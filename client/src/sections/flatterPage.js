@@ -9,10 +9,12 @@ import usersAPI from "../api/usersAPI";
 
 const FlatterPage = (props) => {
   let [scrollY, setScrollY] = useState(0);
+  let userToken = localStorage.getItem("token", '');
 
   const { data, loading, error } = useQuery(usersAPI.getContractByUsername, {
     variables: {
       username: localStorage.getItem("user", ""),
+      userToken: userToken,
     },
   });
 

@@ -32,7 +32,8 @@ const socialLib ={
                             variables: {
                                 username: localStorage.getItem("user"),
                                 text: text,
-                                chatId: chatId
+                                chatId: chatId,
+                                userToken: localStorage.getItem("token")
                             }
                         }).then((response) => {
                             element.current.innerHTML = "";

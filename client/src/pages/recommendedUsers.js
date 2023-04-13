@@ -8,9 +8,11 @@ import customAlert from "../libs/functions/customAlert";
 const RecommendedUsers = () => {
 
     let [users, setUsers] = useState([]);
+    let userToken = localStorage.getItem("token", '');
     const {data, loading} = useQuery(usersAPI.getRecomendedUsers, {
         variables: {
-            username: localStorage.getItem('user')
+            username: localStorage.getItem('user'),
+            userToken: userToken
         },
         onError: (error) => {
             customAlert("No se han encontrado recomendaciones");

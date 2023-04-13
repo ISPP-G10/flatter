@@ -4,6 +4,7 @@ from .models import Group
 from .types import MessageType, GroupAndLastMessageType
 from authentication.models import FlatterUser
 from django.utils.translation import gettext as _
+from .mutations import check_token
 
 class MessageSubscription(channels_graphql_ws.Subscription):
     message = graphene.Field(MessageType)
@@ -11,6 +12,7 @@ class MessageSubscription(channels_graphql_ws.Subscription):
     class Arguments:
         username = graphene.String(required=True)
         group_id = graphene.Int(required=False)
+        user_token = graphene.String(required=True)
 
     @staticmethod
     def subscribe(root, info, p=None, **kwargs):
@@ -22,6 +24,8 @@ class MessageSubscription(channels_graphql_ws.Subscription):
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
+        
+        check_token(kwargs.get('user_token', '').strip(), FlatterUser.objects.get(username=username))
 
         return [f'group_{username}']
 
@@ -48,6 +52,7 @@ class GroupSubscription(channels_graphql_ws.Subscription):
     
     class Arguments:
         username = graphene.String(required=True)
+        user_token = graphene.String(required=True)
 
     @staticmethod
     def subscribe(root, info, p=None, **kwargs):
@@ -55,6 +60,8 @@ class GroupSubscription(channels_graphql_ws.Subscription):
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
+        
+        check_token(kwargs.get('user_token', '').strip(), FlatterUser.objects.get(username=username))
 
         return [f'group_{username}']
     

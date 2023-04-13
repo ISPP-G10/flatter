@@ -8,6 +8,7 @@ import { useRef, useState } from "react";
 const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
     let [userImage, setUserImage] = useState(null);
+    let userToken = localStorage.getItem('token', '');
 
     const client = useApolloClient();
 
@@ -27,6 +28,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
                 profilePicture: encodedImage,
                 phone: values.phoneNumber,
                 profilePicture: encodedImage,
+                userToken: userToken
 
             }
         })

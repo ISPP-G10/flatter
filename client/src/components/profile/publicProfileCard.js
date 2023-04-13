@@ -23,10 +23,12 @@ const PublicProfileCard = (props) => {
     const editPublicProfileModalRef = useRef(null);
     const updatePublicProfileRef = useRef(null); 
     const tagsInput = useRef(null);
+    let userToken = localStorage.getItem("token", '');
 
     const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
         variables: {
-            type: "U"
+            type: "U",
+            userToken: userToken
         }
     });
 
@@ -35,7 +37,8 @@ const PublicProfileCard = (props) => {
             mutation: chatsAPI.createIndividualChat,
             variables: {
                 username: props.username,
-                users: [props.username, localStorage.getItem('user')]
+                users: [props.username, localStorage.getItem('user')],
+                userToken: userToken
             }
         }).then((response) => {
             props.setActivateChat(props.username);
@@ -66,7 +69,8 @@ const PublicProfileCard = (props) => {
                 biography: values.biography,
                 profession: values.profession,
                 birthday: userBirthday,
-                tags: tagsValues
+                tags: tagsValues,
+                userToken: userToken
             }
         })
         .then((response) => {

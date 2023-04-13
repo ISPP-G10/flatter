@@ -18,6 +18,7 @@ import customConfirm from "../libs/functions/customConfirm";
 const OwnerProperties = ({}) => {
 
   let [ property, setProperty ] = useState({});
+  let userToken = localStorage.getItem("token", '');
 
   const addPropertyModalRef = useRef(null);
   const editPropertyModalRef = useRef(null);
@@ -31,6 +32,7 @@ const OwnerProperties = ({}) => {
               mutation: propertiesAPI.deletePropertyById,
               variables: {
                   propertyId: parseInt(id),
+                  userToken: userToken,
               }
           }).then((response) => {
             window.location.reload();
@@ -46,6 +48,7 @@ const OwnerProperties = ({}) => {
           mutation: propertiesAPI.outstandPropertyById,
           variables: {
               propertyId: parseInt(idPiso),
+              userToken: userToken,
           }
       }).then((response) => {
           window.location.reload();
@@ -66,7 +69,8 @@ const OwnerProperties = ({}) => {
   }
 
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
-      username: localStorage.getItem('user','')
+      username: localStorage.getItem('user',''),
+      userToken: userToken
     }});
 
     if (loading) return <p>Loading...</p>

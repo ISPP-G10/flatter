@@ -19,6 +19,7 @@ const Chat = (props) => {
     const [totalNewMessages, setTotalNewMessages] = useState(0);
     const MAX_LEN = 140; //maxLength of caracters allowed when writing comments
     const client = useApolloClient();
+    let userToken = localStorage.getItem("token", '');
 
     let chatBtn = useRef();
     let chatSlide = useRef();
@@ -38,7 +39,8 @@ const Chat = (props) => {
 
     const {data, loading} = useQuery(chatsAPI.getInappropiateLanguage, {
         variables: {
-            username: localStorage.getItem('user')
+            username: localStorage.getItem('user'),
+            userToken: userToken
         }
     });
 

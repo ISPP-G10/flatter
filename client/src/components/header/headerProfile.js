@@ -11,9 +11,11 @@ import FlatterCoinsCounter from '../flatterCoinsCounter';
 const HeaderProfile = ({user}) => {
 
     const navigator = useNavigate();
+    let userToken = localStorage.getItem('token', '');
 
     const {data, loading, error} = useQuery(usersAPI.getUserByUsernameHeader, {variables: {
-        username: user
+        username: user,
+        userToken: userToken
     }});
 
     if (loading) return <p>Loading...</p>

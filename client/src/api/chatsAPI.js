@@ -2,8 +2,8 @@ import {gql} from 'apollo-boost';
 
 const chatsAPI = {
     getMyGroups: gql`
-        query getMyGroups($username: String!) {
-            getMyGroups(username: $username) {
+        query getMyGroups($username: String!, $userToken: String!) {
+            getMyGroups(username: $username, userToken: $userToken) {
                 group{
                     id
                     name
@@ -22,8 +22,8 @@ const chatsAPI = {
         }
     `,
     getMessagesByGroup: gql`
-        query getMessagesByGroup($username: String!, $chatId: Int!) {
-            getMessagesByGroup(username: $username, groupId: $chatId) {
+        query getMessagesByGroup($username: String!, $chatId: Int!, $userToken: String!) {
+            getMessagesByGroup(username: $username, groupId: $chatId, userToken: $userToken) {
                 key
                 value{
                     text
@@ -40,8 +40,8 @@ const chatsAPI = {
         }
     `,
     createMessage: gql`
-        mutation createMessage($username: String!, $chatId: Int!, $text: String!) {
-            createMessage(username: $username, groupId: $chatId, text: $text) {
+        mutation createMessage($username: String!, $chatId: Int!, $text: String!, $userToken: String!) {
+            createMessage(username: $username, groupId: $chatId, text: $text, userToken: $userToken) {
                 message{
                     text
                     timestamp
@@ -50,8 +50,8 @@ const chatsAPI = {
         }
     `,
     newMessages: gql`
-        subscription messageSubscription($username: String!, $chatId: Int!) {
-            messageSubscription(username: $username, groupId: $chatId) {
+        subscription messageSubscription($username: String!, $chatId: Int!, $userToken: String!) {
+            messageSubscription(username: $username, groupId: $chatId, userToken: $userToken) {
                 message{
                     text
                     timestamp
@@ -67,8 +67,8 @@ const chatsAPI = {
         }
     `,
     newGroups: gql`
-        subscription groupSubscription($username: String!) {
-            groupSubscription(username: $username) {
+        subscription groupSubscription($username: String!, $userToken: String!) {
+            groupSubscription(username: $username, userToken: $userToken) {
                 groupAndLastMessage{
                     group{
                         id
@@ -94,8 +94,8 @@ const chatsAPI = {
         }
     `,
     createIndividualChat: gql`
-        mutation createIndividualGroup($username: String!, $users: [String!]!) {
-            createIndividualGroup(username: $username, users: $users) {
+        mutation createIndividualGroup($username: String!, $users: [String!]!, $userToken: String!) {
+            createIndividualGroup(username: $username, users: $users, userToken: $userToken) {
                 group{
                     id
                     name
@@ -109,8 +109,8 @@ const chatsAPI = {
         }
     `,
     createGroupalChat: gql`
-        mutation createGroupalGroup($username: String!, $groupName: String!, $users: [String!]!) {
-            createGroupalGroup(username: $username, groupName: $groupName, users: $users) {
+        mutation createGroupalGroup($username: String!, $groupName: String!, $users: [String!]!, $userToken: String!) {
+            createGroupalGroup(username: $username, groupName: $groupName, users: $users, userToken: $userToken) {
                 group{
                     id
                     name
@@ -124,8 +124,8 @@ const chatsAPI = {
         }
     `,
     getInappropiateLanguage: gql`
-        query getInappropiateLanguage($username: String!) {
-            getInappropiateLanguage(username: $username) {
+        query getInappropiateLanguage($username: String!, $userToken: String!) {
+            getInappropiateLanguage(username: $username, userToken: $userToken) {
                 word
             }
         }

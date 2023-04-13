@@ -12,11 +12,15 @@ import { useQuery, useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
 
 const PricingPage = () => {
+
+  let userToken = localStorage.getItem("token", '');
+
   const { data, loading } = useQuery(usersAPI.getPlans);
 
   const userPlanQuery = useQuery(usersAPI.getContractByUsername, {
     variables: {
       username: localStorage.getItem("user", ""),
+      userToken: userToken,
     },
   });
 

@@ -16,6 +16,7 @@ class DeleteImageFromProperty(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
         image = graphene.String(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
         
     property = graphene.Field(PropertyType)
@@ -42,6 +43,7 @@ class AddTagToProperty(graphene.Mutation):
     class Input:
         id = graphene.Int(required=True)
         tag = graphene.String(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     property = graphene.Field(PropertyType)
@@ -208,6 +210,7 @@ class CreatePropertyMutation(graphene.Mutation):
 class DeletePropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
         
     property = graphene.Field(PropertyType)
@@ -263,6 +266,7 @@ class UpdatePetitionStatus(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
         status_petition = graphene.String(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     petition = graphene.Field(PetitionType)
@@ -295,6 +299,7 @@ class UpdatePetitionStatus(graphene.Mutation):
 class DeletePetition(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     petition = graphene.Field(PetitionType)
@@ -328,6 +333,7 @@ class UpdatePropertyMutation(graphene.Mutation):
         images = graphene.List(graphene.String, required=False)
         max_capacity = graphene.Int(required=False)
         tags = graphene.List(graphene.String, required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     property = graphene.Field(PropertyType)
@@ -465,6 +471,7 @@ class UpdatePropertyMutation(graphene.Mutation):
 class MakePropertyOutstandingMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     property = graphene.Field(PropertyType)
@@ -575,6 +582,7 @@ class AddUserToPropertyMutation(graphene.Mutation):
     class Input:
         property_id = graphene.Int(required=True)
         username = graphene.String(required=True)
+        user_token = graphene.String(required=True)
         # TODO: comprobar usuario
 
     user = graphene.Field(FlatterUserType)

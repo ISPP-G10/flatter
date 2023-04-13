@@ -22,6 +22,8 @@ const PersonalRequests = () => {
     const query = useURLQuery();
     const filterFormRef = useRef(null);
 
+    let userToken = localStorage.getItem("token", '');
+
     let [filterValues, setFilterValues] = useState({
         username : localStorage.getItem('user',''),
         status: query.get("status"),
@@ -83,7 +85,8 @@ const PersonalRequests = () => {
             username: filterValues.username,
             status: filterValues.status,
             startDate: filterValues.startdate,
-            endDate: filterValues.enddate
+            endDate: filterValues.enddate,
+            userToken: userToken
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByRequesterAndStatusAndDates))
@@ -102,7 +105,8 @@ const PersonalRequests = () => {
             mutation: personalRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: "I"
+                statusPetition: "I",
+                userToken: userToken
             }
         }).then((response) => {
             window.location.reload();
@@ -115,7 +119,8 @@ const PersonalRequests = () => {
             mutation: personalRequestsAPI.addUserToProperty,
             variables: {
                 propertyId: parseInt(propertyId),
-                username: username
+                username: username,
+                userToken: userToken
             }
         }).then((response) => {
             window.location.reload();
@@ -124,17 +129,9 @@ const PersonalRequests = () => {
         });
       }
 
-
-
-    const {data, loading} = useQuery(personalRequestsAPI.getPersonalPetitions, {variables: {
-        username: localStorage.getItem('user','')
-      }});
-
     const paymentModal = useRef(null);
 
-    return loading ? 
-            <div className='carrousel-container'>Loading...</div>
-        : (
+    return (
             <FlatterPage withBackground userLogged>
                 <div>
                     <h1 className="properties-title">Tus Solicitudes a otros Pisos</h1>

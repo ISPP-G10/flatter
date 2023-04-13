@@ -22,6 +22,7 @@ const ListProperties = () => {
 
   const PAGE_SIZE = 10;
 
+  let userToken = localStorage.getItem("token", '');
   const query = useURLQuery();
   const navigator = useNavigate();
   const client = useApolloClient();
@@ -30,9 +31,11 @@ const ListProperties = () => {
   const [ optionMunicipality, setOptionMunicipality ] = useState([]);
   const [configured, setConfigured] = useState(false);
   const [inputsChanged, setInputsChanged] = useState(false);
+  const [favouritesProperties, setFavouriteProperties] = useState([]);
   const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
     variables: {
-        type: "P"
+        type: "P",
+        userToken: userToken
     }
   }); 
 
@@ -85,6 +88,7 @@ const ListProperties = () => {
     {
       variables: {
         username: localStorage.getItem("user"),
+        userToken: userToken,
       },
       fetchPolicy: "no-cache",
     }
@@ -123,7 +127,8 @@ const ListProperties = () => {
         province: filterValues.province,
         tag: filterValues.tag,
         pageNumber: paginationIndex,
-        pageSize: PAGE_SIZE
+        pageSize: PAGE_SIZE,
+        userToken: userToken,
       }
     }).then(response => {
       setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
@@ -180,7 +185,8 @@ const ListProperties = () => {
             client.query({
               query: provincesAPI.getMunicipalitiesByProvince,
               variables: {
-                province: provinceInput.value
+                province: provinceInput.value,
+                userToken: userToken
               }
             })
             .then(response => {
@@ -199,8 +205,14 @@ const ListProperties = () => {
       }
     }, [inputsChanged]);
 
-  if (loading) 
-    return <p>Loading...</p>;
+  useEffect(() => {
+    if (!loading){
+      setFavouriteProperties(data.getFavouriteProperties);
+    }
+  }, [loading, data]);
+
+  useEffect(() => {
+  }, [favouritesProperties]);
 
   return (
     <FlatterPage withBackground userLogged>
@@ -224,8 +236,8 @@ const ListProperties = () => {
   
         <div className="content">
           {
-            currentPageData && currentPageData.map((property, index) => {
-              const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
+            currentPageData && favouritesProperties && currentPageData.map((property, index) => {
+              const isFavourite = favouritesProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
 
               return(
               <article key={ index } className="property-card card">
