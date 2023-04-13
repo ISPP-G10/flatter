@@ -43,27 +43,27 @@ function App() {
                 localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
                 <>
                   <MainPage/>
+                  <Chat activateChat={activateChat} setActivateChat={setActivateChat} />
                 </>
                 :
                   <LandingPage/>
               }
             </>
           }/>
-          <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
-          <Route path="/search" element={<> <ListProperties/> </>}/>
-          <Route path="/users" element={<> <SearchUsers/> </>}/>
-          <Route path="/properties" element={<> <OwnerProperties /> </>}/>
-          <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
-          <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-          <Route path='/requests' element={<> <PersonalRequests/> </>}/>
+          <Route path="/privacy" element={<> <PrivacyPage/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/search" element={<> <ListProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/users" element={<> <SearchUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/properties" element={<> <OwnerProperties /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/property/:id" element={<> <PropertyDetails /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path='/property/requests' element={<> <PropertyRequests/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path='/requests' element={<> <PersonalRequests/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
           <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
-          <Route path='/me' element={<> <AccountSettings/> </>}/>
-          <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
-          <Route path='/pricing' element={<> <PricingPage /> </>} />
-          <Route path='/shop' element={<> <ShopPage /> </>} />
-          <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
-          <Route path='/ejemplo' element={<> <Example/> </>}/>
+          <Route path='/me' element={<> <AccountSettings/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path='/favourites' element={<> <FavouritesProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path='/pricing' element={<> <PricingPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>} />
+          <Route path='/shop' element={<> <ShopPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>} />
+          <Route path="/recommendations" element={<> <RecommendedUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="*" element={<Error/>}/>
         </Routes>
       </Router>

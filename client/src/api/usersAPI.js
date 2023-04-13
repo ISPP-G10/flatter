@@ -95,6 +95,7 @@ const usersAPI = {
                 }
                 getContractByUsername(username: $username){
                     plan {
+                        chatCreation
                         viewSelfProfileOpinions
                     }
                 }
@@ -267,6 +268,7 @@ const usersAPI = {
             getContractByUsername(username: $username){
                 plan {
                     planType
+                    chatCreation
                 }
             }
         }

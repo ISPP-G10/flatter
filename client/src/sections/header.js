@@ -131,7 +131,7 @@ const Header = ({scrollY, userLogged}) => {
     return(
         <>
             <header className={`site-header${isScrolling ? ' scroll' : ''}`}>
-                <div>
+                <div onClick={() => navigator("/")} style={{cursor: 'pointer'}}>
                     <img src={logo} alt='Logo Flatter'/>
                 </div>
                 <nav>

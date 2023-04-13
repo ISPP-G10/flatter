@@ -13,6 +13,7 @@ import {useApolloClient} from '@apollo/client';
 import { useNavigate } from "react-router-dom";
 import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
+import PaymentModal from '../components/paymentModal';
 
 const PersonalRequests = () => {
 
@@ -129,6 +130,8 @@ const PersonalRequests = () => {
         username: localStorage.getItem('user','')
       }});
 
+    const paymentModal = useRef(null);
+
     return loading ? 
             <div className='carrousel-container'>Loading...</div>
         : (
@@ -225,7 +228,7 @@ const PersonalRequests = () => {
                                 : request.status === "A" ?
                                 (
                                     <div className="request-actions">
-                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}} 
+                                          <SolidButton onClick={ () => paymentModal.current.open()} 
                                           text="Pagar" className="pay" />
                                       </div> 
                                 )
@@ -244,9 +247,12 @@ const PersonalRequests = () => {
                                 : (<div></div>)
                                 }    
 
-                                        
-                                
-
+                                <PaymentModal
+                                    price={request.property.price}
+                                    resolve={()=> handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}
+                                    reject={() => customAlert("Se ha cancelado el pago")}
+                                    ref={paymentModal}
+                                />    
                             </div>
                         );})}
                         </div>
