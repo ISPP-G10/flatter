@@ -1,5 +1,5 @@
 import graphene
-from .types import FlatterUserType, RoleType, PlanType, ContractType
+from .types import FlatterUserType, FlatterUserPageType, RoleType, PlanType, ContractType
 from .models import Contract, FlatterUser, Plan, Role
 from django.db.models import Q
 from django.core.paginator import Paginator
