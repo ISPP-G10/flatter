@@ -38,10 +38,13 @@ const PublicProfileCard = (props) => {
                 users: [props.username, localStorage.getItem('user')]
             }
         }).then((response) => {
-            customAlert("Ya puedes chatear con este usuario")
-            window.location.reload();
+            props.setActivateChat(props.username);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            if (error.message.split("\n")[0].trim() === "The group already exists") {
+                props.setActivateChat(props.username);
+            } else {
+                customAlert(error.message.split("\n")[0]);
+            }
         });
     }
 
@@ -119,8 +122,7 @@ const PublicProfileCard = (props) => {
                                 <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
                             (
-                                // <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
-                                <></>
+                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
                             )
                         }
                     </div>

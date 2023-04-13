@@ -33,7 +33,7 @@ services:
     build: 
       context: ..
       dockerfile: ./docker/backend/Dockerfile
-    command: bash -c "/usr/src/app/flatter-backend/entrypoint_demo.sh && daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
+    command: bash -c "/usr/src/app/flatter-backend/entrypoint_demo.sh  && daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
     environment:
       DEBUG: ${DEBUG}
       DJANGO_ENV: ${DJANGO_ENV}

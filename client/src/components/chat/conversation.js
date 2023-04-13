@@ -9,7 +9,8 @@ import socialLib from "../../libs/socialLib";
 const Conversation = (props) => {
     
     let chatId = props.chatId;
-    let username = localStorage.getItem("user");
+    let username = localStorage.getItem('user');
+
     const [messagesMap, setMessagesMap] = useState(undefined);
     const [messagesChanged, setMessagesChanged] = useState(false);
 
@@ -21,9 +22,10 @@ const Conversation = (props) => {
         fetchPolicy: "no-cache"
     });
 
-    const subscription = useSubscription(chatsAPI.newMessages, {
+    const {data: subscriptionData, loading: subscriptionLoading} = useSubscription(chatsAPI.newMessages, {
         variables: {
             username: username,
+            chatId: chatId
         }
     });
 
@@ -32,34 +34,40 @@ const Conversation = (props) => {
         if (chatId!==null && chatId!==undefined){
             if (!loading){
                 setMessagesMap(data.getMessagesByGroup);
+                setMessagesChanged(!messagesChanged)
             }
-        }else{
+        } else{
             setMessagesMap(undefined);
         }
     }, [props.chatId, loading]);
 
     useEffect (() => {
         if (chatId!==null && chatId!==undefined){
-            if (!subscription.loading){
+            if (!subscriptionLoading){
                 if (messagesMap){
                     let messages = messagesMap
-                    let newMessage = subscription.data.messageSubscription.message
-                    let todayList = messages.at(-1).value
-                    let lastMessagesList = todayList.at(-1)
-                    let isFromMe = lastMessagesList.at(-1).user.username===newMessage.user.username
-                    if(isFromMe){
-                        lastMessagesList.push(newMessage)
+                    let newMessage = subscriptionData.messageSubscription.message
+                    if (messages.length===0){
+                        messages.push({key: newMessage.timestamp, value: [[newMessage]]})
                     } else{
-                        todayList.push([newMessage])
+                        let todayList = messages.at(-1).value
+                        let lastMessagesList = todayList.at(-1)
+                        let isFromMe = lastMessagesList.at(-1).user.username===newMessage.user.username
+                        if(isFromMe){
+                            lastMessagesList.push(newMessage)
+                        } else{
+                            todayList.push([newMessage])
+                        }
                     }
                     setMessagesMap(messages)
                     setMessagesChanged(!messagesChanged)
                 }
             }
         }
-    }, [subscription.data, subscription.loading]);
+    }, [subscriptionData, subscriptionLoading]);
 
     useEffect (()=>{
+        props.parentRef.current.scrollTop = props.parentRef.current.scrollHeight;
     }, [messagesChanged])
 
     return (
@@ -72,7 +80,7 @@ const Conversation = (props) => {
                             {
                                 dict.value.map((messagesList, messageIndex) => {
                                     return (
-                                        <Messages key={`messages-list-${messageIndex}`} messagesList={messagesList} whose={messagesList[0].user.username===username?"mine":"yours"} />
+                                        <Messages key={`messages-list-${messageIndex}`} messagesList={messagesList} whose={messagesList[0].user.username===username?"mine":"yours"} inappropiateWords={props.inappropiateWords}/>
                                     )
                                 }
                             )}
@@ -88,10 +96,14 @@ const Conversation = (props) => {
 
 PropTypes.propTypes = {
     chatId: PropTypes.number,
+    parentRef: PropTypes.object,
+    inappropiateWords: PropTypes.array
 }
 
 PropTypes.defaultProps = {
-    chatId: null,
+    chatId: undefined,
+    parentRef: undefined,
+    inappropiateWords: []
 }
 
 export default Conversation;

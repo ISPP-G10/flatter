@@ -1,12 +1,11 @@
 import graphene
 from django.utils.translation import ugettext_lazy as _
-from authentication.models import Tag, Role
+from authentication.models import Tag, Role, FlatterUser
 from authentication.types import TagType, FlatterUserType
 from mainApp.models import Property
 from .recommendations import recommend_similar_users, build_similarity_matrix
-from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType
-from .models import Group, Message
-from authentication.models import FlatterUser
+from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType, InappropiateLanguageType
+from .models import Group, Message, InappropiateLanguage
 
 class SocialQueries(object):
 
@@ -18,6 +17,8 @@ class SocialQueries(object):
     get_messages = graphene.List(MessageType)
     get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String())
     get_users_recommendations = graphene.List(FlatterUserType, username=graphene.String())
+    get_inappropiate_language = graphene.List(InappropiateLanguageType, username=graphene.String())
+
     def resolve_get_all_tag(self, info):
         return Tag.objects.all()
     
@@ -42,8 +43,8 @@ class SocialQueries(object):
             else:
                 last_message = None
             result.append(GroupAndLastMessageType(group=group, last_message=last_message))
-        
-        return result
+
+        return sorted(result, key=lambda x: x.last_message.timestamp.timestamp() if x.last_message else 0, reverse=True)
     
     def resolve_get_messages_by_group(self, info, username, group_id):
         username = username.strip()
@@ -82,7 +83,6 @@ class SocialQueries(object):
         return Message.objects.all()
 
     def resolve_get_tags_by_type(self, info, tag_type=None):
-        
         if tag_type=="U":
             return Tag.objects.filter(entity="U")
         elif tag_type=="P":
@@ -97,8 +97,6 @@ class SocialQueries(object):
 
         if user_login == user_valued:
             raise ValueError(_('No puedes tener una relación contigo mismo'))
-
-
 
         if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
             properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
@@ -118,8 +116,6 @@ class SocialQueries(object):
         if len(relationships) == 0:
             relationships = ['Amigo', 'Excompañero']
 
-
-
         return relationships
 
 
@@ -135,4 +131,10 @@ class SocialQueries(object):
         matrix = build_similarity_matrix(users, user)
         return recommend_similar_users(matrix)
 
-
+    def resolve_get_inappropiate_language(self, info, username):
+        username = username.strip()
+        
+        if not username or not FlatterUser.objects.filter(username=username).exists():
+            raise ValueError(_('El usuario no es válido'))
+        
+        return InappropiateLanguage.objects.all()

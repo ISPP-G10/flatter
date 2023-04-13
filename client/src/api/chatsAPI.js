@@ -50,8 +50,8 @@ const chatsAPI = {
         }
     `,
     newMessages: gql`
-        subscription messageSubscription($username: String!) {
-            messageSubscription(username: $username) {
+        subscription messageSubscription($username: String!, $chatId: Int!) {
+            messageSubscription(username: $username, groupId: $chatId) {
                 message{
                     text
                     timestamp
@@ -61,6 +61,33 @@ const chatsAPI = {
                     }
                     group{
                         individual
+                    }
+                }
+            }
+        }
+    `,
+    newGroups: gql`
+        subscription groupSubscription($username: String!) {
+            groupSubscription(username: $username) {
+                groupAndLastMessage{
+                    group{
+                        id
+                        name
+                        individual
+                        users {
+                            username
+                            profilePicture
+                        }
+                    }
+                    lastMessage {
+                        text
+                        timestamp
+                        user{
+                            username
+                            profilePicture
+                            firstName
+                            lastName
+                        }
                     }
                 }
             }
@@ -93,6 +120,13 @@ const chatsAPI = {
                         profilePicture
                     }
                 }
+            }
+        }
+    `,
+    getInappropiateLanguage: gql`
+        query getInappropiateLanguage($username: String!) {
+            getInappropiateLanguage(username: $username) {
+                word
             }
         }
     `,

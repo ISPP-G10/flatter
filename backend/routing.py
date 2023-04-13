@@ -13,10 +13,8 @@ websocket_urlPattern = [
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
-        AuthMiddlewareStack(
-            URLRouter(
-                websocket_urlPattern
-                )
+        URLRouter(
+            websocket_urlPattern
             )
     )
 })

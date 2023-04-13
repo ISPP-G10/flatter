@@ -1,0 +1,173 @@
+.animate-enter {
+    animation-duration: 1s;
+    animation-name: slide-in;
+}
+
+.animate-leave {
+    animation-duration: 1s;
+    animation-name: slide-out;
+}
+
+.class-notification-invisible{
+    display: flex;
+    justify-content: flex-start;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    height: 100%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-out {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+}
+
+.class-notification-box{
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 475px;
+    max-height: 125px;
+}
+
+.class-notification-left{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px 0 10px 0;
+    width: 100%;
+}
+
+.class-notification-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    width: 100%;
+}
+
+.class-notification-img-div{
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.class-notification-img{
+    width: 50px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.class-notification-info{
+    width: 100%;
+    height: 100%;
+    margin-left: 10px;
+}
+
+.class-notification-user{
+    font-weight: bolder;
+    max-width: 350px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 15px;
+    margin-top: 10px;
+    padding-right: 10px;
+    text-overflow: ellipsis;
+    text-align: left;
+}
+
+.class-notification-text{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: justify;
+    width: 350px;
+    height: 100%;
+    font-size: 13px;
+    flex-wrap: wrap;
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding-right: 10px;
+    color: rgb(107 114 128)
+}
+
+.class-notification-btn{
+    color: #3b5998;
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 1px solid #3b5998;
+    max-width: 75px;
+}
+
+.class-notification-btn:hover, .class-notification-invisible:hover{
+    background-color: rgb(240, 240, 240);
+}
+
+@media screen and (max-width: 768px) {
+    .class-notification-box{
+        width: 100%;
+        margin: 0;
+        max-height: 300px;
+    }
+
+    .class-notification-left{
+        width: 100%;
+        margin: 0;
+    }
+
+    .class-notification-info{
+        width: 100%;
+    }
+
+    .class-notification-user{
+        width: 100%;
+    }
+
+    .class-notification-text{
+        width: 100%;
+        height: 100%;
+    }
+
+    .class-notification-img-div{
+        display: none;
+    }
+
+    .class-notification-right{
+        max-width: 60px !important;
+        margin: 0;
+    }
+
+    .class-notification-btn{
+        max-width: 60px !important;
+    }
+}

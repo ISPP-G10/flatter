@@ -25,9 +25,10 @@ const AccountSettings = () => {
     });
 
     function logout(){
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('roles');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("inappropiateLanguage");
+        localStorage.removeItem("roles");
         
         window.location.href = "/";
     }

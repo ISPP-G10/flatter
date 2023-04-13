@@ -77,6 +77,7 @@ const TagSelector = forwardRef((props, tagRef) => {
       ':hover': {
         backgroundColor: data.color,
         color: 'white',
+        cursor: 'pointer',
       },
     }),
   };

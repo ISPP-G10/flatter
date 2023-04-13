@@ -1,0 +1,282 @@
+[
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 1,
+    "fields": {
+      "word": "puto"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 2,
+    "fields": {
+      "word": "puta"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 3,
+    "fields": {
+      "word": "coño"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 4,
+    "fields": {
+      "word": "mierda"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 5,
+    "fields": {
+      "word": "joder"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 6,
+    "fields": {
+      "word": "hostia"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 7,
+    "fields": {
+      "word": "gilipollas"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 8,
+    "fields": {
+      "word": "cabrón"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 9,
+    "fields": {
+      "word": "zorra"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 10,
+    "fields": {
+      "word": "pendejo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 11,
+    "fields": {
+      "word": "culo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 12,
+    "fields": {
+      "word": "culazo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 13,
+    "fields": {
+      "word": "maricón"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 14,
+    "fields": {
+      "word": "marica"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 15,
+    "fields": {
+      "word": "pene"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 16,
+    "fields": {
+      "word": "vagina"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 17,
+    "fields": {
+      "word": "prostituta"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 18,
+    "fields": {
+      "word": "masturbarse"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 19,
+    "fields": {
+      "word": "follar"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 20,
+    "fields": {
+      "word": "chupar"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 21,
+    "fields": {
+      "word": "follando"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 22,
+    "fields": {
+      "word": "follen"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 23,
+    "fields": {
+      "word": "polla"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 24,
+    "fields": {
+      "word": "cabronazo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 25,
+    "fields": {
+      "word": "coñazo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 20,
+    "fields": {
+      "word": "follada"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 26,
+    "fields": {
+      "word": "pollón"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 27,
+    "fields": {
+      "word": "poronga"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 28,
+    "fields": {
+      "word": "mamón"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 29,
+    "fields": {
+      "word": "mamonazo"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 30,
+    "fields": {
+      "word": "putear"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 31,
+    "fields": {
+      "word": "tonto"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 32,
+    "fields": {
+      "word": "tonta"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 33,
+    "fields": {
+      "word": "idiota"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 34,
+    "fields": {
+      "word": "estúpido"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 35,
+    "fields": {
+      "word": "estúpida"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 36,
+    "fields": {
+      "word": "cabrones"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 37,
+    "fields": {
+      "word": "mamones"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 38,
+    "fields": {
+      "word": "pollones"
+    }
+  },
+  {
+    "model": "social.inappropiateLanguage",
+    "pk": 39,
+    "fields": {
+      "word": "maricones"
+    }
+  }
+]
