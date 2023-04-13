@@ -6,8 +6,13 @@ import PropTypes from "prop-types";
 import { useState, useRef } from "react";
 import PaymentModal from "../components/paymentModal";
 import customAlert from "../libs/functions/customAlert";
+import { useApolloClient } from "@apollo/client";
+import usersAPI from "../api/usersAPI";
 
 const ShopPage = () => {
+
+  const client = useApolloClient();
+
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [amount, setAmount] = useState(0);
@@ -58,11 +63,26 @@ const ShopPage = () => {
   }
 
   function handleCorrectPayment() {
-    customAlert("El pago se ha realizado correctamente");
+    client.mutate({
+      mutation: usersAPI.editUserFlatterCoins,
+      variables: {
+        username: localStorage.getItem("user"),
+        token: localStorage.getItem("token"),
+        flatterCoins: amount,
+      }
+    })
+    .then(response => {
+      customAlert("¡Has añadido correctamente las FlatterCoins a tu cuenta!");
+      handleEmpty();
+      window.location.reload();
+    })
+    .catch(error => {
+      customAlert("Ha ocurrido un error al añadir las flatterCoins a tu cuenta. Por favor, contacta con nuestro equipo de soporte")
+    });
   }
 
   function handleBadPayment() {
-    customAlert("El pago no se ha realizado correctamente");
+    customAlert("Se ha cancelado el pago");
   }
 
   return (

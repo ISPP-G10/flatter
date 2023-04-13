@@ -121,7 +121,7 @@ class EditPlan(graphene.Mutation):
     if plan_type not in choices_values:
       raise ValueError("El plan seleccionado no existe")
 
-    if flatter_coins < 0:
+    if flatter_coins and flatter_coins < 0:
       raise ValueError("No puede introducir una cantidad negativa")
     
     if Plan.objects.filter(flatter_coins=flatter_coins if flatter_coins is not None else current_plan.flatter_coins,
@@ -263,6 +263,29 @@ class DeleteUserMutation(graphene.Mutation):
     selected_user.delete()
     
     return DeleteUserMutation(user=selected_user)
+
+class EditUserFlatterCoins(graphene.Mutation):
+  
+  class Input:
+    username = graphene.String(required=True)
+    token = graphene.String(required=False)
+    flatter_coins = graphene.Int(required=True)
+    
+  user = graphene.Field(FlatterUserType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get('token', '').strip()
+    flatter_coins = kwargs.get('flatter_coins', 0)
+    
+    selected_user = FlatterUser.objects.get(username=username)
+
+    selected_user.flatter_coins = selected_user.flatter_coins + flatter_coins
+    
+    selected_user.save()
+    
+    return EditUserFlatterCoins(user=selected_user)
   
 class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     user = graphene.Field(FlatterUserType)
@@ -270,8 +293,6 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     @classmethod
     def resolve(cls, root, info, **kwargs):
         return cls(user=info.context.user)
-
-
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
@@ -281,6 +302,7 @@ class AuthenticationMutation(graphene.ObjectType):
   delete_user = DeleteUserMutation.Field()
   change_contract = ChangeContract.Field()
   edit_plan = EditPlan.Field()
+  edit_user_flatter_coins = EditUserFlatterCoins.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 

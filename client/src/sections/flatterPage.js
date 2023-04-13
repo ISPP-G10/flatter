@@ -10,7 +10,7 @@ import usersAPI from "../api/usersAPI";
 const FlatterPage = (props) => {
   let [scrollY, setScrollY] = useState(0);
 
-  const { data, loading } = useQuery(usersAPI.getContractByUsername, {
+  const { data, loading, error } = useQuery(usersAPI.getContractByUsername, {
     variables: {
       username: localStorage.getItem("user", ""),
     },
@@ -36,6 +36,11 @@ const FlatterPage = (props) => {
   });
 
   if (loading) return <p>Loading...</p>;
+
+  if (error && props.userLogged) {
+    localStorage.clear();
+    window.location.href = "/ups";
+  }
 
   return (
     <main>

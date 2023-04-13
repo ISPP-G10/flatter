@@ -43,6 +43,7 @@ const PublicProfile = () => {
     if(loading) return <FlatterPage withBackground userLogged withAds={false}><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
 
     const profile = data.getUserByUsername;
+    const canSeeSelfComments = data.getContractByUsername.plan.viewSelfProfileOpinions;
 
     let roles = profile.roles.map((role) => role.role);
 
@@ -63,7 +64,7 @@ const PublicProfile = () => {
                     refetchUser = {refetch}
                 />
                 <ReviewsBox average={averageRating} total={totalRatings} />
-                <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} />
+                <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} canSeeSelfComments={canSeeSelfComments} isMe={username===localStorage.getItem("user")}/>
             </div>
         </FlatterPage>
     );

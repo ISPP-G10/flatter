@@ -58,7 +58,7 @@ class AuthenticationQuery(object):
     return Role.objects.all()
   
   def resolve_get_plans(self, info):
-    return Plan.objects.all()
+    return Plan.objects.filter(end_date=None).order_by('flatter_coins')
 
   def resolve_get_contract_by_username(self, info, username):
     user = FlatterUser.objects.get(username=username)

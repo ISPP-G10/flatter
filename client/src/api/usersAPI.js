@@ -87,6 +87,11 @@ const usersAPI = {
                         relationship
                     }
                 }
+                getContractByUsername(username: $username){
+                    plan {
+                        viewSelfProfileOpinions
+                    }
+                }
             }
     `,
     createReview: gql`
@@ -238,6 +243,17 @@ const usersAPI = {
             }
         }
     `,      
+
+    editUserFlatterCoins: gql`
+        mutation editUserFlatterCoins($username: String!, $token: String!, $flatterCoins: Int!){
+            editUserFlatterCoins(username: $username, token: $token, flatterCoins: $flatterCoins){
+                user{
+                    username
+                    flatterCoins
+                }
+            }
+        }
+    `,
 }   
 
 export default usersAPI;
