@@ -33,7 +33,7 @@ function notification(message, image, name, surname, username) {
             Cerrar
           </button>
         </div>
-    ));
+    ), {duration: 500000});
     
     window.navigator.vibrate && window.navigator.vibrate([200, 100, 200, 100, 200, 100, 200]);
 }

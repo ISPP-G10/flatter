@@ -36,7 +36,7 @@ const PublicProfileCard = (props) => {
                 users: [props.username, localStorage.getItem('user')]
             }
         }).then((response) => {
-            props.setActivateChat(true);
+            props.setActivateChat(props.username);
         }).catch((error) => {
             if (error.message.split("\n")[0].trim() === "The group already exists") {
                 props.setActivateChat(props.username);

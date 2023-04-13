@@ -22,12 +22,8 @@ class MessageSubscription(channels_graphql_ws.Subscription):
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
-        
-        user = FlatterUser.objects.get(username=username)
 
-        groups_ids = Group.objects.filter(users=user).values_list('id', flat=True)
-
-        return [f'group_{str(group_id)}' for group_id in groups_ids]
+        return [f'group_{username}']
 
     @staticmethod
     def publish(payload, info, **kwargs):
@@ -59,12 +55,8 @@ class GroupSubscription(channels_graphql_ws.Subscription):
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
-        
-        user = FlatterUser.objects.get(username=username)
 
-        groups_ids = Group.objects.filter(users=user).values_list('id', flat=True)
-
-        return [f'group_{str(group_id)}' for group_id in groups_ids]
+        return [f'group_{username}']
     
     @staticmethod
     def publish(payload, info, **kwargs):

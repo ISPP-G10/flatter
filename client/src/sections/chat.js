@@ -54,6 +54,10 @@ const Chat = (props) => {
         setTotalNewMessages(sum);
     }, [newMessages])
 
+    useEffect(() => {
+        console.log(props.activateChat)
+    }, [props.activateChat])
+
     const setChangeTabTrue = () => {
         setChangeTab(true);
     }

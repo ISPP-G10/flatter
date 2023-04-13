@@ -37,6 +37,7 @@ const Groups = (props) => {
 
     useEffect (() => {
         if (!subscriptionLoading){
+            console.log(subscriptionData)
             if (groups){
                 let groupAndLastMessage = subscriptionData.groupSubscription.groupAndLastMessage
                 let group = groupAndLastMessage.group
@@ -62,6 +63,7 @@ const Groups = (props) => {
                     setAllGroups([groupAndLastMessage,...allGroups])
                 } else{
                     setAllGroups([groupAndLastMessage,...allGroups])
+                    console.log(group)
                     setNewGroupId(group.id)
                 }
             }
@@ -77,19 +79,21 @@ const Groups = (props) => {
                 props.setShowChat(true)
                 props.setShowGroups(true)
                 if (props.activateChat === true){
+                    console.log(newGroupId)
+                    console.log(props.activateChat)
                     props.setChatId(newGroupId)
                 } else{
                     let groups_filtered = allGroups.filter(g => g.group.individual && g.group.users.filter(u => u.username === props.activateChat).length !== 0)
+                    console.log(allGroups)
                     props.setChatId(parseInt(groups_filtered[0].group.id))
                 }
                 props.setActivateChat(false)
             }, 100);
         }
-    }, [props.activateChat]);
+    }, [props.activateChat, allGroups]);
 
     useEffect (() => {
-        console.log(groups)
-    }, [groups]);
+    }, [groups, allGroups]);
 
     function parseMessage(message){
         return socialLib.parseMessageInappropiateWords(message, props.inappropiateWords);

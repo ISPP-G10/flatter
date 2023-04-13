@@ -8,15 +8,16 @@ from .types import GroupAndLastMessageType
 def add_message(sender, instance, created, **kwargs):
     from social.subscriptions import MessageSubscription, GroupSubscription
     if created:
-        MessageSubscription.broadcast(payload={'message': instance}, group=f'group_{instance.group.id}')
-        GroupSubscription.broadcast(payload={'group_and_last_message': {'group': instance.group, 'last_message': instance}}, group=f'group_{instance.group.id}')
+        for user in instance.group.users.all():
+            MessageSubscription.broadcast(payload={'message': instance}, group=f'group_{user.username}')
+            GroupSubscription.broadcast(payload={'group_and_last_message': {'group': instance.group, 'last_message': instance}}, group=f'group_{user.username}')
 
-@receiver(post_save, sender=Group)
-def add_group(sender, instance, created, **kwargs):
+@receiver(m2m_changed, sender=Group.users.through)
+def add_group(sender, instance, **kwargs):
     from social.subscriptions import GroupSubscription
-    if created:
-        GroupSubscription.broadcast(payload={'group_and_last_message': {'group': instance, 'last_message': None}}, group=f'group_{instance.id}')
-        
+    for user in instance.users.all():
+        GroupSubscription.broadcast(payload={'group_and_last_message': {'group': instance, 'last_message': None}}, group=f'group_{user.username}')
+    
 
 #Comprobar que un usuario no invie un mensaje a un grupo al que no pertenece
 @receiver(pre_save, sender=Message)
