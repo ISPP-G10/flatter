@@ -5,6 +5,7 @@ from .types import ContractType, FlatterUserType, PlanType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import datetime, timedelta
+from social.mutations import check_token
 
 class ChangeContract(graphene.Mutation):
   class Input:
@@ -26,6 +27,7 @@ class ChangeContract(graphene.Mutation):
     
     try:
       user = FlatterUser.objects.get(username=username)
+      check_token(token, user)
     except FlatterUser.DoesNotExist:
       raise FlatterUser.DoesNotExist("El usuario no existe")
     
@@ -109,7 +111,10 @@ class EditPlan(graphene.Mutation):
     premium_support = kwargs.get("premium_support", None)
     view_self_profile_opinions = kwargs.get("view_self_profile_opinions", None)
     
-    #user = FlatterUser.objects.get(username=username) #Hará falta para los permisos de edición
+    user = FlatterUser.objects.get(username=username) #Hará falta para los permisos de edición
+
+    check_token(token, user)
+
     current_plan = Plan.objects.filter(plan_type=plan_type, end_date=None).first()
     contracts = Contract.objects.filter(plan=current_plan)
 
@@ -251,14 +256,18 @@ class DeleteUserMutation(graphene.Mutation):
 
   class Input:
     username = graphene.String(required=True)
+    user_token = graphene.String(required=True)
 
   user = graphene.Field(FlatterUserType)
 
   @staticmethod
   def mutate(root, info, **kwargs):
     username = kwargs.get('username', '').strip()
+    user_token = kwargs.get('user_token', '').strip()
     
     selected_user = FlatterUser.objects.get(username=username)
+
+    check_token(user_token, selected_user)
 
     selected_user.delete()
     
@@ -280,6 +289,8 @@ class EditUserFlatterCoins(graphene.Mutation):
     flatter_coins = kwargs.get('flatter_coins', 0)
     
     selected_user = FlatterUser.objects.get(username=username)
+
+    check_token(token, selected_user)
 
     selected_user.flatter_coins = selected_user.flatter_coins + flatter_coins
     

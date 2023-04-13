@@ -6,18 +6,19 @@ from mainApp.models import Property
 from .recommendations import recommend_similar_users, build_similarity_matrix
 from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType, InappropiateLanguageType
 from .models import Group, Message, InappropiateLanguage
+from .mutations import check_token
 
 class SocialQueries(object):
 
     get_all_tag = graphene.List(TagType, tag=graphene.String())
     get_tags_by_type = graphene.List(TagType, tag_type=graphene.String())
     get_groups = graphene.List(GroupType)
-    get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
-    get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
+    get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String(), user_token=graphene.String(required=True))
+    get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int(), user_token=graphene.String(required=True))
     get_messages = graphene.List(MessageType)
-    get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String())
-    get_users_recommendations = graphene.List(FlatterUserType, username=graphene.String())
-    get_inappropiate_language = graphene.List(InappropiateLanguageType, username=graphene.String())
+    get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String(), user_token=graphene.String(required=True))
+    get_users_recommendations = graphene.List(FlatterUserType, username=graphene.String(), user_token=graphene.String(required=True))
+    get_inappropiate_language = graphene.List(InappropiateLanguageType, username=graphene.String(), user_token=graphene.String(required=True))
 
     def resolve_get_all_tag(self, info):
         return Tag.objects.all()
@@ -25,14 +26,17 @@ class SocialQueries(object):
     def resolve_get_groups(self, info):
         return Group.objects.all()
   
-    def resolve_get_my_groups(self, info, username):
+    def resolve_get_my_groups(self, info, username, user_token):
         username = username.strip()
+
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
         
         user = FlatterUser.objects.get(username=username)
-        
+
+        check_token(user, user_token)
+
         groups = Group.objects.filter(users__in=[user])
         
         result = []
@@ -46,7 +50,7 @@ class SocialQueries(object):
 
         return sorted(result, key=lambda x: x.last_message.timestamp.timestamp() if x.last_message else 0, reverse=True)
     
-    def resolve_get_messages_by_group(self, info, username, group_id):
+    def resolve_get_messages_by_group(self, info, username, group_id, user_token):
         username = username.strip()
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
@@ -56,6 +60,9 @@ class SocialQueries(object):
             raise ValueError(_('El grupo no existe'))
         
         user = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user)
+
         group = Group.objects.get(id=group_id)
 
         if not group.users.filter(id=user.id).exists():
@@ -90,10 +97,12 @@ class SocialQueries(object):
         else:
             raise ValueError(_('El tipo de etiqueta no es válido'))
 
-    def resolve_get_relationships_between_users(self, info, user_login, user_valued):
+    def resolve_get_relationships_between_users(self, info, user_login, user_valued, user_token):
         relationships = []
         user_login = FlatterUser.objects.get(username=user_login)
         user_valued = FlatterUser.objects.get(username=user_valued)
+
+        check_token(user_token, user_login)
 
         if user_login == user_valued:
             raise ValueError(_('No puedes tener una relación contigo mismo'))
@@ -119,9 +128,10 @@ class SocialQueries(object):
         return relationships
 
 
-    def resolve_get_users_recommendations(self, info, username):
+    def resolve_get_users_recommendations(self, info, username, user_token):
         try:
             user = FlatterUser.objects.get(username=username)
+            check_token(user_token, user)
         except FlatterUser.DoesNotExist:
             raise ValueError(_('El usuario no existe'))
         role = Role.objects.get(role="RENTER")
@@ -131,10 +141,14 @@ class SocialQueries(object):
         matrix = build_similarity_matrix(users, user)
         return recommend_similar_users(matrix)
 
-    def resolve_get_inappropiate_language(self, info, username):
+    def resolve_get_inappropiate_language(self, info, username, user_token):
         username = username.strip()
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_('El usuario no es válido'))
+
+        user = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user)
         
         return InappropiateLanguage.objects.all()

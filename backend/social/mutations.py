@@ -25,6 +25,7 @@ class CreateIndividualGroupMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
         users = graphene.List(graphene.String, required=True)
+        user_token = graphene.String(required=True)
 
     group = graphene.Field(GroupType)
 
@@ -33,6 +34,11 @@ class CreateIndividualGroupMutation(graphene.Mutation):
 
         username = kwargs.get('username', '').strip()
         users = kwargs.get('users', [])
+        user_token = kwargs.get('user_token', '').strip()
+
+        user = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user)
         
         if not username and not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(USER_DOES_NOT_EXIST)
@@ -69,7 +75,7 @@ class CreateMessageMutation(graphene.Mutation):
         text = graphene.String(required=True)
         group_id = graphene.Int(required=True)
         username = graphene.String(required=True)
-        user_token = graphene.String(required=False)
+        user_token = graphene.String(required=True)
 
     message = graphene.Field(MessageType)
 
@@ -177,7 +183,7 @@ class LeaveGroupMutation(graphene.Mutation):
     class Input:
         group_id = graphene.Int(required=True)
         user_id = graphene.Int(required=True)
-        user_token = graphene.String(required=False)
+        user_token = graphene.String(required=True)
 
     group = graphene.Field(GroupType)
 

@@ -21,7 +21,7 @@ class MainAppQuery(object):
                                                               page_number = graphene.Int(), page_size = graphene.Int())
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
     get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
-    get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
+    get_properties_by_owner = graphene.List(PropertyType, username = graphene.String()) #TODO: comprobar
     get_outstanding_properties = graphene.List(PropertyType)
     get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
     get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
