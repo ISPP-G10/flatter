@@ -12,11 +12,30 @@ import FlatterForm from "../components/forms/flatterForm";
 import FavouriteButton from "../components/property/favouriteButton";
 import customAlert from "../libs/functions/customAlert";
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
-import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useApolloClient } from "@apollo/client";
+import usersAPI from '../api/usersAPI';
 
 const PropertyDetails = () => {
+  const [userData, setUserData] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+      username: localStorage.getItem("user")
+  }});
+  
+  useEffect(() => {
+      if (!loading && data && data.getUserByUsername) {
+          setUserData(data.getUserByUsername);
+      }
+  }, [loading, data]);
+  
+  useEffect(() => {
+      if (userData) {
+          setProfile(userData);
+      }
+  }, [userData]);
+
   let [property, setProperty] = useState({});
   const editPropertyModalRef = useRef(null);
 
@@ -84,7 +103,7 @@ const PropertyDetails = () => {
       .catch((error) => customAlert(error.message));
   };
   return (
-    <FlatterPage withBackground userLogged>
+    <FlatterPage withBackground userLogged withAds={false}>
       <div className="property-housing-page">
         <section className="property-housing">
           <div className="property-housing__photo">
@@ -136,6 +155,7 @@ const PropertyDetails = () => {
                 )
               }
 
+              {/* RENDERIZACIÓN DEL BOTON POR VALIDAR */}
               {propertyData.getPropertyById.owner.username !==
               localStorage.getItem("user") ? (
                 userRequest === false ? (
@@ -246,14 +266,17 @@ const PropertyDetails = () => {
         ref={propertyRequestModalRef}
       >
         <h1 className="comments-form-title">Solicitar alquiler</h1>
-        <FlatterForm
-          buttonText="Solicitar"
-          showSuperAnimatedButton
-          numberOfColumns={1}
-          inputs={propertyRequestsInputs}
-          onSubmit={handlePropertyRequest}
-          ref={propertyRequestFormRef}
+        {
+          profile &&
+          <FlatterForm
+            buttonText="Solicitar"
+            showSuperAnimatedButton
+            numberOfColumns={1}
+            inputs={propertyRequestsInputs(profile.firstName+" "+profile.lastName, profile.age, profile.profession)}
+            onSubmit={handlePropertyRequest}
+            ref={propertyRequestFormRef}
         ></FlatterForm>
+        }
       </FlatterModal>
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
         <FormProperty property={property} />

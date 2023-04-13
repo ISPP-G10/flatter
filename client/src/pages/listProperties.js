@@ -1,4 +1,5 @@
 import "../static/css/pages/listProperties.css";
+import "../static/css/components/pagination.css";
 import "../static/css/pages/propertyRequests.css";
 
 import FlatterPage from "../sections/flatterPage";
@@ -18,6 +19,8 @@ import provincesAPI from "../api/provincesAPI";
 import tagsAPI from "../api/tagsAPI";
 
 const ListProperties = () => {
+
+  const PAGE_SIZE = 10;
 
   const query = useURLQuery();
   const navigator = useNavigate();
@@ -42,9 +45,12 @@ const ListProperties = () => {
     tag: query.get("tag") ?? '',
   });
 
-  let [sharedProperty, setSharedProperty] = useState({});
+  let [paginationIndex, setPaginationIndex] = useState(query.get("page") && parseInt(query.get("page")) > 0 ? parseInt(query.get("page")) : 1);
 
-  let [properties, setProperties] = useState([]);
+  const [formKey, setFormKey] = useState(0);
+  const [sharedProperty, setSharedProperty] = useState({});
+  const [currentPageData, setCurrentPageData] = useState([]);
+  const [numberOfFilteredProperties, setNumberOfFilteredProperties] = useState(0);
 
   const modalRef = useRef(null);
   const location = useLocation();
@@ -71,9 +77,29 @@ const ListProperties = () => {
       municipality: values.municipality==='-' ? '' : values.municipality,
       province: values.province === '-' ? '' : values.province,
       tag: values.tag === '-'? null : values.tag,
+    });
+  }
+
+  const { loading, data } = useQuery(
+    propertiesAPI.getFavouritePropertiesByUser,
+    {
+      variables: {
+        username: localStorage.getItem("user"),
+      },
+      fetchPolicy: "no-cache",
+    }
+  );
+
+  useEffect(() => {
+    filterInputs.map((input) => {
+      if(input.name === 'price'){
+        input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
+        input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
+      }
+      if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
 
-  }
+  }, [filterValues, loading]);
 
   useEffect(() => { 
     if (!propertyTagsLoading) { 
@@ -96,26 +122,31 @@ const ListProperties = () => {
         municipality: filterValues.municipality,
         province: filterValues.province,
         tag: filterValues.tag,
+        pageNumber: paginationIndex,
+        pageSize: PAGE_SIZE
       }
-    })
-    .then((response) => setProperties(response.data.getFilteredPropertiesByPriceAndCity))
-    .catch((error) => customAlert("No hay propiedades disponibles para esa búsqueda"));
+    }).then(response => {
+      setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
+      setNumberOfFilteredProperties(response.data.getFilteredPropertiesByPriceAndCity.totalCount);
+    }).catch(error => customAlert("¡Ups! Parece que no hay resultados que cumplan estos requisitos"));
 
-    filterInputs.map((input) => {
-      if(input.name === 'price'){
-       input.min = isNaN(filterValues.min) ? 0 : filterValues.min;
-       input.max = isNaN(filterValues.max) ? 2000 : filterValues.max;
-      }
-      if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
-    })
-
-  }, [filterValues]);
+  }, [filterValues, paginationIndex]);
 
   const copyShareInputClipboard = () => {
     const input = document.querySelector('#share-modal-input');
     window.navigator.clipboard.writeText(input.value)
       .then(customAlert("¡Ya puedes compartir la propiedad!"))
       .catch(error => console.log(error));;
+  }
+  
+  const handleCleanFilters = () => {
+    setFilterValues({
+      min: 0,
+      max: 2000,
+      municipality: "",
+    });
+    
+    setFormKey((prevKey) => prevKey + 1);
   }
 
   useEffect(() => { 
@@ -168,7 +199,8 @@ const ListProperties = () => {
       }
     }, [inputsChanged]);
 
-
+  if (loading) 
+    return <p>Loading...</p>;
 
   return (
     <FlatterPage withBackground userLogged>
@@ -182,24 +214,19 @@ const ListProperties = () => {
             <div className="filters">
               <h3>Filtrar por:</h3>
 
-              <FlatterForm ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
+              <FlatterForm key={formKey} ref={filterFormRef} inputs={filterInputs} onSubmit={handleFilterForm} buttonText="Filtrar Propiedades"/>
             </div>
           </div>
           <div style={{marginTop: '20px'}}>
-            <SolidButton type="featured" text="Limpiar filtros" onClick={() => {
-              navigator('/search')
-              setFilterValues({
-                min: 0,
-                max: 2000,
-                municipality: '',
-              })
-            }}/>
+            <SolidButton type="featured" text="Limpiar filtros" onClick={() => handleCleanFilters()}/>
           </div>
         </div>
   
         <div className="content">
           {
-            properties.map((property, index) => {
+            currentPageData && currentPageData.map((property, index) => {
+              const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
+
               return(
               <article key={ index } className="property-card card">
                 <div className="property-gallery">
@@ -245,10 +272,21 @@ const ListProperties = () => {
                     } }/>
                   </footer>
                 </div>
+                { isFavourite ? (
+                  <div className="favourite-badge"><img
+                  src={require("../static/files/icons/estrella.png")}
+                  alt="fav icon"
+                /> Favorito</div>
+                ) : "" }
               </article>
               );
               }
             )}
+            <div className="pagination-container">
+              <button onClick={() => setPaginationIndex(paginationIndex-1)} disabled={paginationIndex<=1}>Anterior</button>
+              <span>{paginationIndex}</span>
+              <button onClick={() => setPaginationIndex(paginationIndex+1)} disabled={paginationIndex*PAGE_SIZE>=numberOfFilteredProperties}>Siguiente</button>
+            </div>
         </div>
       </section>
 

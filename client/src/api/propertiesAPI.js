@@ -76,37 +76,40 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String) {
-          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag) {
-                id
-                title
-                description
-                dimensions
-                location
-                bedroomsNumber
-                bathroomsNumber
-                tags {
-                    name
-                    color
-                }
-                province{
-                    name
-                }
-                price
-                isOutstanding
-                maxCapacity
-                owner {
-                    username
-                }
-                images{
-                    image
-                }
-                flatmates{
-                    firstName
-                    lastName
-                }
+      query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String) {
+        getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag) {
+          properties{
+            id
+            title
+            description
+            dimensions
+            location
+            bedroomsNumber
+            bathroomsNumber
+            tags {
+                name
+                color
             }
+            province{
+                name
+            }
+            price
+            isOutstanding
+            maxCapacity
+            owner {
+                username
+            }
+            images{
+                image
+            }
+            flatmates{
+                firstName
+                lastName
+            }
+          }
+          totalCount
         }
+      }
   `,
   getPropertiesByOwner: gql`
     query getPropertiesByOwner($username: String!) {

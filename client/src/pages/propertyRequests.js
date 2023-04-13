@@ -1,4 +1,5 @@
 import '../static/css/pages/listProperties.css'
+import '../static/css/pages/propertyRequests.css'
 
 import FlatterPage from "../sections/flatterPage";
 import propertyRequestsAPI from '../api/propertyRequestsAPI';
@@ -25,7 +26,7 @@ const PropertyRequests = () => {
             mutation: propertyRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: true
+                statusPetition: 'A'
             }
         }).then((response) => {
             window.location.reload();
@@ -41,7 +42,7 @@ const PropertyRequests = () => {
             mutation: propertyRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: false
+                statusPetition: "D"
             }
         }).then((response) => {
             window.location.reload();
@@ -74,6 +75,9 @@ const PropertyRequests = () => {
                 break;
             case 'Rechazadas':
                 newStatus = 'D';
+                break;
+            case 'Pagadas':
+                newStatus = 'I';
                 break;
             case 'Todas':
                 newStatus = '';
@@ -199,6 +203,12 @@ const PropertyRequests = () => {
                                 (
                                     <div className="request-actions">
                                         <div className='rejected-status'>Rechazada</div>
+                                    </div>
+                                )
+                                : request.status === "I" ?
+                                (
+                                    <div className="request-actions">
+                                        <div className='paid-status'>Pagada</div>
                                     </div>
                                 )
                                 : (<div></div>)

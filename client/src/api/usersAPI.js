@@ -93,6 +93,11 @@ const usersAPI = {
                         relationship
                     }
                 }
+                getContractByUsername(username: $username){
+                    plan {
+                        viewSelfProfileOpinions
+                    }
+                }
             }
     `,
     createReview: gql`
@@ -142,19 +147,22 @@ const usersAPI = {
         }
     `,
     filteredUsersByTagAndReview: gql`
-        query getFilteredUsersByTagAndReview($username: String!, $tag: String, $owner: Boolean){
-            getFilteredUsersByTagAndReview(username: $username, tag: $tag, owner: $owner){
-                id
-                firstName
-                lastName
-                username
-                profilePicture
-                profession
-                averageRating
-                tags{
-                    name
-                    color
-                }
+        query getFilteredUsersByTagAndReview($pageNumber: Int!, $pageSize: Int!, $username: String!, $tag: String, $owner: Boolean, $minRating: Int, $maxRating: Int){
+            getFilteredUsersByTagAndReview(pageNumber: $pageNumber, pageSize: $pageSize, username: $username, tag: $tag, owner: $owner, minRating: $minRating, maxRating: $maxRating){
+                users {  
+                    id
+                    firstName
+                    lastName
+                    username
+                    profilePicture
+                    profession
+                    averageRating
+                    tags{
+                        name
+                        color
+                    }
+                },
+                totalCount
             }
         }
     `,
@@ -237,12 +245,60 @@ const usersAPI = {
             }
         }
     `,
+
+    getPlans: gql`
+    query {
+        getPlans {
+          id
+          flatterCoins
+          visitsNumber
+          tagsNumber
+          advertisement
+          chatCreation
+          standardSupport
+          premiumSupport
+          viewSelfProfileOpinions
+          planType
+        }
+      }
+    `,
+    getContractByUsername: gql`
+        query getContractByUsername($username: String!){
+            getContractByUsername(username: $username){
+                plan {
+                    planType
+                }
+            }
+        }
+    `,
+
     updateUserPreferences: gql`
         mutation editUserPreferences($username: String!, $inappropiateLanguage: Boolean!){
             editUserPreferences(username: $username, inappropiateLanguage: $inappropiateLanguage){
                 userPreferences{
                     inappropiateLanguage
                 }   
+            }
+        }
+    `,
+
+    changeContract: gql`
+        mutation changeContract($numDaysSelected: Int!, $planType: String!, $token: String!, $username: String!) {
+            changeContract(numDaysSelected: $numDaysSelected, planType: $planType, token: $token, username: $username) {
+                contract {
+                    endDate
+                }         
+            }
+        }
+    `,      
+
+    editUserFlatterCoins: gql`
+        mutation editUserFlatterCoins($username: String!, $token: String!, $flatterCoins: Int!){
+            editUserFlatterCoins(username: $username, token: $token, flatterCoins: $flatterCoins){
+                user{
+                    username
+                    flatterCoins
+                }
             }
         }
     `,

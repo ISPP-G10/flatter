@@ -123,20 +123,25 @@ const CommentsBox = (props) => {
                         <span className="comments-btn-text">Escribe tu reseña...</span>
                     </button>
                 </div>
-                <div className="comments-box-scollable">
-                    {
-                        comments.length !== 0 ? (
-                            comments.map((comment, i) => {
-                                return(
-                                    <Comment key={'comment-' + i} name={comment.evaluatorUser.firstName + " " + comment.evaluatorUser.lastName} pic={API_SERVER_MEDIA+comment.evaluatorUser.profilePicture} tagName={getTagName(comment.relationship, comment.evaluatorUser.genre)} tagColor={getTagColor(comment.relationship)} text={comment.text} username={comment.evaluatorUser.username} />
-                                );
-                            }))
-                        :
-                            (
-                                <Comment />
-                            )
-                    }
-                </div>
+                {
+                    (!props.canSeeSelfComments && props.isMe) ? 
+                    <h4 style={{margin: '30px 20px', width: '100%', textAlign: 'center'}}>Mejora a los planes AVANZADO o PRO para ver qué opinan otros usuarios de tí</h4> 
+                    :
+                    <div className="comments-box-scollable">
+                        {
+                            comments.length !== 0 ? (
+                                comments.map((comment, i) => {
+                                    return(
+                                        <Comment key={'comment-' + i} name={comment.evaluatorUser.firstName + " " + comment.evaluatorUser.lastName} pic={API_SERVER_MEDIA+comment.evaluatorUser.profilePicture} tagName={getTagName(comment.relationship, comment.evaluatorUser.genre)} tagColor={getTagColor(comment.relationship)} text={comment.text} username={comment.evaluatorUser.username} />
+                                    );
+                                }))
+                            :
+                                (
+                                    <Comment />
+                                )
+                        }
+                    </div>
+                }
             </div>
             <FlatterModal maxWidth={500} maxHeight={500} ref={commentsModalRef}>
                 <h1 className="comments-form-title">Emite tu valoración</h1>

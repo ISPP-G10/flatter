@@ -8,7 +8,7 @@ export const filterRequestsInputs = [
         type: "select",
         defaultValue: "Todas",
         isRequired: true,
-        values: ['Todas', 'Aceptadas', 'Rechazadas', 'Pendientes'],
+        values: ['Todas', 'Aceptadas', 'Rechazadas', 'Pendientes', 'Pagadas'],
         validators: [
             filterRequestsValidators.notEmptyValidator,
             filterRequestsValidators.validStatus

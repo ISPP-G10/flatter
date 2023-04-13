@@ -1,0 +1,78 @@
+.shop-cesta {
+  background-color: #fff;
+  border-radius: 5px;
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: fit-content;
+  max-width: 400px;
+}
+
+@media screen and (max-width: 768px) {
+  .shop-cesta {
+    max-width: none;
+  }
+}
+
+.shop-cesta > h2 {
+  text-align: center;
+}
+
+.shop-cesta-items > ul {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  list-style: none;
+}
+
+.shop-cesta-item {
+  display: flex;;
+  align-items: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.shop-cesta-item__name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.shop-cesta-item__name {
+  font-weight: 600;
+  margin-right: 4px;
+  margin-left: 0;
+}
+
+.shop-cesta-item__name {
+  margin-left: 0px;
+}
+
+.shop-cesta-buttons {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.shop-cesta-buttons > button {
+  border-radius: 5px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  margin-right: 10px;
+  margin-left: 0;
+}
+
+.shop-cesta-buttons > button:hover {
+  transform: scale(0.95);
+}
+
+.shop-cesta-item__remove {
+  margin-left: 5px;
+  margin-right: 0;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.shop-cesta-item__remove:hover {
+  transform: scale(1.1);
+}

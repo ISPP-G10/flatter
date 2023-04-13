@@ -17,41 +17,57 @@ import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
+import PersonalRequests from './pages/personalRequests';
+import Example from './pages/example';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PricingPage from './pages/pricingPage';
+import ShopPage from './pages/shopPage';
 import RecommendedUsers from './pages/recommendedUsers';
 
 function App() {
 
+  const initialOptions = {
+    "client-id": `${process.env.REACT_APP_PAYPAL_CLIENT_ID}`,
+    currency: "EUR",
+  };
+  
   const [activateChat, setActivateChat] = useState(false);
 
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={
-          <>
-            {
-              localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
-              <>
-                <MainPage/>
-              </>
-              :
-                <LandingPage/>
-            }
-          </>
-        }/>
-        <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
-        <Route path="/search" element={<> <ListProperties/> </>}/>
-        <Route path="/users" element={<> <SearchUsers/> </>}/>
-        <Route path="/properties" element={<> <OwnerProperties /> </>}/>
-        <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
-        <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
-        <Route path='/me' element={<> <AccountSettings/> </>}/>
-        <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
-        <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
-        <Route path="*" element={<Error/>}/>
-      </Routes>
-    </Router>
+    <PayPalScriptProvider options={initialOptions}>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              {
+                localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
+                <>
+                  <MainPage/>
+                </>
+                :
+                  <LandingPage/>
+              }
+            </>
+          }/>
+          <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
+          <Route path="/search" element={<> <ListProperties/> </>}/>
+          <Route path="/users" element={<> <SearchUsers/> </>}/>
+          <Route path="/properties" element={<> <OwnerProperties /> </>}/>
+          <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
+          <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+          <Route path='/requests' element={<> <PersonalRequests/> </>}/>
+          <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
+          <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
+          <Route path='/me' element={<> <AccountSettings/> </>}/>
+          <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
+          <Route path='/pricing' element={<> <PricingPage /> </>} />
+          <Route path='/shop' element={<> <ShopPage /> </>} />
+          <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
+          <Route path='/ejemplo' element={<> <Example/> </>}/>
+          <Route path="*" element={<Error/>}/>
+        </Routes>
+      </Router>
+    </PayPalScriptProvider>
   );
 }
 

@@ -8,6 +8,7 @@ from .types import PropertyType, PetitionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import base64, random, string, os, graphene, jwt
+from datetime import datetime
 
 
 class DeleteImageFromProperty(graphene.Mutation):
@@ -248,14 +249,14 @@ class CreatePetitionMutation(graphene.Mutation):
 class UpdatePetitionStatus(graphene.Mutation):
     class Input:
         petition_id = graphene.Int(required=True)
-        status_petition = graphene.Boolean(required=True)
+        status_petition = graphene.String(required=True)
 
     petition = graphene.Field(PetitionType)
 
     @staticmethod
     def mutate(root, info, **kwargs):
         petition_id = kwargs.get('petition_id', '')
-        status_petition = kwargs.get('status_petition', False)
+        status_petition = kwargs.get('status_petition', '')
         
         try:
             petition = Petition.objects.get(id=petition_id)
@@ -264,13 +265,16 @@ class UpdatePetitionStatus(graphene.Mutation):
 
         user = petition.property.owner
         
-        if petition.status != "P":
-            raise GraphQLError(f"No se puede actualizar una solicitud que no esté pendiente")
+        if (petition.status == "D" or petition.status == "I") :
+            raise GraphQLError(f"No se puede actualizar una solicitud que denegada o ya pagada")
 
-        if status_petition:
+        if status_petition == "A":
             petition.status = "A"
-        else:
+            petition.date_of_petition_acepted = datetime.now()
+        elif status_petition == "D":
             petition.status = "D"
+        elif status_petition == "I":
+            petition.status = "I"
         petition.save()
         return UpdatePetitionStatus(petition=petition)
 
@@ -289,8 +293,8 @@ class DeletePetition(graphene.Mutation):
         except Petition.DoesNotExist:
             raise GraphQLError(f"Solicitud con ID {petition_id} no existe")
         
-        if petition.status == "A":
-            raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada")
+        if petition.status == "A" or petition.status == "I":
+            raise GraphQLError(f"No se puede puede eliminar una petición ya aceptada o pagada")
         petition.delete()
         return DeletePetition(petition=petition)
 
@@ -464,6 +468,12 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         
         if outstanding_properties.count() >= 5:
             raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
+
+        if selected_property.owner.flatter_coins < 1000:
+            raise ValueError(_("No tienes suficientes flattercoins para destacar este inmueble"))
+        
+        selected_property.owner.flatter_coins -= 1000
+        selected_property.owner.save()
         
         selected_property.is_outstanding = True
         selected_property.outstanding_start_date = timezone.now()
@@ -537,7 +547,39 @@ class DeleteUsersToFavouritePropertyMutation(graphene.Mutation):
             raise ValueError(_("Ya has eliminado este usuario"))
         return DeleteUsersToFavouritePropertyMutation(user=user, property=property)
 
+class AddUserToPropertyMutation(graphene.Mutation):
+    class Input:
+        property_id = graphene.Int(required=True)
+        username = graphene.String(required=True)
 
+    user = graphene.Field(FlatterUserType)
+    property = graphene.Field(PropertyType)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+        property_id = kwargs.get('property_id', 0)
+        username=kwargs.get('username')
+        
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise ValueError(_(f"El usuario con nombre de usuario {username} no existe"))
+    
+        try:
+            property = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise ValueError(_("El inmueble seleccionado no existe"))
+        if not FlatterUser.objects.filter(username=username,roles__in = [Role.objects.get(role="RENTER").pk]).exists():
+            raise ValueError(_(f"El usuario {username} no tiene el rol de renter"))
+        if user in property.flatmates.all():
+            raise ValueError(_(f"El usuario {username} ya se encuentra asociado a este piso"))
+        
+        if len(property.flatmates.all()) < property.max_capacity:
+            property.flatmates.add(user)
+            property.save()
+        else:
+            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el numero máximo de inquilinos {property.max_capacity}"))
+        return AddUserToPropertyMutation(user=user, property=property)
 class PropertyMutation(graphene.ObjectType):
     create_property = CreatePropertyMutation.Field()
     update_property = UpdatePropertyMutation.Field()
@@ -551,6 +593,7 @@ class PropertyMutation(graphene.ObjectType):
     delete_petition = DeletePetition.Field()
     add_users_to_favourite_property=AddUsersToFavouritePropertyMutation.Field()
     delete_users_to_favourite_property=DeleteUsersToFavouritePropertyMutation.Field()
+    add_user_to_property= AddUserToPropertyMutation.Field()
 
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #

@@ -80,20 +80,20 @@ const FormProperty = ({ property }) => {
 
         if(input.name === 'municipality') {
           input.defaultValue = property.municipality.name;
-          client.query({
-            query: provincesAPI.getMunicipalitiesByProvince,
-            variables: {
-              province: property.province.name
-            }
-          })
-          .then(response => {
+           client.query({
+             query: provincesAPI.getMunicipalitiesByProvince,
+             variables: {
+               province: property.province.name
+             }
+           })
+           .then(response => {
 
             let municipalityOptions = response.data.getMunicipalitiesByProvince.map(municipality => municipality.name);
-
-            setOptionMunicipality(municipalityOptions);
+            municipalityOptions = municipalityOptions.filter(municipality => municipality !== property.municipality.name);
+            setOptionMunicipality([property.municipality.name].concat(municipalityOptions));
             input.values = municipalityOptions;
-          })
-          .catch(error => console.log(error));
+           })
+           .catch(error => console.log(error));
         };
 
         if(input.name === 'images') input.tag = 'Imágenes de la propiedad (al añadir imágenes, se sustituirán las actuales)';  
