@@ -8,6 +8,18 @@
     animation-name: slide-out;
 }
 
+.class-notification-invisible{
+    display: flex;
+    justify-content: flex-start;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    height: 100%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 @keyframes slide-in {
     from {
         transform: translateY(-100%);
@@ -44,10 +56,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    padding: 10px 0 10px 0;
     width: 100%;
 }
 
@@ -84,7 +93,9 @@
     max-width: 350px;
     overflow: hidden;
     white-space: nowrap;
+    font-size: 15px;
     margin-top: 10px;
+    padding-right: 10px;
     text-overflow: ellipsis;
     text-align: left;
 }
@@ -95,10 +106,12 @@
     text-align: justify;
     width: 350px;
     height: 100%;
+    font-size: 13px;
     flex-wrap: wrap;
     display: flex;
     margin-top: 5px;
     margin-bottom: 10px;
+    padding-right: 10px;
     color: rgb(107 114 128)
 }
 
@@ -116,7 +129,7 @@
     max-width: 75px;
 }
 
-.class-notification-btn:hover{
+.class-notification-btn:hover, .class-notification-invisible:hover{
     background-color: rgb(240, 240, 240);
 }
 
@@ -128,12 +141,12 @@
     }
 
     .class-notification-left{
-        width: 80%;
+        width: 100%;
         margin: 0;
     }
 
     .class-notification-info{
-        width: 90%;
+        width: 100%;
     }
 
     .class-notification-user{

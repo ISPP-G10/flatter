@@ -48,13 +48,13 @@ const Groups = (props) => {
                     if (notificationsAllowed==="true" && lastMessage.user.username !== username){
                         let messageText = localStorage.getItem("inappropiateLanguage")?localStorage.getItem("inappropiateLanguage")==="false"?parseMessage(lastMessage.text):lastMessage.text:lastMessage.text;
                         if (parseInt(group.id)!==props.chatId){
-                            notification(messageText, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username)
                             if (props.newMessages.get(group.id)) {
                                 props.newMessages.set(group.id, props.newMessages.get(group.id)+1) 
                             } else {
                                 props.newMessages.set(group.id, 1)
                             }
                             props.setNewMessages(new Map(props.newMessages))
+                            notification(messageText, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username, props.setActivateChat, props.newMessages, props.setNewMessages, group.id)
                         }
                     }
                 } else if(!group.individual){

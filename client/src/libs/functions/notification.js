@@ -1,14 +1,23 @@
 import { toast } from "react-hot-toast";
 import "../../static/css/components/notification.css"
 
+function notification(message, image, name, surname, username, setActivateChat, newMessages, setNewMessages, groupId) {
 
-function notification(message, image, name, surname, username) {
-    toast.custom((t) => (
-        <div
-          className={`${
-            t.visible ? 'animate-enter' : 'animate-leave'
-          } class-notification-box`}
-        >
+    function handleClick(t) {
+      toast.dismiss(t.id);
+      setActivateChat(username);
+      if (newMessages.get(groupId)){
+        newMessages.delete(groupId);
+        setNewMessages(new Map(newMessages));
+    }
+  } 
+
+  toast.custom((t) => (
+      <div
+        className={`${
+          t.visible ? 'animate-enter' : 'animate-leave'
+        } class-notification-box`}>
+        <button className="class-notification-invisible" onClick={handleClick}>
           <div className="class-notification-left">
             <div className="class-notification-img-div">
               <img
@@ -26,16 +35,17 @@ function notification(message, image, name, surname, username) {
               </p>
             </div>
           </div>
-          <button
-              onClick={() => toast.dismiss(t.id)}
-              className="class-notification-btn"
-          >
-            Cerrar
-          </button>
-        </div>
-    ));
-    
-    window.navigator.vibrate && window.navigator.vibrate([200, 100, 200, 100, 200, 100, 200]);
+        </button>
+        <button
+            onClick={() => toast.dismiss(t.id)}
+            className="class-notification-btn"
+        >
+          Cerrar
+        </button>
+      </div>
+  ),{duration: 500000});
+  
+  window.navigator.vibrate && window.navigator.vibrate([200, 100, 200, 100, 200, 100, 200]);
 }
 
 export default notification
