@@ -230,6 +230,7 @@ class TestsMutations(DefaultTests):
                     password: "contraseña"
                     genre: "Hombre"
                     roles: "Owner"
+                    flatterCoins: 3000
                 ){
                     user{
                         username

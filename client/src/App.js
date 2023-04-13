@@ -17,37 +17,52 @@ import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
 import PersonalRequests from './pages/personalRequests';
+import Example from './pages/example';
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import PricingPage from './pages/pricingPage';
+import ShopPage from './pages/shopPage';
 
 function App() {
+
+  const initialOptions = {
+    "client-id": `${process.env.REACT_APP_PAYPAL_CLIENT_ID}`,
+    currency: "EUR",
+  };
+
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={
-          <>
-            {
-              localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
-              <>
-                <MainPage/>
-              </>
-              :
-                <LandingPage/>
-            }
-          </>
-        }/>
-        <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
-        <Route path="/search" element={<> <ListProperties/> </>}/>
-        <Route path="/users" element={<> <SearchUsers/> </>}/>
-        <Route path="/properties" element={<> <OwnerProperties /> </>}/>
-        <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
-        <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
-        <Route path='/requests' element={<> <PersonalRequests/> </>}/>
-        <Route path='/profile' element={<> <PublicProfile/> </>}/>
-        <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
-        <Route path='/me' element={<> <AccountSettings/> </>}/>
-        <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
-        <Route path="*" element={<Error/>}/>
-      </Routes>
-    </Router>
+    <PayPalScriptProvider options={initialOptions}>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={
+            <>
+              {
+                localStorage.getItem('user') && localStorage.getItem('token') && localStorage.getItem('roles') ?
+                <>
+                  <MainPage/>
+                </>
+                :
+                  <LandingPage/>
+              }
+            </>
+          }/>
+          <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
+          <Route path="/search" element={<> <ListProperties/> </>}/>
+          <Route path="/users" element={<> <SearchUsers/> </>}/>
+          <Route path="/properties" element={<> <OwnerProperties /> </>}/>
+          <Route path="/property/:id" element={<> <PropertyDetails /> </>}/>
+          <Route path='/property/requests' element={<> <PropertyRequests/> </>}/>
+          <Route path='/requests' element={<> <PersonalRequests/> </>}/>
+          <Route path='/profile' element={<> <PublicProfile/> </>}/>
+          <Route path='/profile/:username' element={<> <PublicProfile/> </>}/>
+          <Route path='/me' element={<> <AccountSettings/> </>}/>
+          <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
+          <Route path='/pricing' element={<> <PricingPage /> </>} />
+          <Route path='/shop' element={<> <ShopPage /> </>} />
+          <Route path='/ejemplo' element={<> <Example/> </>}/>
+          <Route path="*" element={<Error/>}/>
+        </Routes>
+      </Router>
+    </PayPalScriptProvider>
   );
 }
 

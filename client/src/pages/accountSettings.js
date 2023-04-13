@@ -69,7 +69,7 @@ const AccountSettings = () => {
     }, [data, loading, setting]);
 
     return(
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withBackground userLogged withAds={false}>
             <div className='settings-page-container'>
                 <div className='settings-title'>
                     <h1>Configuración de la cuenta</h1>
@@ -100,6 +100,12 @@ const AccountSettings = () => {
                         </div>
                         <div className='settings-section' onClick={() => navigator(`/profile/${localStorage.getItem("user", "")}`)}>
                             <h4>Ver mi perfil público</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => navigator(`/pricing`)}>
+                            <h4>Mis planes</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => navigator(`/shop`)}>
+                            <h4>Tienda</h4>
                         </div>
                         <div className='settings-section' onClick={logout}>
                             <h4>Cerrar sesión</h4>

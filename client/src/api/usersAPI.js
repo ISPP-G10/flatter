@@ -87,6 +87,11 @@ const usersAPI = {
                         relationship
                     }
                 }
+                getContractByUsername(username: $username){
+                    plan {
+                        viewSelfProfileOpinions
+                    }
+                }
             }
     `,
     createReview: gql`
@@ -204,6 +209,51 @@ const usersAPI = {
                     roles{
                         role
                     }
+                }
+            }
+        }
+    `,
+    getPlans: gql`
+    query {
+        getPlans {
+          id
+          flatterCoins
+          visitsNumber
+          tagsNumber
+          advertisement
+          chatCreation
+          standardSupport
+          premiumSupport
+          viewSelfProfileOpinions
+          planType
+        }
+      }
+    `,
+    getContractByUsername: gql`
+        query getContractByUsername($username: String!){
+            getContractByUsername(username: $username){
+                plan {
+                    planType
+                }
+            }
+        }
+    `,
+    changeContract: gql`
+        mutation changeContract($numDaysSelected: Int!, $planType: String!, $token: String!, $username: String!) {
+            changeContract(numDaysSelected: $numDaysSelected, planType: $planType, token: $token, username: $username) {
+                contract {
+                    endDate
+                }         
+            }
+        }
+    `,      
+
+    editUserFlatterCoins: gql`
+        mutation editUserFlatterCoins($username: String!, $token: String!, $flatterCoins: Int!){
+            editUserFlatterCoins(username: $username, token: $token, flatterCoins: $flatterCoins){
+                user{
+                    username
+                    flatterCoins
                 }
             }
         }

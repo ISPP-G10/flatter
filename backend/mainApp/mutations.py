@@ -437,6 +437,12 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         
         if outstanding_properties.count() >= 5:
             raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
+
+        if selected_property.owner.flatter_coins < 1000:
+            raise ValueError(_("No tienes suficientes flattercoins para destacar este inmueble"))
+        
+        selected_property.owner.flatter_coins -= 1000
+        selected_property.owner.save()
         
         selected_property.is_outstanding = True
         selected_property.outstanding_start_date = timezone.now()
