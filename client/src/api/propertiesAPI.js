@@ -74,9 +74,7 @@ const propertiesAPI = {
     filterProperties: gql`
     query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String) {
       getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
-        hasNext,
-        hasPrevious,
-        properties {
+        properties{
           id
           title
           description
@@ -105,6 +103,7 @@ const propertiesAPI = {
               lastName
           }
         }
+        totalCount
       }
     }
   `,

@@ -11,14 +11,20 @@ import UserCard from "../components/users/userCards";
 import FlatterForm from "../components/forms/flatterForm";
 import SolidButton from "../sections/solidButton";
 import customAlert from "../libs/functions/customAlert";
-import Pagination from "../components/pagination";
 
 const SearchUsers = () => {
+
+  const PAGE_SIZE = 5;
 
   const query = useURLQuery();
   const navigator = useNavigate();
   const client = useApolloClient();
   const filterFormRef = useRef(null);
+
+  let [paginationIndex, setPaginationIndex] = useState(query.get("page") && parseInt(query.get("page")) > 0 ? parseInt(query.get("page")) : 1);
+  
+  const [currentPageData, setCurrentPageData] = useState([]);
+  const [numberOfFilteredProperties, setNumberOfFilteredProperties] = useState(0);
 
   let [filterValues, setFilterValues] = useState({
     min: parseInt(query.get("min")),
@@ -38,6 +44,8 @@ const SearchUsers = () => {
         owner: values.role === 'Propietario' ? true : values.role === 'Inquilino' ? false : null
     });
 
+    setPaginationIndex(1);
+
   }
 
   useEffect(() => {
@@ -50,45 +58,29 @@ const SearchUsers = () => {
         if(input.name === 'tag') input.defaultValue = filterValues.tag ?? '';
     })
 
-    paginationRef.current.reset();
-
     //eslint-disable-next-line
   }, [filterValues]);
 
-
-  const handlePagination = (pageIndex, resultsPerPage) => {
-
-    return client.query({
+  useEffect(() => {
+    client.query({
       query: usersAPI.filteredUsersByTagAndReview,
       variables: {
-        username: localStorage.getItem('user'),
+        username: localStorage.getItem("user"),
         tag: filterValues.tag,
+        minRating: filterValues.min,
+        maxRating: filterValues.max,
         owner: filterValues.owner,
-        pageNumber: pageIndex,
-        pageSize: resultsPerPage
+        pageNumber: paginationIndex,
+        pageSize: PAGE_SIZE
       }
+    }).then(response => {
+      setCurrentPageData(response.data.getFilteredUsersByTagAndReview.users);
+      setNumberOfFilteredProperties(response.data.getFilteredUsersByTagAndReview.totalCount);
+    }).catch(error => {
+      console.log(error);
+      customAlert("¡Ups! No se han encontrado usuarios que cumplan con estos requisitos");
     })
-    .then((response) => {
-        let responseUsers = response.data.getFilteredUsersByTagAndReview.flatterUsers;
-        let minValue = isNaN(filterValues.min) ? 0 : filterValues.min;
-        let maxValue = isNaN(filterValues.max) ? 5 : filterValues.max;
-        setCurrentPageData(responseUsers.filter((user) => user.averageRating >= minValue && user.averageRating <= maxValue))
-
-        return {
-          next: response.data.getFilteredUsersByTagAndReview.hasNext,
-          prev: response.data.getFilteredUsersByTagAndReview.hasPrevious
-        }
-    })
-    .catch((error) => customAlert("No hay usuarios que coincidan con la búsqueda"));
-  }
-
-  const paginationRef = useRef(null);
-
-  const [currentPageData, setCurrentPageData] = useState([]);
-
-  useEffect(() => {
-    paginationRef.current.handle();
-  }, [paginationRef])
+  }, [filterValues, paginationIndex]);
 
   return (
     <FlatterPage withBackground userLogged>
@@ -123,8 +115,11 @@ const SearchUsers = () => {
                     );
                 })
             }
-
-          <Pagination ref = {paginationRef} queryCallback = {handlePagination} resultsPerPage = {10} />
+            <div className="pagination-container">
+              <button onClick={() => setPaginationIndex(paginationIndex-1)} disabled={paginationIndex<=1}>Anterior</button>
+              <span>{paginationIndex}</span>
+              <button onClick={() => setPaginationIndex(paginationIndex+1)} disabled={paginationIndex*PAGE_SIZE>=numberOfFilteredProperties}>Siguiente</button>
+            </div>
         </div>
       </section>
           

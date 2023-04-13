@@ -10,8 +10,6 @@ class PropertyType(DjangoObjectType):
 class PropertyPageType(ObjectType):
     properties = List(PropertyType)
     total_count = Int()
-    has_next = Boolean()
-    has_previous = Boolean()
     
 
 class ImageType(DjangoObjectType):

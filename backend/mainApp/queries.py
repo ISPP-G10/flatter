@@ -7,23 +7,16 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
-from django.core.paginator import Paginator
-
-
-
 
 class MainAppQuery(object):
     get_all_tags = graphene.List(TagType)
     get_property_tags = graphene.List(TagType, property=graphene.Int())
     get_property_by_title = graphene.Field(PropertyType, title=graphene.String())
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
-    get_properties = graphene.Field(PropertyPageType, page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
+    get_properties = graphene.Field(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
-                                                              location=graphene.String(), province=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
-    get_filtered_properties_by_province_municipality_location = graphene.Field(PropertyPageType, province=graphene.String(),
-                                                                              municipality=graphene.String(),
-                                                                              location=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
+                                                              location=graphene.String(), province=graphene.String(), page_number = graphene.Int(), page_size = graphene.Int())
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
     get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
     get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
@@ -39,16 +32,8 @@ class MainAppQuery(object):
     def resolve_get_property_by_id(self, info, id):
         return Property.objects.get(id=id)
 
-    def resolve_get_properties(self, info, page_number, page_size):
-        properties =  Property.objects.all()
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
+    def resolve_get_properties(self, info):
+        return Property.objects.all()
         
 
     def resolve_get_all_tags(self, info):
@@ -58,12 +43,19 @@ class MainAppQuery(object):
         property = Property.objects.get(id=property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self, info, page_number,page_size,max_price=None, min_price=None, municipality=None,
+    def resolve_get_filtered_properties_by_price_and_city(self, info, page_number=1, page_size=10 ,max_price=None, min_price=None, municipality=None,
                                                           location=None, province=None):
+        
         q = Q()
 
         if min_price and max_price and max_price < min_price:
             raise ValueError(_("El precio máximo introducido es menor al mínimo"))
+        
+        if page_number < 1:
+            raise ValueError(_("El número de página debe ser mayor que 0"))
+        
+        if page_size <= 0:
+            raise ValueError(_("El número de propiedades por página debe ser mayor que 0"))
         
         if max_price:
             q &= Q(price__lte=max_price)
@@ -87,50 +79,32 @@ class MainAppQuery(object):
 
         if location:
             q &= Q(location=location)
-
-        properties = Property.objects.filter(q)
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
-       
-
         
-
-    def resolve_get_filtered_properties_by_province_municipality_location(self, info, page_size, page_number,province=None,
-                                                                          municipality=None, location=None):
-        q = Q()
-        if province and not Province.objects.filter(name=province).exists():
-            raise ValueError(_("La provincia introducida no existe"))
-        elif province:
-            province = Province.objects.get(name=province)
-            q &= Q(municipality__province=province)
-
-        if municipality and not Municipality.objects.filter(name=municipality).exists():
-            raise ValueError(_("El municipio introducido no existe"))
-        elif municipality:
-            municipality = Municipality.objects.get(name=municipality)
-            q &= Q(municipality=municipality)
-
-        if province and municipality and not Municipality.objects.filter(name=municipality.name, province=province).exists():
-            raise ValueError(_("El municipio introducido no pertenece a la provincia introducida"))
-
-        if location:
-            q &= Q(location__icontains=location)
-
         properties = Property.objects.filter(q)
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
+        total_count = len(properties)
+
+        min_pagination_index = page_size * (page_number - 1)
+        max_pagination_index = page_size * page_number
+
+        if len(properties) == 0:
+            raise ValueError(_("No se han encontrado propiedades con los filtros introducidos"))
+        elif len(properties) < max_pagination_index and len(properties) > min_pagination_index:
+            properties = properties[min_pagination_index:]
+        elif len(properties) < max_pagination_index:
+            
+            new_min_pagination_index = len(properties)-page_size
+            
+            if new_min_pagination_index <= 0:
+                new_min_pagination_index = 0
+            
+            properties = properties[new_min_pagination_index:]
+        else:
+            properties = properties[min_pagination_index:max_pagination_index]
+
+        return PropertyPageType(
+            properties = properties,
+            total_count = total_count,
+        )
 
     def resolve_get_properties_by_owner(self, info, username):
         user = FlatterUser.objects.get(username=username)

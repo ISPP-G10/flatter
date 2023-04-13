@@ -141,19 +141,18 @@ const usersAPI = {
         }
     `,
     filteredUsersByTagAndReview: gql`
-        query getFilteredUsersByTagAndReview($pageNumber: Int!, $pageSize: Int!, $username: String!, $tag: String, $owner: Boolean){
-            getFilteredUsersByTagAndReview(pageNumber: $pageNumber, pageSize: $pageSize, username: $username, tag: $tag, owner: $owner){
-            flatterUsers {  
-                id
-                firstName
-                lastName
-                username
-                profilePicture
-                profession
-                averageRating
-            },
-                hasNext,
-                hasPrevious
+        query getFilteredUsersByTagAndReview($pageNumber: Int!, $pageSize: Int!, $username: String!, $tag: String, $owner: Boolean, $minRating: Int, $maxRating: Int){
+            getFilteredUsersByTagAndReview(pageNumber: $pageNumber, pageSize: $pageSize, username: $username, tag: $tag, owner: $owner, minRating: $minRating, maxRating: $maxRating){
+                users {  
+                    id
+                    firstName
+                    lastName
+                    username
+                    profilePicture
+                    profession
+                    averageRating
+                },
+                totalCount
             }
         }
     `,

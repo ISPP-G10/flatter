@@ -1,4 +1,5 @@
 import "../static/css/pages/listProperties.css";
+import "../static/css/components/pagination.css";
 import "../static/css/pages/propertyRequests.css";
 
 import FlatterPage from "../sections/flatterPage";
@@ -14,9 +15,10 @@ import {useNavigate} from 'react-router-dom';
 import {useApolloClient, useQuery} from '@apollo/client';
 import customAlert from "../libs/functions/customAlert";
 import FlatterModal from "../components/flatterModal";
-import Pagination from "../components/pagination";
 
 const ListProperties = () => {
+
+  const PAGE_SIZE = 10;
 
   const query = useURLQuery();
   const navigator = useNavigate();
@@ -29,9 +31,12 @@ const ListProperties = () => {
     municipality: query.get("municipality") ?? '',
   });
 
-  const [formKey, setFormKey] = useState(0);
+  let [paginationIndex, setPaginationIndex] = useState(query.get("page") && parseInt(query.get("page")) > 0 ? parseInt(query.get("page")) : 1);
 
+  const [formKey, setFormKey] = useState(0);
   const [sharedProperty, setSharedProperty] = useState({});
+  const [currentPageData, setCurrentPageData] = useState([]);
+  const [numberOfFilteredProperties, setNumberOfFilteredProperties] = useState(0);
 
   const modalRef = useRef(null);
 
@@ -65,50 +70,31 @@ const ListProperties = () => {
       if(input.name === 'municipality') input.defaultValue = filterValues.municipality ?? '';
     })
 
-    if(!loading)
-      paginationRef.current.reset();
-
   }, [filterValues, loading]);
+
+  useEffect(() => {
+
+    client.query({
+      query: propertiesAPI.filterProperties,
+      variables: {
+        minPrice: filterValues.min,
+        maxPrice: filterValues.max,
+        municipality: filterValues.municipality,
+        pageNumber: paginationIndex,
+        pageSize: PAGE_SIZE
+      }
+    }).then(response => {
+      setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
+      setNumberOfFilteredProperties(response.data.getFilteredPropertiesByPriceAndCity.totalCount);
+    }).catch(error => customAlert("¡Ups! Parece que no hay resultados que cumplan estos requisitos"));
+
+  }, [filterValues, paginationIndex]);
 
   const copyShareInputClipboard = () => {
     const input = document.querySelector('#share-modal-input');
     window.navigator.clipboard.writeText(input.value)
       .then(customAlert("¡Ya puedes compartir la propiedad!"))
       .catch(error => console.log(error));;
-  }
-
-  const paginationRef = useRef(null);
-
-  const [currentPageData, setCurrentPageData] = useState([]);
-
-  useEffect(() => {
-    if(!loading)
-      paginationRef.current.handle();
-  }, [paginationRef, loading])
-
-  const handlePagination = (pageIndex, resultsPerPage) => {
-
-    return client.query({
-      query: propertiesAPI.filterProperties,
-      variables: {
-        minPrice: filterValues.min,
-        maxPrice: filterValues.max,
-        municipality: filterValues.municipality,
-        pageNumber: pageIndex,
-        pageSize: resultsPerPage
-      }
-    })
-    .then((response) => {
-      setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
-
-      return {
-        next: response.data.getFilteredPropertiesByPriceAndCity.hasNext,
-        prev: response.data.getFilteredPropertiesByPriceAndCity.hasPrevious
-      }
-    })
-    .catch((error) => {
-      customAlert("No hay propiedades disponibles para esa búsqueda");
-    });
   }
   
   const handleCleanFilters = () => {
@@ -146,7 +132,7 @@ const ListProperties = () => {
   
         <div className="content">
           {
-            currentPageData.map((property, index) => {
+            currentPageData && currentPageData.map((property, index) => {
               const isFavourite = data.getFavouriteProperties.map(x => x).filter(x => parseInt(x.id) === parseInt(property.id)).length>0;
 
               return(
@@ -202,8 +188,11 @@ const ListProperties = () => {
               );
               }
             )}
-
-          <Pagination ref = {paginationRef} queryCallback = {handlePagination} resultsPerPage = {10} />
+            <div className="pagination-container">
+              <button onClick={() => setPaginationIndex(paginationIndex-1)} disabled={paginationIndex<=1}>Anterior</button>
+              <span>{paginationIndex}</span>
+              <button onClick={() => setPaginationIndex(paginationIndex+1)} disabled={paginationIndex*PAGE_SIZE>=numberOfFilteredProperties}>Siguiente</button>
+            </div>
         </div>
       </section>
 
