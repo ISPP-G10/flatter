@@ -8,6 +8,14 @@ from social.models import Group, Message
 from social.models import Incident, Request
 from social.types import ReviewType, GroupType, MessageType
 
+
+environment = os.environ.get("DJANGO_ENV", "development")
+
+if environment == 'development':
+    from backend.settings.development import GRAPHQL_JWT
+else:
+    from backend.settings.production import GRAPHQL_JWT
+
 GROUP_DOES_NOT_EXIST = 'Group does not exist'
 
 USER_DOES_NOT_EXIST = 'User does not exist'
@@ -590,6 +598,7 @@ class EditUserPreferencesMutation(graphene.Mutation):
     class Input():
         username = graphene.String(required=True)
         inappropiate_language = graphene.Boolean(required=False)
+        user_token = graphene.String(required=False)
     
     user_preferences = graphene.Field(UserPreferencesType)
     
@@ -597,11 +606,14 @@ class EditUserPreferencesMutation(graphene.Mutation):
     def mutate(root, info, **kwargs):
         username = kwargs.get('username', '').strip()
         inappropiate_language = kwargs.get('inappropiate_language', False)
+        user_token = kwargs.get('user_token', '').strip()
         
         if not username or not FlatterUser.objects.filter(username=username).exists():
             raise ValueError(_("El usuario no existe"))
         
         user_selected = FlatterUser.objects.get(username=username)
+
+        check_token(user_token, user_selected)
         
         user_preferences = UserPreferences.objects.get(user=user_selected)
         user_preferences.inappropiate_language = inappropiate_language
@@ -687,9 +699,24 @@ def _exists_tag(tag):
 def check_token(user_token: str, user: FlatterUser):
     if user_token:
         try:
-            user_token = jwt.decode(user_token, 'my_secret', algorithms=['HS256'])
+            user_token = jwt.decode(user_token, GRAPHQL_JWT['JWT_SECRET_KEY'], algorithms=['HS256'])
             if user_token['username'] != user.username:
                 raise ValueError(_("El token no es válido"))
+
+            date_exp = datetime.utcfromtimestamp(user_token['exp'])
+
+            now = datetime.utcnow()
+
+            if now > date_exp:
+                raise ValueError(_("El token ha expirado"))
+
+            date_cre = datetime.utcfromtimestamp(user_token['origIat'])
+
+            time_delta = GRAPHQL_JWT['JWT_EXPIRATION_DELTA']
+
+            if date_exp - date_cre > time_delta:
+                raise ValueError(_("El token no es válido"))
+
         except jwt.exceptions.DecodeError:
             raise ValueError(_("El token no es válido"))
 
