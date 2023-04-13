@@ -115,8 +115,8 @@ const SearchUsers = () => {
             } 
         }) 
       }
-    }, [userTagsLoading, userTagsData]);
-
+  }, [userTagsLoading, userTagsData]);
+  return (
     <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Buscar a otros usuarios</h1>

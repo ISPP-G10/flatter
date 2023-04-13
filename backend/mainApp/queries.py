@@ -16,7 +16,8 @@ class MainAppQuery(object):
     get_properties = graphene.Field(PropertyType)
     get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
-                                                              location=graphene.String(), province=graphene.String(), 
+                                                              location=graphene.String(), province=graphene.String(),
+                                                              tag=graphene.String(), 
                                                               page_number = graphene.Int(), page_size = graphene.Int())
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
     get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))

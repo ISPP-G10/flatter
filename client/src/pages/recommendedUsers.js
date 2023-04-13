@@ -28,8 +28,8 @@ const RecommendedUsers = () => {
         <div>
             <h1 className="properties-title">Usuarios recomendados</h1>
         </div>
-        <section className="site-content-sidebar properties"  style={{maxWidth: '100%'}}>
-            <div className="content">
+        <section className="site-content-sidebar properties"  style={{maxWidth: '90%'}}>
+            <div className="content" style={{paddingLeft: '0'}}>
                 {
                     users.length >0 && users.map((user) => {
                         return(
