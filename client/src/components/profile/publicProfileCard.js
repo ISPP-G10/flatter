@@ -121,9 +121,11 @@ const PublicProfileCard = (props) => {
                             props.isMe ? (
                                 <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
-                            (
-                                <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
-                            )
+                        
+                            props.canCreateChats && 
+                                (
+                                    <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
+                                ) 
                         }
                     </div>
                     {props.job && <p>{props.job}</p>}

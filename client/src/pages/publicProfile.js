@@ -23,6 +23,10 @@ const PublicProfile = (props) => {
         username: username
     }});
 
+    const {data: contractData, loading: contractLoading} = useQuery(usersAPI.getContractByUsername, {variables: {
+        username: localStorage.getItem("user")
+    }});
+
     useEffect (() => {
         if (!loading){
             setAverageRating(profile.averageRating);
@@ -40,10 +44,11 @@ const PublicProfile = (props) => {
         return total_ratings
     }
 
-    if(loading) return <FlatterPage withBackground userLogged withAds={false}><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
+    if(loading || contractLoading) return <FlatterPage withBackground userLogged withAds={false}><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
 
     const profile = data.getUserByUsername;
     const canSeeSelfComments = data.getContractByUsername.plan.viewSelfProfileOpinions;
+    const canCreateChats = contractData.getContractByUsername.plan.chatCreation;
 
     let roles = profile.roles.map((role) => role.role);
 
@@ -63,6 +68,7 @@ const PublicProfile = (props) => {
                     pic={API_SERVER_MEDIA+profile.profilePicture}
                     refetchUser = {refetch}
                     setActivateChat={props.setActivateChat}
+                    canCreateChats={canCreateChats}
                 />
                 <ReviewsBox average={averageRating} total={totalRatings} />
                 <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} canSeeSelfComments={canSeeSelfComments} isMe={username===localStorage.getItem("user")}/>

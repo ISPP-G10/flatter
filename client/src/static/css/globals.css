@@ -76,6 +76,7 @@ section {
     url("../files/images/flatter-bg.jpg");
   background-size: cover;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .glass {
