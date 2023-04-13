@@ -119,7 +119,7 @@ const PersonalRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte");
         });
       }
 

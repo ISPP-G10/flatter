@@ -20,7 +20,7 @@ import usersAPI from '../api/usersAPI';
 const PropertyDetails = () => {
   const [userData, setUserData] = useState(null);
   const [profile, setProfile] = useState(null);
-  const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+  const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
       username: localStorage.getItem("user")
   }});
   
@@ -102,7 +102,7 @@ const PropertyDetails = () => {
       .catch((error) => customAlert(error.message));
   };
   return (
-    <FlatterPage withBackground userLogged>
+    <FlatterPage withBackground userLogged withAds={false}>
       <div className="property-housing-page">
         <section className="property-housing">
           <div className="property-housing__photo">
@@ -152,6 +152,7 @@ const PropertyDetails = () => {
                 )
               }
 
+              {/* RENDERIZACIÓN DEL BOTON POR VALIDAR */}
               {propertyData.getPropertyById.owner.username !==
               localStorage.getItem("user") ? (
                 userRequest === false ? (
@@ -262,14 +263,17 @@ const PropertyDetails = () => {
         ref={propertyRequestModalRef}
       >
         <h1 className="comments-form-title">Solicitar alquiler</h1>
-        <FlatterForm
-          buttonText="Solicitar"
-          showSuperAnimatedButton
-          numberOfColumns={1}
-          inputs={propertyRequestsInputs(profile.firstName+" "+profile.lastName, profile.age, profile.profession)}
-          onSubmit={handlePropertyRequest}
-          ref={propertyRequestFormRef}
+        {
+          profile &&
+          <FlatterForm
+            buttonText="Solicitar"
+            showSuperAnimatedButton
+            numberOfColumns={1}
+            inputs={propertyRequestsInputs(profile.firstName+" "+profile.lastName, profile.age, profile.profession)}
+            onSubmit={handlePropertyRequest}
+            ref={propertyRequestFormRef}
         ></FlatterForm>
+        }
       </FlatterModal>
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
         <FormProperty property={property} />
