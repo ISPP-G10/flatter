@@ -2,7 +2,7 @@ import { propertyValidators } from "../libs/validators/propertyValidation"
 
 export const propertyInputs = [
     {
-      tag: 'Título de la propiedad',
+      tag: 'Nombre del inmueble',
       name: 'title',
       type: 'text',
       defaultValue: "",

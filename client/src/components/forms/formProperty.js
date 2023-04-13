@@ -1,6 +1,8 @@
 import FlatterForm from './flatterForm';
 import provincesAPI from "../../api/provincesAPI";
 import propertiesAPI from "../../api/propertiesAPI";
+import TagSelector from '../inputs/tagSelector';
+import tagsAPI from '../../api/tagsAPI';
 
 import { useApolloClient, useQuery } from "@apollo/client";
 import { propertyInputs } from '../../forms/propertiesForm';
@@ -16,7 +18,16 @@ const FormProperty = ({ property }) => {
   const [configured, setConfigured] = useState(false);
   const [inputsChanged, setInputsChanged] = useState(false);
 
+  const {data: propertyTagsData, loading: propertyTagsLoading} = useQuery(tagsAPI.getTagsByType, {
+    variables: {
+        type: "P"
+    }
+  });
+  const tagsInput = useRef(null);
+  
   function createPropertySubmit({values}){
+
+    let tagsValues = tagsInput.current.props.value.map(tag => tag.value);
 
     if(!createPropertyFormRef.current.validate()) return;
 
@@ -34,7 +45,8 @@ const FormProperty = ({ property }) => {
         price: parseFloat(values.price),
         images: values.images,
         maxCapacity: parseInt(values.maxCapacity),
-        location: values.location
+        location: values.location,
+        tags: tagsValues
       }
     } : {
       mutation: propertiesAPI.updateProperty,
@@ -51,7 +63,8 @@ const FormProperty = ({ property }) => {
         ownerUsername: localStorage.getItem('user',''),
         price: parseFloat(values.price),
         images: values.images,
-        maxCapacity: parseInt(values.maxCapacity)
+        maxCapacity: parseInt(values.maxCapacity),
+        tags: tagsValues
       }
     })
     .then(response => window.location.reload())
@@ -159,7 +172,31 @@ const FormProperty = ({ property }) => {
         onSubmit={createPropertySubmit}
         ref={createPropertyFormRef}
         scrollable
-    />
+        childrenPosition={6}
+    >
+      <div className='tag-input'>
+          {
+              !propertyTagsLoading && 
+                  <TagSelector 
+                      options={propertyTagsData.getTagsByType.map(tag => {
+                                  return {
+                                          value: tag.id,
+                                          name: tag.name, 
+                                          color: tag.color
+                                      }
+                              })}
+                      defaultValues={property?property.tags.map(tag => {
+                                  return {
+                                          value: tag.id,
+                                          name: tag.name,
+                                          color: tag.color
+                                      }
+                              }):[]}
+                      max={8} 
+                      ref={tagsInput}/>
+          }
+      </div>
+    </FlatterForm>
   );
 };
 

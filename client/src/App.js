@@ -17,6 +17,7 @@ import PrivacyPage from './pages/privacyPage';
 import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
+import RecommendedUsers from './pages/recommendedUsers';
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
         <Route path='/profile/:username' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>
         <Route path='/me' element={<> <AccountSettings/> </>}/>
         <Route path='/favourites' element={<> <FavouritesProperties/> </>}/>
+        <Route path="/recommendations" element={<> <RecommendedUsers/> </>}/>
         <Route path="*" element={<Error/>}/>
       </Routes>
     </Router>

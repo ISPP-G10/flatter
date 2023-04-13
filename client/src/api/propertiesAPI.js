@@ -15,6 +15,7 @@ const propertiesAPI = {
       $price: Float!
       $images: [String]
       $maxCapacity: Int!
+      $tags: [String]!
     ) {
       createProperty(
         title: $title
@@ -29,6 +30,7 @@ const propertiesAPI = {
         price: $price
         images: $images
         maxCapacity: $maxCapacity
+        tags: $tags
       ) {
         property {
           title
@@ -50,6 +52,7 @@ const propertiesAPI = {
       $municipality: String!
       $price: Float!
       $images: [String]
+      $tags: [String]!
     ) {
       updateProperty(
         propertyId: $id
@@ -63,6 +66,7 @@ const propertiesAPI = {
         municipality: $municipality
         price: $price
         images: $images
+        tags: $tags
       ) {
         property {
           title
@@ -72,8 +76,8 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String) {
-          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
+        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String) {
+          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag) {
                 id
                 title
                 description

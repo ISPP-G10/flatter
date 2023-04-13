@@ -1,10 +1,11 @@
 import graphene
 from django.utils.translation import ugettext_lazy as _
-from authentication.models import Tag
-from authentication.types import TagType
+from authentication.models import Tag, Role, FlatterUser
+from authentication.types import TagType, FlatterUserType
+from mainApp.models import Property
+from .recommendations import recommend_similar_users, build_similarity_matrix
 from .types import GroupType, MessageType, GroupedMessagesType, GroupAndLastMessageType, InappropiateLanguageType
 from .models import Group, Message, InappropiateLanguage
-from authentication.models import FlatterUser
 
 class SocialQueries(object):
 
@@ -14,6 +15,8 @@ class SocialQueries(object):
     get_my_groups = graphene.Field(graphene.List(GroupAndLastMessageType), username=graphene.String())
     get_messages_by_group = graphene.Field(graphene.List(GroupedMessagesType), username=graphene.String(), group_id=graphene.Int())
     get_messages = graphene.List(MessageType)
+    get_relationships_between_users = graphene.List(graphene.String, user_login=graphene.String(), user_valued=graphene.String())
+    get_users_recommendations = graphene.List(FlatterUserType, username=graphene.String())
     get_inappropiate_language = graphene.List(InappropiateLanguageType, username=graphene.String())
 
     def resolve_get_all_tag(self, info):
@@ -80,11 +83,54 @@ class SocialQueries(object):
         return Message.objects.all()
 
     def resolve_get_tags_by_type(self, info, tag_type=None):
-        
-        parsed_tag = 'P' if tag_type == "property" else "U"
-        
-        return Tag.objects.filter(entity=parsed_tag)
-    
+        if tag_type=="U":
+            return Tag.objects.filter(entity="U")
+        elif tag_type=="P":
+            return Tag.objects.filter(entity="P")
+        else:
+            raise ValueError(_('El tipo de etiqueta no es válido'))
+
+    def resolve_get_relationships_between_users(self, info, user_login, user_valued):
+        relationships = []
+        user_login = FlatterUser.objects.get(username=user_login)
+        user_valued = FlatterUser.objects.get(username=user_valued)
+
+        if user_login == user_valued:
+            raise ValueError(_('No puedes tener una relación contigo mismo'))
+
+        if user_login.roles.filter(role='OWNER').exists() and user_valued.roles.filter(role='RENTER').exists():
+            properties = Property.objects.filter(owner=user_login).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Propietario')
+
+        if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='OWNER').exists():
+            properties = Property.objects.filter(owner=user_valued).filter(flatmates__in=[user_login])
+            if properties.exists():
+                relationships.append('Inquilino')
+
+        if user_login.roles.filter(role='RENTER').exists() and user_valued.roles.filter(role='RENTER').exists():
+            properties = Property.objects.filter(flatmates__in=[user_login]).filter(flatmates__in=[user_valued])
+            if properties.exists():
+                relationships.append('Compañero')
+
+        if len(relationships) == 0:
+            relationships = ['Amigo', 'Excompañero']
+
+        return relationships
+
+
+    def resolve_get_users_recommendations(self, info, username):
+        try:
+            user = FlatterUser.objects.get(username=username)
+        except FlatterUser.DoesNotExist:
+            raise ValueError(_('El usuario no existe'))
+        role = Role.objects.get(role="RENTER")
+        users = FlatterUser.objects.filter(roles__in=[role]).exclude(id=user.id)
+        if len(users) == 0:
+            raise ValueError(_('No hay usuarios para recomendar'))
+        matrix = build_similarity_matrix(users, user)
+        return recommend_similar_users(matrix)
+
     def resolve_get_inappropiate_language(self, info, username):
         username = username.strip()
         

@@ -12,7 +12,7 @@ class AuthenticationQuery(object):
   def resolve_get_user_by_username(self, info, username):
     return FlatterUser.objects.get(username=username)
   
-  def resolve_get_filtered_users_by_tag_and_review(self,info,username,tag=None,owner=False):
+  def resolve_get_filtered_users_by_tag_and_review(self,info,username,tag=None,owner=None):
 
     username = username.strip()
     
@@ -22,7 +22,7 @@ class AuthenticationQuery(object):
     q = Q()
 
     if tag:    
-      q &= Q(tags__icontains = tag)
+      q &= Q(tags__name__icontains = tag)
       
     if owner is not None and owner:
       q &= Q(roles__in = [Role.objects.get(role="OWNER").pk])

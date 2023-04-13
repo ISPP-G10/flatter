@@ -54,11 +54,13 @@ const FavouritesProperties = () => {
                     <div className="meta-right">
                       {property.tags &&
                         property.tags.map((tag, index) => (
-                          <Tag
-                            key={index}
-                            name={tag.name}
-                            color={tag.color}
-                          ></Tag>
+                          <div className="tagDiv" onClick={() => navigator(`/search?tag=${tag.name}`)}>
+                            <Tag
+                              key={index}
+                              name={tag.name}
+                              color={tag.color}
+                            ></Tag>
+                          </div>
                         ))}
                     </div>
 
