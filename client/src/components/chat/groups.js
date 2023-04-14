@@ -10,7 +10,7 @@ import notification from "../../libs/functions/notification"
 const Groups = (props) => {
 
     let username = localStorage.getItem('user');
-    let notificationsAllowed = localStorage.getItem('notificationsAllowed');
+    let notificationsAllowed = localStorage.getItem('notificationsAllowed', 'true');
     let userToken = localStorage.getItem('token', '');
 
     const [newGroupId, setNewGroupId] = useState(undefined);
@@ -48,8 +48,7 @@ const Groups = (props) => {
                     let groups_filtered = groups.filter(g => g.group.id !== group.id)
                     setGroups([groupAndLastMessage,...groups_filtered])
                     setAllGroups([groupAndLastMessage,...allGroups.filter(g => g.group.id !== group.id)])
-                    if (notificationsAllowed==="true" && lastMessage.user.username !== username){
-                        let messageText = localStorage.getItem("inappropiateLanguage")?localStorage.getItem("inappropiateLanguage")==="false"?parseMessage(lastMessage.text):lastMessage.text:lastMessage.text;
+                    if (lastMessage.user.username !== username){
                         if (parseInt(group.id)!==props.chatId){
                             if (props.newMessages.get(group.id)) {
                                 props.newMessages.set(group.id, props.newMessages.get(group.id)+1) 
@@ -57,7 +56,13 @@ const Groups = (props) => {
                                 props.newMessages.set(group.id, 1)
                             }
                             props.setNewMessages(new Map(props.newMessages))
-                            notification(messageText, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username, props.setActivateChat, props.newMessages, props.setNewMessages, group.id)
+                            if(notificationsAllowed==="true"){
+                                let messageText = lastMessage.text 
+                                if(localStorage.getItem("inappropiateLanguage", 'true')==="false"){
+                                    messageText = parseMessage(lastMessage.text)
+                                }
+                                notification(messageText, API_SERVER_MEDIA+lastMessage.user.profilePicture, lastMessage.user.firstName, lastMessage.user.lastName, lastMessage.user.username, props.setActivateChat, props.newMessages, props.setNewMessages, group.id)
+                            }
                         }
                     }
                 } else if(!group.individual){
