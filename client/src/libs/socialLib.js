@@ -42,7 +42,7 @@ const socialLib ={
                         });
                     }
                 }else{
-                    customAlert("La longitud máxima del mensaje debe ser de " + maxLength +  " caracteres");
+                    customAlert("La longitud máxima del mensaje debe ser de " + maxLength +  " caracteres", "warning");
                 }
             }
         }
