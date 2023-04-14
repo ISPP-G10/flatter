@@ -68,8 +68,9 @@ services:
       dockerfile: ./docker/client/Dockerfile
       args:
         API_SERVER: ${API_SERVER_URL}
-        NODE_ENV: ${NODE_ENV}
-        REACT_APP_PAYPAL_CLIENT_ID: ${REACT_APP_PAYPAL_CLIENT_ID}
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      REACT_APP_PAYPAL_CLIENT_ID: ${REACT_APP_PAYPAL_CLIENT_ID}
     command: sh -c "serve -s build -l 3000 --no-clipboard"
     depends_on:
       - backend
