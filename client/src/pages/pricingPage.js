@@ -101,7 +101,7 @@ const PricingPage = () => {
             userPlanQuery.refetch();
             modalRef.current.close();
             customAlert(
-              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`, 'success', false
+              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`, 'success', false, 10000
             );
           })
           .catch((error) => {

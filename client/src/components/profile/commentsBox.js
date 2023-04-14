@@ -65,7 +65,7 @@ const CommentsBox = (props) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
             setRating(null)
         } else if (newRating < 1 && newRating > 5){
-            customAlert("La valoración debe estar entre 1 y 5", 'warning');
+            customAlert("La valoración debe estar entre 1 y 5", 'warning', true, 10000);
         } else{
             setRating(newRating)
         }

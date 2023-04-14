@@ -7,31 +7,32 @@ import { toast } from "react-hot-toast";
 const alert = ReactDOM.createRoot(document.getElementById("alert"));
 let environment = process.env.NODE_ENV;
 
-function customAlert(string, type = "native", top = true) {
+function customAlert(string, type = "native", top = true, duration = 5000) {
   if (environment === "production") {
     switch (type) {
       case "error":
         toast.error(
           "Se ha producido un error.\nSi el problema persiste, contacte con el equipo de soporte.",
-          { position: top === true ? "top-center" : "bottom-center" }
+          { position: top === true ? "top-center" : "bottom-center", duration: duration }
         );
         break;
       case "success":
         toast.success(string, {
-          position: top === true ? "top-center" : "bottom-center",
+          position: top === true ? "top-center" : "bottom-center", duration: duration
         });
         break;
       case "warning":
         toast(string, {
           icon: "⚠️",
           position: top === true ? "top-center" : "bottom-center",
-          duration: 10000,
+          duration: duration
         });
         break;
       case "info":
         toast(string, {
           icon: "ℹ️",
           position: top === true ? "top-center" : "bottom-center",
+          duration: duration
         });
         break;
       default:

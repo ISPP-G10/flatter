@@ -82,7 +82,7 @@ const ShopPage = () => {
   }
 
   function handleBadPayment() {
-    customAlert("Se ha cancelado el pago", 'warning', false);
+    customAlert("Se ha cancelado el pago", 'warning', false, 10000);
   }
 
   return (

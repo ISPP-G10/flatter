@@ -11,6 +11,7 @@ django_asgi_app = get_asgi_application()
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
+from channels.auth import AuthMiddlewareStack
 from backend.socket import MyGraphqlWsConsumer
 from django.urls import path
 
@@ -20,8 +21,10 @@ websocket_urlPattern = [
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
-            URLRouter(
-                websocket_urlPattern
+            AuthMiddlewareStack(
+                URLRouter(
+                    websocket_urlPattern
+                )
             )
         )
             
