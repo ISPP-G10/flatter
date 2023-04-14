@@ -64,7 +64,7 @@ const Header = ({scrollY, userLogged}) => {
             navigator(0);
 
         }).catch((error) => {
-            customAlert('Usuario o contraseña incorrectos', 'error');
+            customAlert('Usuario o contraseña incorrectos', 'warning');
         });
 
     }
