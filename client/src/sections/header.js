@@ -80,7 +80,7 @@ const Header = ({scrollY, userLogged}) => {
         let approved = true;
 
         if (values.password !== values.passwordConfirm) {
-            customAlert('Las contraseñas no coinciden', 'warning', 10000);
+            customAlert('Las contraseñas no coinciden', 'warning', true, 10000);
             approved = false;
         }
 
