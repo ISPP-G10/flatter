@@ -7,7 +7,7 @@ export const commentsInputs = [
         type: "select",
         defaultValue: "Amigo",
         isRequired: true,
-        values: ['Amigo', 'Compañero', 'Excompañero', 'Propietario', 'Inquilino'],
+        values: [],
         validators: [
             commentsValidators.notEmptyValidator,
             commentsValidators.validRelationship

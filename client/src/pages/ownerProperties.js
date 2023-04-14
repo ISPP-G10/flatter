@@ -1,23 +1,25 @@
 import "../static/css/pages/ownerProperties.css";
 
+import { useNavigate } from "react-router-dom";
+import { useQuery } from '@apollo/client';
+import { useState, useRef } from 'react';
+import { useApolloClient } from '@apollo/client';
+
+import * as settings from "../settings";
 import FlatterPage from "../sections/flatterPage";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 import propertiesAPI from '../api/propertiesAPI';
-import * as settings from "../settings";
 import customAlert from "../libs/functions/customAlert";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from '@apollo/client';
-import { useState, useRef } from 'react';
-import { useApolloClient } from '@apollo/client';
 import customConfirm from "../libs/functions/customConfirm";
 
 
 const OwnerProperties = ({}) => {
 
   let [ property, setProperty ] = useState({});
+  let userToken = localStorage.getItem("token", '');
 
   const addPropertyModalRef = useRef(null);
   const editPropertyModalRef = useRef(null);
@@ -31,11 +33,12 @@ const OwnerProperties = ({}) => {
               mutation: propertiesAPI.deletePropertyById,
               variables: {
                   propertyId: parseInt(id),
+                  userToken: userToken,
               }
           }).then((response) => {
             window.location.reload();
           }).catch((error) => {
-              console.log(error);
+              customAlert(error.message, 'error');
           });
       
     }
@@ -46,11 +49,12 @@ const OwnerProperties = ({}) => {
           mutation: propertiesAPI.outstandPropertyById,
           variables: {
               propertyId: parseInt(idPiso),
+              userToken: userToken,
           }
       }).then((response) => {
           window.location.reload();
       }).catch((error) => {
-          customAlert(error.message);
+          customAlert(error.message, 'error', false);
       });
   
     }
@@ -59,14 +63,16 @@ const OwnerProperties = ({}) => {
       customConfirm("Estás a punto de destacar por 1000 FlatterCoins, ¿quieres continuar?")
       .then((response) => {
           standOutProperty(idPiso);
+          customAlert("Has destacado la propiedad", 'success', false);
       })
       .catch((error) => {
-          customAlert("Has rechazado la operación");
+          customAlert("Has rechazado la operación", 'info', false);
       });
   }
 
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
-      username: localStorage.getItem('user','')
+      username: localStorage.getItem('user',''),
+      userToken: userToken
     }});
 
     if (loading) return <p>Loading...</p>
@@ -139,7 +145,9 @@ const OwnerProperties = ({}) => {
                 {prop && prop.tags.map((tag,index) => {
                   return(
                     <div className="etiquetaindv" key={index}>
-                      <Tag name={tag.name} color={tag.color}/>
+                      <div className="tagDiv" onClick={() => navigate(`/search?tag=${tag.name}`)}>
+                        <Tag name={tag.name} color={tag.color}/>
+                      </div>
                     </div> 
                   ); 
                 })

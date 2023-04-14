@@ -1,6 +1,6 @@
 import logging
 from django.test import TestCase
-from social.models import Group, Message, Incident, Request
+from social.models import Group, Message, InappropiateLanguage
 from authentication.models import FlatterUser
 
 logging.disable(logging.CRITICAL)
@@ -131,5 +131,34 @@ class TestModels(TestCase):
             message = Message(text='Esto es una prueba negativa', user=self.user3, group=self.group1)
             message.save()
             self.fail("User not in group")
+        except Exception:
+            pass
+
+
+    # Modelo Lenguaje inapropiado
+    ### Test de creación de un lenguaje inapropiado  +++ Caso positivo
+    def test_inappropriate_language_positive(self):
+        language = InappropiateLanguage(word='Esto es una prueba positiva')
+        language.save()
+        self.assertEqual(language.word, 'Esto es una prueba positiva')
+        
+
+    
+    ### Test de creación de un lenguaje inapropiado  --- Caso negativo: lenguaje en blanco
+    def test_inappropriate_language_negative(self):
+        try:
+            language = InappropiateLanguage(word='')
+            language.save()
+            self.fail("Language must have text")
+        except Exception:
+            pass
+
+    
+    ### Test de creación de un lenguaje inapropiado  --- Caso negativo: lenguaje repetido
+    def test_inappropriate_language_negative2(self):
+        try:
+            language = InappropiateLanguage(word='Esto es una prueba positiva')
+            language.save()
+            self.fail("Language already exists")
         except Exception:
             pass

@@ -1,18 +1,19 @@
 import '../static/css/pages/listProperties.css'
 import '../static/css/pages/propertyRequests.css'
 
-import FlatterPage from "../sections/flatterPage";
-import personalRequestsAPI from '../api/personalRequestsAPI';
-import * as settings from "../settings";
-import customAlert from "../libs/functions/customAlert";
-import { useQuery } from '@apollo/client';
-import SolidButton from '../sections/solidButton';
-import FlatterForm from '../components/forms/flatterForm';
 import { filterRequestsInputs } from '../forms/filterRequestsForm';
 import {useApolloClient} from '@apollo/client';
 import { useNavigate } from "react-router-dom";
-import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
+
+import * as settings from "../settings";
+import FlatterPage from "../sections/flatterPage";
+import personalRequestsAPI from '../api/personalRequestsAPI';
+import customAlert from "../libs/functions/customAlert";
+import SolidButton from '../sections/solidButton';
+import FlatterForm from '../components/forms/flatterForm';
+import PaymentModal from '../components/paymentModal';
+import useURLQuery from "../hooks/useURLQuery";
 
 const PersonalRequests = () => {
 
@@ -20,6 +21,8 @@ const PersonalRequests = () => {
     const client = useApolloClient();
     const query = useURLQuery();
     const filterFormRef = useRef(null);
+
+    let userToken = localStorage.getItem("token", '');
 
     let [filterValues, setFilterValues] = useState({
         username : localStorage.getItem('user',''),
@@ -33,7 +36,6 @@ const PersonalRequests = () => {
     //Actualmente tiene 7 dias de deadline, pero puede cambiarse si fuese preciso.
     function paymentDeadline(dateString) {
         const date = new Date(dateString);
-        console.log("este es el date"+date)
         date.setDate(date.getDate() + 7);
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -82,56 +84,46 @@ const PersonalRequests = () => {
             username: filterValues.username,
             status: filterValues.status,
             startDate: filterValues.startdate,
-            endDate: filterValues.enddate
+            endDate: filterValues.enddate,
+            userToken: userToken
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByRequesterAndStatusAndDates))
-        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte", 'error'));
     
       }, [filterValues]);
-      
-      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago.
-      function handleRequestPay(price, petitionId, username, propertyId){
-        
-        //aqui te devuelvo el precio
-        console.log(price)
 
-        //Para actualizar el estado de la petición a pagada.
+      function handleRequestPay(price, petitionId, username, propertyId){
         client.mutate({
             mutation: personalRequestsAPI.updateStatusPetition,
             variables: {
                 petitionId: parseInt(petitionId),
-                statusPetition: "I"
+                statusPetition: "I",
+                userToken: userToken
             }
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error', false);
         });
 
-        //Aqui añadimos al usuario al inmueble en cuestion
         client.mutate({
             mutation: personalRequestsAPI.addUserToProperty,
             variables: {
                 propertyId: parseInt(propertyId),
-                username: username
+                username: username,
+                userToken: userToken
             }
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte", 'error', false);
         });
       }
 
+    const paymentModal = useRef(null);
 
-
-    const {data, loading} = useQuery(personalRequestsAPI.getPersonalPetitions, {variables: {
-        username: localStorage.getItem('user','')
-      }});
-
-    return loading ? 
-            <div className='carrousel-container'>Loading...</div>
-        : (
+    return (
             <FlatterPage withBackground userLogged>
                 <div>
                     <h1 className="properties-title">Tus Solicitudes a otros Pisos</h1>
@@ -225,7 +217,7 @@ const PersonalRequests = () => {
                                 : request.status === "A" ?
                                 (
                                     <div className="request-actions">
-                                          <SolidButton onClick={ () => {handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}} 
+                                          <SolidButton onClick={ () => paymentModal.current.open()} 
                                           text="Pagar" className="pay" />
                                       </div> 
                                 )
@@ -244,9 +236,12 @@ const PersonalRequests = () => {
                                 : (<div></div>)
                                 }    
 
-                                        
-                                
-
+                                <PaymentModal
+                                    price={request.property.price}
+                                    resolve={()=> handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}
+                                    reject={() => customAlert("Se ha cancelado el pago", 'info', false)}
+                                    ref={paymentModal}
+                                />    
                             </div>
                         );})}
                         </div>

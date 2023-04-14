@@ -7,63 +7,56 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
-from django.core.paginator import Paginator
-
-
-
 
 class MainAppQuery(object):
-    get_all_tags = graphene.List(TagType)
-    get_property_tags = graphene.List(TagType, property=graphene.Int())
-    get_property_by_title = graphene.Field(PropertyType, title=graphene.String())
-    get_property_by_id = graphene.Field(PropertyType, id=graphene.Int())
-    get_properties = graphene.Field(PropertyPageType, page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
+    get_all_tags = graphene.List(TagType, user_token = graphene.String(required=True))
+    get_property_tags = graphene.List(TagType, property=graphene.Int(), user_token = graphene.String(required=True))
+    get_property_by_title = graphene.Field(PropertyType, title=graphene.String(), user_token = graphene.String(required=True))
+    get_property_by_id = graphene.Field(PropertyType, id=graphene.Int(), user_token = graphene.String(required=True))
+    get_properties = graphene.Field(PropertyType, user_token = graphene.String(required=True))
     get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
-                                                              location=graphene.String(), province=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
-    get_filtered_properties_by_province_municipality_location = graphene.Field(PropertyPageType, province=graphene.String(),
-                                                                              municipality=graphene.String(),
-                                                                              location=graphene.String(),page_number = graphene.Int(required=True), page_size = graphene.Int(required=True))
+                                                              location=graphene.String(), province=graphene.String(),
+                                                              tag=graphene.String(), user_token = graphene.String(required=True),
+                                                              page_number = graphene.Int(), page_size = graphene.Int())
     get_provinces = graphene.List(ProvinceType, name=graphene.String(required=False))
-    get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True))
-    get_properties_by_owner = graphene.List(PropertyType, username = graphene.String())
-    get_outstanding_properties = graphene.List(PropertyType)
-    get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
-    get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False))
-    get_petition_by_requester_to_property = graphene.List(PetitionType, username = graphene.String(required=True), property_id = graphene.Int(required=True))
-    get_favourite_properties = graphene.List(PropertyType, username = graphene.String())
+    get_municipalities_by_province = graphene.List(MunicipalityType, province=graphene.String(required=True), user_token = graphene.String(required=True))
+    get_properties_by_owner = graphene.List(PropertyType, username = graphene.String(), user_token = graphene.String(required=True)) #TODO: comprobar
+    get_outstanding_properties = graphene.List(PropertyType, user_token = graphene.String(required=True))
+    get_petitions_by_status_and_username_and_dates = graphene.List(PetitionType, username = graphene.String(required = True), status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False), user_token = graphene.String(required=True))
+    get_petitions_by_requester_and_status_and_dates = graphene.List(PetitionType, username = graphene.String(required=True),status = graphene.String(required = False),end_date = graphene.String(required = False),start_date = graphene.String(required = False), user_token = graphene.String(required=True))
+    get_petition_by_requester_to_property = graphene.List(PetitionType, username = graphene.String(required=True), property_id = graphene.Int(required=True), user_token = graphene.String(required=True))
+    get_favourite_properties = graphene.List(PropertyType, username = graphene.String(), user_token = graphene.String(required=True))
 
-    def resolve_get_property_by_title(self, info, title):
+    def resolve_get_property_by_title(self, info, title, user_token=''):
         return Property.objects.get(title=title)
 
-    def resolve_get_property_by_id(self, info, id):
+    def resolve_get_property_by_id(self, info, id, user_token=''):
         return Property.objects.get(id=id)
 
-    def resolve_get_properties(self, info, page_number, page_size):
-        properties =  Property.objects.all()
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
+    def resolve_get_properties(self, info, user_token=''):
+        return Property.objects.all()
         
 
-    def resolve_get_all_tags(self, info):
+    def resolve_get_all_tags(self, info, user_token=''):
         return Tag.objects.filter(entity='P')
 
-    def resolve_get_property_tags(self, info, property):
+    def resolve_get_property_tags(self, info, property, user_token=''):
         property = Property.objects.get(id=property)
         return property.tags.all()
 
-    def resolve_get_filtered_properties_by_price_and_city(self, info, page_number,page_size,max_price=None, min_price=None, municipality=None,
-                                                          location=None, province=None):
+    def resolve_get_filtered_properties_by_price_and_city(self, info, page_number=1, page_size=10 ,max_price=None, min_price=None, municipality=None,
+                                                          location=None, province=None, tag=None, user_token=''):
         q = Q()
 
         if min_price and max_price and max_price < min_price:
             raise ValueError(_("El precio máximo introducido es menor al mínimo"))
+        
+        if page_number < 1:
+            raise ValueError(_("El número de página debe ser mayor que 0"))
+        
+        if page_size <= 0:
+            raise ValueError(_("El número de propiedades por página debe ser mayor que 0"))
         
         if max_price:
             q &= Q(price__lte=max_price)
@@ -88,54 +81,39 @@ class MainAppQuery(object):
         if location:
             q &= Q(location=location)
 
+        if tag:
+            q &= Q(tags__name__icontains = tag)
+            
         properties = Property.objects.filter(q)
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
-       
+        total_count = len(properties)
 
-        
+        min_pagination_index = page_size * (page_number - 1)
+        max_pagination_index = page_size * page_number
 
-    def resolve_get_filtered_properties_by_province_municipality_location(self, info, page_size, page_number,province=None,
-                                                                          municipality=None, location=None):
-        q = Q()
-        if province and not Province.objects.filter(name=province).exists():
-            raise ValueError(_("La provincia introducida no existe"))
-        elif province:
-            province = Province.objects.get(name=province)
-            q &= Q(municipality__province=province)
+        if len(properties) == 0:
+            raise ValueError(_("No se han encontrado propiedades con los filtros introducidos"))
+        elif len(properties) < max_pagination_index and len(properties) > min_pagination_index:
+            properties = properties[min_pagination_index:]
+        elif len(properties) < max_pagination_index:
+            
+            new_min_pagination_index = len(properties)-page_size
+            
+            if new_min_pagination_index <= 0:
+                new_min_pagination_index = 0
+            
+            properties = properties[new_min_pagination_index:]
+        else:
+            properties = properties[min_pagination_index:max_pagination_index]
 
-        if municipality and not Municipality.objects.filter(name=municipality).exists():
-            raise ValueError(_("El municipio introducido no existe"))
-        elif municipality:
-            municipality = Municipality.objects.get(name=municipality)
-            q &= Q(municipality=municipality)
+        return PropertyPageType(
+            properties = properties,
+            total_count = total_count,
+        )
 
-        if province and municipality and not Municipality.objects.filter(name=municipality.name, province=province).exists():
-            raise ValueError(_("El municipio introducido no pertenece a la provincia introducida"))
-
-        if location:
-            q &= Q(location__icontains=location)
-
-        properties = Property.objects.filter(q)
-        paginator = Paginator(properties,page_size)
-        properties_page = paginator.get_page(page_number)
-        result = PropertyPageType(
-            properties = properties_page,
-            total_count = len(properties),
-            has_previous = True if page_number>1 else False,
-            has_next = True if (page_number*page_size)<len(properties) else False)
-        return result
-
-    def resolve_get_properties_by_owner(self, info, username):
+    def resolve_get_properties_by_owner(self, info, username, user_token=''):
         user = FlatterUser.objects.get(username=username)
     
-    def resolve_get_properties_by_owner(self,info,username):
+    def resolve_get_properties_by_owner(self,info,username, user_token=''):
         user = FlatterUser.objects.get(username = username)
         if user.roles.filter(role="OWNER").exists:
             properties = Property.objects.filter(owner=user)
@@ -146,7 +124,7 @@ class MainAppQuery(object):
         else:
             raise ValueError(_("El usuario no tiene el rol de propietario"))
 
-    def resolve_get_outstanding_properties(self, info):
+    def resolve_get_outstanding_properties(self, info, user_token=''):
 
         outstanding_properties = Property.objects.filter(is_outstanding=True)
 
@@ -157,7 +135,7 @@ class MainAppQuery(object):
                 
         return Property.objects.filter(is_outstanding = True)
         
-    def resolve_get_petitions_by_status_and_username_and_dates(self, info, username,status=None, start_date=None, end_date =None):
+    def resolve_get_petitions_by_status_and_username_and_dates(self, info, username,status=None, start_date=None, end_date =None, user_token=''):
         q = Q()
         owner = FlatterUser.objects.get(username = username)
         properties = Property.objects.filter(owner = owner)
@@ -175,7 +153,7 @@ class MainAppQuery(object):
         petitions = Petition.objects.filter(q)
         return petitions
     
-    def resolve_get_petitions_by_requester_and_status_and_dates(self,info,username,status=None, start_date=None, end_date =None):
+    def resolve_get_petitions_by_requester_and_status_and_dates(self,info,username,status=None, start_date=None, end_date =None, user_token=''):
         q = Q()
         requester = FlatterUser.objects.get(username = username)
         if status:
@@ -192,24 +170,23 @@ class MainAppQuery(object):
         petitions = Petition.objects.filter(q)
         return petitions
     
-    def resolve_get_petition_by_requester_to_property(self,info,username, property_id):
+    def resolve_get_petition_by_requester_to_property(self,info,username, property_id, user_token=''):
         requester = FlatterUser.objects.get(username = username)
         property = Property.objects.get(id = property_id)
         petition = Petition.objects.filter(property = property, requester = requester).exclude(status = 'D')
         return petition
 
-    def resolve_get_favourite_properties(self, info, username):
+    def resolve_get_favourite_properties(self, info, username, user_token=''):
         user = FlatterUser.objects.get(username = username)
         favourites_properties = Property.objects.filter(interested_users = user)
         return favourites_properties
 
     def resolve_get_provinces(self, info, name=None):
-
         if name:
             return Province.objects.filter(name__icontains=name)
 
         return Province.objects.all()
 
-    def resolve_get_municipalities_by_province(self, info, province=None):
+    def resolve_get_municipalities_by_province(self, info, province=None, user_token=''):
         
         return Municipality.objects.filter(province__name=province)

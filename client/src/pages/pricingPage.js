@@ -8,15 +8,20 @@ import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
 import FlatterModal from "../components/flatterModal";
 import { useRef, useState } from "react";
 import SolidButton from "../sections/solidButton";
+import socialLib from "../libs/socialLib";
 import { useQuery, useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
 
 const PricingPage = () => {
+
+  let userToken = localStorage.getItem("token", '');
+
   const { data, loading } = useQuery(usersAPI.getPlans);
 
   const userPlanQuery = useQuery(usersAPI.getContractByUsername, {
     variables: {
       username: localStorage.getItem("user", ""),
+      userToken: userToken,
     },
   });
 
@@ -69,14 +74,14 @@ const PricingPage = () => {
           .then((response) => {
             userPlanQuery.refetch();
             modalRef.current.close();
-            customAlert(`Has cancelado tu suscripción correctamente.`);
+            customAlert(`Has cancelado tu suscripción correctamente.`, 'success', false);
           })
           .catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error', false);
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación");
+        customAlert("Has cancelado la confirmación", 'info', false);
       });
   }
 
@@ -97,20 +102,20 @@ const PricingPage = () => {
             userPlanQuery.refetch();
             modalRef.current.close();
             customAlert(
-              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`
+              `Has cambiado de plan correctamente, tu plan caduca el ${socialLib.getDateToString(response.data.changeContract.contract.endDate)}.`, 'success', false, 10000
             );
           })
           .catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error', false);
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación");
+        customAlert("Has cancelado la confirmación", 'info', false);
       });
   }
 
   if (loading || userPlanLoading) return <p>Loading...</p>;
-
+  
   return (
     <FlatterPage withBackground userLogged>
       <div>

@@ -9,8 +9,8 @@ const provincesAPI = {
         }
     `,
     getMunicipalitiesByProvince: gql`
-        query getMunicipalitiesByProvince($province: String!){
-            getMunicipalitiesByProvince(province: $province){
+        query getMunicipalitiesByProvince($province: String!, $userToken: String!){
+            getMunicipalitiesByProvince(province: $province, userToken: $userToken){
                 name
             }
         }
