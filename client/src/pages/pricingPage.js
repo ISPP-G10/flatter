@@ -8,6 +8,7 @@ import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
 import FlatterModal from "../components/flatterModal";
 import { useRef, useState } from "react";
 import SolidButton from "../sections/solidButton";
+import socialLib from "../libs/socialLib";
 import { useQuery, useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
 
@@ -101,7 +102,7 @@ const PricingPage = () => {
             userPlanQuery.refetch();
             modalRef.current.close();
             customAlert(
-              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`, 'success', false, 10000
+              `Has cambiado de plan correctamente, tu plan caduca el ${socialLib.getDateToString(response.data.changeContract.contract.endDate)}.`, 'success', false, 10000
             );
           })
           .catch((error) => {
@@ -114,7 +115,7 @@ const PricingPage = () => {
   }
 
   if (loading || userPlanLoading) return <p>Loading...</p>;
-
+  
   return (
     <FlatterPage withBackground userLogged>
       <div>

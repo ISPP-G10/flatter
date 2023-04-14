@@ -67,10 +67,10 @@ const socialLib ={
         let hours = dateFinal.getHours();
         let minutes = dateFinal.getMinutes();
         // eslint-disable-next-line no-self-assign
-        hours < 10 ? hours = "0" + hours : hours = hours;
+        hours = hours < 10 ? "0" + hours : hours;
         // eslint-disable-next-line react-hooks/exhaustive-deps
         // eslint-disable-next-line no-self-assign
-        minutes < 10 ? minutes = "0" + minutes : minutes = minutes;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
         // eslint-disable-next-line react-hooks/exhaustive-deps
         
         return hours + ":" + minutes;
@@ -78,9 +78,9 @@ const socialLib ={
 
     parseMessageInappropiateWords: (message, inappropiateWords) =>{
         let words = message.split(" ")
-        for (let i = 0; i < words.length; i++){
-            if (inappropiateWords.includes(words[i].toLowerCase().trim()) || inappropiateWords.includes(words[i].toLowerCase().trim()+"s")){
-                message = message.replace(words[i], "****")
+        for (let word of words){
+            if (inappropiateWords.includes(word.toLowerCase().trim()) || inappropiateWords.includes(word.toLowerCase().trim()+"s")){
+                message = message.replace(word, "****")
 
             }
         }
