@@ -81,8 +81,8 @@ class TestQueries(TestCase):
     def test_resolve_get_my_groups_returns_groups_with_last_message(self):
         result = SocialQueries.resolve_get_my_groups(None, None, 'test_user')
         expected_result = [
-            {'group': self.group1, 'last_message': self.message3},
             {'group': self.group2, 'last_message': self.message4},
+            {'group': self.group1, 'last_message': self.message3},
         ]
         self.assertEqual(len(result), len(expected_result))
         self.assertEqual(result[0].group.name, expected_result[0]['group'].name)
