@@ -3,7 +3,6 @@ from datetime import datetime
 import random
 
 from authentication.models import FlatterUser
-from sklearn.metrics.pairwise import euclidean_distances
 
 
 def user_age(birthday):
@@ -41,7 +40,7 @@ def build_similarity_matrix(users, user_login):
 
             age1 = user_age(user_login.birthday)
             age2 = user_age(user.birthday)
-            dist_euc = int(euclidean_distances([[age1]], [[age2]])[0][0])
+            dist_euc = abs(age1 - age2)
             dist_norm = dist_euc / 100
             similitud_age = math.exp(-1 *  dist_norm)
             similarity_total = similarity_tags*0.7 + similitud_age*0.3
