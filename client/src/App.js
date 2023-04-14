@@ -18,7 +18,6 @@ import SearchUsers from './pages/searchUsers';
 import PropertyRequests from './pages/propertyRequests';
 import FavouritesProperties from './pages/favouritesProperties';
 import PersonalRequests from './pages/personalRequests';
-import Example from './pages/example';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';

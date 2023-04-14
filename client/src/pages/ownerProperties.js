@@ -37,7 +37,7 @@ const OwnerProperties = ({}) => {
           }).then((response) => {
             window.location.reload();
           }).catch((error) => {
-              console.log(error);
+              customAlert(error.message, 'error');
           });
       
     }
@@ -53,7 +53,7 @@ const OwnerProperties = ({}) => {
       }).then((response) => {
           window.location.reload();
       }).catch((error) => {
-          customAlert(error.message);
+          customAlert(error.message, 'error');
       });
   
     }
@@ -62,9 +62,10 @@ const OwnerProperties = ({}) => {
       customConfirm("Estás a punto de destacar por 1000 FlatterCoins, ¿quieres continuar?")
       .then((response) => {
           standOutProperty(idPiso);
+          customAlert("Has destacado la propiedad", 'success');
       })
       .catch((error) => {
-          customAlert("Has rechazado la operación");
+          customAlert("Has rechazado la operación", 'info');
       });
   }
 

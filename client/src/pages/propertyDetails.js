@@ -75,7 +75,6 @@ const PropertyDetails = () => {
     propertyRequestsData.getPetitionByRequesterToProperty[0] ?? false;
 
   const handlePropertyRequest = ({ values }) => {
-    console.log(values);
     client
       .mutate({
         mutation: propertiesAPI.createPropertyRequest,
@@ -90,7 +89,7 @@ const PropertyDetails = () => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => customAlert(error.message));
+      .catch((error) => customAlert(error.message, 'error'));
   };
 
   const handleCancelRequest = (e) => {
@@ -106,7 +105,7 @@ const PropertyDetails = () => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => customAlert(error.message));
+      .catch((error) => customAlert(error.message, 'error'));
   };
   return (
     <FlatterPage withBackground userLogged withAds={false}>

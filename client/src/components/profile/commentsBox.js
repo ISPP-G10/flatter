@@ -65,7 +65,7 @@ const CommentsBox = (props) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
             setRating(null)
         } else if (newRating < 1 && newRating > 5){
-            customAlert("La valoración debe estar entre 1 y 5");
+            customAlert("La valoración debe estar entre 1 y 5", 'warning');
         } else{
             setRating(newRating)
         }
@@ -102,7 +102,7 @@ const CommentsBox = (props) => {
                 ]);
             props.setAverageRating(response.data.createReview.review.valuedUser.averageRating);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
         
     }

@@ -133,15 +133,15 @@ const ListProperties = () => {
     }).then(response => {
       setCurrentPageData(response.data.getFilteredPropertiesByPriceAndCity.properties);
       setNumberOfFilteredProperties(response.data.getFilteredPropertiesByPriceAndCity.totalCount);
-    }).catch(error => customAlert("¡Ups! Parece que no hay resultados que cumplan estos requisitos"));
+    }).catch(error => customAlert("¡Ups! Parece que no hay resultados que cumplan estos requisitos", 'info'));
 
   }, [filterValues, paginationIndex]);
 
   const copyShareInputClipboard = () => {
     const input = document.querySelector('#share-modal-input');
     window.navigator.clipboard.writeText(input.value)
-      .then(customAlert("¡Ya puedes compartir la propiedad!"))
-      .catch(error => console.log(error));;
+      .then(customAlert("¡Ya puedes compartir la propiedad!", 'success'))
+      .catch(error => customAlert('Ha ocurrido un error', 'error'));;
   }
   
   const handleCleanFilters = () => {
@@ -196,7 +196,7 @@ const ListProperties = () => {
                 setOptionMunicipality(["-"]);
               }
             })
-            .catch(error => console.log(error));
+            .catch(error => customAlert(error.message.split("\n")[0], 'error'));
     
           });
   

@@ -24,7 +24,7 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        customAlert(error.message);
+        customAlert(error.message, 'error');
       });
   }
 
@@ -42,7 +42,7 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        customAlert(error.message);
+        customAlert(error.message, 'error');
       });
   }
 

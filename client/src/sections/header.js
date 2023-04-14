@@ -67,7 +67,7 @@ const Header = ({scrollY, userLogged}) => {
             navigator(0);
 
         }).catch((error) => {
-            customAlert(['Usuario o contraseña incorrectos']);
+            customAlert('Usuario o contraseña incorrectos', 'error');
         });
 
     }
@@ -106,7 +106,7 @@ const Header = ({scrollY, userLogged}) => {
 
             navigator(0);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
         
     }

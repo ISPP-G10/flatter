@@ -33,7 +33,7 @@ const PropertyRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error');
         });
     
       }
@@ -50,7 +50,7 @@ const PropertyRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error');
         });
     
     }
@@ -110,7 +110,7 @@ const PropertyRequests = () => {
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByStatusAndUsernameAndDates))
-        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte", 'error'));
     
       }, [filterValues]);
 

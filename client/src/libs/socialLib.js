@@ -24,7 +24,7 @@ const socialLib ={
                 if(text.length <= maxLength){
                     if(element.current.style.color !== "rgb(165, 165, 165)"){
                         if (chatId === null) {
-                            customAlert("The chat is invalid");
+                            customAlert("El chat no es válido", 'error');
                             return;
                         }
                         client.mutate({
@@ -38,7 +38,7 @@ const socialLib ={
                         }).then((response) => {
                             element.current.innerHTML = "";
                         }).catch((error) => {
-                            customAlert(error.message.split("\n")[0]);
+                            customAlert(error.message.split("\n")[0], 'error');
                         });
                     }
                 }else{

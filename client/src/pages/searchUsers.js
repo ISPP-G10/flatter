@@ -101,8 +101,7 @@ const SearchUsers = () => {
       setCurrentPageData(response.data.getFilteredUsersByTagAndReview.users);
       setNumberOfFilteredProperties(response.data.getFilteredUsersByTagAndReview.totalCount);
     }).catch(error => {
-      console.log(error);
-      customAlert("¡Ups! No se han encontrado usuarios que cumplan con estos requisitos");
+      customAlert("¡Ups! No se han encontrado usuarios que cumplan con estos requisitos", 'info');
     })
   }, [filterValues, paginationIndex]);
   

@@ -27,7 +27,7 @@ const PasswordSettingForm = ({correctModalRef}) => {
         .then((response) => {
             correctModalRef.current.open();
         })
-        .catch((error) => customAlert(error.message));
+        .catch((error) => customAlert(error.message, 'error'));
 
     }
 

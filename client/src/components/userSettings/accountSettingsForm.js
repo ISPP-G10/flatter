@@ -39,7 +39,7 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
 
             window.location.reload();
         })
-        .catch((error) => customAlert(error.message));
+        .catch((error) => customAlert(error.message, 'error'));
     }
 
     function handleAccountFormSubmit({values}){

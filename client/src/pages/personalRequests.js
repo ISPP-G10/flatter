@@ -36,7 +36,6 @@ const PersonalRequests = () => {
     //Actualmente tiene 7 dias de deadline, pero puede cambiarse si fuese preciso.
     function paymentDeadline(dateString) {
         const date = new Date(dateString);
-        console.log("este es el date"+date)
         date.setDate(date.getDate() + 7);
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -90,17 +89,11 @@ const PersonalRequests = () => {
           }
         })
         .then((response) => setRequests(response.data.getPetitionsByRequesterAndStatusAndDates))
-        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte"));
+        .catch((error) => customAlert("Ha ocurrido un error, por favor, intétalo más tarde o contacta con nuestro equipo de soporte", 'error'));
     
       }, [filterValues]);
-      
-      //Ale, aqui te dejo la función preparada para que implementes la pasarela de pago.
-      function handleRequestPay(price, petitionId, username, propertyId){
-        
-        //aqui te devuelvo el precio
-        console.log(price)
 
-        //Para actualizar el estado de la petición a pagada.
+      function handleRequestPay(price, petitionId, username, propertyId){
         client.mutate({
             mutation: personalRequestsAPI.updateStatusPetition,
             variables: {
@@ -111,10 +104,9 @@ const PersonalRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error');
         });
 
-        //Aqui añadimos al usuario al inmueble en cuestion
         client.mutate({
             mutation: personalRequestsAPI.addUserToProperty,
             variables: {
@@ -125,7 +117,7 @@ const PersonalRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte");
+            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte", 'error');
         });
       }
 
@@ -247,7 +239,7 @@ const PersonalRequests = () => {
                                 <PaymentModal
                                     price={request.property.price}
                                     resolve={()=> handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}
-                                    reject={() => customAlert("Se ha cancelado el pago")}
+                                    reject={() => customAlert("Se ha cancelado el pago", 'info')}
                                     ref={paymentModal}
                                 />    
                             </div>

@@ -73,14 +73,14 @@ const PricingPage = () => {
           .then((response) => {
             userPlanQuery.refetch();
             modalRef.current.close();
-            customAlert(`Has cancelado tu suscripción correctamente.`);
+            customAlert(`Has cancelado tu suscripción correctamente.`, 'success');
           })
           .catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error');
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación");
+        customAlert("Has cancelado la confirmación", 'info');
       });
   }
 
@@ -101,15 +101,15 @@ const PricingPage = () => {
             userPlanQuery.refetch();
             modalRef.current.close();
             customAlert(
-              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`
+              `Has cambiado de plan correctamente, tu plan caduca el día ${response.data.changeContract.contract.endDate}.`, 'success'
             );
           })
           .catch((error) => {
-            customAlert(error.message);
+            customAlert(error.message, 'error');
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación");
+        customAlert("Has cancelado la confirmación", 'info');
       });
   }
 

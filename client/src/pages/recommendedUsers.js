@@ -15,7 +15,7 @@ const RecommendedUsers = () => {
             userToken: userToken
         },
         onError: (error) => {
-            customAlert("No se han encontrado recomendaciones");
+            customAlert("No se han encontrado recomendaciones", 'info');
         }
     });
 

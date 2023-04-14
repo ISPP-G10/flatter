@@ -46,7 +46,7 @@ const PublicProfileCard = (props) => {
             if (error.message.split("\n")[0].trim() === "The group already exists") {
                 props.setActivateChat(props.username);
             } else {
-                customAlert(error.message.split("\n")[0]);
+                customAlert(error.message.split("\n")[0], 'error');
             }
         });
     }
@@ -78,7 +78,7 @@ const PublicProfileCard = (props) => {
             window.location.reload();
             setReload(true);
         })
-        .catch((error) => customAlert(error.message.split("\n")[0]));
+        .catch((error) => customAlert(error.message.split("\n")[0], 'error'));
     }
 
     useEffect(() => {

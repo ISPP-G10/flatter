@@ -29,7 +29,7 @@ const Settings = () => {
         }).then((response) => {
             localStorage.setItem("inappropiateLanguage", response.data.editUserPreferences.userPreferences.inappropiateLanguage)
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
     }
 

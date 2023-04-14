@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 const alert = ReactDOM.createRoot(document.getElementById('alert'));
 let environment = process.env.NODE_ENV
 
-function customAlert(string, type, top=true) {
+function customAlert(string, type='native', top=true) {
 
     switch (environment) {
         case "production":

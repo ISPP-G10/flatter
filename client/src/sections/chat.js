@@ -57,7 +57,6 @@ const Chat = (props) => {
     }, [newMessages])
 
     useEffect(() => {
-        console.log(props.activateChat)
     }, [props.activateChat])
 
     const setChangeTabTrue = () => {

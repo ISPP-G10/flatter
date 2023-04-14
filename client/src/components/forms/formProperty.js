@@ -7,6 +7,7 @@ import tagsAPI from '../../api/tagsAPI';
 import { useApolloClient, useQuery } from "@apollo/client";
 import { propertyInputs } from '../../forms/propertiesForm';
 import { useEffect, useRef, useState } from 'react';
+import customAlert from '../../libs/functions/customAlert';
 
 const FormProperty = ({ property }) => {
 
@@ -73,7 +74,7 @@ const FormProperty = ({ property }) => {
       }
     })
     .then(response => window.location.reload())
-    .catch(error => console.log(error));
+    .catch(error => customAlert(error.message.split("\n")[0], 'error'));
   }
 
   useEffect(() => {
@@ -93,13 +94,12 @@ const FormProperty = ({ property }) => {
              }
            })
            .then(response => {
-
             let municipalityOptions = response.data.getMunicipalitiesByProvince.map(municipality => municipality.name);
             municipalityOptions = municipalityOptions.filter(municipality => municipality !== property.municipality.name);
             setOptionMunicipality([property.municipality.name].concat(municipalityOptions));
             input.values = municipalityOptions;
            })
-           .catch(error => console.log(error));
+           .catch(error => customAlert(error.message.split("\n")[0], 'error'));
         };
 
         if(input.name === 'images') input.tag = 'Imágenes de la propiedad (al añadir imágenes, se sustituirán las actuales)';  
@@ -159,7 +159,7 @@ const FormProperty = ({ property }) => {
               setOptionMunicipality(["-"]);
             }
           })
-          .catch(error => console.log(error));
+          .catch(error => customAlert(error.message.split("\n")[0], 'error'));
   
         });
 
