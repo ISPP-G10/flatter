@@ -30,9 +30,6 @@ const Header = ({scrollY, userLogged}) => {
     const registerFormRef = useRef(null);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     let [user, setUser] = useState(null);
-    // TODO: USAR TOKEN PARA VERIFICAR SI EL USUARIO ESTA LOGUEADO Y TIENE PERMISOS
-    //eslint-disable-next-line
-    let [token, setToken] = useState(null);
 
     function toggleMenu(){
         setIsMenuOpen(!isMenuOpen);
@@ -80,34 +77,42 @@ const Header = ({scrollY, userLogged}) => {
     function handleRegisterSubmit({values}){
 
         if(!registerFormRef.current.validate()) return;
+        let approved = true;
 
-        client.mutate({
-            mutation: usersAPI.createUser,
-            variables: {
-                firstName: values.first_name,
-                lastName: values.last_name,
-                username: values.username,
-                password: values.password,
-                email: values.email,
-                genre: values.genre,
-                roles: values.role
-            }
-        }).then((response) => {
-            let token = response.data.tokenAuth.token;
-            let username = response.data.tokenAuth.user.username;
-            let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
-            let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
+        if (values.password !== values.passwordConfirm) {
+            customAlert('Las contraseñas no coinciden', 'warning');
+            approved = false;
+        }
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', username);
-            localStorage.setItem('roles', roles);
-            localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
-            localStorage.setItem('notificationsAllowed', true);
+        if(approved){
+            client.mutate({
+                mutation: usersAPI.createUser,
+                variables: {
+                    firstName: values.first_name,
+                    lastName: values.last_name,
+                    username: values.username,
+                    password: values.password,
+                    email: values.email,
+                    genre: values.genre,
+                    roles: values.role
+                }
+            }).then((response) => {
+                let token = response.data.tokenAuth.token;
+                let username = response.data.tokenAuth.user.username;
+                let roles = response.data.tokenAuth.user.roles.map((role) => role.role);
+                let inappropiateLanguage = response.data.tokenAuth.user.userpreferences.inappropiateLanguage;
 
-            navigator(0);
-        }).catch((error) => {
-            customAlert(error.message.split("\n")[0], 'error');
-        });
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', username);
+                localStorage.setItem('roles', roles);
+                localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
+                localStorage.setItem('notificationsAllowed', true);
+
+                navigator(0);
+            }).catch((error) => {
+                customAlert(error.message.split("\n")[0], 'error');
+            });
+        }
         
     }
 
@@ -122,8 +127,8 @@ const Header = ({scrollY, userLogged}) => {
     useEffect(() => {
         if(userLogged){
             localStorage.getItem("user") ? setUser(localStorage.getItem("user")) : navigator("/");
-            localStorage.getItem("token") ? setToken(localStorage.getItem("token")) : navigator("/");
-            localStorage.getItem("roles") ? setToken(localStorage.getItem("roles")) : navigator("/");
+            !localStorage.getItem("token") && navigator("/");
+            !localStorage.getItem("roles") && navigator("/");
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

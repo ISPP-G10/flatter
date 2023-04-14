@@ -72,17 +72,17 @@ const ShopPage = () => {
       }
     })
     .then(response => {
-      customAlert("¡Has añadido correctamente las FlatterCoins a tu cuenta!", 'success');
+      customAlert("¡Has añadido correctamente las FlatterCoins a tu cuenta!", 'success', false);
       handleEmpty();
       window.location.reload();
     })
     .catch(error => {
-      customAlert("Ha ocurrido un error al añadir las flatterCoins a tu cuenta. Por favor, contacta con nuestro equipo de soporte", 'error')
+      customAlert("Ha ocurrido un error al añadir las flatterCoins a tu cuenta. Por favor, contacta con nuestro equipo de soporte", 'error', false);
     });
   }
 
   function handleBadPayment() {
-    customAlert("Se ha cancelado el pago", 'warning');
+    customAlert("Se ha cancelado el pago", 'warning', false);
   }
 
   return (

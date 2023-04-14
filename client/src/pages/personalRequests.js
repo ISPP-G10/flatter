@@ -104,7 +104,7 @@ const PersonalRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message, 'error');
+            customAlert(error.message, 'error', false);
         });
 
         client.mutate({
@@ -117,7 +117,7 @@ const PersonalRequests = () => {
         }).then((response) => {
             window.location.reload();
         }).catch((error) => {
-            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte", 'error');
+            customAlert("No ha sido posible añadirte al inmueble, por favor, inténtalo más tarde o contacta con nuestro equipo de soporte", 'error', false);
         });
       }
 
@@ -239,7 +239,7 @@ const PersonalRequests = () => {
                                 <PaymentModal
                                     price={request.property.price}
                                     resolve={()=> handleRequestPay(request.property.price, request.id, request.requester.username, request.property.id)}
-                                    reject={() => customAlert("Se ha cancelado el pago", 'info')}
+                                    reject={() => customAlert("Se ha cancelado el pago", 'info', false)}
                                     ref={paymentModal}
                                 />    
                             </div>
