@@ -50,7 +50,7 @@ class CreateIndividualGroupMutation(graphene.Mutation):
         if len(users) != 2:
             raise ValueError('The group must have 2 users')
         
-        real_user = users[1] if users.copy().index(username) == 0 else users[0]
+        real_user = users[1] if users.index(username) == 0 else users[0]
         
         if not FlatterUser.objects.filter(username=real_user).exists():
             raise ValueError('The user does not exist')
