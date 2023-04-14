@@ -73,7 +73,7 @@ const FlatterPage = (props) => {
             data-full-width-responsive="true"
           ></ins>
           <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> */}
-          <Footer />
+          <Footer userLogged={props.userLogged}/>
         </div>
       ) : (
         <>
@@ -92,7 +92,7 @@ const FlatterPage = (props) => {
             <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> */}
           </div>
 
-          <Footer />
+          <Footer userLogged={props.userLogged}/>
         </>
       )}
     </main>
@@ -100,11 +100,13 @@ const FlatterPage = (props) => {
 };
 
 FlatterPage.propTypes = {
+  userLogged: PropTypes.bool,
   withBackground: PropTypes.bool,
   withAds: PropTypes.bool,
 };
 
 FlatterPage.defaultProps = {
+  userLogged: false,
   withBackground: false,
   withAds: true,
 };

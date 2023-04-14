@@ -16,8 +16,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useQuery, useApolloClient } from "@apollo/client";
 import usersAPI from '../api/usersAPI';
+import { AiFillQuestionCircle } from "react-icons/ai";
+import chatsAPI from "../api/chatsAPI";
 
-const PropertyDetails = () => {
+const PropertyDetails = (props) => {
   const [userData, setUserData] = useState(null);
   const [profile, setProfile] = useState(null);
   let userToken = localStorage.getItem("token", '');
@@ -107,6 +109,10 @@ const PropertyDetails = () => {
       })
       .catch((error) => customAlert(error.message, 'error'));
   };
+
+  let isFlatmate = propertyData.getPropertyById.flatmates.map(f => f.username).includes(localStorage.getItem('user'));
+  let canCreateChat = data.getContractByUsername.plan.chatCreation;
+
   return (
     <FlatterPage withBackground userLogged withAds={false}>
       <div className="property-housing-page">
@@ -148,7 +154,8 @@ const PropertyDetails = () => {
               {localStorage.getItem("roles") &&
                 localStorage.getItem("roles").includes("RENTER") &&
                 localStorage.getItem("user") !==
-                  propertyData.getPropertyById.owner.username && (
+                  propertyData.getPropertyById.owner.username && 
+                  !isFlatmate &&(
                   <FavouriteButton
                     isFavourite={propertyData.getPropertyById.interestedUsers
                       .map(
@@ -160,7 +167,6 @@ const PropertyDetails = () => {
                 )
               }
 
-              {/* RENDERIZACIÓN DEL BOTON POR VALIDAR */}
               {propertyData.getPropertyById.owner.username !==
               localStorage.getItem("user") ? (
                 userRequest === false ? (
@@ -172,15 +178,12 @@ const PropertyDetails = () => {
                     }}
                   >
                     <>
-                      <img
-                        className="property-img"
-                        src={require("../static/files/icons/lapiz.png")}
-                        alt="Petición"
-                      />
+                      <AiFillQuestionCircle color="white" style={{marginRight: '0.5em', width: '25px', height: '25px'}}/>
                       Solicitar
                     </>
                   </button>
                 ) : (
+                  !isFlatmate &&
                   <button
                     className="property-btn red outlined"
                     style={{ textTransform: "uppercase", marginLeft: "auto" }}
@@ -218,8 +221,31 @@ const PropertyDetails = () => {
                     EDITAR
                   </button>
                 ) : (
+                  (isFlatmate || canCreateChat) &&
                   <button
                     className="property-btn"
+                    onClick={() => {
+
+                      let ownerUsername = propertyData.getPropertyById.owner.username;
+
+                      client.mutate({
+                        mutation: chatsAPI.createIndividualChat,
+                        variables: {
+                            username: ownerUsername,
+                            users: [ownerUsername, localStorage.getItem('user')],
+                            userToken: userToken
+                        }
+                      }).then((response) => {
+                        props.setActivateChat(ownerUsername);
+                      }).catch((error) => {
+                        if (error.message.split("\n")[0].trim() === "The group already exists") {
+                          props.setActivateChat(ownerUsername);
+                        } else {
+                            customAlert(error.message.split("\n")[0], 'error');
+                        }
+                      });
+                    }}
+                    title={`Contactar con @${propertyData.getPropertyById.owner.username}`}
                   >
                     <img
                       className="property-img"

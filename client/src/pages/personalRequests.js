@@ -1,19 +1,19 @@
 import '../static/css/pages/listProperties.css'
 import '../static/css/pages/propertyRequests.css'
 
-import FlatterPage from "../sections/flatterPage";
-import personalRequestsAPI from '../api/personalRequestsAPI';
-import * as settings from "../settings";
-import customAlert from "../libs/functions/customAlert";
-import { useQuery } from '@apollo/client';
-import SolidButton from '../sections/solidButton';
-import FlatterForm from '../components/forms/flatterForm';
 import { filterRequestsInputs } from '../forms/filterRequestsForm';
 import {useApolloClient} from '@apollo/client';
 import { useNavigate } from "react-router-dom";
-import useURLQuery from "../hooks/useURLQuery";
 import { useState, useEffect, useRef } from "react";
+
+import * as settings from "../settings";
+import FlatterPage from "../sections/flatterPage";
+import personalRequestsAPI from '../api/personalRequestsAPI';
+import customAlert from "../libs/functions/customAlert";
+import SolidButton from '../sections/solidButton';
+import FlatterForm from '../components/forms/flatterForm';
 import PaymentModal from '../components/paymentModal';
+import useURLQuery from "../hooks/useURLQuery";
 
 const PersonalRequests = () => {
 

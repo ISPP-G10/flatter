@@ -53,7 +53,7 @@ function App() {
           <Route path="/search" element={<> <ListProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/users" element={<> <SearchUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/properties" element={<> <OwnerProperties /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
-          <Route path="/property/:id" element={<> <PropertyDetails /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/property/:id" element={<> <PropertyDetails setActivateChat={setActivateChat}/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/property/requests' element={<> <PropertyRequests/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/requests' element={<> <PersonalRequests/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/profile' element={<> <PublicProfile setActivateChat={setActivateChat} /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>}/>

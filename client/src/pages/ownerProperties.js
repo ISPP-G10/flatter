@@ -1,17 +1,18 @@
 import "../static/css/pages/ownerProperties.css";
 
+import { useNavigate } from "react-router-dom";
+import { useQuery } from '@apollo/client';
+import { useState, useRef } from 'react';
+import { useApolloClient } from '@apollo/client';
+
+import * as settings from "../settings";
 import FlatterPage from "../sections/flatterPage";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 import propertiesAPI from '../api/propertiesAPI';
-import * as settings from "../settings";
 import customAlert from "../libs/functions/customAlert";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from '@apollo/client';
-import { useState, useRef } from 'react';
-import { useApolloClient } from '@apollo/client';
 import customConfirm from "../libs/functions/customConfirm";
 
 
