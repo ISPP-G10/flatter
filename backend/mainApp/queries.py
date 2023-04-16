@@ -13,7 +13,7 @@ class MainAppQuery(object):
     get_property_tags = graphene.List(TagType, property=graphene.Int(), user_token = graphene.String(required=True))
     get_property_by_title = graphene.Field(PropertyType, title=graphene.String(), user_token = graphene.String(required=True))
     get_property_by_id = graphene.Field(PropertyType, id=graphene.Int(), user_token = graphene.String(required=True))
-    get_properties = graphene.Field(PropertyType, user_token = graphene.String(required=True))
+    get_properties = graphene.List(PropertyType, user_token = graphene.String(required=True))
     get_filtered_properties_by_price_and_city = graphene.Field(PropertyPageType, min_price=graphene.Float(),
                                                               max_price=graphene.Float(), municipality=graphene.String(),
                                                               location=graphene.String(), province=graphene.String(),
