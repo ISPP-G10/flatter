@@ -2,6 +2,7 @@ import logging
 from django.test import TestCase
 from social.models import Group, Message, InappropiateLanguage
 from authentication.models import FlatterUser, Tag, Role
+from mainApp.models import Property, Municipality, Province
 from graphene.test import Client
 from backend.schema import schema
 from django.test import TestCase 
@@ -176,12 +177,51 @@ class TestQueries(TestCase):
 
 
     ### Test de query de relaciones entre usuarios  +++ Caso positivo: obtener todas las relaciones entre usuarios
-    def test_get_user_relations_returns_correct_data(self):
-        #client = Client(schema)
-        #executed = client.execute('''query {getRelationsBetweenUsers{ user_login, user_valued }}''')
-        #assert executed == {'data': {'getRelationsBetweenUsers': []}}
-        pass
+    def test_get_relationships_between_users_positive(self):
+        # Creamos dos usuarios de prueba
+        self.user_owner = FlatterUser.objects.create_user(username='user_login', email='user_login@example.com', password='password')
+        self.user_exmate = FlatterUser.objects.create_user(username='user_valued', email='user_valued@example.com', password='password')
 
+        # Creamos una propiedad y asignamos a ambos usuarios como compañeros de piso
+        provincia = Province.objects.create(name='Provincia de prueba', code=12345)
+        municipality = Municipality.objects.create(name='Municipio de prueba', province=provincia , code=12345)
+
+        self.property = Property.objects.create(title='Propiedad de prueba', owner=self.user_owner, price=1000, dimensions=100, 
+            bedrooms_number=1, bathrooms_number=1, municipality=municipality, province=provincia)
+        self.property.flatmates.add(self.user1)
+        self.property.flatmates.add(self.user2)
+
+        # Dos usuarios son compañeros de piso
+        # Añadimos el rol de RENTER a los usuarios 1 y 2
+        renter_role = Role.objects.get(role="RENTER")
+        self.user1.roles.add(renter_role)
+        self.user2.roles.add(renter_role)
+        result_mates = SocialQueries.resolve_get_relationships_between_users(None, None, self.user2.username, self.user1.username)
+        self.assertEqual(result_mates, ['Compañero'])
+
+        # Dos usuarios son amigos o excompañeros de piso
+        result_friend = SocialQueries.resolve_get_relationships_between_users(None, None, self.user1.username, self.user_exmate.username)
+        self.assertEqual(result_friend, ['Amigo', 'Excompañero'])
+
+        # Dos usuarios son inquilino y propietario
+        # Añadimos el rol de OWNER al owner de la propiedad
+        owner_role = Role.objects.get(role="OWNER")
+        self.user_owner.roles.add(owner_role)
+        result_owner = SocialQueries.resolve_get_relationships_between_users(None, None, self.user_owner.username, self.user1.username)
+        self.assertEqual(result_owner, ['Propietario'])
+
+        # Dos usuarios son inquilino y propietario
+        result_renter = SocialQueries.resolve_get_relationships_between_users(None, None, self.user1.username, self.user_owner.username)
+        self.assertEqual(result_renter, ['Inquilino'])
+
+
+    ### Test de query de relaciones entre usuarios  --- Caso negativo: obtener todas las relaciones entre el mismo usuario
+    def test_get_relationships_between_users_negative(self):
+        # Creamos dos usuarios de prueba
+        try:
+            SocialQueries.resolve_get_relationships_between_users(None, None, self.user1.username, self.user1.username)
+        except Exception as e:
+            self.assertEqual(str(e), 'No puedes tener una relación contigo mismo')
 
     ### Test de query de usuarios recomendar  +++ Caso positivo: obtener todos los usuarios recomendados
     def test_get_recommended_users_returns_correct_data(self):
