@@ -8,6 +8,7 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
   const [favourite, setFavourite] = useState(isFavourite);
 
   const client = useApolloClient();
+  let userToken = localStorage.getItem("token", '');
 
   function addUsersToFavouriteProperty(user) {
     client
@@ -16,13 +17,14 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         variables: {
           username: user,
           propertyId: parseInt(propertyId),
+          userToken: userToken,
         },
       })
       .then((response) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        customAlert(error.message);
+        customAlert(error.message, 'error');
       });
   }
 
@@ -33,13 +35,14 @@ const FavouriteButton = ({ isFavourite, propertyId }) => {
         variables: {
           username: user,
           propertyId: parseInt(propertyId),
+          userToken: userToken,
         },
       })
       .then((response) => {
         setFavourite(!favourite);
       })
       .catch((error) => {
-        customAlert(error.message);
+        customAlert(error.message, 'error');
       });
   }
 

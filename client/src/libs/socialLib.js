@@ -24,7 +24,7 @@ const socialLib ={
                 if(text.length <= maxLength){
                     if(element.current.style.color !== "rgb(165, 165, 165)"){
                         if (chatId === null) {
-                            customAlert("The chat is invalid");
+                            customAlert("El chat no es válido", 'error');
                             return;
                         }
                         client.mutate({
@@ -32,19 +32,18 @@ const socialLib ={
                             variables: {
                                 username: localStorage.getItem("user"),
                                 text: text,
-                                chatId: chatId
+                                chatId: chatId,
+                                userToken: localStorage.getItem("token")
                             }
                         }).then((response) => {
                             element.current.innerHTML = "";
                         }).catch((error) => {
-                            customAlert(error.message.split("\n")[0]);
+                            customAlert(error.message.split("\n")[0], 'error');
                         });
                     }
                 }else{
-                    customAlert("The max length of a message must be of " + maxLength +  " characterers");
+                    customAlert("La longitud máxima del mensaje debe ser de " + maxLength +  " caracteres", "warning");
                 }
-            }else{
-                customAlert("You cannot send an empty message");
             }
         }
     },
@@ -68,13 +67,24 @@ const socialLib ={
         let hours = dateFinal.getHours();
         let minutes = dateFinal.getMinutes();
         // eslint-disable-next-line no-self-assign
-        hours < 10 ? hours = "0" + hours : hours = hours;
+        hours = hours < 10 ? "0" + hours : hours;
         // eslint-disable-next-line react-hooks/exhaustive-deps
         // eslint-disable-next-line no-self-assign
-        minutes < 10 ? minutes = "0" + minutes : minutes = minutes;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
         // eslint-disable-next-line react-hooks/exhaustive-deps
         
         return hours + ":" + minutes;
+    },
+
+    parseMessageInappropiateWords: (message, inappropiateWords) =>{
+        let words = message.split(" ")
+        for (let word of words){
+            if (inappropiateWords.includes(word.toLowerCase().trim()) || inappropiateWords.includes(word.toLowerCase().trim()+"s")){
+                message = message.replace(word, "****")
+
+            }
+        }
+        return message
     }
 }
 

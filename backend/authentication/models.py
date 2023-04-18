@@ -4,7 +4,8 @@ from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
+from django.utils import timezone
+from django.core.validators import MinLengthValidator
 
 
 class RoleType(models.TextChoices):
@@ -77,15 +78,39 @@ class Plan(models.Model):
         ('A','Advanced'),
         ('P','Pro')
     )
-    price = models.FloatField(validators=[MinValueValidator(0.0), MaxValueValidator(100000.0)],)
-    initial_date = models.DateTimeField(default=datetime.now)
-    end_date = models.DateTimeField(null=True)
+    flatter_coins = models.PositiveIntegerField(default = 0)
+    visits_number = models.FloatField(default = 10)
+    tags_number = models.PositiveIntegerField(default = 6)
+    advertisement = models.BooleanField(default=False)
+    chat_creation = models.BooleanField(default=False)
+    standard_support = models.BooleanField(default=False)
+    premium_support = models.BooleanField(default=False)
+    view_self_profile_opinions = models.BooleanField(default=False)
+    initial_date = models.DateField(default=datetime.now)
+    end_date = models.DateField(null=True)
     plan_type = models.CharField(max_length=1, choices=choices_type)
+    compensation = models.PositiveIntegerField(default=0)
+
+class Contract(models.Model):
+    choices_days = (
+        (1, '1 día'),
+        (3, '3 días'),
+        (7, '1 semana'),
+        (30, '1 mes'),
+        (90, '3 meses'),
+        (180, '6 meses')
+    )
+    initial_date = models.DateField(default=datetime.now)
+    end_date = models.DateField(null=True)
+    choices=models.PositiveIntegerField(choices_days, default=1, null=True)
+    obsolete = models.BooleanField(default=False)
     user = models.ForeignKey(FlatterUser, on_delete=models.DO_NOTHING)
-    
+    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+        
 class UserPreferences(models.Model):
     public = models.BooleanField(default=True)
     add_group = models.BooleanField(default=True)
+    inappropiate_language = models.BooleanField(default=True)
     user = models.OneToOneField(FlatterUser, on_delete=models.CASCADE)
     
 def add_roles(sender=None, **kwargs):
@@ -94,15 +119,35 @@ def add_roles(sender=None, **kwargs):
 
 signals.post_migrate.connect(add_roles)
 
+def create_plans(sender=None, **kwargs):
+    
+    if Plan.objects.count() == 0:
+    
+        Plan.objects.get_or_create(flatter_coins=0, visits_number=10, 
+                            tags_number=6, advertisement=True, 
+                            chat_creation=False, standard_support=False, 
+                            premium_support=False, view_self_profile_opinions=False, 
+                            initial_date=timezone.now(), end_date=None, 
+                            plan_type='B')
+
+        Plan.objects.get_or_create(flatter_coins=30, visits_number=30, 
+                            tags_number=10, advertisement=False, 
+                            chat_creation=True, standard_support=True, 
+                            premium_support=False, view_self_profile_opinions=True, 
+                            initial_date=timezone.now(), end_date=None, 
+                            plan_type='A')
+
+        Plan.objects.get_or_create(flatter_coins=65, visits_number=10**10, 
+                            tags_number=10, advertisement=False, 
+                            chat_creation=True, standard_support=True, 
+                            premium_support=True, view_self_profile_opinions=True, 
+                            initial_date=timezone.now(), end_date=None, 
+                            plan_type='P')
+        
+signals.post_migrate.connect(create_plans)
+
 @receiver(signals.post_save, sender=FlatterUser)
 def create_user_preferences(sender, instance, created, **kwargs):
     if created:
         UserPreferences.objects.create(user=instance)
-
-
-
-
-
-
-
 

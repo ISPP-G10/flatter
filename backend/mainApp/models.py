@@ -77,9 +77,11 @@ class Petition(models.Model):
     status_choices = (
         ('A','Accepted'),
         ('P','Pending'),
-        ('D', 'Denied')
+        ('D', 'Denied'),
+        ('I', 'Paid')
     )
     status = models.CharField(max_length=1,choices=status_choices)
+    date_of_petition_acepted = models.DateTimeField(null=True, blank=True)
     
 def add_default_img(sender=None, **kwargs):
     Image.objects.get_or_create(image='properties/images/default.png')

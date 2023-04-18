@@ -9,21 +9,25 @@ const MainPageCarousel = ({items}) => {
     const navigator = useNavigate();
 
     let [carouselItems, setCarouselItems] = useState([...items])
+    let [carouselInterval, setCarouselInterval] = useState(null);
 
     let carouselContainer = useRef(null);
     let statusBar = useRef(null);
     let carouselItemsRef = useRef([]);
+    let carouselStatusButtonsRef = useRef([]);
 
     function updateCarousel(){
         carouselItemsRef.current.forEach((item, index) => {
-            let itemId = parseInt(item.id)-1;
-            for(let i = 0; i <= carouselItemsRef.current.length; i++){
-                statusBar.current.childNodes[itemId].style.backgroundColor = '#8e8e8e';
-                item.classList.remove(`carousel-item-${i+1}`);
-            }
-            item.classList.add(`carousel-item-${index+1}`);
-            if(item.className.includes('carousel-item-3')){
-                statusBar.current.childNodes[itemId].style.backgroundColor = 'var(--flatter-orange-color)';
+            let itemId = item !== null ? parseInt(item.id)-1 : null;
+            if (itemId !== null){
+                for(let i = 0; i <= carouselItemsRef.current.length; i++){
+                    statusBar.current.childNodes[itemId].style.backgroundColor = '#8e8e8e';
+                    item.classList.remove(`carousel-item-${i+1}`);
+                }
+                item.classList.add(`carousel-item-${index+1}`);
+                if(item.className.includes('carousel-item-3')){
+                    statusBar.current.childNodes[itemId].style.backgroundColor = 'var(--flatter-orange-color)';
+                }
             }
         });
     }
@@ -43,9 +47,9 @@ const MainPageCarousel = ({items}) => {
     useEffect(() => {
         if(carouselItems.length === 5){
             statusBar.current.childNodes[2].style.backgroundColor = 'var(--flatter-orange-color)';
-            setInterval(() => {
+            setCarouselInterval(setInterval(() => {
                 setCurrentState('next');
-            }, 4000);
+            }, 4000));
         }else if(carouselItems.length < 5){
             for(let i = carouselItems.length; i < 5; i++){
                 carouselItems.push(null);
@@ -64,7 +68,20 @@ const MainPageCarousel = ({items}) => {
                 {
                     [...Array(5).keys()].map((_, index) => {
                         return(
-                            <div className="carousel-status-bar-item" key={`status-${index+1}`}></div>
+                            <div 
+                                className="carousel-status-bar-item" 
+                                key={`status-${index+1}`} 
+                                onClick={()=>{
+                                    let currentIndex = parseInt(carouselItemsRef.current.filter(item => item.className.includes('carousel-item-3'))[0].id)-1;
+                                    while(currentIndex !== index){
+                                        setCurrentState('next');
+                                        currentIndex = (currentIndex+1)%5;
+                                    }
+                                    clearInterval(carouselInterval);
+                                }}
+                                ref={(button) => (carouselStatusButtonsRef.current[index] = button)}
+                            >
+                            </div>
                         );
                     })
                 }

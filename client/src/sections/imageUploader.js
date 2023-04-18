@@ -1,3 +1,4 @@
+import customAlert from "../libs/functions/customAlert";
 import "../static/css/sections/imageUploader.css";
 
 import React, { useState } from "react";
@@ -19,7 +20,7 @@ function ImageUploader({ name }) {
 
           document.querySelector(`input[type="hidden"][name="${name}"]`).value = base64Array;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => customAlert(error.toString(), "error"));
     }
   };
 
@@ -54,7 +55,7 @@ function ImageUploader({ name }) {
             base64Array
           );
         })
-        .catch((error) => console.log(error));
+        .catch((error) => customAlert(error.toString(), 'error'));
     }
   };
 

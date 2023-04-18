@@ -8,9 +8,10 @@ import { useParams } from "react-router-dom";
 import { API_SERVER_MEDIA } from "../settings";
 import { useEffect, useState } from "react";
 
-const PublicProfile = () => {
+const PublicProfile = (props) => {
 
     let username = useParams().username;
+    let userToken = localStorage.getItem("token", '');
 
     if (username === undefined){
         username = localStorage.getItem("user");
@@ -20,7 +21,13 @@ const PublicProfile = () => {
     let [totalRatings, setTotalRatings] = useState(0);
 
     const {data, loading, refetch} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
-        username: username
+        username: username,
+        userToken: userToken
+    }});
+
+    const {data: contractData, loading: contractLoading} = useQuery(usersAPI.getContractByUsername, {variables: {
+        username: localStorage.getItem("user"),
+        userToken: userToken
     }});
 
     useEffect (() => {
@@ -40,14 +47,16 @@ const PublicProfile = () => {
         return total_ratings
     }
 
-    if(loading) return <FlatterPage withBackground userLogged><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
+    if(loading || contractLoading) return <FlatterPage withBackground userLogged withAds={false}><div className="profile-grid"><h1>Cargando...</h1></div></FlatterPage>
 
     const profile = data.getUserByUsername;
+    const canSeeSelfComments = data.getContractByUsername.plan.viewSelfProfileOpinions;
+    const canCreateChats = contractData.getContractByUsername.plan.chatCreation;
 
     let roles = profile.roles.map((role) => role.role);
 
     return(
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withBackground userLogged withAds={false}>
             <div className="profile-grid">
                 <PublicProfileCard 
                     username={username} 
@@ -61,9 +70,11 @@ const PublicProfile = () => {
                     tags={profile.tags} 
                     pic={API_SERVER_MEDIA+profile.profilePicture}
                     refetchUser = {refetch}
+                    setActivateChat={props.setActivateChat}
+                    canCreateChats={canCreateChats}
                 />
                 <ReviewsBox average={averageRating} total={totalRatings} />
-                <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} />
+                <CommentsBox comments={profile.valuedReviews} username={username} setAverageRating={setAverageRating} setTotalRatings={setTotalRatings} getTotalRatings={getTotalRatings} canSeeSelfComments={canSeeSelfComments} isMe={username===localStorage.getItem("user")}/>
             </div>
         </FlatterPage>
     );

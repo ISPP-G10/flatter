@@ -1,22 +1,25 @@
 import "../static/css/pages/ownerProperties.css";
 
+import { useNavigate } from "react-router-dom";
+import { useQuery } from '@apollo/client';
+import { useState, useRef } from 'react';
+import { useApolloClient } from '@apollo/client';
+
+import * as settings from "../settings";
 import FlatterPage from "../sections/flatterPage";
 import Tag from "../components/tag";
 import SolidButton from "../sections/solidButton";
 import FlatterModal from "../components/flatterModal";
 import FormProperty from "../components/forms/formProperty";
 import propertiesAPI from '../api/propertiesAPI';
-import * as settings from "../settings";
 import customAlert from "../libs/functions/customAlert";
-import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from '@apollo/client';
-import { useState, useRef } from 'react';
-import { useApolloClient } from '@apollo/client';
+import customConfirm from "../libs/functions/customConfirm";
 
 
 const OwnerProperties = ({}) => {
 
   let [ property, setProperty ] = useState({});
+  let userToken = localStorage.getItem("token", '');
 
   const addPropertyModalRef = useRef(null);
   const editPropertyModalRef = useRef(null);
@@ -30,11 +33,12 @@ const OwnerProperties = ({}) => {
               mutation: propertiesAPI.deletePropertyById,
               variables: {
                   propertyId: parseInt(id),
+                  userToken: userToken,
               }
           }).then((response) => {
             window.location.reload();
           }).catch((error) => {
-              console.log(error);
+              customAlert(error.message, 'error');
           });
       
     }
@@ -45,17 +49,30 @@ const OwnerProperties = ({}) => {
           mutation: propertiesAPI.outstandPropertyById,
           variables: {
               propertyId: parseInt(idPiso),
+              userToken: userToken,
           }
       }).then((response) => {
           window.location.reload();
       }).catch((error) => {
-          customAlert(error.message);
+          customAlert(error.message, 'error', false);
       });
   
     }
 
+    function handleConfirm(idPiso){
+      customConfirm("Estás a punto de destacar por 1000 FlatterCoins, ¿quieres continuar?")
+      .then((response) => {
+          standOutProperty(idPiso);
+          customAlert("Has destacado la propiedad", 'success', false);
+      })
+      .catch((error) => {
+          customAlert("Has rechazado la operación", 'info', false);
+      });
+  }
+
     const {data, loading} = useQuery(propertiesAPI.getPropertiesByOwner, {variables: {
-      username: localStorage.getItem('user','')
+      username: localStorage.getItem('user',''),
+      userToken: userToken
     }});
 
     if (loading) return <p>Loading...</p>
@@ -90,25 +107,32 @@ const OwnerProperties = ({}) => {
             (
               data.getPropertiesByOwner.map ((prop, index) => { 
                 return(
-            <div className="listview" key={ index }>
+            <div className={`listview`} key={ index }>
+
               <div className="listview-header" onClick={() => navigate(`/property/${prop.id}`)}>
+                <h3>{prop.title}</h3>
+              </div>
+
+              <div className="upper">
+                <p className = "team">{prop.price} €/mes</p>
+
                 {
                   prop.isOutstanding ? 
-                    <img src={require('../static/files/icons/yellow-star.png')} className="outstanding-icon"></img>
+                    <div className="outstanding-badge">
+                      <span>✓</span> Destacado
+                    </div>
                     :
-                    <div className="outstanding-icon" style={{marginTop: '50px'}}></div>
+                    ''
                 }
-                <h3>{prop.title}</h3>
               </div>
               
               <div className="attrcontainer"> 
+              
                 <div className="attrindv">
                   <img className="small-picture-back" src={require('../static/files/icons/ubicacion.png')} alt='Ubicacion'/>
                   <p className = "location" style={{fontSize: '12px', overflowY: 'scroll', maxHeight: '30px', maxWidth: '215px'}}>{prop.location}, {prop.municipality.name}, {prop.province.name}</p>  
                 </div>
-                <div className="attrindv">
-                  <p className = "team">{prop.price} €/mes</p>
-                </div>
+
               </div>
               
 
@@ -121,7 +145,9 @@ const OwnerProperties = ({}) => {
                 {prop && prop.tags.map((tag,index) => {
                   return(
                     <div className="etiquetaindv" key={index}>
-                      <Tag name={tag.name} color={tag.color}/>
+                      <div className="tagDiv" onClick={() => navigate(`/search?tag=${tag.name}`)}>
+                        <Tag name={tag.name} color={tag.color}/>
+                      </div>
                     </div> 
                   ); 
                 })
@@ -145,7 +171,7 @@ const OwnerProperties = ({}) => {
                       <button className="styled-red-info-button" onClick={()=>{deleteProperty(prop.id)}}>Borrar Piso</button>
                     </div>
                     <div className="btnindv">
-                      <button className="styled-info-button"onClick={()=>{standOutProperty(prop.id)}}>Destacar Piso</button>
+                      <button className="styled-info-button"onClick={()=>{handleConfirm(prop.id)}}>Destacar Piso</button>
                     </div>
 
                   </div>

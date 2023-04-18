@@ -7,7 +7,7 @@ import Comment from './comment';
 import ReactStars from "react-rating-stars-component";
 import PropTypes from 'prop-types';
 import { API_SERVER_MEDIA } from '../../settings';
-import {useApolloClient} from '@apollo/client'
+import {useApolloClient, useQuery} from '@apollo/client'
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
 
@@ -26,6 +26,8 @@ function getTagName(tag, genre) {
             return "Compañer" + final_letter;
         case "E":
             return "Excompañer" + final_letter;
+        case "I": 
+            return "Inquilin" + final_letter;
         default:
             return "Propietari" + final_letter;
     }
@@ -48,15 +50,22 @@ const CommentsBox = (props) => {
 
     const commentsModalRef = useRef(null)
     const commentsFormRef = useRef(null);
+    const client = useApolloClient();
     let [rating, setRating] = useState(null);
     let [comments, setComments] = useState(props.comments)
-    const client = useApolloClient();
+    let username = localStorage.getItem("user");
+    let userToken = localStorage.getItem("token", '');
+
+    const { data : dataRelations, loading : loadingRelations } = useQuery( usersAPI.getRelationships,
+        { variables: { userLogin: username,
+                        userValued: props.username, 
+                        userToken:  userToken} } );
  
     const ratingChanged = (newRating) => {
         if (newRating === null || newRating === undefined || newRating === 0) {
             setRating(null)
         } else if (newRating < 1 && newRating > 5){
-            customAlert("La valoración debe estar entre 1 y 5");
+            customAlert("La valoración debe estar entre 1 y 5", 'warning', true, 10000);
         } else{
             setRating(newRating)
         }
@@ -82,7 +91,8 @@ const CommentsBox = (props) => {
                 evaluatorUser: localStorage.getItem("user"),
                 text: values.comment,
                 rating: rating ? rating : null,
-                relationship: values.relationship
+                relationship: values.relationship,
+                userToken: userToken
             }
         }).then((response) => {
             commentsModalRef.current.close();
@@ -92,10 +102,17 @@ const CommentsBox = (props) => {
                 ]);
             props.setAverageRating(response.data.createReview.review.valuedUser.averageRating);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
         
     }
+
+    useEffect(() => { 
+        if (!loadingRelations && props.username!==username) { 
+            commentsInputs.map((input) => { 
+                if(input.name === 'relationship') { input.values = dataRelations.getRelationshipsBetweenUsers; } }); 
+            } 
+        }, [loadingRelations, dataRelations, props.username])
 
     return(
         <>
@@ -105,24 +122,29 @@ const CommentsBox = (props) => {
                         <img className="comments-box-star" src={require("../../static/files/icons/star.png")} alt="Icono estrella"></img>
                         <h3 className='comments-box-title'>Reseñas</h3>
                     </div>
-                    <button className={`comments-btn ${props.username===localStorage.getItem("user") ? 'no-comments-btn' : ''}`} title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
+                    <button className={`comments-btn ${props.username===username || comments.filter(c => c.evaluatorUser.username === username).length > 0 ? 'no-comments-btn' : ''}`} title="Añade una nueva reseña" onClick={handleCommentsButtonClick} >
                         <span className="comments-btn-text">Escribe tu reseña...</span>
                     </button>
                 </div>
-                <div className="comments-box-scollable">
-                    {
-                        comments.length !== 0 ? (
-                            comments.map((comment, i) => {
-                                return(
-                                    <Comment key={'comment-' + i} name={comment.evaluatorUser.firstName + " " + comment.evaluatorUser.lastName} pic={API_SERVER_MEDIA+comment.evaluatorUser.profilePicture} tagName={getTagName(comment.relationship, comment.evaluatorUser.genre)} tagColor={getTagColor(comment.relationship)} text={comment.text} username={comment.evaluatorUser.username} />
-                                );
-                            }))
-                        :
-                            (
-                                <Comment />
-                            )
-                    }
-                </div>
+                {
+                    (!props.canSeeSelfComments && props.isMe) ? 
+                    <h4 style={{margin: '30px 20px', width: '100%', textAlign: 'center'}}>Mejora a los planes AVANZADO o PRO para ver qué opinan otros usuarios de tí</h4> 
+                    :
+                    <div className="comments-box-scollable">
+                        {
+                            comments.length !== 0 ? (
+                                comments.map((comment, i) => {
+                                    return(
+                                        <Comment key={'comment-' + i} name={comment.evaluatorUser.firstName + " " + comment.evaluatorUser.lastName} pic={API_SERVER_MEDIA+comment.evaluatorUser.profilePicture} tagName={getTagName(comment.relationship, comment.evaluatorUser.genre)} tagColor={getTagColor(comment.relationship)} text={comment.text} username={comment.evaluatorUser.username} />
+                                    );
+                                }))
+                            :
+                                (
+                                    <Comment />
+                                )
+                        }
+                    </div>
+                }
             </div>
             <FlatterModal maxWidth={500} maxHeight={500} ref={commentsModalRef}>
                 <h1 className="comments-form-title">Emite tu valoración</h1>
