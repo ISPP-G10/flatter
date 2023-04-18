@@ -76,6 +76,7 @@ class TestMutations(GraphQLTestCase):
                 createIndividualGroup(
                     username: "%s"
                     users: ["%s", "%s"]
+                    userToken: ""
                 ){
                     group{
                         name
@@ -137,6 +138,7 @@ class TestMutations(GraphQLTestCase):
                 createIndividualGroup(
                     username: "%s"
                     users: ["%s", "%s"]
+                    userToken: ""
                 ){
                     group{
                         name
@@ -157,7 +159,7 @@ class TestMutations(GraphQLTestCase):
             raise e
         
         self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'Some users do not exist')
+        self.assertEqual(content['errors'][0]['message'], 'The user does not exist')
 
 
 
@@ -202,6 +204,7 @@ class TestMutations(GraphQLTestCase):
                     text: "Creación de mensaje de prueba"
                     groupId: %s
                     username: "%s"
+                    userToken: ""
                 ){
                     message{
                         text
@@ -236,6 +239,7 @@ class TestMutations(GraphQLTestCase):
                     text: ""
                     groupId: %s
                     username: "%s"
+                    userToken: ""
                 ){
                     message{
                         text
@@ -270,6 +274,7 @@ class TestMutations(GraphQLTestCase):
                     text: "Creación de mensaje de prueba con grupo inexsitente"
                     groupId: 999
                     username: "%s"
+                    userToken: ""
                 ){
                     message{
                         text
@@ -304,6 +309,7 @@ class TestMutations(GraphQLTestCase):
                     text: "Creación de mensaje de prueba con usuario inexsitente"
                     groupId: %s
                     username: "No existe"
+                    userToken: ""
                 ){
                     message{
                         text
@@ -338,6 +344,7 @@ class TestMutations(GraphQLTestCase):
                     text: "Creación de mensaje de prueba con usuario que no pertenece al grupo"
                     groupId: %s
                     username: "%s"
+                    userToken: ""
                 ){
                     message{
                         text
@@ -537,6 +544,7 @@ class TestMutations(GraphQLTestCase):
                 leaveGroup(
                     userId: %s
                     groupId: %s
+                    userToken: ""
                 ){
                     group{
                         id
@@ -570,6 +578,7 @@ class TestMutations(GraphQLTestCase):
                 leaveGroup(
                     userId: %s
                     groupId: %s
+                    userToken: ""
                 ){
                     group{
                         id
@@ -600,6 +609,7 @@ class TestMutations(GraphQLTestCase):
                 leaveGroup(
                     userId: %s
                     groupId: %s
+                    userToken: ""
                 ){
                     group{
                         id
