@@ -624,6 +624,105 @@ class TestMutations(GraphQLTestCase):
 
 
 
+    #TESTS DE INCIDENT Y REQUEST
+    ### Test de mutación de crear incidente  +++ Caso positivo: se crea un incidente
+    def test_create_incident_positive(self):
+        response = self.query('''
+            mutation test{
+                createIncident(
+                    command: "Prueba de incidente"
+                ){
+                    incident{
+                        id
+                        command
+                    }
+                }
+            }
+        ''')
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseNoErrors(response)
+
+
+    
+    ### Test de mutación de crear incidente  --- Caso negativo: se intenta crear un incidente sin comando
+    def test_create_incident_negative_no_command(self):
+        response = self.query('''
+            mutation test{
+                createIncident(
+                    command: ""
+                ){
+                    incident{
+                        id
+                        command
+                    }
+                }
+            }
+        ''')
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El comando no puede estar vacío')
+
+
+
+    ### Test de mutación de crear reporte  +++ Caso positivo: se crea un reporte
+    def test_create_request_positive(self):
+        response = self.query('''
+            mutation test{
+                createRequest(
+                    command: "Prueba de reporte"
+                ){
+                    request{
+                        id
+                        command
+                    }
+                }
+            }
+        ''')
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseNoErrors(response)
+
+
+
+    ### Test de mutación de crear reporte  --- Caso negativo: se intenta crear un reporte sin comando
+    def test_create_request_negative_no_command(self):
+        response = self.query('''
+            mutation test{
+                createRequest(
+                    command: ""
+                ){
+                    request{
+                        id
+                        command
+                    }
+                }
+            }
+        ''')
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El comando no puede estar vacío')
+
+
+
     #TESTS DE AÑADIR RESEÑA
     ### Test de mutación de añadir reseña  +++ Caso positivo: se añade una reseña
     def test_add_review_positive(self):
@@ -917,6 +1016,8 @@ class TestMutations(GraphQLTestCase):
                 email: "%s"
                 firstName: "%s"
                 lastName: "%s"
+                genre: "Mujer"
+                role: "Inquilino"
                 ){
                     user{
                         id
@@ -924,6 +1025,10 @@ class TestMutations(GraphQLTestCase):
                         email
                         firstName
                         lastName
+                        genre
+                        roles {
+                            role
+                        }
                     }
                 }
             }
@@ -933,7 +1038,6 @@ class TestMutations(GraphQLTestCase):
         try:
             content = json.loads(response.content)
         except json.JSONDecodeError as e:
-            print(response.content)
             raise e
         
         self.assertResponseNoErrors(response)
@@ -972,6 +1076,202 @@ class TestMutations(GraphQLTestCase):
         self.assertResponseHasErrors(response)
         self.assertEqual(content['errors'][0]['message'], 'Este email ya está registrado. Por favor, elige otro.')
 
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un nombre muy largo
+    def test_edit_user_private_negative_long_name(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user2.email, 'A'*60, self.user2.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            print(response.content)
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El nombre debe tener entre 3 y 50 caracteres')
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un apellido muy corto
+    def test_edit_user_private_negative_short_surname(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user2.email, self.user2.first_name, 'A')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Los apellidos deben tener entre 3 y 50 caracteres')
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un email no válido
+    def test_edit_user_private_negative_invalid_email(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                    }
+                }
+            }
+            ''' % (self.user2.username, 'invalid_email', self.user2.first_name, self.user2.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El email no es válido')
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un género no válido
+    def test_edit_user_private_negative_gender_not_valid(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                genre: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                        genre
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user2.email, self.user2.first_name, self.user2.last_name, 'invalid_genre')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El género no es válido')
+
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un teléfono no válido
+    def test_edit_user_private_negative_invalid_phone(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                phone: "%s"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                        phoneNumber
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user2.email, self.user2.first_name, self.user2.last_name, 'invalid_phone')
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'El teléfono no es válido')
+
+
+    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con role no válido
+    def test_edit_user_private_negative_invalid_roles(self):
+        response = self.query('''
+            mutation test{
+                editUserPrivate(
+                username: "%s"
+                email: "%s"
+                firstName: "%s"
+                lastName: "%s"
+                role: "invalid_role"
+                ){
+                    user{
+                        id
+                        username
+                        email
+                        firstName
+                        lastName
+                        roles {
+                            role
+                        }
+                    }
+                }
+            }
+            ''' % (self.user2.username, self.user2.email, self.user2.first_name, self.user2.last_name)
+        )
+
+        try:
+            content = json.loads(response.content)
+        except json.JSONDecodeError as e:
+            raise e
+        
+        self.assertResponseHasErrors(response)
+        self.assertEqual(content['errors'][0]['message'], 'Expected a value of type "RoleRole" but received: U')
 
 
     #TESTS DE EDITAR USUARIO PÚBLICO
