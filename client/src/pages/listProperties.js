@@ -215,7 +215,7 @@ const ListProperties = () => {
   }, [favouritesProperties]);
 
   return (
-    <FlatterPage withBackground userLogged>
+    <FlatterPage withBackground userLogged withAds={false}>
       <div>
         <h1 className="properties-title">Buscar habitaciones en alquiler</h1>
       </div>
