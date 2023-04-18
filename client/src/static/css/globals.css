@@ -70,8 +70,8 @@ section {
   height: 100vh;
   padding-top: 70px;
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.5)
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
     ),
     url("../files/images/flatter-bg.jpg");
   background-size: cover;
