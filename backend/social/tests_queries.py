@@ -70,7 +70,7 @@ class TestQueries(TestCase):
     ### Test de query de etiquetas  +++ Caso positivo: obtener todas las etiquetas
     def test_get_all_tag_returns_correct_data(self):
         client = Client(schema)
-        executed = client.execute('''query {getAllTag{ name, color }}''')
+        executed = client.execute('''query {getAllTag(userToken: " "){ name, color }}''')
         assert executed == {'data': {'getAllTag': [{'name': 'test_tag_1', 'color': 'red'}]}}
 
 
@@ -78,8 +78,11 @@ class TestQueries(TestCase):
     ### Test de query de grupos  +++ Caso positivo: obtener todos los grupos
     def test_get_groups_returns_correct_data(self):
         client = Client(schema)
-        executed = client.execute('''query {getGroups{ name }}''')
-        assert executed == {'data': {'getGroups': [{'name': 'test_query_group_1'}, {'name': 'test_query_group_2'}]}}
+        executed = client.execute('''query {getGroups(userToken: " "){ name }}''')
+        expected_data = {'data': {'getGroups': [{'name': 'test_query_group_1'}, {'name': 'test_query_group_2'}]}}
+        assert len(executed['data']['getGroups']) == len(expected_data['data']['getGroups'])
+        for group in expected_data['data']['getGroups']:
+            assert group in executed['data']['getGroups']
 
 
 
@@ -140,7 +143,7 @@ class TestQueries(TestCase):
     ### Test de query de mensajes  +++ Caso positivo: obtener todos los mensajes
     def test_get_messages_returns_correct_data(self):
         client = Client(schema)
-        executed = client.execute('''query {getMessages{ text }}''')
+        executed = client.execute('''query {getMessages(userToken: " "){ text }}''')
         assert executed == {'data': {'getMessages': [{'text': 'message1'}, {'text': 'message2'}, {'text': 'message3'}, {'text': 'message4'}]}}
 
 
