@@ -2,7 +2,7 @@ import '../static/css/sections/footer.css'
 
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const Footer = ({userLogged}) => {
 
     return(
         <footer className={`site-footer`}>
@@ -27,14 +27,17 @@ const Footer = () => {
                     </a></li>
             </ul>
             <ul className="menu">
-                <li className='menu-item'><Link className='menu-link' to="/">Inicio</Link></li>
-                <li className='menu-item'><Link className='menu-link' to="/search">Buscador de viviendas</Link></li>
-                <li className='menu-item'><Link className='menu-link' to="/users">Buscador de usuarios</Link></li>
                 {
-                    localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
-                    <li className='menu-item'><Link className='menu-link' to="/properties">Mis viviendas</Link></li>
+                    userLogged &&
+                    <>
+                        <li className='menu-item'><Link className='menu-link' to="/">Inicio</Link></li>
+                        <li className='menu-item'><Link className='menu-link' to="/search">Buscador de viviendas</Link></li>
+                        <li className='menu-item'><Link className='menu-link' to="/users">Buscador de usuarios</Link></li>
+                        <li className='menu-item'><Link className='menu-link' to="/pricing">Planes</Link></li>
+                        <li className='menu-item'><Link className='menu-link' to="/shop">Tienda</Link></li>
+                        <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>
+                    </>
                 }
-                <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>       
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>

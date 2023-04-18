@@ -11,20 +11,24 @@ import { useEffect, useRef, useState } from 'react';
 import { publicProfileFormInputs } from '../../forms/publicProfileForm';
 import usersAPI from '../../api/usersAPI';
 import customAlert from '../../libs/functions/customAlert';
+import { useNavigate } from 'react-router-dom';
 
 const PublicProfileCard = (props) => {
 
     const client = useApolloClient()
+    const navigate = useNavigate();
 
     const [reload, setReload] = useState(false);
 
     const editPublicProfileModalRef = useRef(null);
     const updatePublicProfileRef = useRef(null); 
     const tagsInput = useRef(null);
+    let userToken = localStorage.getItem("token", '');
 
     const {data: userTagsData, loading: userTagsLoading} = useQuery(tagsAPI.getTagsByType, {
         variables: {
-            type: "user"
+            type: "U",
+            userToken: userToken
         }
     });
 
@@ -33,13 +37,17 @@ const PublicProfileCard = (props) => {
             mutation: chatsAPI.createIndividualChat,
             variables: {
                 username: props.username,
-                users: [props.username, localStorage.getItem('user')]
+                users: [props.username, localStorage.getItem('user')],
+                userToken: userToken
             }
         }).then((response) => {
-            customAlert("Ya puedes chatear con este usuario")
-            window.location.reload();
+            props.setActivateChat(props.username);
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            if (error.message.split("\n")[0].trim() === "The group already exists") {
+                props.setActivateChat(props.username);
+            } else {
+                customAlert(error.message.split("\n")[0], 'error');
+            }
         });
     }
 
@@ -61,7 +69,8 @@ const PublicProfileCard = (props) => {
                 biography: values.biography,
                 profession: values.profession,
                 birthday: userBirthday,
-                tags: tagsValues
+                tags: tagsValues,
+                userToken: userToken
             }
         })
         .then((response) => {
@@ -69,7 +78,7 @@ const PublicProfileCard = (props) => {
             window.location.reload();
             setReload(true);
         })
-        .catch((error) => customAlert(error.message.split("\n")[0]));
+        .catch((error) => customAlert(error.message.split("\n")[0], 'error'));
     }
 
     useEffect(() => {
@@ -116,10 +125,11 @@ const PublicProfileCard = (props) => {
                             props.isMe ? (
                                 <button className="profile-card-btn" title="Edita tu perfil" onClick={() => editPublicProfileModalRef.current.open()}></button>
                             ) : 
-                            (
-                                // <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
-                                <></>
-                            )
+                        
+                            props.canCreateChats && 
+                                (
+                                    <button className="profile-card-btn profile-card-btn-chat" title={`Contacta con @${props.username}`} onClick={() => openChat()}></button>
+                                ) 
                         }
                     </div>
                     {props.job && <p>{props.job}</p>}
@@ -138,7 +148,9 @@ const PublicProfileCard = (props) => {
                             props.tags.length !== 0 ? (
                                 props.tags.map((tag, i) => { 
                                     return(
-                                        <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        <div className='tagDiv' onClick={() => navigate(`/users?tag=${tag.name}`)}>
+                                            <Tag key={'tag-'+i} name={tag.name} color={tag.color} />
+                                        </div>
                                     )
                                 })
                             ) : (

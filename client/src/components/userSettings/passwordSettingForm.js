@@ -9,6 +9,7 @@ const PasswordSettingForm = ({correctModalRef}) => {
 
     const client = useApolloClient();    
     const accountFormRef = useRef(null);
+    let userToken = localStorage.getItem('token', '');
 
     function handleAccountFormSubmit({values}){
 
@@ -20,12 +21,13 @@ const PasswordSettingForm = ({correctModalRef}) => {
                 username: localStorage.getItem('user', ''),
                 oldPassword: values.oldPassword,
                 newPassword: values.newPassword,
+                userToken: userToken
             }
         })
         .then((response) => {
             correctModalRef.current.open();
         })
-        .catch((error) => customAlert(error.message));
+        .catch((error) => customAlert(error.message, 'error'));
 
     }
 

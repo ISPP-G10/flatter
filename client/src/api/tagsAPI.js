@@ -2,8 +2,8 @@ import {gql} from 'apollo-boost';
 
 const tagsAPI = {
     getTags: gql`
-        query getAllTag{
-            getAllTag{
+        query getAllTag($userToken: String!){
+            getAllTag(userToken: $userToken){
                 id
                 name
                 color
@@ -12,8 +12,8 @@ const tagsAPI = {
     `,
 
     getTagsByType: gql`
-        query getTagsByType($type: String!){
-            getTagsByType(tagType: $type){
+        query getTagsByType($type: String!, $userToken: String!){
+            getTagsByType(tagType: $type, userToken: $userToken){
                 id
                 name
                 color

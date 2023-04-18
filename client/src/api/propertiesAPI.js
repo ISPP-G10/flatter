@@ -15,6 +15,8 @@ const propertiesAPI = {
       $price: Float!
       $images: [String]
       $maxCapacity: Int!
+      $tags: [String]!
+      $userToken: String!
     ) {
       createProperty(
         title: $title
@@ -29,6 +31,8 @@ const propertiesAPI = {
         price: $price
         images: $images
         maxCapacity: $maxCapacity
+        tags: $tags
+        userToken: $userToken
       ) {
         property {
           title
@@ -50,6 +54,8 @@ const propertiesAPI = {
       $municipality: String!
       $price: Float!
       $images: [String]
+      $tags: [String]!
+      $userToken: String!
     ) {
       updateProperty(
         propertyId: $id
@@ -63,6 +69,8 @@ const propertiesAPI = {
         municipality: $municipality
         price: $price
         images: $images
+        tags: $tags
+        userToken: $userToken
       ) {
         property {
           title
@@ -72,41 +80,44 @@ const propertiesAPI = {
     }
     `,
     filterProperties: gql`
-        query filterProperties($minPrice: Float, $maxPrice: Float, $municipality: String) {
-          getFilteredPropertiesByPriceAndCity(minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality) {
-                id
-                title
-                description
-                dimensions
-                location
-                bedroomsNumber
-                bathroomsNumber
-                tags {
-                    name
-                    color
-                }
-                province{
-                    name
-                }
-                price
-                isOutstanding
-                maxCapacity
-                owner {
-                    username
-                }
-                images{
-                    image
-                }
-                flatmates{
-                    firstName
-                    lastName
-                }
+      query filterProperties($pageNumber: Int!, $pageSize: Int!, $minPrice: Float, $maxPrice: Float, $municipality: String, $province: String, $tag: String, $userToken: String!) {
+        getFilteredPropertiesByPriceAndCity(pageNumber: $pageNumber, pageSize: $pageSize, minPrice: $minPrice, maxPrice: $maxPrice, municipality: $municipality, province: $province, tag: $tag, userToken: $userToken) {
+          properties{
+            id
+            title
+            description
+            dimensions
+            location
+            bedroomsNumber
+            bathroomsNumber
+            tags {
+                name
+                color
             }
+            province{
+                name
+            }
+            price
+            isOutstanding
+            maxCapacity
+            owner {
+                username
+            }
+            images{
+                image
+            }
+            flatmates{
+                firstName
+                lastName
+            }
+          }
+          totalCount
         }
+      }
   `,
   getPropertiesByOwner: gql`
-    query getPropertiesByOwner($username: String!) {
-      getPropertiesByOwner(username: $username) {
+    query getPropertiesByOwner($username: String!, $userToken: String!) {
+      getPropertiesByOwner(username: $username, userToken: $userToken) {
         id
         description
         tags {
@@ -134,8 +145,8 @@ const propertiesAPI = {
     }
   `,
   deletePropertyById: gql`
-    mutation deletePropertyById($propertyId: Int!) {
-      deleteProperty(propertyId: $propertyId) {
+    mutation deletePropertyById($propertyId: Int!, $userToken: String!) {
+      deleteProperty(propertyId: $propertyId, userToken: $userToken) {
         property {
           title
         }
@@ -143,8 +154,8 @@ const propertiesAPI = {
     }
   `,
   outstandPropertyById: gql`
-    mutation makePropertyOutstanding($propertyId: Int!) {
-      makePropertyOutstanding(propertyId: $propertyId) {
+    mutation makePropertyOutstanding($propertyId: Int!, $userToken: String!) {
+      makePropertyOutstanding(propertyId: $propertyId, userToken: $userToken) {
         property {
           isOutstanding
           title
@@ -154,8 +165,8 @@ const propertiesAPI = {
   `,
 
   getOutstandingProperties: gql`
-    query getOutstanding {
-      getOutstandingProperties {
+    query getOutstanding($userToken: String!) {
+      getOutstandingProperties(userToken: $userToken) {
         id
         owner {
           firstName
@@ -170,8 +181,8 @@ const propertiesAPI = {
   `,
 
   getPropertyById: gql`
-    query getPropertyById($id: Int!) {
-      getPropertyById(id: $id) {
+    query getPropertyById($id: Int!, $userToken: String!) {
+      getPropertyById(id: $id, userToken: $userToken) {
         id
         title
         location
@@ -218,16 +229,16 @@ const propertiesAPI = {
     }
     `,
     getPropertyRequestsByUsername: gql`
-        query getPropertyRequestsByUsername($requesterUsername: String!, $propertyId: Int!) {
-            getPetitionByRequesterToProperty(username: $requesterUsername, propertyId: $propertyId) {
+        query getPropertyRequestsByUsername($requesterUsername: String!, $propertyId: Int!, $userToken: String!) {
+            getPetitionByRequesterToProperty(username: $requesterUsername, propertyId: $propertyId, userToken: $userToken) {
                 id
                 status
             }
         }
     `,
     createPropertyRequest: gql`
-        mutation createPropertyRequest($message: String!, $requesterUsername: String!, $propertyId: Int!) {
-            createPetition(message: $message, requesterUsername: $requesterUsername, propertyId: $propertyId) {
+        mutation createPropertyRequest($message: String!, $requesterUsername: String!, $propertyId: Int!, $userToken: String!) {
+            createPetition(message: $message, requesterUsername: $requesterUsername, propertyId: $propertyId, userToken: $userToken) {
                 petition {
                     status
                 }
@@ -235,8 +246,8 @@ const propertiesAPI = {
         }
     `,
     removePropertyRequest: gql`
-        mutation removePropertyRequest($requestId: Int!) {
-            deletePetition(petitionId: $requestId) {
+        mutation removePropertyRequest($requestId: Int!, $userToken: String!) {
+            deletePetition(petitionId: $requestId, userToken: $userToken) {
                 petition {
                     status
                 }
@@ -245,8 +256,8 @@ const propertiesAPI = {
     `,
     
   addUsersToFavouriteProperty: gql`
-    mutation addUsersToFavouriteProperty($username: String!, $propertyId: Int!){
-        addUsersToFavouriteProperty(username: $username, propertyId: $propertyId){
+    mutation addUsersToFavouriteProperty($username: String!, $propertyId: Int!, $userToken: String!){
+        addUsersToFavouriteProperty(username: $username, propertyId: $propertyId, userToken: $userToken){
             user{
                 username
             }
@@ -254,8 +265,8 @@ const propertiesAPI = {
     }
   `,
   deleteUsersToFavouriteProperty: gql`
-      mutation deleteUsersToFavouriteProperty($username: String!, $propertyId: Int!){
-          deleteUsersToFavouriteProperty(username: $username, propertyId: $propertyId){
+      mutation deleteUsersToFavouriteProperty($username: String!, $propertyId: Int!, $userToken: String!){
+          deleteUsersToFavouriteProperty(username: $username, propertyId: $propertyId, userToken: $userToken){
               user{
                   username
               }
@@ -263,8 +274,8 @@ const propertiesAPI = {
       }
   `,
   getFavouritePropertiesByUser: gql`
-      query getFavouritePropertiesByUser($username: String!){
-        getFavouriteProperties(username: $username) {
+      query getFavouritePropertiesByUser($username: String!, $userToken: String!){
+        getFavouriteProperties(username: $username, userToken: $userToken) {
           id
           title
           description

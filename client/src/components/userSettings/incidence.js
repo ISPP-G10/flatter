@@ -61,10 +61,10 @@ const Incidence = () => {
                 command: result,
             }
         }).then((response) => {
-            customAlert("Incidencia registrada correctamente");
+            customAlert("Incidencia registrada correctamente", 'success');
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
         
     }

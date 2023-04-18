@@ -61,10 +61,10 @@ const Request = () => {
                 command: result,
             }
         }).then((response) => {
-            customAlert("Sugerencia registrada correctamente");
+            customAlert("Sugerencia registrada correctamente", 'success');
             window.location.reload();
         }).catch((error) => {
-            customAlert(error.message.split("\n")[0]);
+            customAlert(error.message.split("\n")[0], 'error');
         });
         
     }

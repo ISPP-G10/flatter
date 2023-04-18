@@ -26,6 +26,50 @@ export const registerInputs = [
         ]
     },
     {
+        tag: "Nombre de usuario",
+        name: "username",
+        type: "text",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.usernameLengthValidator
+        ]
+    },
+    {
+        tag: "Email",
+        name: "email",
+        type: "email",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.emailValidator
+        ]
+    },
+    {
+        tag: "Contraseña",
+        name: "password",
+        type: "password",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.passwordLengthValidator
+        ]
+    },    
+    {
+        tag: "Confirmar contraseña",
+        name: "passwordConfirm",
+        type: "password",
+        defaultValue: "",
+        isRequired: true,
+        validators: [
+            registerValidators.notEmptyValidator,
+            registerValidators.passwordLengthValidator
+        ]
+    },
+    {
         tag: "Género",
         name: "genre",
         type: "select",
@@ -48,38 +92,5 @@ export const registerInputs = [
             registerValidators.notEmptyValidator,
             registerValidators.validRole
         ],
-    },
-    {
-        tag: "Nombre de usuario",
-        name: "username",
-        type: "text",
-        defaultValue: "",
-        isRequired: true,
-        validators: [
-            registerValidators.notEmptyValidator,
-            registerValidators.usernameLengthValidator
-        ]
-    },
-    {
-        tag: "Contraseña",
-        name: "password",
-        type: "password",
-        defaultValue: "",
-        isRequired: true,
-        validators: [
-            registerValidators.notEmptyValidator,
-            registerValidators.passwordLengthValidator
-        ]
-    },
-    {
-        tag: "Email",
-        name: "email",
-        type: "email",
-        defaultValue: "",
-        isRequired: true,
-        validators: [
-            registerValidators.notEmptyValidator,
-            registerValidators.emailValidator
-        ]
     }
 ]

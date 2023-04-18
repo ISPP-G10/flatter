@@ -144,11 +144,19 @@
   align-items: center;
 }
 
+.partners-click-tracker span{
+  color: black;
+}
+
 .properties-click-tracker span img,
 .partners-click-tracker span img,
 .owners-click-tracker span img {
   height: 25px;
   width: 25px;
+}
+
+.partners-click-tracker span img{
+  filter: invert(100%);
 }
 
 .properties-click-tracker span::after,

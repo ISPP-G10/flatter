@@ -1,0 +1,34 @@
+.pagination-container {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+}
+
+.pagination-container > button{
+    padding: 8px 16px;
+    background-color: #04AA6D;
+    border-radius: 10px;
+    border: solid 2px #024b31;
+    color: white;
+    font-weight: bolder;
+    text-transform: uppercase;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.pagination-container > button[disabled] {
+    background-color: #04aa6d90;
+    border: solid 2px #024b3183;
+    cursor: not-allowed;
+}
+
+.pagination-container > span {
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: solid 1px black;
+    font-weight: bolder;
+}

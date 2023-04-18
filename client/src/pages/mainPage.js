@@ -9,10 +9,14 @@ import { useQuery } from '@apollo/client';
 
 const MainPage = () => {
 
-    const {loading, data} = useQuery(propertiesAPI.getOutstandingProperties);
+    let userToken = localStorage.getItem("token", '');
+
+    const {loading, data} = useQuery(propertiesAPI.getOutstandingProperties, {
+        variables: {userToken: userToken},
+    });
 
     return (
-        <FlatterPage withBackground userLogged>
+        <FlatterPage withAds withBackground userLogged>
             {
                 loading ? 
                     <div className='carrousel-container'>Loading...</div>

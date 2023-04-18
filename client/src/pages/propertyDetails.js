@@ -12,15 +12,39 @@ import FlatterForm from "../components/forms/flatterForm";
 import FavouriteButton from "../components/property/favouriteButton";
 import customAlert from "../libs/functions/customAlert";
 import { propertyRequestsInputs } from "../forms/propertyRequestsInputs";
-import { useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useApolloClient } from "@apollo/client";
+import usersAPI from '../api/usersAPI';
+import { AiFillQuestionCircle } from "react-icons/ai";
+import chatsAPI from "../api/chatsAPI";
 
-const PropertyDetails = () => {
+const PropertyDetails = (props) => {
+  const [userData, setUserData] = useState(null);
+  const [profile, setProfile] = useState(null);
+  let userToken = localStorage.getItem("token", '');
+  const {data, loading} = useQuery(usersAPI.getPublicProfileByUsername, {variables: {
+      username: localStorage.getItem("user"),
+      userToken: userToken
+  }});
+  
+  useEffect(() => {
+      if (!loading && data && data.getUserByUsername) {
+          setUserData(data.getUserByUsername);
+      }
+  }, [loading, data]);
+  
+  useEffect(() => {
+      if (userData) {
+          setProfile(userData);
+      }
+  }, [userData]);
+
   let [property, setProperty] = useState({});
   const editPropertyModalRef = useRef(null);
 
   const client = useApolloClient();
+  const navigator = useNavigate();
 
   const propertyRequestModalRef = useRef(null);
   const propertyRequestFormRef = useRef(null);
@@ -32,6 +56,7 @@ const PropertyDetails = () => {
     {
       variables: {
         id: parseInt(id),
+        userToken: userToken,
       },
       fetchPolicy: "no-cache",
     }
@@ -42,6 +67,7 @@ const PropertyDetails = () => {
       variables: {
         requesterUsername: localStorage.getItem("user"),
         propertyId: parseInt(id),
+        userToken: userToken,
       },
     });
 
@@ -51,7 +77,6 @@ const PropertyDetails = () => {
     propertyRequestsData.getPetitionByRequesterToProperty[0] ?? false;
 
   const handlePropertyRequest = ({ values }) => {
-    console.log(values);
     client
       .mutate({
         mutation: propertiesAPI.createPropertyRequest,
@@ -59,13 +84,14 @@ const PropertyDetails = () => {
           requesterUsername: localStorage.getItem("user"),
           propertyId: parseInt(id),
           message: values.message,
+          userToken: userToken,
         },
       })
       .then((response) => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => customAlert(error.message));
+      .catch((error) => customAlert(error.message, 'error'));
   };
 
   const handleCancelRequest = (e) => {
@@ -74,16 +100,21 @@ const PropertyDetails = () => {
         mutation: propertiesAPI.removePropertyRequest,
         variables: {
           requestId: parseInt(userRequest.id),
+          userToken: userToken,
         },
       })
       .then((response) => {
         propertyRequestModalRef.current.close();
         window.location.reload();
       })
-      .catch((error) => customAlert(error.message));
+      .catch((error) => customAlert(error.message, 'error'));
   };
+
+  let isFlatmate = propertyData.getPropertyById.flatmates.map(f => f.username).includes(localStorage.getItem('user'));
+  let canCreateChat = data.getContractByUsername.plan.chatCreation;
+
   return (
-    <FlatterPage withBackground userLogged>
+    <FlatterPage withBackground userLogged withAds={false}>
       <div className="property-housing-page">
         <section className="property-housing">
           <div className="property-housing__photo">
@@ -112,7 +143,9 @@ const PropertyDetails = () => {
             </div>
             <div className="property-tags-row">
               {propertyData.getPropertyById.tags.map((tag, index) => (
-                <Tag key={index} name={tag.name} color={tag.color} />
+                <div className="tagDiv" onClick={() => navigator(`/search?tag=${tag.name}`)}>
+                  <Tag key={index} name={tag.name} color={tag.color} />
+                </div>
               ))}
             </div>
 
@@ -121,7 +154,8 @@ const PropertyDetails = () => {
               {localStorage.getItem("roles") &&
                 localStorage.getItem("roles").includes("RENTER") &&
                 localStorage.getItem("user") !==
-                  propertyData.getPropertyById.owner.username && (
+                  propertyData.getPropertyById.owner.username && 
+                  !isFlatmate &&(
                   <FavouriteButton
                     isFavourite={propertyData.getPropertyById.interestedUsers
                       .map(
@@ -144,15 +178,12 @@ const PropertyDetails = () => {
                     }}
                   >
                     <>
-                      <img
-                        className="property-img"
-                        src={require("../static/files/icons/lapiz.png")}
-                        alt="Petición"
-                      />
+                      <AiFillQuestionCircle color="white" style={{marginRight: '0.5em', width: '25px', height: '25px'}}/>
                       Solicitar
                     </>
                   </button>
                 ) : (
+                  !isFlatmate &&
                   <button
                     className="property-btn red outlined"
                     style={{ textTransform: "uppercase", marginLeft: "auto" }}
@@ -190,8 +221,31 @@ const PropertyDetails = () => {
                     EDITAR
                   </button>
                 ) : (
+                  (isFlatmate || canCreateChat) &&
                   <button
                     className="property-btn"
+                    onClick={() => {
+
+                      let ownerUsername = propertyData.getPropertyById.owner.username;
+
+                      client.mutate({
+                        mutation: chatsAPI.createIndividualChat,
+                        variables: {
+                            username: ownerUsername,
+                            users: [ownerUsername, localStorage.getItem('user')],
+                            userToken: userToken
+                        }
+                      }).then((response) => {
+                        props.setActivateChat(ownerUsername);
+                      }).catch((error) => {
+                        if (error.message.split("\n")[0].trim() === "The group already exists") {
+                          props.setActivateChat(ownerUsername);
+                        } else {
+                            customAlert(error.message.split("\n")[0], 'error');
+                        }
+                      });
+                    }}
+                    title={`Contactar con @${propertyData.getPropertyById.owner.username}`}
                   >
                     <img
                       className="property-img"
@@ -243,14 +297,17 @@ const PropertyDetails = () => {
         ref={propertyRequestModalRef}
       >
         <h1 className="comments-form-title">Solicitar alquiler</h1>
-        <FlatterForm
-          buttonText="Solicitar"
-          showSuperAnimatedButton
-          numberOfColumns={1}
-          inputs={propertyRequestsInputs}
-          onSubmit={handlePropertyRequest}
-          ref={propertyRequestFormRef}
+        {
+          profile &&
+          <FlatterForm
+            buttonText="Solicitar"
+            showSuperAnimatedButton
+            numberOfColumns={1}
+            inputs={propertyRequestsInputs(profile.firstName+" "+profile.lastName, profile.age, profile.profession)}
+            onSubmit={handlePropertyRequest}
+            ref={propertyRequestFormRef}
         ></FlatterForm>
+        }
       </FlatterModal>
       <FlatterModal maxWidth={700} ref={editPropertyModalRef}>
         <FormProperty property={property} />
