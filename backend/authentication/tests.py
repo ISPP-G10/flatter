@@ -164,7 +164,7 @@ class TestsQueries(DefaultTests):
     def test_resolve_get_roles(self):
         query = '''
             query test{
-                getRoles {
+                getRoles(userToken: "") {
                     id
                 }
             }
