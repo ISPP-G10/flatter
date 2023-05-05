@@ -146,7 +146,7 @@ const Header = ({scrollY, userLogged}) => {
                         </div>
                         <div>
                             {
-                                userLogged && 
+                                userLogged ? 
                                 <>
                                     <li><Link to="/">Inicio</Link></li>
                                     <li><Link to="/search">Buscador de viviendas</Link></li>
@@ -154,6 +154,10 @@ const Header = ({scrollY, userLogged}) => {
                                     <li><Link to="/recommendations">Usuarios recomendados</Link></li>
                                     <li><Link to="/pricing">Planes</Link></li>
                                     <li><Link to="/shop">Tienda</Link></li>
+                                </>
+                                : 
+                                <>
+                                    <li><Link to="/plans">Planes</Link></li>
                                 </>
                             }
                         </div>
