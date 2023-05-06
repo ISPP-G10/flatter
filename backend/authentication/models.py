@@ -104,8 +104,8 @@ class Contract(models.Model):
     end_date = models.DateField(null=True)
     choices=models.PositiveIntegerField(choices_days, default=1, null=True)
     obsolete = models.BooleanField(default=False)
-    user = models.ForeignKey(FlatterUser, on_delete=models.DO_NOTHING)
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
         
 class UserPreferences(models.Model):
     public = models.BooleanField(default=True)

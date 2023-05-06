@@ -1,6 +1,13 @@
 import json
 import logging
+import time
+
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
+from selenium import webdriver
+from selenium.webdriver import Keys
+from selenium.webdriver.common.by import By
+
 from authentication.models import FlatterUser, Tag
 from .models import Property, Petition
 from backend.schema import schema
@@ -1550,3 +1557,89 @@ class TestsMutations(DefaultTests):
 
         self.assertResponseHasErrors(response)
         self.assertEqual(content['errors'][0]['message'], "Ya has eliminado este usuario")
+
+class SeleniumTests(StaticLiveServerTestCase):
+
+    def setUp(self):
+        super().setUp()
+
+        options = webdriver.ChromeOptions()
+
+        # full window
+        options.add_argument("--start-maximized")
+
+        self.driver = webdriver.Chrome(options=options)
+
+        user = FlatterUser()
+        user.username = "username_test"
+        user.password = "contraseña"
+        user.email = "test@e.com"
+        user.first_name = "Prueba"
+        user.last_name = "Pruebaaa"
+
+        try:
+            user = FlatterUser.objects.get(username=self.user1.username)
+
+        except FlatterUser.DoesNotExist:
+            user = None
+
+        if user:
+            user.delete()
+
+    def tearDown(self) -> None:
+        super().tearDown()
+
+        self.driver.quit()
+
+        try:
+            user = FlatterUser.objects.get(username=self.user1.username)
+
+        except FlatterUser.DoesNotExist:
+            user = None
+
+        if user:
+            user.delete()
+
+        try:
+            user = FlatterUser.objects.get(username=self.user2.username)
+        except FlatterUser.DoesNotExist:
+            user = None
+
+        if user:
+            user.delete()
+
+    def test_simple_test(self):
+
+        self.driver.get(f'http://localhost:3000')
+        button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+        assert button.is_displayed()
+        button.click()
+
+        self.driver.implicitly_wait(10)
+
+        firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+        firstname.send_keys(self.user1.first_name)
+
+
+        lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+        lastname.send_keys(self.user1.last_name)
+
+        username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+        username.send_keys(self.user1.username)
+
+        email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+        email.send_keys(self.user1.email)
+
+        password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+        password.send_keys(self.user1.password)
+
+        password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+        password.send_keys(self.user1.password)
+        password.send_keys(Keys.ENTER)
+
+        time.sleep(5)
+
+        assert self.driver.current_url == f'http://localhost:3000/'
+
+        username = self.driver.find_element(By.ID, "wrapped-name")
+        assert username.text == self.user1.username

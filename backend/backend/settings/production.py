@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
@@ -96,6 +97,17 @@ DATABASES = {
     }
 
 }
+
+if 'test' in sys.argv:
+    DATABASES['default'] = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'flatter_db',
+        'USER': 'flatter_user',
+        'PASSWORD': 'flatter_password',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
+
 
 
 # Password validation

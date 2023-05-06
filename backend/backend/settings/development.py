@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from datetime import timedelta
 from django.utils.translation import gettext_lazy as _
@@ -86,10 +87,12 @@ DATABASES = {
         'PASSWORD': 'flatter_password',
         'HOST': '127.0.0.1',
         'PORT': '5432',
-    }
+        'TEST': {
+            'NAME': 'flatter_db',
+        }
+    },
 
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
