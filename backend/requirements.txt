@@ -63,3 +63,4 @@ typing_extensions==4.5.0
 urllib3==1.26.15
 yarl==1.8.2
 zope.interface==6.0
+selenium==4.9.0
