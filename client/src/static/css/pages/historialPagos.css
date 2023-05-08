@@ -5,6 +5,11 @@
 .contract {
     width: 100%;
     padding: 10px;
+    border-bottom: gray solid 1px;
+}
+
+.contract:last-child {
+    border-bottom: none;
 }
 
 .contract-dates {

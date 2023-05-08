@@ -62,6 +62,8 @@ const HistorialPagosPage = () => {
 
   if (loading) return <p>Loading...</p>;
 
+  console.log(data.getAllContractsByUsername);
+
   return (
     <FlatterPage withBackground userLogged>
       <h1 className="properties-title" style={{ marginBottom: 20 }}>
@@ -74,32 +76,35 @@ const HistorialPagosPage = () => {
         <div className="card contracts">
           {data.getAllContractsByUsername.map((contract) => {
             return (
-              contract.plan.planType !== "B" && (
-                <div className="contract" key={contract.id}>
-                  <div className="contract-content">
-                    <h2>
-                      {contract.plan.planType === "A" ? "Avanzado" : "Pro"}
-                    </h2>
-                    <div className="contract-dates">
-                      <span>
-                        Fecha de inicio: {dateToString(contract.initialDate)}
-                      </span>
-                      {!contract.obsolete ? (
-                        <>
-                          <span>
-                            Próximo pago: {dateToString(contract.endDate)}
-                          </span>
-                          <div className="contract-cancel-btn" onClick={handleCancel}>Cancelar</div>
-                        </>
-                      ) : (
+              <div className="contract" key={contract.id}>
+                <div className="contract-content">
+                  <h2>{contract.plan.planType === "A" ? "Avanzado" : contract.plan.planType === "P" ? "Pro" : "Básico"}</h2>
+                  <div className="contract-dates">
+                    <span>
+                      Fecha de inicio: {dateToString(contract.initialDate)}
+                    </span>
+                    {contract.endDate && !contract.obsolete ? (
+                      <>
                         <span>
-                          Fecha de fin: {dateToString(contract.endDate)}
+                          Próximo pago: {dateToString(contract.endDate)}
                         </span>
-                      )}
-                    </div>
+                        <div
+                          className="contract-cancel-btn"
+                          onClick={handleCancel}
+                        >
+                          Cancelar
+                        </div>
+                      </>
+                    ) : contract.endDate ? (
+                      <span>
+                        Fecha de fin: {dateToString(contract.endDate)}
+                      </span>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
-              )
+              </div>
             );
           })}
         </div>

@@ -108,5 +108,5 @@ class AuthenticationQuery(object):
   
   def resolve_get_all_contracts_by_username(self, info, username, user_token=''):
     user = FlatterUser.objects.get(username=username)
-    # Get all contracts in descending order
-    return Contract.objects.filter(user=user).order_by('-initial_date')
+    # Get all contracts in descending order by initial date and end date
+    return Contract.objects.filter(user=user).order_by('-initial_date', '-end_date')
