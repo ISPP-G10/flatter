@@ -61,3 +61,28 @@
         content: '';
     }
 }
+
+/* Table */
+.privacy-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+.privacy-container table th {
+    background-color: var(--flatter-purple-color);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    border:rgba(185, 196, 208, 0.5) 1px solid;
+}
+
+.privacy-container table td {
+    padding: 10px;
+    text-align: center;
+    border:rgba(185, 196, 208, 0.5) 1px solid;
+}
+
+.privacy-container table tr:nth-child(even) {
+    background-color: rgba(185, 196, 208, 0.5);
+}

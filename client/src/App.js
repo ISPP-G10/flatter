@@ -23,6 +23,7 @@ import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';
 import RecommendedUsers from './pages/recommendedUsers';
 import CondicionesPage from './pages/condicionesPage';
+import AcuerdoServicioPage from './pages/acuerdoServicioPage';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
             </>
           }/>
           <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
+          <Route path='/sla' element={<> <AcuerdoServicioPage /> </>} />
           <Route path='/condiciones' element={<> <CondicionesPage /> </>} />
           <Route path="/search" element={<> <ListProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/users" element={<> <SearchUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
