@@ -10,8 +10,6 @@ import { accountInputs } from "../forms/accountForm";
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import PasswordSettingForm from '../components/userSettings/passwordSettingForm';
-import Incidence from '../components/userSettings/incidence';
-import Request from '../components/userSettings/request';
 
 const AccountSettings = () => {
 
@@ -115,12 +113,6 @@ const AccountSettings = () => {
                                 <h4>Mis solicitudes</h4>
                             </div>
                         }
-                        <div className='settings-section' onClick={() => setSetting('request')} style={setting === 'request' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
-                            <h4>Sugerir cambios</h4>
-                        </div>
-                        <div className='settings-section' onClick={() => setSetting('incidence')} style={setting === 'incidence' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
-                            <h4>Abrir incidencia</h4>
-                        </div>
                         <div className='settings-section' onClick={logout}>
                             <h4>Cerrar sesión</h4>
                         </div>
@@ -137,12 +129,6 @@ const AccountSettings = () => {
                                         setting === 'password' ?
                                             <PasswordSettingForm correctModalRef={correctModalRef}/>
                                         :
-                                            setting === 'incidence' ?
-                                                <Incidence />
-                                            :
-                                                setting === 'request' ?
-                                                    <Request />
-                                                :
                                                     <></>
 
                             }

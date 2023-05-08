@@ -2,10 +2,9 @@ import base64, os, re, jwt, graphene
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
 from authentication.models import FlatterUser, Tag, Role, UserPreferences
-from authentication.types import FlatterUserType, IncidentType, RequestType, UserPreferencesType
+from authentication.types import FlatterUserType, UserPreferencesType
 from mainApp.models import Review, Property
 from social.models import Group, Message
-from social.models import Incident, Request
 from social.types import ReviewType, GroupType, MessageType
 
 
@@ -218,43 +217,6 @@ class LeaveGroupMutation(graphene.Mutation):
 
         return LeaveGroupMutation(group=group)
 
-
-class CreateIncident(graphene.Mutation):
-    class Input:
-        command = graphene.String(required=True)
-
-    incident = graphene.Field(IncidentType)
-
-    @staticmethod
-    def mutate(root, info, **kwargs):
-        command = kwargs.get('command', '').strip()
-
-        if not command:
-            raise ValueError(_("El comando no puede estar vacío"))
-
-        incident = Incident.objects.create(command=command)
-
-        return CreateIncident(incident=incident)
-
-
-class CreateRequest(graphene.Mutation):
-    class Input:
-        command = graphene.String(required=True)
-
-    request = graphene.Field(RequestType)
-
-    @staticmethod
-    def mutate(root, info, **kwargs):
-        command = kwargs.get('command', '').strip()
-
-        if not command:
-            raise ValueError(_("El comando no puede estar vacío"))
-
-        request = Request.objects.create(command=command)
-
-        return CreateRequest(request=request)
-
-
 class EditUserPrivateMutation(graphene.Mutation):
     class Input:
         username = graphene.String(required=True)
@@ -262,7 +224,6 @@ class EditUserPrivateMutation(graphene.Mutation):
         last_name = graphene.String(required=False)
         genre = graphene.String(required=False)
         role = graphene.String(required=False)
-        phone = graphene.String(required=False)
         email = graphene.String(required=False)
         profile_picture = graphene.String(required=False)
         user_token = graphene.String(required=False)
@@ -276,7 +237,6 @@ class EditUserPrivateMutation(graphene.Mutation):
         last_name = kwargs.get('last_name', '').strip()
         genre = kwargs.get('genre', '').strip()
         role = kwargs.get('role', '').strip()
-        phone = kwargs.get('phone', None)
         email = kwargs.get('email', '').strip()
         profile_picture = kwargs.get('profile_picture', '').strip()
         user_token = kwargs.get('user_token', '').strip()
@@ -300,11 +260,6 @@ class EditUserPrivateMutation(graphene.Mutation):
         if role and not valid_roles(role):
             raise ValueError(_("Los roles no son válidos"))
 
-        if phone:
-            phone = phone.strip()
-            if not re.match(r"^[9|6|7][0-9]{8}$", phone):
-                raise ValueError(_("El teléfono no es válido"))
-
         if genre:
             genre = parse_genre(genre)
 
@@ -320,9 +275,6 @@ class EditUserPrivateMutation(graphene.Mutation):
                 raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
             else:
                 user_selected.email = email
-
-        if phone is not None and user_selected.phone_number != phone:
-            user_selected.phone_number = phone.strip()
 
         if profile_picture:
             imgdata = base64.b64decode(profile_picture.split(',')[1])
@@ -638,8 +590,6 @@ class SocialMutation(graphene.ObjectType):
     delete_role_to_user = DeleteRoleFromUserMutation.Field()
     change_user_password = ChangePasswordMutation.Field()
     create_review = CreateReview.Field()
-    create_incident = CreateIncident.Field()
-    create_request = CreateRequest.Field()
     create_individual_group = CreateIndividualGroupMutation.Field()
     create_message = CreateMessageMutation.Field()
     leave_group = LeaveGroupMutation.Field()
@@ -708,6 +658,9 @@ def _exists_tag(tag):
 def check_token(user_token: str, user: FlatterUser):
     if user_token:
         try:
+            if not user.is_active:
+                raise ValueError(_("El usuario ha sido eliminado"))
+            
             user_token = jwt.decode(user_token, GRAPHQL_JWT['JWT_SECRET_KEY'], algorithms=['HS256'])
             if user_token['username'] != user.username:
                 raise ValueError(_("El token no es válido"))

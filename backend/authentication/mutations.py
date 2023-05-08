@@ -1,11 +1,14 @@
 import datetime
 import graphene, graphql_jwt, json, base64, os
-from .models import FlatterUser, Plan, Role, Contract
+from .models import FlatterUser, Plan, Role, Contract, UserPreferences
+from social.models import Group, Message
+from mainApp.models import Property, Application, Petition, Review
 from .types import ContractType, FlatterUserType, PlanType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import datetime, timedelta
 from social.mutations import check_token
+from django.db.models import Q
 
 class ChangeContract(graphene.Mutation):
   class Input:
@@ -174,7 +177,6 @@ class CreateUserMutation(graphene.Mutation):
     first_name = graphene.String(required=True)
     last_name = graphene.String(required=True)
     email = graphene.String(required=True)
-    phone = graphene.String(required=False)
     genre = graphene.String(required=True)
     roles = graphene.String(required=True)
     flatter_coins = graphene.Int(required=False)
@@ -189,7 +191,6 @@ class CreateUserMutation(graphene.Mutation):
     first_name = kwargs.get("first_name", "").strip()
     last_name = kwargs.get("last_name", "").strip()
     email = kwargs.get("email", "").strip()
-    phone = kwargs.get("phone", "").strip()
     genre = kwargs.get("genre", "").strip()
     roles = kwargs.get("roles", [])
     flatter_coins = kwargs.get("flatter_coins", 0)
@@ -208,9 +209,6 @@ class CreateUserMutation(graphene.Mutation):
     
     if not email or ("@" not in email) or ("." not in email):
       raise ValueError(_("El email no es válido"))
-    
-    if phone and len(phone) < 9:
-      raise ValueError(_("El número de teléfono no es válido"))
     
     if _exists_user(username):
       raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
@@ -232,7 +230,6 @@ class CreateUserMutation(graphene.Mutation):
                                           first_name=first_name, 
                                           last_name=last_name, 
                                           email=email, 
-                                          phone_number=phone, 
                                           profile_picture="users/images/default.jpg",
                                           flatter_coins=flatter_coins,
                                           genre=genre,
@@ -304,6 +301,48 @@ class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
     @classmethod
     def resolve(cls, root, info, **kwargs):
         return cls(user=info.context.user)
+      
+class DeleteUser(graphene.Mutation):
+  class Input:
+    username = graphene.String(required=True)
+    token = graphene.String(required=True)
+    
+  user = graphene.Field(FlatterUserType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get('token', '').strip()
+    
+    if not username:
+      raise ValueError(_("El nombre de usuario no puede estar vacío"))
+    
+    if not token:
+      raise ValueError(_("El token no puede estar vacío"))
+    
+    try:  
+      selected_user = FlatterUser.objects.get(username=username)
+    except FlatterUser.DoesNotExist:
+      raise ValueError(_("El usuario no existe"))
+
+    check_token(token, selected_user)
+    
+    Property.objects.filter(owner=selected_user).delete()
+    for property in Property.objects.filter(flatmates=selected_user):
+      property.flatmates.remove(selected_user)
+      property.save()
+    Review.objects.filter(valued_user=selected_user).delete()
+    Review.objects.filter(evaluator_user=selected_user).delete()
+    Application.objects.filter(user=selected_user).delete()
+    Petition.objects.filter(requester=selected_user).delete()
+    Group.objects.filter(users=selected_user).delete()
+    UserPreferences.objects.filter(user=selected_user).delete()
+    
+    selected_user.is_active = False
+    selected_user.last_login = datetime.now()
+    selected_user.save()
+    
+    return DeleteUser(user=selected_user)
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
@@ -314,6 +353,7 @@ class AuthenticationMutation(graphene.ObjectType):
   change_contract = ChangeContract.Field()
   edit_plan = EditPlan.Field()
   edit_user_flatter_coins = EditUserFlatterCoins.Field()
+  delete_user = DeleteUser.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 
