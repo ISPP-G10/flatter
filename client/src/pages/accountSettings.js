@@ -11,8 +11,12 @@ import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import PasswordSettingForm from "../components/userSettings/passwordSettingForm";
 import SolidButton from "../sections/solidButton";
+import { useApolloClient } from "@apollo/client";
 
 const AccountSettings = () => {
+
+  const client = useApolloClient();
+
   let [setting, setSetting] = useState("account");
   let userToken = localStorage.getItem("token", "");
 
@@ -34,6 +38,7 @@ const AccountSettings = () => {
 
   function handleModal() {
     eliminarModalRef.current.open();
+    setError("");
   }
 
   function handleCloseModal() {
@@ -48,10 +53,26 @@ const AccountSettings = () => {
     // Prevenir el comportamiento por defecto del formulario
     e.preventDefault();
     // Verificar que el nombre de usuario ingresado sea igual al del usuario actual
-    if (username === user.displayName) {
+    if (username === user) {
       // Intentar eliminar la cuenta del usuario
       try {
+        setError("");
+
         // Borrar la cuenta
+        await client.mutate({
+          mutation: usersAPI.deleteUser,
+          variables: {
+            username: user,
+            token: userToken,
+          },
+        });
+
+        // Borrar todo el contenido del local storage
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("inappropiateLanguage");
+        localStorage.removeItem("roles");
+        
         // Redirigir a la página de inicio
         window.location.href = "/";
       } catch (error) {
@@ -222,7 +243,7 @@ const AccountSettings = () => {
           ¡Datos actualizados correctamente!
         </span>
       </FlatterModal>
-      <FlatterModal ref={eliminarModalRef} maxHeight={300}>
+      <FlatterModal ref={eliminarModalRef} maxHeight={350}>
         <div className="delete-account-form">
           <form onSubmit={handleSubmit}>
             <h1>Eliminar cuenta</h1>
@@ -256,6 +277,7 @@ const AccountSettings = () => {
                 type="featured"
                 className="btn btn-primary"
                 text="Confirmar"
+                onClick={handleSubmit}
               />
             </div>
           </form>
