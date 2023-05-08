@@ -2,7 +2,7 @@
   width: 100%;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 140px 0;
+  padding: 80px 0;
 }
 
 .pricing-container {
@@ -118,7 +118,7 @@
   margin: 0;
   padding: 20px 0;
   color: #fff;
-  font-size: 60px;
+  font-size: 40px;
 }
 
 .plan-price h5 {
@@ -261,4 +261,34 @@
   .pricing-container {
     max-width: 100%;
   }
+}
+
+.pricing-buttons {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.pricing-button {
+  display: inline-block;
+  margin: 0px 20px;
+  background-color: var(--flatter-blue-color);
+  padding: 10px;
+  border-radius: 50%;
+  position: relative;
+  height: 70px;
+  width: 70px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+}
+
+.pricing-button svg img {
+  position: absolute;
+  left:0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.pricing-button:hover {
+  transform: scale(1.1);
 }
