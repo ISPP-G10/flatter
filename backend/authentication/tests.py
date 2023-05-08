@@ -443,6 +443,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         options.add_argument("--start-maximized")
 
         self.driver = webdriver.Chrome(options=options)
+        self.driver.delete_all_cookies()
 
         user = FlatterUser()
         user.username = "username_test"
@@ -462,9 +463,12 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         self.user2 = user2
 
-        self.user2_c = FlatterUser.objects.create_user(username=self.user2.username, password=self.user2.password,
-                                        email=self.user2.email, first_name=self.user2.first_name,
-                                        last_name=self.user2.last_name)
+
+        try:
+            user22 = FlatterUser.objects.get(username=self.user2.username)
+            user22.delete()
+        except FlatterUser.DoesNotExist:
+            pass
 
 
 
@@ -476,6 +480,9 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         if user:
             user.delete()
+
+
+
 
     def tearDown(self) -> None:
         super().tearDown()
@@ -501,7 +508,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
     def test_simple_test(self):
 
-        self.driver.get(f'http://localhost:3000')
+        self.driver.get(f'http://localhost:3000/')
         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
         assert button.is_displayed()
         button.click()
@@ -538,6 +545,44 @@ class SeleniumTests(StaticLiveServerTestCase):
     def test_simple_login(self):
 
         self.driver.get(f'http://localhost:3000')
+        button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+        assert button.is_displayed()
+        button.click()
+
+        firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+        firstname.send_keys(self.user2.first_name)
+
+        lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+        lastname.send_keys(self.user2.last_name)
+
+        username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+        username.send_keys(self.user2.username)
+
+        email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+        email.send_keys(self.user2.email)
+
+        password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+        password.send_keys(self.user2.password)
+
+        password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+        password.send_keys(self.user2.password)
+
+        time.sleep(5)
+
+        password.send_keys(Keys.ENTER)
+
+        assert self.driver.current_url == f'http://localhost:3000/'
+
+        time.sleep(8)
+
+        username = self.driver.find_element(By.ID, "wrapped-name")
+        assert username.text == self.user2.username
+
+        self.driver.get(f'http://localhost:3000/me')
+
+        logout = self.driver.find_element(By.XPATH, "/html/body/div[1]/main/div/div/div[2]/div[1]/div[8]")
+        logout.click()
+
 
 
         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Acceder')]")
@@ -551,19 +596,23 @@ class SeleniumTests(StaticLiveServerTestCase):
         password.send_keys(self.user2.password)
 
 
+
         button = self.driver.find_element(By.XPATH, "//div[@id='root']/main/div[2]/div/div/div/div/button")
-
-        time.sleep(5)
-
         button.click()
 
-        time.sleep(15)
+        time.sleep(10)
+
+        # Reload page
+
+        self.driver.get(f'http://localhost:3000')
 
         # button.click()
         # self.driver.execute_script("arguments[0].click();", button)
 
-        time.sleep(20)
-
         assert self.driver.current_url == f'http://localhost:3000/'
+
+        username = self.driver.find_element(By.ID, "wrapped-name")
+        assert username.text == self.user2.username
+
 
 
