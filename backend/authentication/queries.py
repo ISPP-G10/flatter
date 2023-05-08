@@ -16,6 +16,10 @@ class AuthenticationQuery(object):
   def resolve_get_user_by_username(self, info, username):
     
     user = FlatterUser.objects.get(username=username)
+
+    if not user.is_active:
+      raise ValueError(_("El usuario no está activo"))
+      
     current_contract = Contract.objects.filter(user=user, obsolete=False).first()
     
     if current_contract.end_date and timezone.now().date() > current_contract.end_date:
@@ -56,7 +60,7 @@ class AuthenticationQuery(object):
     elif owner is not None:
       q &= Q(roles__in = [Role.objects.get(role="RENTER").pk])
       
-    users = FlatterUser.objects.filter(q).exclude(username__exact = username)
+    users = FlatterUser.objects.filter(q).exclude(username__exact = username).exclude(is_active=False).exclude(is_superuser=True).distinct()
     final_users = []
     
     for user in users:

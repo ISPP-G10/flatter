@@ -26,7 +26,6 @@ const AccountSettingsForm = ({inputs, data, correctModalRef}) => {
                 genre: values.genre,
                 role: values.role,
                 profilePicture: encodedImage,
-                phone: values.phoneNumber,
                 profilePicture: encodedImage,
                 userToken: userToken
 
