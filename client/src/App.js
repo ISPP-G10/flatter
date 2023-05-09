@@ -23,6 +23,7 @@ import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';
 import RecommendedUsers from './pages/recommendedUsers';
 import UnloggedPricingPage from './pages/unloggedPricingPage';
+import HistorialPagosPage from './pages/historialPagosPage';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
             </>
           }/>
           <Route path="/privacy" element={<> <PrivacyPage/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/historial" element={<> <HistorialPagosPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>} />
           <Route path="/search" element={<> <ListProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/users" element={<> <SearchUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/properties" element={<> <OwnerProperties /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>

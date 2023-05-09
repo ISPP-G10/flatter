@@ -37,7 +37,6 @@ class FlatterUser(AbstractUser):
                      ('NB','No Binario'),
                      ('O', 'Otro'))
     email = models.EmailField(_("email_address"), unique=True)
-    phone_number = models.CharField(_("phone_number"), max_length=9, null=True)
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', default='users/images/default.png')
     roles = models.ManyToManyField(Role, related_name=_('roles'))
     genre = models.CharField(choices=choices_genre, max_length=2)
