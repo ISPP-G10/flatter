@@ -42,7 +42,7 @@ jobs:
       - name: Run Django tests and coverage
         run: |
           cd backend
-          coverage run manage.py test
+          coverage run manage.py test --keepdb
           coverage xml
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1

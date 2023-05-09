@@ -1,0 +1,62 @@
+name: Flatter CD
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
+  CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
+  TERRAFORM_VARS: ${{ secrets.TERRAFORM_VARS }}
+  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+jobs:
+  deploy-flatter-to-gce:
+    name: Flatter Deployment to GCE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+          terraform_wrapper: false
+        
+      - name: Populate terraform variables
+        working-directory: ./terraform
+        run: |-
+              ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
+              echo "$GCP_CREDENTIALS" | base64 --decode > gcp.json
+              echo "$TERRAFORM_VARS" | base64 --decode > terraform.tfvars
+              echo "$CLIENT_ENV" | base64 --decode > client.env
+              echo "$DOCKER_ENV" | base64 --decode > docker.env
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt
+        continue-on-error: true
+        working-directory: ./terraform
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -input=false -no-color
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false -no-color
+        working-directory: ./terraform
