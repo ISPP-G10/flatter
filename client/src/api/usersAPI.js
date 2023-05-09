@@ -300,6 +300,16 @@ const usersAPI = {
             }
         }
     `,
+
+    deleteUser: gql`
+        mutation deleteUser($token: String!, $username: String!){
+            deleteUser(token: $token, username: $username){
+                user{
+                    username
+                }
+            }
+        }
+    `,
 }
 
 export default usersAPI;
