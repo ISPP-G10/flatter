@@ -12,10 +12,15 @@ class AuthenticationQuery(object):
   get_filtered_users_by_tag_and_review = graphene.Field(FlatterUserPageType, username=graphene.String(required=True), tag = graphene.String(), owner = graphene.Boolean(), min_rating = graphene.Int(), max_rating = graphene.Int(), page_size = graphene.Int(), page_number = graphene.Int(), user_token = graphene.String(required=True))
   get_plans = graphene.List(PlanType)
   get_contract_by_username = graphene.Field(ContractType, username=graphene.String(), user_token = graphene.String(required=True))
+  get_all_contracts_by_username = graphene.List(ContractType, username=graphene.String(), user_token = graphene.String(required=True))
 
   def resolve_get_user_by_username(self, info, username):
     
     user = FlatterUser.objects.get(username=username)
+
+    if not user.is_active:
+      raise ValueError(_("El usuario no está activo"))
+      
     current_contract = Contract.objects.filter(user=user, obsolete=False).first()
     
     if current_contract.end_date and timezone.now().date() > current_contract.end_date:
@@ -56,7 +61,7 @@ class AuthenticationQuery(object):
     elif owner is not None:
       q &= Q(roles__in = [Role.objects.get(role="RENTER").pk])
       
-    users = FlatterUser.objects.filter(q).exclude(username__exact = username)
+    users = FlatterUser.objects.filter(q).exclude(username__exact = username).exclude(is_active=False).exclude(is_superuser=True).distinct()
     final_users = []
     
     for user in users:
@@ -104,3 +109,8 @@ class AuthenticationQuery(object):
   def resolve_get_contract_by_username(self, info, username, user_token=''):
     user = FlatterUser.objects.get(username=username)
     return Contract.objects.filter(user=user, obsolete=False).first()
+  
+  def resolve_get_all_contracts_by_username(self, info, username, user_token=''):
+    user = FlatterUser.objects.get(username=username)
+    # Get all contracts in descending order by initial date and end date
+    return Contract.objects.filter(user=user).order_by('-initial_date', '-end_date')

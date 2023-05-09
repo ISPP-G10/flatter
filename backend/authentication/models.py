@@ -37,7 +37,6 @@ class FlatterUser(AbstractUser):
                      ('NB','No Binario'),
                      ('O', 'Otro'))
     email = models.EmailField(_("email_address"), unique=True)
-    phone_number = models.CharField(_("phone_number"), max_length=9, null=True)
     profile_picture = models.ImageField(_("profile_picture"), upload_to='users/images/', default='users/images/default.png')
     roles = models.ManyToManyField(Role, related_name=_('roles'))
     genre = models.CharField(choices=choices_genre, max_length=2)
@@ -104,8 +103,8 @@ class Contract(models.Model):
     end_date = models.DateField(null=True)
     choices=models.PositiveIntegerField(choices_days, default=1, null=True)
     obsolete = models.BooleanField(default=False)
-    user = models.ForeignKey(FlatterUser, on_delete=models.DO_NOTHING)
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
         
 class UserPreferences(models.Model):
     public = models.BooleanField(default=True)
@@ -120,7 +119,6 @@ def add_roles(sender=None, **kwargs):
 signals.post_migrate.connect(add_roles)
 
 def create_plans(sender=None, **kwargs):
-    
     if Plan.objects.count() == 0:
     
         Plan.objects.get_or_create(flatter_coins=0, visits_number=10, 

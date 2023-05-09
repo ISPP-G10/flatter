@@ -22,6 +22,10 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import PricingPage from './pages/pricingPage';
 import ShopPage from './pages/shopPage';
 import RecommendedUsers from './pages/recommendedUsers';
+import CondicionesPage from './pages/condicionesPage';
+import AcuerdoServicioPage from './pages/acuerdoServicioPage';
+import UnloggedPricingPage from './pages/unloggedPricingPage';
+import HistorialPagosPage from './pages/historialPagosPage';
 
 function App() {
 
@@ -49,7 +53,10 @@ function App() {
               }
             </>
           }/>
-          <Route path="/privacy" element={<> <PrivacyPage/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
+          <Route path="/privacy" element={<> <PrivacyPage/> </>}/>
+          <Route path='/sla' element={<> <AcuerdoServicioPage /> </>} />
+          <Route path='/condiciones' element={<> <CondicionesPage /> </>} />
+          <Route path="/historial" element={<> <HistorialPagosPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /> </>} />
           <Route path="/search" element={<> <ListProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/users" element={<> <SearchUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="/properties" element={<> <OwnerProperties /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
@@ -61,6 +68,7 @@ function App() {
           <Route path='/me' element={<> <AccountSettings/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/favourites' element={<> <FavouritesProperties/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path='/pricing' element={<> <PricingPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>} />
+          <Route path='/plans' element={<> <UnloggedPricingPage /> </>} />
           <Route path='/shop' element={<> <ShopPage /> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>} />
           <Route path="/recommendations" element={<> <RecommendedUsers/> <Chat activateChat={activateChat} setActivateChat={setActivateChat} /></>}/>
           <Route path="*" element={<Error/>}/>

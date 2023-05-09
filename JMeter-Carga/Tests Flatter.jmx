@@ -1,0 +1,743 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Tests Flatter" enabled="true">
+      <stringProp name="TestPlan.comments">Tests del modulo bueno</stringProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Modulo Bueno" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="GraphQLHTTPSamplerGui" testclass="HTTPSamplerProxy" testname="GraphQL HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument" enabled="true">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;operationName&quot;:null,&quot;query&quot;:&quot;mutation {\n\tcreateUser (\n\t\temail: ${email},\n\t\tusername: ${username},\n\t\tpassword: \&quot;password\&quot;,\n\t\troles: \&quot;Owner\&quot;,\n\t\tgenre: \&quot;Hombre\&quot;,\n\t\tfirstName: \&quot;Vicentito\&quot;,\n\t\tlastName: \&quot;Cambron\&quot;\n\t){\n\t\tuser{\n\t\t\tid\n\t\t\tusername\n\t}\n  }\n}&quot;}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8000</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/graphql/</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="GraphQLHTTPSampler.operationName"></stringProp>
+          <stringProp name="GraphQLHTTPSampler.query">mutation {
+	createUser (
+		email: ${email},
+		username: ${username},
+		password: &quot;password&quot;,
+		roles: &quot;Owner&quot;,
+		genre: &quot;Hombre&quot;,
+		firstName: &quot;Vicentito&quot;,
+		lastName: &quot;Cambron&quot;
+	){
+		user{
+			id
+			username
+	}
+  }
+}</stringProp>
+          <stringProp name="GraphQLHTTPSampler.variables">
+</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
+            <collectionProp name="UserParameters.names">
+              <stringProp name="-265713450">username</stringProp>
+              <stringProp name="96619420">email</stringProp>
+              <stringProp name="55143119">username_assert</stringProp>
+            </collectionProp>
+            <collectionProp name="UserParameters.thread_values">
+              <collectionProp name="1031697659">
+                <stringProp name="-1374040165">\&quot;username1\&quot;</stringProp>
+                <stringProp name="-126933485">\&quot;username1@e.com\&quot;</stringProp>
+                <stringProp name="352817691">username1</stringProp>
+              </collectionProp>
+              <collectionProp name="625320744">
+                <stringProp name="-1374039204">\&quot;username2\&quot;</stringProp>
+                <stringProp name="-1934387948">\&quot;username2@e.com\&quot;</stringProp>
+                <stringProp name="352817692">username2</stringProp>
+              </collectionProp>
+              <collectionProp name="720203318">
+                <stringProp name="-1374038243">\&quot;username3\&quot;</stringProp>
+                <stringProp name="553124885">\&quot;username3@e.com\&quot;</stringProp>
+                <stringProp name="352817693">username3</stringProp>
+              </collectionProp>
+              <collectionProp name="-827621916">
+                <stringProp name="-1374037282">\&quot;username4\&quot;</stringProp>
+                <stringProp name="-1254329578">\&quot;username4@e.com\&quot;</stringProp>
+                <stringProp name="352817694">username4</stringProp>
+              </collectionProp>
+              <collectionProp name="-1079622281">
+                <stringProp name="-1374036321">\&quot;username5\&quot;</stringProp>
+                <stringProp name="1233183255">\&quot;username5@e.com\&quot;</stringProp>
+                <stringProp name="352817695">username5</stringProp>
+              </collectionProp>
+              <collectionProp name="1776772621">
+                <stringProp name="-1374035360">\&quot;username6\&quot;</stringProp>
+                <stringProp name="-574271208">\&quot;username6@e.com\&quot;</stringProp>
+                <stringProp name="352817696">username6</stringProp>
+              </collectionProp>
+              <collectionProp name="435574737">
+                <stringProp name="-1374034399">\&quot;username7\&quot;</stringProp>
+                <stringProp name="1913241625">\&quot;username7@e.com\&quot;</stringProp>
+                <stringProp name="352817697">username7</stringProp>
+              </collectionProp>
+              <collectionProp name="-1069209635">
+                <stringProp name="-1374033438">\&quot;username8\&quot;</stringProp>
+                <stringProp name="105787162">\&quot;username8@e.com\&quot;</stringProp>
+                <stringProp name="352817698">username8</stringProp>
+              </collectionProp>
+              <collectionProp name="-1646660453">
+                <stringProp name="-1374032477">\&quot;username9\&quot;</stringProp>
+                <stringProp name="-1701667301">\&quot;username9@e.com\&quot;</stringProp>
+                <stringProp name="352817699">username9</stringProp>
+              </collectionProp>
+              <collectionProp name="-851826265">
+                <stringProp name="354387393">\&quot;username10\&quot;</stringProp>
+                <stringProp name="-805230663">\&quot;username10@e.com\&quot;</stringProp>
+                <stringProp name="-1947553419">username10</stringProp>
+              </collectionProp>
+              <collectionProp name="459049258">
+                <stringProp name="354388354">\&quot;username11\&quot;</stringProp>
+                <stringProp name="1682282170">\&quot;username11@e.com\&quot;</stringProp>
+                <stringProp name="-1947553418">username11</stringProp>
+              </collectionProp>
+              <collectionProp name="1144837384">
+                <stringProp name="354389315">\&quot;username12\&quot;</stringProp>
+                <stringProp name="-125172293">\&quot;username12@e.com\&quot;</stringProp>
+                <stringProp name="-1947553417">username12</stringProp>
+              </collectionProp>
+              <collectionProp name="-1578543199">
+                <stringProp name="354390276">\&quot;username13\&quot;</stringProp>
+                <stringProp name="-1932626756">\&quot;username13@e.com\&quot;</stringProp>
+                <stringProp name="-1947553416">username13</stringProp>
+              </collectionProp>
+              <collectionProp name="-1066601211">
+                <stringProp name="354391237">\&quot;username14\&quot;</stringProp>
+                <stringProp name="554886077">\&quot;username14@e.com\&quot;</stringProp>
+                <stringProp name="-1947553415">username14</stringProp>
+              </collectionProp>
+              <collectionProp name="394972843">
+                <stringProp name="354392198">\&quot;username15\&quot;</stringProp>
+                <stringProp name="-1252568386">\&quot;username15@e.com\&quot;</stringProp>
+                <stringProp name="-1947553414">username15</stringProp>
+              </collectionProp>
+              <collectionProp name="2053764372">
+                <stringProp name="354393159">\&quot;username16\&quot;</stringProp>
+                <stringProp name="1234944447">\&quot;username16@e.com\&quot;</stringProp>
+                <stringProp name="-1947553413">username16</stringProp>
+              </collectionProp>
+              <collectionProp name="-623334119">
+                <stringProp name="354394120">\&quot;username17\&quot;</stringProp>
+                <stringProp name="-572510016">\&quot;username17@e.com\&quot;</stringProp>
+                <stringProp name="-1947553412">username17</stringProp>
+              </collectionProp>
+              <collectionProp name="1572585518">
+                <stringProp name="354395081">\&quot;username18\&quot;</stringProp>
+                <stringProp name="1915002817">\&quot;username18@e.com\&quot;</stringProp>
+                <stringProp name="-1947553411">username18</stringProp>
+              </collectionProp>
+              <collectionProp name="-2140503679">
+                <stringProp name="354396042">\&quot;username19\&quot;</stringProp>
+                <stringProp name="107548354">\&quot;username19@e.com\&quot;</stringProp>
+                <stringProp name="-1947553410">username19</stringProp>
+              </collectionProp>
+              <collectionProp name="-81354808">
+                <stringProp name="354417184">\&quot;username20\&quot;</stringProp>
+                <stringProp name="-1001744168">\&quot;username20@e.com\&quot;</stringProp>
+                <stringProp name="-1947553388">username20</stringProp>
+              </collectionProp>
+            </collectionProp>
+            <boolProp name="UserParameters.per_iteration">false</boolProp>
+          </UserParameters>
+          <hashTree/>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion username" enabled="true">
+            <stringProp name="JSON_PATH">data.createUser.user.username</stringProp>
+            <stringProp name="EXPECTED_VALUE">${username_assert}</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Modulo Bonito" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">20</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="GraphQLHTTPSamplerGui" testclass="HTTPSamplerProxy" testname="GraphQL HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument" enabled="true">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&quot;operationName&quot;:null,&quot;query&quot;:&quot;mutation  {\n\tcreateProperty (\n\t\tdescription: \&quot;descripcion\&quot;\n\t\tbathroomsNumber: 2,\n\t\tbedroomsNumber: 3,\n\t\tlocation: \&quot;location\&quot;,\n\t\tdimensions: 22,\n\t\tmaxCapacity: 3,\n\t\tmunicipality: \&quot;Sevilla\&quot;,\n\t\tprovince: \&quot;Sevilla\&quot;,\n\t\townerUsername: ${username},\n\t\tprice: 32,\n\t\ttags: [\&quot;Con patio\&quot;],\n\t\ttitle: ${title},\n\t\tuserToken: \&quot;\&quot;\n\t){\n\t\t\tproperty{\n\t\t\t\t owner{\n\t\t\t\t   username\n\t\t\t }\n\t\t}\n\t}\n}&quot;}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8000</stringProp>
+          <stringProp name="HTTPSampler.protocol"></stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/api/graphql/</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="GraphQLHTTPSampler.operationName"></stringProp>
+          <stringProp name="GraphQLHTTPSampler.query">mutation  {
+	createProperty (
+		description: &quot;descripcion&quot;
+		bathroomsNumber: 2,
+		bedroomsNumber: 3,
+		location: &quot;location&quot;,
+		dimensions: 22,
+		maxCapacity: 3,
+		municipality: &quot;Sevilla&quot;,
+		province: &quot;Sevilla&quot;,
+		ownerUsername: ${username},
+		price: 32,
+		tags: [&quot;Con patio&quot;],
+		title: ${title},
+		userToken: &quot;&quot;
+	){
+			property{
+				 owner{
+				   username
+			 }
+		}
+	}
+}</stringProp>
+          <stringProp name="GraphQLHTTPSampler.variables">
+</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="" elementType="Header">
+                <stringProp name="Header.name">content-type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+          <UserParameters guiclass="UserParametersGui" testclass="UserParameters" testname="User Parameters" enabled="true">
+            <collectionProp name="UserParameters.names">
+              <stringProp name="-265713450">username</stringProp>
+              <stringProp name="96619420">email</stringProp>
+              <stringProp name="55143119">username_assert</stringProp>
+              <stringProp name="1006140302">bathroomsNumber</stringProp>
+              <stringProp name="-1620860608">bedroomsNumber</stringProp>
+              <stringProp name="414334925">dimensions</stringProp>
+              <stringProp name="1964472894">maxCapacity</stringProp>
+              <stringProp name="-1108065156">municipality</stringProp>
+              <stringProp name="-987485392">province</stringProp>
+              <stringProp name="106934601">price</stringProp>
+              <stringProp name="3552281">tags</stringProp>
+              <stringProp name="110371416">title</stringProp>
+            </collectionProp>
+            <collectionProp name="UserParameters.thread_values">
+              <collectionProp name="1786255565">
+                <stringProp name="-1374040165">\&quot;username1\&quot;</stringProp>
+                <stringProp name="-126933485">\&quot;username1@e.com\&quot;</stringProp>
+                <stringProp name="352817691">username1</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201639717">\&quot;title1\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="2000627509">
+                <stringProp name="-1374039204">\&quot;username2\&quot;</stringProp>
+                <stringProp name="-1934387948">\&quot;username2@e.com\&quot;</stringProp>
+                <stringProp name="352817692">username2</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201640678">\&quot;title2\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="1983950748">
+                <stringProp name="-1374038243">\&quot;username3\&quot;</stringProp>
+                <stringProp name="553124885">\&quot;username3@e.com\&quot;</stringProp>
+                <stringProp name="352817693">username3</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201641639">\&quot;title3\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="2141959671">
+                <stringProp name="-1374037282">\&quot;username4\&quot;</stringProp>
+                <stringProp name="-1254329578">\&quot;username4@e.com\&quot;</stringProp>
+                <stringProp name="352817694">username4</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201642600">\&quot;title4\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="1699782103">
+                <stringProp name="-1374036321">\&quot;username5\&quot;</stringProp>
+                <stringProp name="1233183255">\&quot;username5@e.com\&quot;</stringProp>
+                <stringProp name="352817695">username5</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201643561">\&quot;title5\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="90999222">
+                <stringProp name="-1374035360">\&quot;username6\&quot;</stringProp>
+                <stringProp name="-574271208">\&quot;username6@e.com\&quot;</stringProp>
+                <stringProp name="352817696">username6</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201644522">\&quot;title6\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-1326990832">
+                <stringProp name="-1374034399">\&quot;username7\&quot;</stringProp>
+                <stringProp name="1913241625">\&quot;username7@e.com\&quot;</stringProp>
+                <stringProp name="352817697">username7</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201645483">\&quot;title7\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="1640299321">
+                <stringProp name="-1374033438">\&quot;username8\&quot;</stringProp>
+                <stringProp name="105787162">\&quot;username8@e.com\&quot;</stringProp>
+                <stringProp name="352817698">username8</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201646444">\&quot;title8\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="1600677872">
+                <stringProp name="-1374032477">\&quot;username9\&quot;</stringProp>
+                <stringProp name="-1701667301">\&quot;username9@e.com\&quot;</stringProp>
+                <stringProp name="352817699">username9</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="201647405">\&quot;title9\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-1164803160">
+                <stringProp name="354387393">\&quot;username10\&quot;</stringProp>
+                <stringProp name="-805230663">\&quot;username10@e.com\&quot;</stringProp>
+                <stringProp name="-1947553419">username10</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955823479">\&quot;title10\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="1968221763">
+                <stringProp name="354388354">\&quot;username11\&quot;</stringProp>
+                <stringProp name="1682282170">\&quot;username11@e.com\&quot;</stringProp>
+                <stringProp name="-1947553418">username11</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955824440">\&quot;title11\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-1537892390">
+                <stringProp name="354389315">\&quot;username12\&quot;</stringProp>
+                <stringProp name="-125172293">\&quot;username12@e.com\&quot;</stringProp>
+                <stringProp name="-1947553417">username12</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955825401">\&quot;title12\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="865099519">
+                <stringProp name="354390276">\&quot;username13\&quot;</stringProp>
+                <stringProp name="-1932626756">\&quot;username13@e.com\&quot;</stringProp>
+                <stringProp name="-1947553416">username13</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955826362">\&quot;title13\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="797857232">
+                <stringProp name="354391237">\&quot;username14\&quot;</stringProp>
+                <stringProp name="554886077">\&quot;username14@e.com\&quot;</stringProp>
+                <stringProp name="-1947553415">username14</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955827323">\&quot;title14\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="832855176">
+                <stringProp name="354392198">\&quot;username15\&quot;</stringProp>
+                <stringProp name="-1252568386">\&quot;username15@e.com\&quot;</stringProp>
+                <stringProp name="-1947553414">username15</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955828284">\&quot;title15\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-1298128908">
+                <stringProp name="354393159">\&quot;username16\&quot;</stringProp>
+                <stringProp name="1234944447">\&quot;username16@e.com\&quot;</stringProp>
+                <stringProp name="-1947553413">username16</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955829245">\&quot;title16\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="2116130203">
+                <stringProp name="354394120">\&quot;username17\&quot;</stringProp>
+                <stringProp name="-572510016">\&quot;username17@e.com\&quot;</stringProp>
+                <stringProp name="-1947553412">username17</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955830206">\&quot;title17\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="135958468">
+                <stringProp name="354395081">\&quot;username18\&quot;</stringProp>
+                <stringProp name="1915002817">\&quot;username18@e.com\&quot;</stringProp>
+                <stringProp name="-1947553411">username18</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955831167">\&quot;title18\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-1688903802">
+                <stringProp name="354396042">\&quot;username19\&quot;</stringProp>
+                <stringProp name="107548354">\&quot;username19@e.com\&quot;</stringProp>
+                <stringProp name="-1947553410">username19</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955832128">\&quot;title19\&quot;</stringProp>
+              </collectionProp>
+              <collectionProp name="-740429602">
+                <stringProp name="354417184">\&quot;username20\&quot;</stringProp>
+                <stringProp name="-1001744168">\&quot;username20@e.com\&quot;</stringProp>
+                <stringProp name="-1947553388">username20</stringProp>
+                <stringProp name="49">1</stringProp>
+                <stringProp name="50">2</stringProp>
+                <stringProp name="1600">22</stringProp>
+                <stringProp name="51">3</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="493393884">\&quot;Sevilla\&quot;</stringProp>
+                <stringProp name="1631">32</stringProp>
+                <stringProp name="-248159473">\&quot;bonito\&quot;</stringProp>
+                <stringProp name="1955853270">\&quot;title20\&quot;</stringProp>
+              </collectionProp>
+            </collectionProp>
+            <boolProp name="UserParameters.per_iteration">false</boolProp>
+          </UserParameters>
+          <hashTree/>
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion" enabled="true">
+            <stringProp name="JSON_PATH">data.createProperty.property.owner.username</stringProp>
+            <stringProp name="EXPECTED_VALUE">${username_assert}</stringProp>
+            <boolProp name="JSONVALIDATION">true</boolProp>
+            <boolProp name="EXPECT_NULL">false</boolProp>
+            <boolProp name="INVERT">false</boolProp>
+            <boolProp name="ISREGEX">true</boolProp>
+          </JSONPathAssertion>
+          <hashTree/>
+          <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+          <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+            <boolProp name="ResultCollector.error_logging">false</boolProp>
+            <objProp>
+              <name>saveConfig</name>
+              <value class="SampleSaveConfiguration">
+                <time>true</time>
+                <latency>true</latency>
+                <timestamp>true</timestamp>
+                <success>true</success>
+                <label>true</label>
+                <code>true</code>
+                <message>true</message>
+                <threadName>true</threadName>
+                <dataType>true</dataType>
+                <encoding>false</encoding>
+                <assertions>true</assertions>
+                <subresults>true</subresults>
+                <responseData>false</responseData>
+                <samplerData>false</samplerData>
+                <xml>false</xml>
+                <fieldNames>true</fieldNames>
+                <responseHeaders>false</responseHeaders>
+                <requestHeaders>false</requestHeaders>
+                <responseDataOnError>false</responseDataOnError>
+                <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+                <assertionsResultsToSave>0</assertionsResultsToSave>
+                <bytes>true</bytes>
+                <sentBytes>true</sentBytes>
+                <url>true</url>
+                <threadCounts>true</threadCounts>
+                <idleTime>true</idleTime>
+                <connectTime>true</connectTime>
+              </value>
+            </objProp>
+            <stringProp name="filename"></stringProp>
+          </ResultCollector>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

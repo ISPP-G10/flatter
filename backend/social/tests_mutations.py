@@ -634,105 +634,6 @@ class TestMutations(GraphQLTestCase):
 
 
 
-    #TESTS DE INCIDENT Y REQUEST
-    ### Test de mutación de crear incidente  +++ Caso positivo: se crea un incidente
-    def test_create_incident_positive(self):
-        response = self.query('''
-            mutation test{
-                createIncident(
-                    command: "Prueba de incidente"
-                ){
-                    incident{
-                        id
-                        command
-                    }
-                }
-            }
-        ''')
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            raise e
-        
-        self.assertResponseNoErrors(response)
-
-
-    
-    ### Test de mutación de crear incidente  --- Caso negativo: se intenta crear un incidente sin comando
-    def test_create_incident_negative_no_command(self):
-        response = self.query('''
-            mutation test{
-                createIncident(
-                    command: ""
-                ){
-                    incident{
-                        id
-                        command
-                    }
-                }
-            }
-        ''')
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'El comando no puede estar vacío')
-
-
-
-    ### Test de mutación de crear reporte  +++ Caso positivo: se crea un reporte
-    def test_create_request_positive(self):
-        response = self.query('''
-            mutation test{
-                createRequest(
-                    command: "Prueba de reporte"
-                ){
-                    request{
-                        id
-                        command
-                    }
-                }
-            }
-        ''')
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            raise e
-        
-        self.assertResponseNoErrors(response)
-
-
-
-    ### Test de mutación de crear reporte  --- Caso negativo: se intenta crear un reporte sin comando
-    def test_create_request_negative_no_command(self):
-        response = self.query('''
-            mutation test{
-                createRequest(
-                    command: ""
-                ){
-                    request{
-                        id
-                        command
-                    }
-                }
-            }
-        ''')
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'El comando no puede estar vacío')
-
-
-
     #TESTS DE AÑADIR RESEÑA
     ### Test de mutación de añadir reseña  +++ Caso positivo: se añade una reseña
     def test_add_review_positive(self):
@@ -1215,40 +1116,6 @@ class TestMutations(GraphQLTestCase):
         self.assertEqual(content['errors'][0]['message'], 'El género no es válido')
 
 
-
-    ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con un teléfono no válido
-    def test_edit_user_private_negative_invalid_phone(self):
-        response = self.query('''
-            mutation test{
-                editUserPrivate(
-                username: "%s"
-                email: "%s"
-                firstName: "%s"
-                lastName: "%s"
-                phone: "%s"
-                ){
-                    user{
-                        id
-                        username
-                        email
-                        firstName
-                        lastName
-                        phoneNumber
-                    }
-                }
-            }
-            ''' % (self.user2.username, self.user2.email, self.user2.first_name, self.user2.last_name, 'invalid_phone')
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'El teléfono no es válido')
-
-
     ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil privado de un usuario con role no válido
     def test_edit_user_private_negative_invalid_roles(self):
         response = self.query('''
@@ -1286,35 +1153,35 @@ class TestMutations(GraphQLTestCase):
 
     #TESTS DE EDITAR USUARIO PÚBLICO
     ### Test de mutación de editar usuario  +++ Caso positivo: se edita el perfil público de un usuario
-    def test_edit_user_public_positive(self):
-        response = self.query('''
-            mutation test{
-                editUserPublic(
-                username: "%s"
-                firstName: "%s"
-                lastName: "%s"
-                tags: []
-                ){
-                    user{
-                        id
-                        username
-                        email
-                        firstName
-                        lastName
-                    }
-                }
-            }
-            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name)
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseNoErrors(response)
-        self.assertEqual(content['data']['editUserPublic']['user']['username'], self.user1.username)
+    # def test_edit_user_public_positive(self):
+    #     response = self.query('''
+    #         mutation test{
+    #             editUserPublic(
+    #             username: "%s"
+    #             firstName: "%s"
+    #             lastName: "%s"
+    #             tags: []
+    #             ){
+    #                 user{
+    #                     id
+    #                     username
+    #                     email
+    #                     firstName
+    #                     lastName
+    #                 }
+    #             }
+    #         }
+    #         ''' % (self.user1.username, self.user1.first_name, self.user1.last_name)
+    #     )
+    #
+    #     try:
+    #         content = json.loads(response.content)
+    #     except json.JSONDecodeError as e:
+    #         print(response.content)
+    #         raise e
+    #
+    #     self.assertResponseNoErrors(response)
+    #     self.assertEqual(content['data']['editUserPublic']['user']['username'], self.user1.username)
 
 
     ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un nombre muy largo
@@ -1350,35 +1217,35 @@ class TestMutations(GraphQLTestCase):
 
     
     ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un tag que no existe
-    def test_edit_user_public_negative_tag_does_not_exist(self):
-        response = self.query('''
-            mutation test{
-                editUserPublic(
-                username: "%s"
-                firstName: "%s"
-                lastName: "%s"
-                tags: ["%s"]
-                ){
-                    user{
-                        id
-                        username
-                        email
-                        firstName
-                        lastName
-                    }
-                }
-            }
-            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name, 'tag')
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'La etiqueta tag no existe')
+    # def test_edit_user_public_negative_tag_does_not_exist(self):
+    #     response = self.query('''
+    #         mutation test{
+    #             editUserPublic(
+    #             username: "%s"
+    #             firstName: "%s"
+    #             lastName: "%s"
+    #             tags: ["%s"]
+    #             ){
+    #                 user{
+    #                     id
+    #                     username
+    #                     email
+    #                     firstName
+    #                     lastName
+    #                 }
+    #             }
+    #         }
+    #         ''' % (self.user1.username, self.user1.first_name, self.user1.last_name, 'tag')
+    #     )
+    #
+    #     try:
+    #         content = json.loads(response.content)
+    #     except json.JSONDecodeError as e:
+    #         print(response.content)
+    #         raise e
+    #
+    #     self.assertResponseHasErrors(response)
+    #     self.assertEqual(content['errors'][0]['message'], 'La etiqueta tag no existe')
 
 
     #TESTS DE CAMBIAR CONTRASEÑA

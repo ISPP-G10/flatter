@@ -24,8 +24,8 @@ const usersAPI = {
                 }
     `,
     updateUser: gql`
-                mutation editUser($username: String!, $firstName: String, $lastName: String, $email: String, $role: String, $genre: String, $phoneNumber: String, $profilePicture: String, $biography: String, $profession: String, $userToken: String!){
-                    editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, phone: $phoneNumber, profilePicture: $profilePicture, biography: $biography, profession: $profession, userToken: $userToken){
+                mutation editUser($username: String!, $firstName: String, $lastName: String, $email: String, $role: String, $genre: String, $profilePicture: String, $biography: String, $profession: String, $userToken: String!){
+                    editUser(username: $username, firstName: $firstName, lastName: $lastName, email: $email, role: $role, genre: $genre, profilePicture: $profilePicture, biography: $biography, profession: $profession, userToken: $userToken){
                         user{
                             username
                             roles{
@@ -63,7 +63,7 @@ const usersAPI = {
             }
     `,
     getPublicProfileByUsername: gql`
-            query getUserReviews($username: String!, $userToken: String!){
+            query getPublicProfileByUsername($username: String!, $userToken: String!){
                 getUserByUsername(username: $username){
                     firstName
                     lastName
@@ -97,6 +97,8 @@ const usersAPI = {
                     plan {
                         chatCreation
                         viewSelfProfileOpinions
+                        tagsNumber
+                        visitsNumber
                     }
                 }
             }
@@ -133,7 +135,6 @@ const usersAPI = {
                     roles{
                         role
                     }
-                    phoneNumber
                     email
                 }
             }
@@ -167,24 +168,6 @@ const usersAPI = {
             }
         }
     `,
-    createIncident: gql`
-        mutation createIncident($command: String!){
-            createIncident(command: $command){
-                incident{
-                    command
-                }
-            }
-        }
-    `,
-    createRequest: gql`
-    mutation createRequest($command: String!){
-        createRequest(command: $command){
-            request{
-                command
-                }
-            }
-        }
-    `,
     updatePublicProfile: gql`
         mutation editUserPublic($username: String!, $tags: [String]!, $biography: String, $profession: String, $profilePicture: String, $firstName: String!, $lastName: String!, $birthday: String, $userToken: String!){
             editUserPublic(username: $username, biography: $biography, profession: $profession, profilePicture: $profilePicture, tags: $tags, firstName: $firstName, lastName: $lastName, birthday: $birthday, userToken: $userToken){
@@ -208,14 +191,13 @@ const usersAPI = {
         }
     `,
     updatePrivateProfile: gql`
-        mutation editUserPrivate($username: String!, $firstName: String!, $lastName: String!, $email: String!, $phone: String, $genre: String!, $role: String!, $profilePicture: String, $userToken: String!){
-            editUserPrivate(username: $username, firstName: $firstName, lastName: $lastName, email: $email, phone: $phone, genre: $genre, role: $role, profilePicture: $profilePicture, userToken: $userToken){
+        mutation editUserPrivate($username: String!, $firstName: String!, $lastName: String!, $email: String!, $genre: String!, $role: String!, $profilePicture: String, $userToken: String!){
+            editUserPrivate(username: $username, firstName: $firstName, lastName: $lastName, email: $email , genre: $genre, role: $role, profilePicture: $profilePicture, userToken: $userToken){
                 user{
                     firstName
                     lastName
                     profilePicture
                     email
-                    phoneNumber
                     roles{
                         role
                     }
@@ -271,6 +253,22 @@ const usersAPI = {
                 plan {
                     planType
                     chatCreation
+                    tagsNumber
+                    visitsNumber
+                }
+            }
+        }
+    `,
+    getAllContractsByUsername: gql`
+        query getAllContractsByUsername($username: String!, $userToken: String!){
+            getAllContractsByUsername(username: $username, userToken: $userToken){
+                id
+                initialDate
+                endDate
+                obsolete
+                choices
+                plan {
+                    planType
                 }
             }
         }
@@ -302,6 +300,16 @@ const usersAPI = {
                 user{
                     username
                     flatterCoins
+                }
+            }
+        }
+    `,
+
+    deleteUser: gql`
+        mutation deleteUser($token: String!, $username: String!){
+            deleteUser(token: $token, username: $username){
+                user{
+                    username
                 }
             }
         }

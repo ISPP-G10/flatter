@@ -50,16 +50,6 @@ export const accountInputs = [
         ],
     },
     {
-        tag: "Número de teléfono",
-        name: "phoneNumber",
-        type: "text",
-        defaultValue: "",
-        isRequired: false,
-        validators: [
-            registerValidators.phoneNumber,
-        ]
-    },
-    {
         tag: "Email",
         name: "email",
         type: "email",

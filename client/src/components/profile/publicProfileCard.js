@@ -196,7 +196,7 @@ const PublicProfileCard = (props) => {
                                                     color: tag.color
                                                 }
                                         })}
-                                max={8} 
+                                max={props.tagsLimit} 
                                 ref={tagsInput}/>
                     }
                 </div>
@@ -215,7 +215,8 @@ PublicProfileCard.propTypes = {
     isMe: PropTypes.bool,
     isPropietary: PropTypes.bool,
     tags: PropTypes.array,
-    pic: PropTypes.string
+    pic: PropTypes.string,
+    tagsLimit: PropTypes.number
 }
 
 PublicProfileCard.defaultProps = {
@@ -226,7 +227,8 @@ PublicProfileCard.defaultProps = {
     isMe: false,
     isPropietary: false,
     tags: [],
-    pic: ""
+    pic: "",
+    tagsLimit: 8
 }
 
 export default PublicProfileCard;

@@ -4,7 +4,6 @@ import graphene
 from graphene import ObjectType, List, Int, Boolean
 from graphene_django.types import DjangoObjectType
 from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract
-from social.models import Incident, Request
 from mainApp.models import Review
 
 
@@ -51,14 +50,6 @@ class UserPreferencesType(DjangoObjectType):
 class PlanType(DjangoObjectType):
   class Meta:
     model = Plan
-    
-class IncidentType(DjangoObjectType):
-  class Meta:
-    model = Incident
-    
-class RequestType(DjangoObjectType):
-  class Meta:
-    model = Request
 
 class ContractType(DjangoObjectType):
   

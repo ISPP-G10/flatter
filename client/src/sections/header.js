@@ -13,7 +13,7 @@ import FlatterModal from "../components/flatterModal";
 import FlatterForm from "../components/forms/flatterForm";
 import usersAPI from "../api/usersAPI";
 
-const Header = ({scrollY, userLogged}) => {
+const Header = ({scrollY, userLogged, docPage}) => {
 
     let isScrolling = scrollY>0;
 
@@ -61,7 +61,11 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
             localStorage.setItem('notificationsAllowed', true);
 
-            navigator(0);
+            if (window.location.pathname === "/plans") {
+                window.location.href = "/";
+            }else{
+                navigator(0)
+            }
 
         }).catch((error) => {
             customAlert('Usuario o contraseña incorrectos', 'warning');
@@ -107,8 +111,12 @@ const Header = ({scrollY, userLogged}) => {
                 localStorage.setItem('roles', roles);
                 localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
                 localStorage.setItem('notificationsAllowed', true);
-
-                navigator(0);
+                
+                if (window.location.pathname === "/plans") {
+                    window.location.href = "/";
+                }else{
+                    navigator(0)
+                }
             }).catch((error) => {
                 customAlert(error.message.split("\n")[0], 'error');
             });
@@ -146,7 +154,7 @@ const Header = ({scrollY, userLogged}) => {
                         </div>
                         <div>
                             {
-                                userLogged && 
+                                userLogged ? 
                                 <>
                                     <li><Link to="/">Inicio</Link></li>
                                     <li><Link to="/search">Buscador de viviendas</Link></li>
@@ -155,15 +163,23 @@ const Header = ({scrollY, userLogged}) => {
                                     <li><Link to="/pricing">Planes</Link></li>
                                     <li><Link to="/shop">Tienda</Link></li>
                                 </>
+                                : 
+                                
+                                !docPage && <li><Link to="/plans">Planes</Link></li>
                             }
                         </div>
                         {
-                            user ?
+                            user && !docPage ?
                             <HeaderProfile user={user}/>
                             :
+                            !docPage ?
                             <div>
                                 <SolidButton text="Registrarme" type="outlined" onClick={handleRegisterButtonClick}/>
                                 <SolidButton text="Acceder" type="featured" onClick={handleLoginButtonClick}/>
+                            </div>
+                            :
+                            <div>
+                                <SolidButton text="Regresar" type="featured" onClick={()=>navigator("/")}/>
                             </div>
                         }
                     </ul>
