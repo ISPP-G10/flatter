@@ -25,38 +25,73 @@ resource "google_compute_instance" "test" {
 
   provisioner "file" {
 
-    # source file name on the local machine where you execute terraform plan and apply
-    source = "startup.sh"
-    # destination is the file location on the newly created instance
+    source = "scripts/startup.sh"
     destination = "/tmp/startup.sh"
     connection {
       host = google_compute_address.static.address
       type = "ssh"
-      # username of the instance would vary for each account refer the OS Login in GCP documentation
       user    = var.user
       timeout = "500s"
-      # private_key being used to connect to the VM. ( the public key was copied earlier using metadata )
       private_key = file(var.privatekeypath)
     }
   }
-  # to connect to the instance after the creation and execute few commands for provisioning
-  # here you can execute a custom Shell script or Ansible playbook
+
+  provisioner "file" {
+
+    source = "scripts/run-docker.sh"
+    destination = "/tmp/run-docker.sh"
+    connection {
+      host = google_compute_address.static.address
+      type = "ssh"
+      user    = var.user
+      timeout = "500s"
+      private_key = file(var.privatekeypath)
+    }
+  }
+
+  provisioner "file" {
+
+    source = "docker.env"
+    destination = "/tmp/docker.env"
+    connection {
+      host = google_compute_address.static.address
+      type = "ssh"
+      user    = var.user
+      timeout = "500s"
+      private_key = file(var.privatekeypath)
+    }
+  }
+
+  provisioner "file" {
+
+    source = "client.env"
+    destination = "/tmp/client.env"
+    connection {
+      host = google_compute_address.static.address
+      type = "ssh"
+      user    = var.user
+      timeout = "500s"
+      private_key = file(var.privatekeypath)
+    }
+  }
+  
   provisioner "remote-exec" {
     connection {
       host = google_compute_address.static.address
       type = "ssh"
-      # username of the instance would vary for each account refer the OS Login in GCP documentation
       user    = var.user
       timeout = "500s"
-      # private_key being used to connect to the VM. ( the public key was copied earlier using metadata )
       private_key = file(var.privatekeypath)
     }
-    # Commands to be executed as the instance gets ready.
-    # set execution permission and start the script
+
     inline = [
       "chmod a+x /tmp/startup.sh",
       "sed -i -e 's/\r$//' /tmp/startup.sh",
-      "sudo /tmp/startup.sh"
+      "sudo /tmp/startup.sh",
+      "chmod a+x /tmp/run-docker.sh",
+      "sed -i -e 's/\r$//' /tmp/run-docker.sh",
+      "sudo /tmp/run-docker.sh",
+
     ]
   }
 
