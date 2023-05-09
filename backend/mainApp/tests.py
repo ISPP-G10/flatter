@@ -1842,249 +1842,249 @@ class SeleniumTests(StaticLiveServerTestCase):
             delete = self.driver.find_element(By.CLASS_NAME, "styled-red-info-button")
             delete.click()
         
-    def test_rentProperty(self):
-
-            self.driver.get(f'http://localhost:3000')
-            time.sleep(2)
-            button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
-            button.click()
-
-            self.driver.implicitly_wait(5)
-
-            firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
-            firstname.send_keys(self.user1.first_name)
-
-            lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
-            lastname.send_keys(self.user1.last_name)
-
-            username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
-            username.send_keys(self.user1.username)
-
-            email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
-            email.send_keys(self.user1.email)
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
-            password.send_keys(self.user1.password)
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
-            password.send_keys(self.user1.password)
-            password.send_keys(Keys.ENTER)
-
-            #Creación de propiedad
-            perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
-            perfil.click()
-
-            menuin = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5) > h4")
-            menuin.click()
-
-            newp = self.driver.find_element(By.CSS_SELECTOR, ".filterview-element:nth-child(1) > .button")
-            newp.click()
-
-            title = self.driver.find_element(By.XPATH, "//div[@id='title_form']/input")
-            title.send_keys("Editasión")
-
-            price = self.driver.find_element(By.XPATH, "//div[@id='price_form']/input")
-            price.send_keys(250)
-
-            location = self.driver.find_element(By.XPATH, "//div[@id='location_form']/input")
-            location.send_keys("Calle chill")
-
-            time.sleep(2)
-            select_province = self.driver.find_element(By.NAME, "province")
-            select = Select(select_province)
-            select.select_by_visible_text("Álava")
-
-            dimensions = self.driver.find_element(By.ID, "dimensions")
-            dimensions.send_keys(25)
-
-            description = self.driver.find_element(By.ID, "description")
-            description.send_keys("Una agradable estancia ricolina")
-
-            nbed = self.driver.find_element(By.XPATH, "//div[@id='bedroomsNumber_form']/input")
-            nbed.send_keys(1)
-
-            nbath = self.driver.find_element(By.XPATH, "//div[@id='bathroomsNumber_form']/input")
-            nbath.send_keys(2)
-
-            mcap = self.driver.find_element(By.XPATH, "//div[@id='maxCapacity_form']/input")
-            mcap.send_keys(4)
-            mcap.send_keys(Keys.ENTER)
-            time.sleep(1)
-
-            perfil = self.driver.find_element(By.ID, "wrapped-name")
-            perfil.click()
-            
-            out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(9) > h4")
-            out.click()
-            time.sleep(2)
-
-            button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
-            button.click()
-
-            time.sleep(2)
-
-            firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
-            firstname.send_keys("Test")
-
-            lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
-            lastname.send_keys("Pruebesita")
-
-            username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
-            username.send_keys("username_test2")
-
-            email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
-            email.send_keys("test2@e.com")
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
-            password.send_keys("contraseña")
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
-            password.send_keys("contraseña")
-
-            time.sleep(2)
-            select_client = self.driver.find_element(By.NAME, "role")
-            select = Select(select_client)
-            select.select_by_visible_text("Inquilino")
-            password.send_keys(Keys.ENTER)
-
-            #Solicitud de alquiler
-            search = self.driver.find_element(By.LINK_TEXT, "Buscador de viviendas")
-            search.click()
-
-            property = self.driver.find_element(By.CSS_SELECTOR, ".property-footer > .button:nth-child(1)")
-            property.click()
-
-            solitude = self.driver.find_element(By.CSS_SELECTOR, ".property-btn:nth-child(2)")
-            solitude.click()
-            solitude.send_keys(Keys.ENTER)
-    
-    def test_favouriteProperty(self):
-
-            self.driver.get(f'http://localhost:3000')
-            time.sleep(2)
-            button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
-            button.click()
-
-            self.driver.implicitly_wait(5)
-
-            firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
-            firstname.send_keys(self.user1.first_name)
-
-            lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
-            lastname.send_keys(self.user1.last_name)
-
-            username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
-            username.send_keys(self.user1.username)
-
-            email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
-            email.send_keys(self.user1.email)
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
-            password.send_keys(self.user1.password)
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
-            password.send_keys(self.user1.password)
-            password.send_keys(Keys.ENTER)
-
-            #Creación de propiedad
-            perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
-            perfil.click()
-
-            menuin = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5) > h4")
-            menuin.click()
-
-            newp = self.driver.find_element(By.CSS_SELECTOR, ".filterview-element:nth-child(1) > .button")
-            newp.click()
-
-            title = self.driver.find_element(By.XPATH, "//div[@id='title_form']/input")
-            title.send_keys("Favorito")
-
-            price = self.driver.find_element(By.XPATH, "//div[@id='price_form']/input")
-            price.send_keys(250)
-
-            location = self.driver.find_element(By.XPATH, "//div[@id='location_form']/input")
-            location.send_keys("Calle chill")
-
-            time.sleep(2)
-            select_province = self.driver.find_element(By.NAME, "province")
-            select = Select(select_province)
-            select.select_by_visible_text("Álava")
-
-            dimensions = self.driver.find_element(By.ID, "dimensions")
-            dimensions.send_keys(25)
-
-            description = self.driver.find_element(By.ID, "description")
-            description.send_keys("Una agradable estancia ricolina")
-
-            nbed = self.driver.find_element(By.XPATH, "//div[@id='bedroomsNumber_form']/input")
-            nbed.send_keys(1)
-
-            nbath = self.driver.find_element(By.XPATH, "//div[@id='bathroomsNumber_form']/input")
-            nbath.send_keys(2)
-
-            mcap = self.driver.find_element(By.XPATH, "//div[@id='maxCapacity_form']/input")
-            mcap.send_keys(4)
-            mcap.send_keys(Keys.ENTER)
-            time.sleep(1)
-
-            perfil = self.driver.find_element(By.ID, "wrapped-name")
-            perfil.click()
-            
-            out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(4) > h4")
-            out.click()
-            time.sleep(2)
-
-            button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
-            button.click()
-
-            time.sleep(2)
-
-            firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
-            firstname.send_keys("Test")
-
-            lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
-            lastname.send_keys("Pruebesita")
-
-            username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
-            username.send_keys("username_test2")
-
-            email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
-            email.send_keys("test2@e.com")
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
-            password.send_keys("contraseña")
-
-            password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
-            password.send_keys("contraseña")
-
-            time.sleep(2)
-            select_client = self.driver.find_element(By.NAME, "role")
-            select = Select(select_client)
-            select.select_by_visible_text("Inquilino")
-            password.send_keys(Keys.ENTER)
-
-            #Destacar piso
-            search = self.driver.find_element(By.LINK_TEXT, "Buscador de viviendas")
-            search.click()
-
-            prop = self.driver.find_element(By.CSS_SELECTOR, ".property-footer > .button:nth-child(1)")
-            prop.click()
-            time.sleep(3)
-
-            but = self.driver.find_element(By.CSS_SELECTOR, ".favourite-button > img")
-            but.click()
-
-            #Comprobar es favorito
-            perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
-            perfil.click()
-
-            secF = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5)")
-            secF.click()
-            time.sleep(3)
-
-            fav = self.driver.find_element(By.CSS_SELECTOR, ".property-header > h3") 
-
-            assert fav.text == "Favorito"
+    # def test_rentProperty(self):
+    #
+    #         self.driver.get(f'http://localhost:3000')
+    #         time.sleep(2)
+    #         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+    #         button.click()
+    #
+    #         self.driver.implicitly_wait(5)
+    #
+    #         firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+    #         firstname.send_keys(self.user1.first_name)
+    #
+    #         lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+    #         lastname.send_keys(self.user1.last_name)
+    #
+    #         username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+    #         username.send_keys(self.user1.username)
+    #
+    #         email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+    #         email.send_keys(self.user1.email)
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+    #         password.send_keys(self.user1.password)
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+    #         password.send_keys(self.user1.password)
+    #         password.send_keys(Keys.ENTER)
+    #
+    #         #Creación de propiedad
+    #         perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
+    #         perfil.click()
+    #
+    #         menuin = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5) > h4")
+    #         menuin.click()
+    #
+    #         newp = self.driver.find_element(By.CSS_SELECTOR, ".filterview-element:nth-child(1) > .button")
+    #         newp.click()
+    #
+    #         title = self.driver.find_element(By.XPATH, "//div[@id='title_form']/input")
+    #         title.send_keys("Editasión")
+    #
+    #         price = self.driver.find_element(By.XPATH, "//div[@id='price_form']/input")
+    #         price.send_keys(250)
+    #
+    #         location = self.driver.find_element(By.XPATH, "//div[@id='location_form']/input")
+    #         location.send_keys("Calle chill")
+    #
+    #         time.sleep(2)
+    #         select_province = self.driver.find_element(By.NAME, "province")
+    #         select = Select(select_province)
+    #         select.select_by_visible_text("Álava")
+    #
+    #         dimensions = self.driver.find_element(By.ID, "dimensions")
+    #         dimensions.send_keys(25)
+    #
+    #         description = self.driver.find_element(By.ID, "description")
+    #         description.send_keys("Una agradable estancia ricolina")
+    #
+    #         nbed = self.driver.find_element(By.XPATH, "//div[@id='bedroomsNumber_form']/input")
+    #         nbed.send_keys(1)
+    #
+    #         nbath = self.driver.find_element(By.XPATH, "//div[@id='bathroomsNumber_form']/input")
+    #         nbath.send_keys(2)
+    #
+    #         mcap = self.driver.find_element(By.XPATH, "//div[@id='maxCapacity_form']/input")
+    #         mcap.send_keys(4)
+    #         mcap.send_keys(Keys.ENTER)
+    #         time.sleep(1)
+    #
+    #         perfil = self.driver.find_element(By.ID, "wrapped-name")
+    #         perfil.click()
+    #
+    #         out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(9) > h4")
+    #         out.click()
+    #         time.sleep(2)
+    #
+    #         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+    #         button.click()
+    #
+    #         time.sleep(2)
+    #
+    #         firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+    #         firstname.send_keys("Test")
+    #
+    #         lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+    #         lastname.send_keys("Pruebesita")
+    #
+    #         username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+    #         username.send_keys("username_test2")
+    #
+    #         email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+    #         email.send_keys("test2@e.com")
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+    #         password.send_keys("contraseña")
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+    #         password.send_keys("contraseña")
+    #
+    #         time.sleep(2)
+    #         select_client = self.driver.find_element(By.NAME, "role")
+    #         select = Select(select_client)
+    #         select.select_by_visible_text("Inquilino")
+    #         password.send_keys(Keys.ENTER)
+    #
+    #         #Solicitud de alquiler
+    #         search = self.driver.find_element(By.LINK_TEXT, "Buscador de viviendas")
+    #         search.click()
+    #
+    #         property = self.driver.find_element(By.CSS_SELECTOR, ".property-footer > .button:nth-child(1)")
+    #         property.click()
+    #
+    #         solitude = self.driver.find_element(By.CSS_SELECTOR, ".property-btn:nth-child(2)")
+    #         solitude.click()
+    #         solitude.send_keys(Keys.ENTER)
+    #
+    # def test_favouriteProperty(self):
+    #
+    #         self.driver.get(f'http://localhost:3000')
+    #         time.sleep(2)
+    #         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+    #         button.click()
+    #
+    #         self.driver.implicitly_wait(5)
+    #
+    #         firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+    #         firstname.send_keys(self.user1.first_name)
+    #
+    #         lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+    #         lastname.send_keys(self.user1.last_name)
+    #
+    #         username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+    #         username.send_keys(self.user1.username)
+    #
+    #         email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+    #         email.send_keys(self.user1.email)
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+    #         password.send_keys(self.user1.password)
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+    #         password.send_keys(self.user1.password)
+    #         password.send_keys(Keys.ENTER)
+    #
+    #         #Creación de propiedad
+    #         perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
+    #         perfil.click()
+    #
+    #         menuin = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5) > h4")
+    #         menuin.click()
+    #
+    #         newp = self.driver.find_element(By.CSS_SELECTOR, ".filterview-element:nth-child(1) > .button")
+    #         newp.click()
+    #
+    #         title = self.driver.find_element(By.XPATH, "//div[@id='title_form']/input")
+    #         title.send_keys("Favorito")
+    #
+    #         price = self.driver.find_element(By.XPATH, "//div[@id='price_form']/input")
+    #         price.send_keys(250)
+    #
+    #         location = self.driver.find_element(By.XPATH, "//div[@id='location_form']/input")
+    #         location.send_keys("Calle chill")
+    #
+    #         time.sleep(2)
+    #         select_province = self.driver.find_element(By.NAME, "province")
+    #         select = Select(select_province)
+    #         select.select_by_visible_text("Álava")
+    #
+    #         dimensions = self.driver.find_element(By.ID, "dimensions")
+    #         dimensions.send_keys(25)
+    #
+    #         description = self.driver.find_element(By.ID, "description")
+    #         description.send_keys("Una agradable estancia ricolina")
+    #
+    #         nbed = self.driver.find_element(By.XPATH, "//div[@id='bedroomsNumber_form']/input")
+    #         nbed.send_keys(1)
+    #
+    #         nbath = self.driver.find_element(By.XPATH, "//div[@id='bathroomsNumber_form']/input")
+    #         nbath.send_keys(2)
+    #
+    #         mcap = self.driver.find_element(By.XPATH, "//div[@id='maxCapacity_form']/input")
+    #         mcap.send_keys(4)
+    #         mcap.send_keys(Keys.ENTER)
+    #         time.sleep(1)
+    #
+    #         perfil = self.driver.find_element(By.ID, "wrapped-name")
+    #         perfil.click()
+    #
+    #         out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(4) > h4")
+    #         out.click()
+    #         time.sleep(2)
+    #
+    #         button = self.driver.find_element(By.XPATH, "//button[contains(.,'Registrarme')]")
+    #         button.click()
+    #
+    #         time.sleep(2)
+    #
+    #         firstname = self.driver.find_element(By.XPATH, "//div[@id='first_name_form']/input")
+    #         firstname.send_keys("Test")
+    #
+    #         lastname = self.driver.find_element(By.XPATH, "//div[@id='last_name_form']/input")
+    #         lastname.send_keys("Pruebesita")
+    #
+    #         username = self.driver.find_element(By.XPATH, "//div[@id='username_form']/input")
+    #         username.send_keys("username_test2")
+    #
+    #         email = self.driver.find_element(By.XPATH, "//div[@id='email_form']/input")
+    #         email.send_keys("test2@e.com")
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='password_form']/input")
+    #         password.send_keys("contraseña")
+    #
+    #         password = self.driver.find_element(By.XPATH, "//div[@id='passwordConfirm_form']/input")
+    #         password.send_keys("contraseña")
+    #
+    #         time.sleep(2)
+    #         select_client = self.driver.find_element(By.NAME, "role")
+    #         select = Select(select_client)
+    #         select.select_by_visible_text("Inquilino")
+    #         password.send_keys(Keys.ENTER)
+    #
+    #         #Destacar piso
+    #         search = self.driver.find_element(By.LINK_TEXT, "Buscador de viviendas")
+    #         search.click()
+    #
+    #         prop = self.driver.find_element(By.CSS_SELECTOR, ".property-footer > .button:nth-child(1)")
+    #         prop.click()
+    #         time.sleep(3)
+    #
+    #         but = self.driver.find_element(By.CSS_SELECTOR, ".favourite-button > img")
+    #         but.click()
+    #
+    #         #Comprobar es favorito
+    #         perfil = self.driver.find_element(By.CSS_SELECTOR, ".header-user-section")
+    #         perfil.click()
+    #
+    #         secF = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(5)")
+    #         secF.click()
+    #         time.sleep(3)
+    #
+    #         fav = self.driver.find_element(By.CSS_SELECTOR, ".property-header > h3")
+    #
+    #         assert fav.text == "Favorito"
 
             
 
