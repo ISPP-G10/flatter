@@ -6,9 +6,6 @@ on:
       - "module/cd"
 
 env:
-  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  GCP_JSON_CREDENTIALS: ${{ secrets.GCP_JSON_CREDENTIALS }}
-  VM_INSTANCE_USER: ${{ secrets.VM_INSTANCE_USER }}
   DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
   CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
   TERRAFORM_VARS: ${{ secrets.TERRAFORM_VARS }}
