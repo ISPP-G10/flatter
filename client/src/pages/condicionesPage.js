@@ -3,7 +3,7 @@ import "../static/css/pages/privacyPage.css";
 
 const CondicionesPage = () => {
   return (
-    <FlatterPage>
+    <FlatterPage docPage>
       <div className="privacy-container">
         <h1>Términos y condiciones de uso</h1>
         <h3>Información general</h3>

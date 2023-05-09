@@ -3,7 +3,7 @@ import "../static/css/pages/privacyPage.css";
 
 const AcuerdoServicioPage = () => {
   return (
-    <FlatterPage>
+    <FlatterPage docPage>
       <div className="privacy-container">
         <h1>Acuerdo a nivel de Servicio</h1>
         <h3>Tipos de soporte</h3>

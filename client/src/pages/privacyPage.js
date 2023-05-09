@@ -4,7 +4,7 @@ import "../static/css/pages/privacyPage.css";
 
 const PrivacyPage = () => {
   return (
-    <FlatterPage>
+    <FlatterPage docPage>
       <div className="privacy-container">
         <h2>Compromiso total</h2>
         <h1>Política de privacidad</h1>
