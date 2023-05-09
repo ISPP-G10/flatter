@@ -61,7 +61,11 @@ const Header = ({scrollY, userLogged}) => {
             localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
             localStorage.setItem('notificationsAllowed', true);
 
-            navigator(0);
+            if (window.location.pathname === "/plans") {
+                window.location.href = "/";
+            }else{
+                navigator(0)
+            }
 
         }).catch((error) => {
             customAlert('Usuario o contraseña incorrectos', 'warning');
@@ -107,8 +111,12 @@ const Header = ({scrollY, userLogged}) => {
                 localStorage.setItem('roles', roles);
                 localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
                 localStorage.setItem('notificationsAllowed', true);
-
-                navigator(0);
+                
+                if (window.location.pathname === "/plans") {
+                    window.location.href = "/";
+                }else{
+                    navigator(0)
+                }
             }).catch((error) => {
                 customAlert(error.message.split("\n")[0], 'error');
             });
