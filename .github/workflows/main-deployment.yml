@@ -9,6 +9,7 @@ env:
   DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
   CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
   TERRAFORM_VARS: ${{ secrets.TERRAFORM_VARS }}
+  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
 jobs:
   deploy-flatter-to-gce:
@@ -25,6 +26,7 @@ jobs:
         working-directory: ./terraform
         run: |-
               ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
+              echo "$GCP_CREDENTIALS" | base64 --decode > gcp.json
               echo "$TERRAFORM_VARS" | base64 --decode > terraform.tfvars
               echo "$CLIENT_ENV" | base64 --decode > client.env
               echo "$DOCKER_ENV" | base64 --decode > docker.env
