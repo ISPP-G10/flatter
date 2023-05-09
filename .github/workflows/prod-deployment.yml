@@ -51,6 +51,12 @@ jobs:
         run: terraform validate -no-color
         working-directory: ./terraform
 
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy -auto-approve -input=false -no-color
+        working-directory: ./terraform
+        continue-on-error: true
+
       - name: Terraform Plan
         id: plan
         run: |
