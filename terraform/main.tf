@@ -1,4 +1,11 @@
 terraform {
+  cloud {
+    organization = "flatter"
+
+    workspaces {
+      name = "flatter"
+    }
+  }
   required_providers {
     google = {
       source  = "hashicorp/google"
