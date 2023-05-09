@@ -95,9 +95,10 @@ resource "google_compute_instance" "compute_instance" {
     ]
   }
 
-  depends_on = [google_compute_firewall.flatter_firewall]
+  # depends_on = [google_compute_firewall.flatter_firewall]
 }
 
 resource "google_compute_address" "static" {
   name       = "${var.instance_name}-public-address"
+  # depends_on = [google_compute_firewall.flatter_firewall]
 }
