@@ -151,7 +151,6 @@ dmypy.json
 terraform/.terraform/
 terraform/.terraform**
 terraform/**.tfstate
-terraform.tfvars
 .ssh
 terraform/**.json
 terraform/**.env

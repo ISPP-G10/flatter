@@ -1,0 +1,62 @@
+name: Flatter CD
+
+on:
+  push:
+    branches:
+      - "module/cd"
+
+env:
+  GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCP_JSON_CREDENTIALS: ${{ secrets.GCP_JSON_CREDENTIALS }}
+  VM_INSTANCE_USER: ${{ secrets.VM_INSTANCE_USER }}
+  DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
+  CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
+
+jobs:
+  deploy-flatter-to-gce:
+    name: Flatter Deployment to GCE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setups Terraform
+        uses: hashicorp/setup-terraform@v2
+        
+      - name: Populate terraform variables
+        working-directory: ./terraform
+        run: |-
+              ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
+              echo "project_id = \"$GCP_PROJECT_ID\"" >> terraform.tfvars
+              echo "json_credentials = \"$GCP_JSON_CREDENTIALS\"" >> terraform.tfvars
+              echo "user = \"$VM_INSTANCE_USER\"" >> terraform.tfvars
+              echo "publickeypath = \"~/.ssh/flatter.pub\"" >> terraform.tfvars
+              echo "privatekeypath = \"~/.ssh/flatter\"" >> terraform.tfvars
+              echo "$CLIENT_ENV" > client.env
+              echo "$DOCKER_ENV" > docker.env
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+        working-directory: ./terraform
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: ./terraform
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -input=false -no-color
+        working-directory: ./terraform
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false -no-color
+        working-directory: ./terraform
