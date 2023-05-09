@@ -393,11 +393,6 @@ const LandingPage = () => {
                     <input type="text" name="FNAME" id="mce-FNAME" />
                     <span id="mce-FNAME-HELPERTEXT" className="helper_text" />
                   </div>
-                  <div className="mc-field-group">
-                    <label htmlFor="mce-PHONE">Teléfono </label>
-                    <input type="text" name="PHONE" id="mce-PHONE" />
-                    <span id="mce-PHONE-HELPERTEXT" className="helper_text" />
-                  </div>
                   <div id="mce-responses" className="clear foot">
                     <div
                       className="response"
@@ -475,11 +470,6 @@ const LandingPage = () => {
                     <label htmlFor="mce-FNAME-2">Nombre completo </label>
                     <input type="text" name="FNAME" id="mce-FNAME-2" />
                     <span id="mce-FNAME-HELPERTEXT-2" className="helper_text" />
-                  </div>
-                  <div className="mc-field-group">
-                    <label htmlFor="mce-PHONE-2">Teléfono </label>
-                    <input type="text" name="PHONE" id="mce-PHONE-2" />
-                    <span id="mce-PHONE-HELPERTEXT-2" className="helper_text" />
                   </div>
                   <div id="mce-responses-2" className="clear foot">
                     <div

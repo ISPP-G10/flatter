@@ -49,6 +49,7 @@ const FlatterPage = (props) => {
       <Header
         scrollY={props.withBackground ? 100 : scrollY}
         userLogged={props.userLogged}
+        docPage={props.docPage}
       />
 
       {props.withBackground ? (
