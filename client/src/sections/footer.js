@@ -30,17 +30,6 @@ const Footer = ({userLogged}) => {
                 <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de Privacidad</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/condiciones">Términos y Condiciones de Uso</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/sla">Acuerdo a nivel de Servicio</Link></li>
-                {
-                    userLogged &&
-                    <>
-                        <li className='menu-item'><Link className='menu-link' to="/">Inicio</Link></li>
-                        <li className='menu-item'><Link className='menu-link' to="/search">Buscador de viviendas</Link></li>
-                        <li className='menu-item'><Link className='menu-link' to="/users">Buscador de usuarios</Link></li>
-                        <li className='menu-item'><Link className='menu-link' to="/pricing">Planes</Link></li>
-                        <li className='menu-item'><Link className='menu-link' to="/shop">Tienda</Link></li>
-                        <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de privacidad</Link></li>
-                    </>
-                }
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>

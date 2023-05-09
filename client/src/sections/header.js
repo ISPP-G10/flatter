@@ -164,9 +164,8 @@ const Header = ({scrollY, userLogged, docPage}) => {
                                     <li><Link to="/shop">Tienda</Link></li>
                                 </>
                                 : 
-                                <>
-                                    <li><Link to="/plans">Planes</Link></li>
-                                </>
+                                
+                                !docPage && <li><Link to="/plans">Planes</Link></li>
                             }
                         </div>
                         {
