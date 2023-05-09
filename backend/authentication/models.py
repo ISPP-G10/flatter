@@ -119,7 +119,6 @@ def add_roles(sender=None, **kwargs):
 signals.post_migrate.connect(add_roles)
 
 def create_plans(sender=None, **kwargs):
-    
     if Plan.objects.count() == 0:
     
         Plan.objects.get_or_create(flatter_coins=0, visits_number=10, 

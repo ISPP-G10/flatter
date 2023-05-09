@@ -63,7 +63,7 @@ const usersAPI = {
             }
     `,
     getPublicProfileByUsername: gql`
-            query getUserReviews($username: String!, $userToken: String!){
+            query getPublicProfileByUsername($username: String!, $userToken: String!){
                 getUserByUsername(username: $username){
                     firstName
                     lastName
@@ -97,6 +97,8 @@ const usersAPI = {
                     plan {
                         chatCreation
                         viewSelfProfileOpinions
+                        tagsNumber
+                        visitsNumber
                     }
                 }
             }
@@ -251,6 +253,8 @@ const usersAPI = {
                 plan {
                     planType
                     chatCreation
+                    tagsNumber
+                    visitsNumber
                 }
             }
         }

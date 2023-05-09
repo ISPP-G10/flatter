@@ -86,8 +86,10 @@ const UnloggedPricingPage = () => {
               <div className="option">
                 <ul>
                   <li>
-                    <BsDot color="white" /> {data.getPlans[0].visitsNumber}{" "}
-                    visitas al perfil por día
+                    <BsDot color="white" /> {data.getPlans[0].visitsNumber > 100000
+                      ? "Visitas ilimitadas"
+                      : data.getPlans[0].visitsNumber +
+                        " visitas al perfil por día"}
                   </li>
                   <li>
                     <BsDot color="white" /> {data.getPlans[0].tagsNumber}{" "}
@@ -164,8 +166,10 @@ const UnloggedPricingPage = () => {
               <div className="option">
                 <ul>
                   <li>
-                    <BsDot color="white" /> {data.getPlans[1].visitsNumber}{" "}
-                    visitas al perfil por día
+                    <BsDot color="white" /> {data.getPlans[1].visitsNumber > 100000
+                      ? "Visitas ilimitadas"
+                      : data.getPlans[1].visitsNumber +
+                        " visitas al perfil por día"}
                   </li>
                   <li>
                     <BsDot color="white" /> {data.getPlans[1].tagsNumber}{" "}

@@ -67,10 +67,7 @@ const AccountSettings = () => {
         });
 
         // Borrar todo el contenido del local storage
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.removeItem("inappropiateLanguage");
-        localStorage.removeItem("roles");
+        localStorage.clear();
 
         // Redirigir a la página de inicio
         window.location.href = "/";
@@ -266,6 +263,7 @@ const AccountSettings = () => {
               type="text"
               value={username}
               onChange={handleChange}
+              placeholder={user}
               required
             />
             {/* Un mensaje de error si lo hay */}

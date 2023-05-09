@@ -2,7 +2,7 @@ import base64, os, re, jwt, graphene
 import graphql
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
-from authentication.models import FlatterUser, Tag, Role, UserPreferences
+from authentication.models import FlatterUser, Tag, Role, UserPreferences, Contract
 from authentication.types import FlatterUserType, UserPreferencesType
 from mainApp.models import Review, Property
 from social.models import Group, Message
@@ -384,8 +384,9 @@ class EditUserPublicMutation(graphene.Mutation):
         elif user_selected.profession != profession:
             user_selected.profession = profession
 
-        if len(tags) > 8:
-            raise ValueError(_("No se pueden añadir más de 8 tags"))
+        tags_limit = Contract.objects.filter(user=user_selected, obsolete=False).first().plan.tags_number
+        if len(tags) > tags_limit:
+            raise ValueError(_(f"No se pueden añadir más de {tags_limit} tags"))
 
         user_tags = []
         for tag in tags:
