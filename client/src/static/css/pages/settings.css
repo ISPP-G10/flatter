@@ -49,7 +49,7 @@
   padding: 20px 40px;
 }
 
-.settings-section {
+.settings-section, .remove-account-section {
   width: 90%;
   padding: 5px 30px;
   text-align: center;
@@ -57,6 +57,17 @@
   border-radius: 15px;
   margin: 10px 0;
   cursor: pointer;
+}
+
+.remove-account-section{
+  margin-top: 50px;
+  color: red;
+  border: solid 1px red !important;
+}
+
+.remove-account-section:hover{
+  color: white;
+  background-color: rgb(253, 161, 161);
 }
 
 .settings-section:hover {
