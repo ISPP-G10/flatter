@@ -28,7 +28,7 @@ jobs:
         run: |-
               ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
               echo "project_id = \"$GCP_PROJECT_ID\"" >> terraform.tfvars
-              echo "json_credentials = $GCP_JSON_CREDENTIALS >> terraform.tfvars
+              echo "json_credentials = \"$GCP_JSON_CREDENTIALS\"" >> terraform.tfvars
               echo "user = \"$VM_INSTANCE_USER\"" >> terraform.tfvars
               echo "publickeypath = \"~/.ssh/flatter.pub\"" >> terraform.tfvars
               echo "privatekeypath = \"~/.ssh/flatter\"" >> terraform.tfvars
