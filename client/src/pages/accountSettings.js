@@ -10,8 +10,6 @@ import { accountInputs } from "../forms/accountForm";
 import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import PasswordSettingForm from '../components/userSettings/passwordSettingForm';
-import Incidence from '../components/userSettings/incidence';
-import Request from '../components/userSettings/request';
 
 const AccountSettings = () => {
 
@@ -140,12 +138,6 @@ const AccountSettings = () => {
                                         setting === 'password' ?
                                             <PasswordSettingForm correctModalRef={correctModalRef}/>
                                         :
-                                            setting === 'incidence' ?
-                                                <Incidence />
-                                            :
-                                                setting === 'request' ?
-                                                    <Request />
-                                                :
                                                     <></>
 
                             }
