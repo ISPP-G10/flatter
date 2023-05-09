@@ -12,7 +12,7 @@ resource "google_compute_instance" "compute_instance" {
   }
 
   network_interface {
-    network = google_compute_network.flatter_network.name
+    network = "flatter-network"
 
     access_config {
       nat_ip = google_compute_address.static.address
@@ -100,5 +100,4 @@ resource "google_compute_instance" "compute_instance" {
 
 resource "google_compute_address" "static" {
   name       = "${var.instance_name}-public-address"
-  depends_on = [google_compute_firewall.flatter_firewall]
 }
