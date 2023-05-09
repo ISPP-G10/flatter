@@ -124,7 +124,6 @@ class MyTest(TestCase):
                 genre='HHH',
                 flatter_coins=0,
             )
-
             self.fail("Se esperaba un error por género inválido.")
         except DataError:
             pass
@@ -199,7 +198,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usuario"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -229,7 +227,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usu"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -260,7 +257,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usuario"
                     password: "mal"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -291,7 +287,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usuario"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -322,7 +317,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pr"
                     username: "usuario"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -353,7 +347,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usuario"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Hombre"
                     roles: "Owner"
                 ){
@@ -384,7 +377,6 @@ class TestsMutations(DefaultTests):
                     lastName: "Pruebaaa"
                     username: "usuario"
                     password: "contraseña"
-                    phone: "123456789"
                     genre: "Xxxx"
                     roles: "Owner"
                 ){
