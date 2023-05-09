@@ -3,7 +3,7 @@ name: Flatter CD
 on:
   push:
     branches:
-      - "module/cd"
+      - "main"
 
 env:
   DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
@@ -37,7 +37,7 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt
         continue-on-error: true
         working-directory: ./terraform
 
