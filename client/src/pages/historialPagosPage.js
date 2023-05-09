@@ -78,7 +78,15 @@ const HistorialPagosPage = () => {
             return (
               <div className="contract" key={contract.id}>
                 <div className="contract-content">
-                  <h2>{contract.plan.planType === "A" ? "Avanzado" : contract.plan.planType === "P" ? "Pro" : "Básico"}</h2>
+                  {
+                    contract.plan.planType === "A" && <h2 style={{color: "#708090"}}>Avanzado</h2>
+                  }
+                  {
+                    contract.plan.planType === "P" && <h2 style={{color: "#B8860B"}}>Pro</h2>
+                  }
+                  {
+                    contract.plan.planType === "B" && <h2 style={{color: "white", textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"}}>Básico</h2>
+                  }
                   <div className="contract-dates">
                     <span>
                       Fecha de inicio: {dateToString(contract.initialDate)}

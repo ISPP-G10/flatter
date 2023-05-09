@@ -1,4 +1,5 @@
 import base64, os, re, jwt, graphene
+import graphql
 from datetime import datetime
 from django.utils.translation import gettext_lazy as _
 from authentication.models import FlatterUser, Tag, Role, UserPreferences
@@ -726,7 +727,7 @@ def check_token(user_token: str, user: FlatterUser):
             if date_exp - date_cre > time_delta:
                 raise ValueError(_("El token no es válido"))
 
-        except jwt.exceptions.DecodeError:
+        except Exception:
             raise ValueError(_("El token no es válido"))
 
 def get_relationships_between_users(user_login, user_valued):
