@@ -4,7 +4,7 @@ import PublicProfileCard from "../components/profile/publicProfileCard";
 import ReviewsBox from "../components/profile/reviewsBox";
 import {useQuery} from '@apollo/client';
 import usersAPI from '../api/usersAPI';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_SERVER_MEDIA } from "../settings";
 import { useEffect, useState } from "react";
 import customAlert from "../libs/functions/customAlert";
@@ -14,6 +14,7 @@ const PublicProfile = (props) => {
 
     let username = useParams().username;
     let userToken = localStorage.getItem("token", '');
+    let navigator = useNavigate();
 
     if (username === undefined){
         username = localStorage.getItem("user");
