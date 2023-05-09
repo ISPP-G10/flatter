@@ -137,61 +137,75 @@ const AccountSettings = () => {
         <div className="settings-title">
           <h1>Configuración de la cuenta</h1>
         </div>
-        <div className="settings-content">
-          <div className="settings-sections">
-            <h2 className="settings-sections-title">Opciones</h2>
-            <div
-              className="settings-section"
-              onClick={() => setSetting("account")}
-              style={
-                setting === "account"
-                  ? {
-                      backgroundColor: "rgba(0, 168, 255, 0.8)",
-                      color: "white",
-                    }
-                  : {}
-              }
-            >
-              <h4>Mi cuenta</h4>
-            </div>
-            <div
-              className="settings-section"
-              onClick={() => setSetting("password")}
-              style={
-                setting === "password"
-                  ? {
-                      backgroundColor: "rgba(0, 168, 255, 0.8)",
-                      color: "white",
-                    }
-                  : {}
-              }
-            >
-              <h4>Cambiar mi contraseña</h4>
-            </div>
-            <div
-              className="settings-section"
-              onClick={() =>
-                navigator(`/profile/${localStorage.getItem("user", "")}`)
-              }
-            >
-              <h4>Mi perfil público</h4>
-            </div>
-            {localStorage.getItem("roles") &&
-              localStorage.getItem("roles").includes("RENTER") && (
-                <div
-                  className="settings-section"
-                  onClick={() => navigator("/favourites")}
-                >
-                  <h4>Mis pisos favoritos</h4>
-                </div>
-              )}
-            {localStorage.getItem("roles") &&
-              localStorage.getItem("roles").includes("OWNER") && (
-                <div
-                  className="settings-section"
-                  onClick={() => navigator(`/properties`)}
-                >
-                  <h4>Mis inmuebles</h4>
+                <div className='settings-content'>
+                    <div className='settings-sections'>
+                        <h2 className='settings-sections-title'>Opciones</h2>
+                        <div className='settings-section' onClick={() => setSetting('account')} style={setting === 'account' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Mi cuenta</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('password')} style={setting === 'password' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Cambiar mi contraseña</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => navigator(`/profile/${localStorage.getItem("user", "")}`)}>
+                            <h4>Mi perfil público</h4>
+                        </div>
+                        {localStorage.getItem("roles") &&
+                         localStorage.getItem("roles").includes("RENTER") && (
+                            <div
+                            className="settings-section"
+                            onClick={() => navigator("/favourites")}
+                            >
+                                <h4>Mis pisos favoritos</h4>
+                            </div>
+                        )}
+                        {
+                            localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
+                            <div className='settings-section' onClick={() => navigator(`/properties`)}>
+                                <h4>Mis inmuebles</h4>
+                            </div>
+                        }
+                        {
+                            localStorage.getItem("roles") && localStorage.getItem("roles").includes("RENTER") &&
+                            <div className='settings-section' onClick={() => navigator(`/requests`)}>
+                                <h4>Mis notificaciones</h4>
+                            </div>
+                        }
+                        {
+                            localStorage.getItem("roles") && localStorage.getItem("roles").includes("OWNER") &&
+                            <div className='settings-section' onClick={() => navigator(`/property/requests`)}>
+                                <h4>Mis solicitudes</h4>
+                            </div>
+                        }
+                        <div className='settings-section' onClick={() => navigator("/historial")}>
+                            <h4>Historial de pagos</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('request')} style={setting === 'request' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Sugerir cambios</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('incidence')} style={setting === 'incidence' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Abrir incidencia</h4>
+                        </div>
+                        <div className='settings-section' onClick={logout}>
+                            <h4>Cerrar sesión</h4>
+                        </div>
+                    </div>
+                    <div className='setting-body'>
+                        <div className='setting-form-container'>
+                            {
+                                loading ? 
+                                    <h1>Loading...</h1>
+                                :
+                                    setting === 'account' ?
+                                        <AccountSettingsForm inputs={accountInputs} data={data} correctModalRef={correctModalRef}/>
+                                    :
+                                        setting === 'password' ?
+                                            <PasswordSettingForm correctModalRef={correctModalRef}/>
+                                        :
+                                                    <></>
+
+                            }
+                        </div>
+                    </div>
                 </div>
               )}
             {localStorage.getItem("roles") &&

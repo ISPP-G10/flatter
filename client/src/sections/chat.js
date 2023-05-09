@@ -37,7 +37,7 @@ const Chat = (props) => {
     let chatHeaderActive = useRef();
     let nodesList = [];
 
-    const {data, loading} = useQuery(chatsAPI.getInappropiateLanguage, {
+    const {data, loading, error} = useQuery(chatsAPI.getInappropiateLanguage, {
         variables: {
             username: localStorage.getItem('user'),
             userToken: userToken
@@ -354,6 +354,11 @@ const Chat = (props) => {
             setInappropiateWords(data.getInappropiateLanguage.map(w => w.word.toLowerCase().trim()));
         }
     }, [loading, data]);
+
+    if (error){
+        localStorage.clear();
+        window.location.href = "/";
+    }
 
     return (
         <>

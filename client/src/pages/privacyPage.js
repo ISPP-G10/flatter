@@ -4,11 +4,11 @@ import "../static/css/pages/privacyPage.css";
 
 const PrivacyPage = () => {
   return (
-    <FlatterPage withBackground>
+    <FlatterPage docPage>
       <div className="privacy-container">
-        <h2>COMPROMISO TOTAL</h2>
-        <h1>TÉRMINOS DE USO Y PRIVACIDAD</h1>
-        <h3>INFORMACIÓN DE CONTACTO</h3>
+        <h2>Compromiso total</h2>
+        <h1>Política de privacidad</h1>
+        <h3>Información de contacto</h3>
         <p>
           En Flatter, nos tomamos muy en serio la privacidad y la protección de
           datos de nuestros usuarios. Si tiene alguna pregunta o inquietud
@@ -22,7 +22,7 @@ const PrivacyPage = () => {
           </li>
           <li>
             <span className="strong-text">Correo electrónico de contacto:</span>{" "}
-            <a href="mailto:flatter.ispp@gmail.com">flatter@gmail.com</a>
+            <a href="mailto:flatter.proyect@gmail.com">flatter.proyect@gmail.com</a>
           </li>
         </ul>
         <br />
@@ -38,7 +38,7 @@ const PrivacyPage = () => {
           electrónico. Agradecemos sus comentarios y nos esforzamos por
           responder a todas las consultas lo antes posible.
         </p>
-        <h3>INFORMACIÓN RECOPILADA</h3>
+        <h3>Información recopilada</h3>
         <p>
           En el marco de la prestación de servicios de alquiler de pisos a
           través de nuestra aplicación, Flatter recopila los siguientes datos
@@ -93,7 +93,7 @@ const PrivacyPage = () => {
           se compromete a cumplir con todas las obligaciones legales aplicables
           en materia de protección de datos personales.
         </p>
-        <h3>USO DE LA INFORMACIÓN</h3>
+        <h3>Uso de la información</h3>
         <p>
           Los datos personales recopilados por Flatter, incluyendo las etiquetas
           de preferencias de usuario, serán utilizados únicamente para los fines
@@ -132,7 +132,7 @@ const PrivacyPage = () => {
           seguridad necesarias para proteger los datos personales de los
           usuarios y garantizar su confidencialidad.
         </p>
-        <h3>COMPARTIR INFORMACIÓN</h3>
+        <h3>Compartir información</h3>
         <p>
           Flatter puede compartir la información personal de los usuarios con su
           empresa filial de seguros con el fin de ofrecer a los usuarios
@@ -147,7 +147,7 @@ const PrivacyPage = () => {
           dirección y la duración del contrato.
         </p>
         <p>
-          El uso de los datos por parte de X estará sujeto a su propia política
+          El uso de los datos por parte de nuestra filial estará sujeto a su propia política
           de privacidad, que será accesible para los usuarios antes de la
           contratación de los servicios de seguros.
         </p>
@@ -160,10 +160,10 @@ const PrivacyPage = () => {
         <p>
           En cualquier caso, los usuarios podrán ejercer sus derechos de acceso,
           rectificación, cancelación y oposición respecto a los datos
-          compartidos con X, de conformidad con lo establecido en la sección 6
+          compartidos con nuestra filial, de conformidad con lo establecido en la sección 6
           de esta política de privacidad.
         </p>
-        <h3>PROTECCIÓN DE LA INFORMACIÓN</h3>
+        <h3>Protección de la información</h3>
         <p>
           La privacidad y seguridad de los datos de nuestros usuarios es una de
           las principales preocupaciones de Flatter. Nos comprometemos a
@@ -207,12 +207,12 @@ const PrivacyPage = () => {
           Si tienes alguna pregunta o preocupación sobre cómo manejamos la
           información personal de nuestros usuarios, no dudes en contactarnos a
           través de{" "}
-          <a href="mailto:flatter.ispp@gmail.com">flatter@gmail.com</a>. Estamos
+          <a href="mailto:flatter.proyect@gmail.com">flatter.proyect@gmail.com</a>. Estamos
           comprometidos con la protección de tu privacidad y trabajamos
           continuamente para mejorar nuestras prácticas de privacidad y
           seguridad.
         </p>
-        <h3>DERECHOS DE LOS USUARIOS</h3>
+        <h3>Derechos de los usuarios</h3>
         <p>
           Flatter reconoce y garantiza a los usuarios el ejercicio de los
           derechos de acceso, rectificación, cancelación y oposición respecto a
@@ -244,7 +244,7 @@ const PrivacyPage = () => {
           respetados por parte de Flatter, podrá presentar una reclamación ante
           la autoridad de control competente en materia de protección de datos.
         </p>
-        <h3>CAMBIOS EN LA POLÍTICA DE PRIVACIDAD</h3>
+        <h3>Cambios en la política de privacidad</h3>
         <p>
           Flatter se reserva el derecho de modificar en cualquier momento y sin
           necesidad de previo aviso la presente política de privacidad para

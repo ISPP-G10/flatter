@@ -11,12 +11,19 @@ import SolidButton from "../sections/solidButton";
 import socialLib from "../libs/socialLib";
 import { useQuery, useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
+import { AiOutlineEuroCircle } from "react-icons/ai";
 
 const PricingPage = () => {
+  let userToken = localStorage.getItem("token", "");
 
-  let userToken = localStorage.getItem("token", '');
-
-  const { data, loading } = useQuery(usersAPI.getPlans);
+  const { data, loading } = useQuery(usersAPI.getPlans, {
+    onCompleted: (data) => {
+      setPrice({
+        price_a: data.getPlans[1].flatterCoins,
+        price_b: data.getPlans[2].flatterCoins,
+      });
+    }
+  });
 
   const userPlanQuery = useQuery(usersAPI.getContractByUsername, {
     variables: {
@@ -32,6 +39,25 @@ const PricingPage = () => {
   const [clickedPlan, setClickedPlan] = useState("");
   const [planDays, setPlanDays] = useState(1);
   const [discount, setDiscount] = useState(0);
+
+  const [price, setPrice] = useState({});
+  const [priceType, setPriceType] = useState("FlatterCoins");
+
+  function handleFcButton() {
+    setPrice({
+      price_a: data.getPlans[1].flatterCoins,
+      price_b: data.getPlans[2].flatterCoins,
+    });
+    setPriceType("FlatterCoins");
+  }
+
+  function handleEuroButton() {
+    setPrice({
+      price_a: "0,30 - 0,80",
+      price_b: "0,80 - 1,60",
+    });
+    setPriceType("Euros");
+  }
 
   const modalRef = useRef();
   const client = useApolloClient();
@@ -74,14 +100,18 @@ const PricingPage = () => {
           .then((response) => {
             userPlanQuery.refetch();
             modalRef.current.close();
-            customAlert(`Has cancelado tu suscripción correctamente.`, 'success', false);
+            customAlert(
+              `Has cancelado tu suscripción correctamente.`,
+              "success",
+              false
+            );
           })
           .catch((error) => {
-            customAlert(error.message, 'error', false);
+            customAlert(error.message, "error", false);
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación", 'info', false);
+        customAlert("Has cancelado la confirmación", "info", false);
       });
   }
 
@@ -102,26 +132,43 @@ const PricingPage = () => {
             userPlanQuery.refetch();
             modalRef.current.close();
             customAlert(
-              `Has cambiado de plan correctamente, tu plan caduca el ${socialLib.getDateToString(response.data.changeContract.contract.endDate)}.`, 'success', false, 10000
+              `Has cambiado de plan correctamente, tu plan caduca el ${socialLib.getDateToString(
+                response.data.changeContract.contract.endDate
+              )}.`,
+              "success",
+              false,
+              10000
             );
           })
           .catch((error) => {
-            customAlert(error.message, 'error', false);
+            customAlert(error.message, "error", false);
           });
       })
       .catch((error) => {
-        customAlert("Has cancelado la confirmación", 'info', false);
+        customAlert("Has cancelado la confirmación", "info", false);
       });
   }
 
   if (loading || userPlanLoading) return <p>Loading...</p>;
-  
+
   return (
     <FlatterPage withBackground userLogged>
       <div>
         <h1 className="properties-title">Mis planes</h1>
       </div>
       <div className="section-pricing">
+        <div className="pricing-buttons">
+          <div className="pricing-button" onClick={handleFcButton}>
+            <img
+              src={require("../static/files/icons/flattercoins-icon.png")}
+              alt="Logo Flatter Coins"
+              style={{ width: "50px", height: "50px" }}
+            />
+          </div>
+          <div className="pricing-button" onClick={handleEuroButton}>
+            <AiOutlineEuroCircle color="white" size="50px" />
+          </div>
+        </div>
         <div className="pricing-container">
           <div className="pricing-card text-center">
             <div className="title">
@@ -132,10 +179,14 @@ const PricingPage = () => {
             </div>
             <div className="plan-price">
               <h4>{data.getPlans[0].flatterCoins}</h4>
-              <img
-                src={require("../static/files/icons/flattercoins-icon.png")}
-                alt="Logo Flatter Coins"
-              />
+              {priceType === "FlatterCoins" ? (
+                <img
+                  src={require("../static/files/icons/flattercoins-icon.png")}
+                  alt="Logo Flatter Coins"
+                />
+              ) : (
+                <h5>€</h5>
+              )}
               <div
                 className="d-flex"
                 style={{ height: "60px", alignItems: "end" }}
@@ -210,11 +261,15 @@ const PricingPage = () => {
               <h2>Avanzado</h2>
             </div>
             <div className="plan-price">
-              <h4>{data.getPlans[1].flatterCoins}</h4>
-              <img
-                src={require("../static/files/icons/flattercoins-icon.png")}
-                alt="Logo Flatter Coins"
-              />
+              <h4>{price.price_a}</h4>
+              {priceType === "FlatterCoins" ? (
+                <img
+                  src={require("../static/files/icons/flattercoins-icon.png")}
+                  alt="Logo Flatter Coins"
+                />
+              ) : (
+                <h5>€</h5>
+              )}
               <div
                 className="d-flex"
                 style={{ height: "60px", alignItems: "end" }}
@@ -299,11 +354,15 @@ const PricingPage = () => {
               <h2>Pro</h2>
             </div>
             <div className="plan-price">
-              <h4>{data.getPlans[2].flatterCoins}</h4>
-              <img
-                src={require("../static/files/icons/flattercoins-icon.png")}
-                alt="Logo Flatter Coins"
-              />
+              <h4>{price.price_b}</h4>
+              {priceType === "FlatterCoins" ? (
+                <img
+                  src={require("../static/files/icons/flattercoins-icon.png")}
+                  alt="Logo Flatter Coins"
+                />
+              ) : (
+                <h5>€</h5>
+              )}
               <div
                 className="d-flex"
                 style={{ height: "60px", alignItems: "end" }}
