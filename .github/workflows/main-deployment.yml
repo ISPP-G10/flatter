@@ -28,14 +28,14 @@ jobs:
         run: |-
               ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
               echo "project_id = \"$GCP_PROJECT_ID\"" >> terraform.tfvars
-              echo "$GCP_JSON_CREDENTIALS" > gcp.json
+              echo $GOOGLE_CREDENTIALS | base64 --decode > gcp.json
               cat gcp.json
               echo "json_credentials = \"gcp.json\"" >> terraform.tfvars
               echo "user = \"$VM_INSTANCE_USER\"" >> terraform.tfvars
               echo "publickeypath = \"~/.ssh/flatter.pub\"" >> terraform.tfvars
               echo "privatekeypath = \"~/.ssh/flatter\"" >> terraform.tfvars
-              echo "$CLIENT_ENV" > client.env
-              echo "$DOCKER_ENV" > docker.env
+              echo "$CLIENT_ENV" | base64 --decode > client.env
+              echo "$DOCKER_ENV" | base64 --decode > docker.env
 
       - name: Terraform Format
         id: fmt
