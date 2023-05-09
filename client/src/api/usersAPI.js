@@ -255,6 +255,20 @@ const usersAPI = {
             }
         }
     `,
+    getAllContractsByUsername: gql`
+        query getAllContractsByUsername($username: String!, $userToken: String!){
+            getAllContractsByUsername(username: $username, userToken: $userToken){
+                id
+                initialDate
+                endDate
+                obsolete
+                choices
+                plan {
+                    planType
+                }
+            }
+        }
+    `,
 
     updateUserPreferences: gql`
         mutation editUserPreferences($username: String!, $inappropiateLanguage: Boolean!, $userToken: String!){

@@ -113,6 +113,15 @@ const AccountSettings = () => {
                                 <h4>Mis solicitudes</h4>
                             </div>
                         }
+                        <div className='settings-section' onClick={() => navigator("/historial")}>
+                            <h4>Historial de pagos</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('request')} style={setting === 'request' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Sugerir cambios</h4>
+                        </div>
+                        <div className='settings-section' onClick={() => setSetting('incidence')} style={setting === 'incidence' ? {backgroundColor: 'rgba(0, 168, 255, 0.8)', color: 'white'} : {}}>
+                            <h4>Abrir incidencia</h4>
+                        </div>
                         <div className='settings-section' onClick={logout}>
                             <h4>Cerrar sesión</h4>
                         </div>
