@@ -13,7 +13,7 @@ import FlatterModal from "../components/flatterModal";
 import FlatterForm from "../components/forms/flatterForm";
 import usersAPI from "../api/usersAPI";
 
-const Header = ({scrollY, userLogged}) => {
+const Header = ({scrollY, userLogged, docPage}) => {
 
     let isScrolling = scrollY>0;
 
@@ -170,12 +170,17 @@ const Header = ({scrollY, userLogged}) => {
                             }
                         </div>
                         {
-                            user ?
+                            user && !docPage ?
                             <HeaderProfile user={user}/>
                             :
+                            !docPage ?
                             <div>
                                 <SolidButton text="Registrarme" type="outlined" onClick={handleRegisterButtonClick}/>
                                 <SolidButton text="Acceder" type="featured" onClick={handleLoginButtonClick}/>
+                            </div>
+                            :
+                            <div>
+                                <SolidButton text="Regresar" type="featured" onClick={()=>navigator("/")}/>
                             </div>
                         }
                     </ul>

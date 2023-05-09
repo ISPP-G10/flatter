@@ -27,6 +27,9 @@ const Footer = ({userLogged}) => {
                     </a></li>
             </ul>
             <ul className="menu">
+                <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de Privacidad</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/condiciones">Términos y Condiciones de Uso</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/sla">Acuerdo a nivel de Servicio</Link></li>
                 {
                     userLogged &&
                     <>
