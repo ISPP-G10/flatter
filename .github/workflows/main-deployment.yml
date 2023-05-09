@@ -11,6 +11,7 @@ env:
   VM_INSTANCE_USER: ${{ secrets.VM_INSTANCE_USER }}
   DOCKER_ENV: ${{ secrets.DOCKER_ENV }}
   CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
+  TERRAFORM_VARS: ${{ secrets.TERRAFORM_VARS }}
 
 jobs:
   deploy-flatter-to-gce:
@@ -27,13 +28,7 @@ jobs:
         working-directory: ./terraform
         run: |-
               ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
-              echo "project_id = \"$GCP_PROJECT_ID\"" >> terraform.tfvars
-              echo $GOOGLE_CREDENTIALS | base64 --decode > gcp.json
-              cat gcp.json
-              echo "json_credentials = \"gcp.json\"" >> terraform.tfvars
-              echo "user = \"$VM_INSTANCE_USER\"" >> terraform.tfvars
-              echo "publickeypath = \"~/.ssh/flatter.pub\"" >> terraform.tfvars
-              echo "privatekeypath = \"~/.ssh/flatter\"" >> terraform.tfvars
+              echo "$TERRAFORM_VARS" | base64 --decode > terraform.tfvars
               echo "$CLIENT_ENV" | base64 --decode > client.env
               echo "$DOCKER_ENV" | base64 --decode > docker.env
 
