@@ -61,7 +61,11 @@ const Header = ({scrollY, userLogged, docPage}) => {
             localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
             localStorage.setItem('notificationsAllowed', true);
 
-            navigator(0);
+            if (window.location.pathname === "/plans") {
+                window.location.href = "/";
+            }else{
+                navigator(0)
+            }
 
         }).catch((error) => {
             customAlert('Usuario o contraseña incorrectos', 'warning');
@@ -107,8 +111,12 @@ const Header = ({scrollY, userLogged, docPage}) => {
                 localStorage.setItem('roles', roles);
                 localStorage.setItem('inappropiateLanguage', inappropiateLanguage);
                 localStorage.setItem('notificationsAllowed', true);
-
-                navigator(0);
+                
+                if (window.location.pathname === "/plans") {
+                    window.location.href = "/";
+                }else{
+                    navigator(0)
+                }
             }).catch((error) => {
                 customAlert(error.message.split("\n")[0], 'error');
             });
@@ -146,7 +154,7 @@ const Header = ({scrollY, userLogged, docPage}) => {
                         </div>
                         <div>
                             {
-                                userLogged && 
+                                userLogged ? 
                                 <>
                                     <li><Link to="/">Inicio</Link></li>
                                     <li><Link to="/search">Buscador de viviendas</Link></li>
@@ -154,6 +162,10 @@ const Header = ({scrollY, userLogged, docPage}) => {
                                     <li><Link to="/recommendations">Usuarios recomendados</Link></li>
                                     <li><Link to="/pricing">Planes</Link></li>
                                     <li><Link to="/shop">Tienda</Link></li>
+                                </>
+                                : 
+                                <>
+                                    <li><Link to="/plans">Planes</Link></li>
                                 </>
                             }
                         </div>

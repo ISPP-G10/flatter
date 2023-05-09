@@ -15,9 +15,3 @@ class Message(models.Model):
     
 class InappropiateLanguage(models.Model):
     word = models.CharField(max_length=140, blank=False, null=False, unique=True)
-    
-class Incident(models.Model):
-    command = models.TextField()
-    
-class Request(models.Model):
-    command = models.TextField()
