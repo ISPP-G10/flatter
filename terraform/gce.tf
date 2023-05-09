@@ -1,4 +1,4 @@
-resource "google_compute_instance" "test" {
+resource "google_compute_instance" "compute_instance" {
   name         = var.instance_name
   machine_type = var.instance_machine_type
   zone         = var.zone
