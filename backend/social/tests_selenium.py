@@ -18,6 +18,7 @@ class SeleniumTestCase(StaticLiveServerTestCase):
         super().setUp()
 
         options = webdriver.ChromeOptions()
+        # options.headless = True
         # crear una instancia de ChromeDriver
         self.browser = webdriver.Chrome(options=options)
         # maximizar la ventana del navegador

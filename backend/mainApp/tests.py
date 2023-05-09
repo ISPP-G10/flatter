@@ -1568,6 +1568,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         # full window
         options.add_argument("--start-maximized")
+        # options.headless = True
 
         self.driver = webdriver.Chrome(options=options)
 
@@ -2029,7 +2030,7 @@ class SeleniumTests(StaticLiveServerTestCase):
             perfil = self.driver.find_element(By.ID, "wrapped-name")
             perfil.click()
             
-            out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(9) > h4")
+            out = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(4) > h4")
             out.click()
             time.sleep(2)
 

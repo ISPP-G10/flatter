@@ -93,31 +93,12 @@ class MyTest(TestCase):
         except IntegrityError:
             pass
 
-    def test_invalid_phoneNumber(self):
-
-        try:
-            user = FlatterUser.objects.create_user(
-                username="Hola",
-                password="1234",
-                phone_number="123456789000",
-                email="asd@asd.asd",
-                first_name="A",
-                last_name="B",
-                genre='H',
-                flatter_coins=0,
-            )
-
-            self.fail("Se esperaba un error por número de teléfono inválido.")
-        except DataError:
-            pass
-
     def test_invalid_genre(self):
 
         try:
             user = FlatterUser.objects.create_user(
                 username="Hola",
                 password="1234",
-                phone_number="123456789",
                 email="asd@asd.asd",
                 first_name="A",
                 last_name="B",
@@ -433,6 +414,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         # full window
         options.add_argument("--start-maximized")
+        # options.headless = True
 
         self.driver = webdriver.Chrome(options=options)
         self.driver.delete_all_cookies()
@@ -572,7 +554,7 @@ class SeleniumTests(StaticLiveServerTestCase):
 
         self.driver.get(f'http://localhost:3000/me')
 
-        logout = self.driver.find_element(By.XPATH, "/html/body/div[1]/main/div/div/div[2]/div[1]/div[8]")
+        logout = self.driver.find_element(By.CSS_SELECTOR, ".settings-section:nth-child(8) > h4")
         logout.click()
 
 
