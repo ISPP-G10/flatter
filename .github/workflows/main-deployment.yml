@@ -28,6 +28,7 @@ jobs:
         run: |-
               ssh-keygen -f ~/.ssh/flatter -t rsa -N ""
               echo "project_id = \"$GCP_PROJECT_ID\"" >> terraform.tfvars
+              touch gcp.json
               echo "$GCP_JSON_CREDENTIALS" > gcp.json
               echo "json_credentials = \"gcp.json\" >> terraform.tfvars
               echo "user = \"$VM_INSTANCE_USER\"" >> terraform.tfvars
