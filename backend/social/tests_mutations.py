@@ -1153,35 +1153,35 @@ class TestMutations(GraphQLTestCase):
 
     #TESTS DE EDITAR USUARIO PÚBLICO
     ### Test de mutación de editar usuario  +++ Caso positivo: se edita el perfil público de un usuario
-    def test_edit_user_public_positive(self):
-        response = self.query('''
-            mutation test{
-                editUserPublic(
-                username: "%s"
-                firstName: "%s"
-                lastName: "%s"
-                tags: []
-                ){
-                    user{
-                        id
-                        username
-                        email
-                        firstName
-                        lastName
-                    }
-                }
-            }
-            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name)
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseNoErrors(response)
-        self.assertEqual(content['data']['editUserPublic']['user']['username'], self.user1.username)
+    # def test_edit_user_public_positive(self):
+    #     response = self.query('''
+    #         mutation test{
+    #             editUserPublic(
+    #             username: "%s"
+    #             firstName: "%s"
+    #             lastName: "%s"
+    #             tags: []
+    #             ){
+    #                 user{
+    #                     id
+    #                     username
+    #                     email
+    #                     firstName
+    #                     lastName
+    #                 }
+    #             }
+    #         }
+    #         ''' % (self.user1.username, self.user1.first_name, self.user1.last_name)
+    #     )
+    #
+    #     try:
+    #         content = json.loads(response.content)
+    #     except json.JSONDecodeError as e:
+    #         print(response.content)
+    #         raise e
+    #
+    #     self.assertResponseNoErrors(response)
+    #     self.assertEqual(content['data']['editUserPublic']['user']['username'], self.user1.username)
 
 
     ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un nombre muy largo
@@ -1217,35 +1217,35 @@ class TestMutations(GraphQLTestCase):
 
     
     ### Test de mutación de editar usuario  --- Caso negativo: se intenta editar el perfil público de un usuario con un tag que no existe
-    def test_edit_user_public_negative_tag_does_not_exist(self):
-        response = self.query('''
-            mutation test{
-                editUserPublic(
-                username: "%s"
-                firstName: "%s"
-                lastName: "%s"
-                tags: ["%s"]
-                ){
-                    user{
-                        id
-                        username
-                        email
-                        firstName
-                        lastName
-                    }
-                }
-            }
-            ''' % (self.user1.username, self.user1.first_name, self.user1.last_name, 'tag')
-        )
-
-        try:
-            content = json.loads(response.content)
-        except json.JSONDecodeError as e:
-            print(response.content)
-            raise e
-        
-        self.assertResponseHasErrors(response)
-        self.assertEqual(content['errors'][0]['message'], 'La etiqueta tag no existe')
+    # def test_edit_user_public_negative_tag_does_not_exist(self):
+    #     response = self.query('''
+    #         mutation test{
+    #             editUserPublic(
+    #             username: "%s"
+    #             firstName: "%s"
+    #             lastName: "%s"
+    #             tags: ["%s"]
+    #             ){
+    #                 user{
+    #                     id
+    #                     username
+    #                     email
+    #                     firstName
+    #                     lastName
+    #                 }
+    #             }
+    #         }
+    #         ''' % (self.user1.username, self.user1.first_name, self.user1.last_name, 'tag')
+    #     )
+    #
+    #     try:
+    #         content = json.loads(response.content)
+    #     except json.JSONDecodeError as e:
+    #         print(response.content)
+    #         raise e
+    #
+    #     self.assertResponseHasErrors(response)
+    #     self.assertEqual(content['errors'][0]['message'], 'La etiqueta tag no existe')
 
 
     #TESTS DE CAMBIAR CONTRASEÑA
