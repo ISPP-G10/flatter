@@ -37,15 +37,6 @@ const PublicProfile = (props) => {
         const date = new Date();
         let contract_limit = localStorage.getItem("contract_limit", null);
         let contract_date = localStorage.getItem("contract_date", null);
-        let contract_user = localStorage.getItem("contract_user", null);
-        if (contract_user === null) {
-            localStorage.setItem("contract_user", username);
-        }
-        contract_user = localStorage.getItem("contract_user", null);
-        if (contract_user !== localStorage.getItem("user", '')) {
-            localStorage.setItem("contract_limit", contractData.getContractByUsername.plan.visitsNumber);
-            localStorage.setItem("contract_date", socialLib.getDateToString(date));
-        }
         if (contract_limit === null) {
             localStorage.setItem("contract_limit", contractData.getContractByUsername.plan.visitsNumber);
         }
@@ -64,7 +55,6 @@ const PublicProfile = (props) => {
             }
             localStorage.setItem("contract_limit", contract_limit-1);
         }
-
     }, [])
 
     useEffect (() => {

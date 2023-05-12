@@ -100,6 +100,9 @@ const PricingPage = () => {
           .then((response) => {
             userPlanQuery.refetch();
             modalRef.current.close();
+            localStorage.setItem("contract_limit", response.data.changeContract.contract.plan.visitsNumber)
+            let date = new Date();
+            localStorage.setItem("contract_date", socialLib.getDateToString(date));
             customAlert(
               `Has cancelado tu suscripción correctamente.`,
               "success",
@@ -131,6 +134,9 @@ const PricingPage = () => {
           .then((response) => {
             userPlanQuery.refetch();
             modalRef.current.close();
+            localStorage.setItem("contract_limit", response.data.changeContract.contract.plan.visitsNumber)
+            let date = new Date();
+            localStorage.setItem("contract_date", socialLib.getDateToString(date));
             customAlert(
               `Has cambiado de plan correctamente, tu plan caduca el ${socialLib.getDateToString(
                 response.data.changeContract.contract.endDate

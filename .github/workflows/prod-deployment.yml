@@ -53,7 +53,7 @@ jobs:
 
       - name: Terraform Destroy
         id: destroy
-        run: terraform destroy -auto-approve -input=false -no-color
+        run: terraform destroy -target=google_compute_instance.compute_instance -auto-approve -input=false -no-color
         working-directory: ./terraform
         continue-on-error: true
 

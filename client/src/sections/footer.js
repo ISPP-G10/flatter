@@ -29,7 +29,7 @@ const Footer = ({userLogged}) => {
             <ul className="menu">
                 <li className='menu-item'><Link className='menu-link' to="/privacy">Aviso de Privacidad</Link></li>
                 <li className='menu-item'><Link className='menu-link' to="/condiciones">Términos y Condiciones de Uso</Link></li>
-                <li className='menu-item'><Link className='menu-link' to="/sla">Acuerdo a nivel de Servicio</Link></li>
+                <li className='menu-item'><Link className='menu-link' to="/sla">Acuerdo de Nivel de Servicio</Link></li>
             </ul>
             <p>&copy; 2023 Flatter | Todos los derechos reservados</p>
         </footer>

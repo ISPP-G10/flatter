@@ -289,6 +289,9 @@ const usersAPI = {
             changeContract(numDaysSelected: $numDaysSelected, planType: $planType, token: $token, username: $username) {
                 contract {
                     endDate
+                    plan{
+                        visitsNumber
+                    }
                 }         
             }
         }

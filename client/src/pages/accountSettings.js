@@ -86,6 +86,8 @@ const AccountSettings = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("inappropiateLanguage");
     localStorage.removeItem("roles");
+    localStorage.removeItem("contract_limit");
+    localStorage.removeItem("contract_date");
 
     window.location.href = "/";
   }
