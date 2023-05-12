@@ -5,7 +5,7 @@ const AcuerdoServicioPage = () => {
   return (
     <FlatterPage docPage>
       <div className="privacy-container">
-        <h1>Acuerdo a nivel de Servicio</h1>
+        <h1>Acuerdo de Nivel de Servicio</h1>
         <h3>Tipos de soporte</h3>
         <table>
           <thead>
