@@ -1,17 +1,16 @@
 from datetime import datetime
 
 import graphene
-from graphene import ObjectType, List, Int, Boolean
+from graphene import ObjectType, List, Int
 from graphene_django.types import DjangoObjectType
-from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract
+from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract, Promotion
 from mainApp.models import Review
 
 
 class FlatterUserType(DjangoObjectType):
-
   class Meta:
     model = FlatterUser
-    exclude = ('password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'user_permissions', 'last_login')
+    exclude = ('password', 'is_superuser', 'is_staff', 'is_active', 'date_joined', 'user_permissions', 'last_login', 'promotionSet')
   
   average_rating = graphene.Float()
   age = graphene.Int()
@@ -52,10 +51,14 @@ class PlanType(DjangoObjectType):
     model = Plan
 
 class ContractType(DjangoObjectType):
-  
   class Meta:
     model = Contract
     
+class PromotionType(DjangoObjectType):
+  class Meta:
+    model = Promotion
+    exclude = ('code', 'users_used')
+
 def get_user_rating(username):
   reviews = Review.objects.filter(valued_user__username=username)
   if not reviews:

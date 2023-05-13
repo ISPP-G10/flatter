@@ -1,14 +1,13 @@
 import datetime
-import graphene, graphql_jwt, json, base64, os
-from .models import FlatterUser, Plan, Role, Contract, UserPreferences
-from social.models import Group, Message
+import graphene, graphql_jwt
+from .models import FlatterUser, Plan, Role, Contract, UserPreferences, Promotion
+from social.models import Group
 from mainApp.models import Property, Application, Petition, Review
-from .types import ContractType, FlatterUserType, PlanType
+from .types import ContractType, FlatterUserType, PlanType, PromotionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import datetime, timedelta
 from social.mutations import check_token
-from django.db.models import Q
 
 class ChangeContract(graphene.Mutation):
   class Input:
@@ -344,6 +343,56 @@ class DeleteUser(graphene.Mutation):
     
     return DeleteUser(user=selected_user)
 
+class RedeemPromotion(graphene.Mutation):
+  class Input:
+    username = graphene.String(required=True)
+    token = graphene.String(required=True)
+    code = graphene.String(required=True)
+    
+  promotion = graphene.Field(PromotionType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get('token', '').strip()
+    code = kwargs.get('code', '').strip()
+    
+    if not username:
+      raise ValueError(_("El nombre de usuario no puede estar vacío"))
+    
+    if not token:
+      raise ValueError(_("El token no puede estar vacío"))
+    
+    if not code:
+      raise ValueError(_("El código no puede estar vacío"))
+    
+    try:
+      user = FlatterUser.objects.get(username=username)
+    except FlatterUser.DoesNotExist:
+      raise ValueError(_("El usuario no existe"))
+    
+    check_token(token, user)
+    
+    try:
+      promotion = Promotion.objects.get(code=code)
+    except Promotion.DoesNotExist:
+      raise ValueError(_("El código introducido no existe"))
+    
+    if promotion.is_disabled:
+      raise ValueError(_("El código ya no está activo"))
+    
+    if promotion.users_used.filter(username=username).exists():
+      raise ValueError(_("Ya has canjeado el código"))
+    
+    if not promotion.is_discount:
+      user.flatter_coins += promotion.quantity
+      user.save()
+    
+    promotion.users_used.add(user)
+    promotion.save()
+    
+    return RedeemPromotion(promotion=promotion) 
+
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
   verify_token = graphql_jwt.Verify.Field()
@@ -354,6 +403,7 @@ class AuthenticationMutation(graphene.ObjectType):
   edit_plan = EditPlan.Field()
   edit_user_flatter_coins = EditUserFlatterCoins.Field()
   delete_user = DeleteUser.Field()
+  redeem_promotion = RedeemPromotion.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 

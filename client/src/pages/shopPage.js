@@ -8,14 +8,18 @@ import PaymentModal from "../components/paymentModal";
 import customAlert from "../libs/functions/customAlert";
 import { useApolloClient } from "@apollo/client";
 import usersAPI from "../api/usersAPI";
+import FlatterForm from "../components/forms/flatterForm";
+import { couponFormInputs } from "../forms/couponForm";
 
 const ShopPage = () => {
 
   const client = useApolloClient();
+  const couponFormRef = useRef(null);
 
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [amount, setAmount] = useState(0);
+  const [discount, setDiscount] = useState(null);
 
   const paymentModal = useRef(null);
 
@@ -74,6 +78,7 @@ const ShopPage = () => {
     .then(response => {
       customAlert("¡Has añadido correctamente las FlatterCoins a tu cuenta!", 'success', false);
       handleEmpty();
+      setDiscount(null);
       window.location.reload();
     })
     .catch(error => {
@@ -83,6 +88,36 @@ const ShopPage = () => {
 
   function handleBadPayment() {
     customAlert("Se ha cancelado el pago", 'warning', false, 10000);
+  }
+
+  function handleCorrectRedeem({values}) {
+
+    if(!couponFormRef.current.validate()) return;
+
+    client.mutate({
+      mutation: usersAPI.redeemPromotion,
+      variables: {
+        username: localStorage.getItem("user"),
+        token: localStorage.getItem("token"),
+        code: values.code,
+      }
+    }).then(response => {
+      if (response.data.redeemPromotion.promotion.isDiscount === false) {
+        customAlert("¡Has canjeado correctamente el cupón!", 'success', false);
+        window.location.reload();
+      } else {
+        setDiscount(response.data.redeemPromotion.promotion.quantity);
+        customAlert("Se ha aplicado el descuento correctamente", 'success', false);
+      }
+    }).catch(error => {
+      let errorMessage = error.message.split("\n")[0];
+      if(errorMessage === "El código ya no está activo" || errorMessage === "Ya has canjeado el código" || errorMessage === "El código introducido no existe") {
+        customAlert(errorMessage, 'warning', false);
+      }else{
+        customAlert(errorMessage, 'error', false);
+      }
+    });
+
   }
 
   return (
@@ -154,20 +189,37 @@ const ShopPage = () => {
               onClick={() => handleAdd(6000, 69.99)}
             />
           </div>
-          <ShopCesta
-            items={items}
-            totalPrice={total}
-            totalAmount={amount}
-            onEmpty={handleEmpty}
-            onBuy={handlePayment}
-            onRemoveItem={handleRemoveItem}
-          />
+          <div className="w-50 ml-5">
+            <div className="shop-cesta mb-4 d-flex flex-column justify-content-center align-items-center">
+              <h2>Aplica tu cupón aquí</h2>
+              <div className="shop-cesta-buttons w-100">
+                <FlatterForm
+                  inputs={couponFormInputs}
+                  onSubmit= {handleCorrectRedeem}
+                  buttonText="Aplicar"
+                  showSuperAnimatedButton={false}
+                  ref={couponFormRef}
+                />
+              </div>
+            </div>
+            
+            <ShopCesta
+              items={items}
+              totalPrice={total}
+              totalAmount={amount}
+              onEmpty={handleEmpty}
+              onBuy={handlePayment}
+              onRemoveItem={handleRemoveItem}
+              discount={discount}
+            />
+          </div>
         </div>
         <PaymentModal
           price={total}
           resolve={handleCorrectPayment}
           reject={handleBadPayment}
           ref={paymentModal}
+          discount={discount}
         />
       </div>
     </FlatterPage>
