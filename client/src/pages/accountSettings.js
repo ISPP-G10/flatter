@@ -266,6 +266,7 @@ const AccountSettings = () => {
               value={username}
               onChange={handleChange}
               placeholder={user}
+              style={{fontSize: "14px"}}
               required
             />
             {/* Un mensaje de error si lo hay */}

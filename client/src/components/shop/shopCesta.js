@@ -9,7 +9,15 @@ const ShopCesta = ({
   onEmpty,
   onBuy,
   onRemoveItem,
+  discount,
 }) => {
+  let total = totalPrice;
+  if(discount!==null && discount!==undefined){
+    total = (Math.round((totalPrice*(1-discount)) * 100) / 100).toFixed(2);
+  }else{
+    total = (Math.round(totalPrice * 100) / 100).toFixed(2);
+  }
+  total = total<0?0.0.toFixed(2):total;
   return (
     <div className="shop-cesta">
       <h2>Cesta</h2>
@@ -57,10 +65,13 @@ const ShopCesta = ({
             />
           </p>
           <p>
-            <strong>Precio total:</strong> {(Math.round(totalPrice * 100) / 100).toFixed(2)}€
+            {discount!==null && discount!==undefined?<strong>Descuento: {(discount*100).toFixed(2)}%</strong>:<></>}
+          </p>
+          <p className="mt-1">
+            <strong>Precio total:</strong> {total}€
           </p>
         </div>
-        <div className="shop-cesta-buttons">
+        <div className="shop-cesta-buttons d-flex justify-content-between">
           <SolidButton text="Vaciar" type="featured" onClick={onEmpty} />
           <SolidButton text="Comprar" type="featured" onClick={onBuy} />
         </div>

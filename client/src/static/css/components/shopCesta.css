@@ -58,7 +58,19 @@
   border-radius: 5px;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
-  margin-right: 10px;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.shop-cesta-buttons > div > div > button:hover {
+  transform: scale(0.95);
+}
+
+.shop-cesta-buttons > div > div > button {
+  border-radius: 5px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  margin-right: 0;
   margin-left: 0;
 }
 
