@@ -29,11 +29,15 @@ const PaymentModal = forwardRef((props, ref) => {
                 <PayPalButtons 
                     style={{layout: "vertical", shape: "pill", tagline: "false"}}
                     createOrder={(data, actions) => {
+                        let price = parseFloat(props.price);
+                        if (props.discount !== null && props.discount !== undefined) {
+                            price = props.price * (1 - parseFloat(props.discount));
+                        }
                         return actions.order.create({
                             purchase_units: [
                                 {
                                     amount: {
-                                        value: props.price.toString(),
+                                        value: price.toFixed(2).toString(),
                                     },
                                 },
                             ],

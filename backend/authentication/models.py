@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.validators import MinLengthValidator
+from django.core.exceptions import ValidationError
 
 
 class RoleType(models.TextChoices):
@@ -101,7 +102,7 @@ class Contract(models.Model):
     )
     initial_date = models.DateField(default=datetime.now)
     end_date = models.DateField(null=True)
-    choices=models.PositiveIntegerField(choices_days, default=1, null=True)
+    choices = models.PositiveIntegerField(choices_days, default=1, null=True)
     obsolete = models.BooleanField(default=False)
     user = models.ForeignKey(FlatterUser, on_delete=models.CASCADE)
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
@@ -111,6 +112,24 @@ class UserPreferences(models.Model):
     add_group = models.BooleanField(default=True)
     inappropiate_language = models.BooleanField(default=True)
     user = models.OneToOneField(FlatterUser, on_delete=models.CASCADE)
+    
+class Promotion(models.Model):
+    code = models.CharField(max_length=64, unique=True)
+    quantity = models.FloatField()
+    is_discount = models.BooleanField(default=False)
+    users_used = models.ManyToManyField(FlatterUser, related_name=_('users_used'), blank=True)
+    is_disabled = models.BooleanField(default=False)
+
+@receiver(signals.post_save, sender=Promotion) 
+def create_promotion(sender, instance, created,  **kwargs):
+    if instance.is_discount:
+        if instance.quantity > 1 or instance.quantity < 0:
+            raise ValidationError("The quantity must be between 0 and 1")
+    else:
+        if instance.quantity < 0:
+            raise ValidationError("The quantity must be greater than 0")
+        if int(instance.quantity) != instance.quantity:
+            raise ValidationError("The quantity must be an integer")
     
 def add_roles(sender=None, **kwargs):
     for role in RoleType:
