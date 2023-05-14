@@ -1,5 +1,4 @@
 import Hero from '../../sections/hero';
-import SolidButton from '../../sections/solidButton';
 
 const HeroHome = ({pilotUsersModal}) => {
 
