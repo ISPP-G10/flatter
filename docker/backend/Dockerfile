@@ -24,6 +24,6 @@ COPY ./backend .
 ENV DJANGO_ENV=${DJANGO_ENV}
 RUN pip install -U pip
 RUN pip install -r requirements.txt
-RUN chmod +x /usr/src/app/flatter-backend/entrypoint_demo.sh
+RUN chmod +x /usr/src/app/flatter-backend/entrypoint.sh
 RUN apk add dos2unix
-RUN dos2unix /usr/src/app/flatter-backend/entrypoint_demo.sh
+RUN dos2unix /usr/src/app/flatter-backend/entrypoint.sh
