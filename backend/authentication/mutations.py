@@ -1,14 +1,13 @@
 import datetime
-import graphene, graphql_jwt, json, base64, os
-from .models import FlatterUser, Plan, Role, Contract, UserPreferences
-from social.models import Group, Message
+import graphene, graphql_jwt
+from .models import FlatterUser, Plan, Role, Contract, UserPreferences, Promotion
+from social.models import Group
 from mainApp.models import Property, Application, Petition, Review
-from .types import ContractType, FlatterUserType, PlanType
+from .types import ContractType, FlatterUserType, PlanType, PromotionType
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import datetime, timedelta
 from social.mutations import check_token
-from django.db.models import Q
 
 class ChangeContract(graphene.Mutation):
   class Input:
@@ -179,7 +178,6 @@ class CreateUserMutation(graphene.Mutation):
     email = graphene.String(required=True)
     genre = graphene.String(required=True)
     roles = graphene.String(required=True)
-    flatter_coins = graphene.Int(required=False)
 
   user = graphene.Field(FlatterUserType)
   contract = graphene.Field(ContractType)
@@ -193,7 +191,6 @@ class CreateUserMutation(graphene.Mutation):
     email = kwargs.get("email", "").strip()
     genre = kwargs.get("genre", "").strip()
     roles = kwargs.get("roles", [])
-    flatter_coins = kwargs.get("flatter_coins", 0)
     
     if not username or len(username) < 6 or len(username) > 25:
       raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
@@ -231,7 +228,7 @@ class CreateUserMutation(graphene.Mutation):
                                           last_name=last_name, 
                                           email=email, 
                                           profile_picture="users/images/default.jpg",
-                                          flatter_coins=flatter_coins,
+                                          flatter_coins=0,
                                           genre=genre,
                                           )
         
@@ -248,27 +245,6 @@ class CreateUserMutation(graphene.Mutation):
     )
         
     return CreateUserMutation(user=obj, contract=new_user_contract)
-
-class DeleteUserMutation(graphene.Mutation):
-
-  class Input:
-    username = graphene.String(required=True)
-    user_token = graphene.String(required=True)
-
-  user = graphene.Field(FlatterUserType)
-
-  @staticmethod
-  def mutate(root, info, **kwargs):
-    username = kwargs.get('username', '').strip()
-    user_token = kwargs.get('user_token', '').strip()
-    
-    selected_user = FlatterUser.objects.get(username=username)
-
-    check_token(user_token, selected_user)
-
-    selected_user.delete()
-    
-    return DeleteUserMutation(user=selected_user)
 
 class EditUserFlatterCoins(graphene.Mutation):
   
@@ -344,16 +320,150 @@ class DeleteUser(graphene.Mutation):
     
     return DeleteUser(user=selected_user)
 
+class RedeemPromotion(graphene.Mutation):
+  class Input:
+    username = graphene.String(required=True)
+    token = graphene.String(required=True)
+    code = graphene.String(required=True)
+    
+  promotion = graphene.Field(PromotionType)
+  
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    token = kwargs.get('token', '').strip()
+    code = kwargs.get('code', '').strip()
+    
+    if not username:
+      raise ValueError(_("El nombre de usuario no puede estar vacío"))
+    
+    if not token:
+      raise ValueError(_("El token no puede estar vacío"))
+    
+    if not code:
+      raise ValueError(_("El código no puede estar vacío"))
+    
+    try:
+      user = FlatterUser.objects.get(username=username)
+    except FlatterUser.DoesNotExist:
+      raise ValueError(_("El usuario no existe"))
+    
+    check_token(token, user)
+    
+    try:
+      promotion = Promotion.objects.get(code=code)
+    except Promotion.DoesNotExist:
+      raise ValueError(_("El código introducido no existe"))
+    
+    if promotion.is_disabled:
+      raise ValueError(_("El código ya no está activo"))
+    
+    if promotion.users_used.filter(username=username).exists():
+      raise ValueError(_("Ya has canjeado el código"))
+    
+    if not promotion.is_discount:
+      user.flatter_coins += promotion.quantity
+      user.save()
+    
+    promotion.users_used.add(user)
+    promotion.save()
+    
+    return RedeemPromotion(promotion=promotion) 
+
+class WelcomeUserMutation(graphene.Mutation):
+
+  class Input:
+    username = graphene.String(required=True)
+    password = graphene.String(required=True)
+    first_name = graphene.String(required=True)
+    last_name = graphene.String(required=True)
+    email = graphene.String(required=True)
+    genre = graphene.String(required=True)
+    roles = graphene.String(required=True)
+
+  user = graphene.Field(FlatterUserType)
+  contract = graphene.Field(ContractType)
+
+  @staticmethod
+  def mutate(root, info, **kwargs):
+    username = kwargs.get('username', '').strip()
+    password = kwargs.get("password", '').strip()
+    first_name = kwargs.get("first_name", "").strip()
+    last_name = kwargs.get("last_name", "").strip()
+    email = kwargs.get("email", "").strip()
+    genre = kwargs.get("genre", "").strip()
+    roles = kwargs.get("roles", [])
+    flatter_coins = 0
+    now = datetime.now()
+    
+    if (now.month == 5 or now.month == 6) and now.year == 2023:
+      flatter_coins = 500
+    
+    if not username or len(username) < 6 or len(username) > 25:
+      raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
+    
+    if not username or len(password) < 6:
+      raise ValueError(_("La contraseña debe tener al menos 6 caracteres"))
+    
+    if not first_name or len(first_name) < 3 or len(first_name) >= 50:
+      raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
+    
+    if not last_name or len(last_name) < 3 or len(last_name) >= 50:
+      raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
+    
+    if not email or ("@" not in email) or ("." not in email):
+      raise ValueError(_("El email no es válido"))
+    
+    if _exists_user(username):
+      raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
+    
+    if _exists_email(email):
+      raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
+    
+    if not valid_genre(genre):
+      raise ValueError(_("El género no es válido"))
+    
+    if not valid_roles(roles):
+      raise ValueError(_("Los roles no son válidos"))
+
+    genre = parse_genre(genre)
+    roles = parse_roles(roles)
+
+    obj = FlatterUser.objects.create_user(username=username, 
+                                          password=password, 
+                                          first_name=first_name, 
+                                          last_name=last_name, 
+                                          email=email, 
+                                          profile_picture="users/images/default.jpg",
+                                          flatter_coins=flatter_coins,
+                                          genre=genre,
+                                          )
+        
+    obj.roles.add(*roles)
+    
+    # Create user contract
+    
+    new_user_contract = Contract.objects.create(
+      initial_date=datetime.now(),
+      end_date = None,
+      choices = None,
+      plan=Plan.objects.get(plan_type=Plan.choices_type[0][0], end_date=None),
+      user=obj,
+    )
+        
+    return WelcomeUserMutation(user=obj, contract=new_user_contract)
+
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
   verify_token = graphql_jwt.Verify.Field()
   refresh_token = graphql_jwt.Refresh.Field()
   create_user = CreateUserMutation.Field()
-  delete_user = DeleteUserMutation.Field()
   change_contract = ChangeContract.Field()
   edit_plan = EditPlan.Field()
   edit_user_flatter_coins = EditUserFlatterCoins.Field()
   delete_user = DeleteUser.Field()
+  redeem_promotion = RedeemPromotion.Field()
+  welcome_user = WelcomeUserMutation.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 

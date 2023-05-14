@@ -317,6 +317,17 @@ const usersAPI = {
             }
         }
     `,
+    redeemPromotion: gql`
+        mutation redeemPromotion($token: String!, $username: String!, $code: String!){
+            redeemPromotion(token: $token, username: $username, code: $code){
+                promotion{
+                    quantity
+                    isDiscount
+                    isDisabled
+                }
+            }
+        }
+    `,
 }
 
 export default usersAPI;

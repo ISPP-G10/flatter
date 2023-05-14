@@ -1,18 +1,6 @@
 version: '3'
 
 services:
-  db:
-    restart: always
-    container_name: flatter-db
-    image: postgres:alpine
-    volumes:
-      - db:/var/lib/postgresql/data
-    networks:
-      - flatter
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
   redis:
     restart: always
@@ -33,7 +21,7 @@ services:
     build: 
       context: ..
       dockerfile: ./docker/backend/Dockerfile
-    command: bash -c "/usr/src/app/flatter-backend/entrypoint_demo.sh  && daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
+    command: bash -c "/usr/src/app/flatter-backend/entrypoint.sh  && daphne -b 0.0.0.0 -p 8000 backend.asgi:application"
     environment:
       DEBUG: ${DEBUG}
       DJANGO_ENV: ${DJANGO_ENV}
@@ -41,9 +29,11 @@ services:
       DJANGO_ADMIN_EMAIL: ${DJANGO_ADMIN_EMAIL}
       DJANGO_ADMIN_PASSWORD: ${DJANGO_ADMIN_PASSWORD}
       SECRET_KEY: ${SECRET_KEY}
-      DATABASE: ${DATABASE}
+      DB_ENGINE: ${DB_ENGINE}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
 
     volumes:
       - static:/usr/src/app/flatter-backend/static
@@ -51,10 +41,8 @@ services:
     expose:
       - 8000
     depends_on:
-      - db
       - redis
     links:
-      - db
       - redis
     networks:
       - flatter
@@ -102,8 +90,6 @@ volumes:
     name: flatter-static
   redis-data:
     name: flatter-redis-data
-  db:
-    name: flatter-db
 
 
 networks:
