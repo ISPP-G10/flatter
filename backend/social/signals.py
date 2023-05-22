@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save, pre_save, pre_delete, m2m_changed
 from django.dispatch import receiver
 from .models import Message, Group
-from .types import GroupAndLastMessageType
 
 @receiver(post_save, sender=Message)
 def add_message(sender, instance, created, **kwargs):

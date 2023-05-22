@@ -3,7 +3,7 @@ from datetime import datetime
 import graphene
 from graphene import ObjectType, List, Int
 from graphene_django.types import DjangoObjectType
-from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract, Promotion
+from authentication.models import FlatterUser, Role, Tag, UserPreferences, Plan, Contract, Promotion, ReferralProgram, ReferralProgramController
 from mainApp.models import Review
 
 
@@ -58,6 +58,15 @@ class PromotionType(DjangoObjectType):
   class Meta:
     model = Promotion
     exclude = ('code', 'users_used')
+  
+class ReferralProgramType(DjangoObjectType):
+  class Meta:
+    model = ReferralProgram
+    exclude = ['users_referred']
+
+class ReferralProgramControllerType(DjangoObjectType):
+  class Meta:
+    model = ReferralProgramController
 
 def get_user_rating(username):
   reviews = Review.objects.filter(valued_user__username=username)

@@ -92,5 +92,15 @@ export const registerInputs = [
             registerValidators.notEmptyValidator,
             registerValidators.validRole
         ],
+    },
+    {
+        tag: "Código de invitación o de regalo",
+        name: "code",
+        type: "text",
+        defaultValue: "",
+        isRequired: false,
+        validators: [
+            registerValidators.codeLengthValidator
+        ]
     }
 ]

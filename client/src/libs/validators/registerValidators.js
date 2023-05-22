@@ -45,4 +45,9 @@ export const registerValidators = {
         message: "El campo debe ser un rol válido",
     },
 
+    codeLengthValidator: {
+        validate: (value) => value.trim().length > 64,
+        message: "El código debe tener al menos 64 caracteres"
+    },
+
 }

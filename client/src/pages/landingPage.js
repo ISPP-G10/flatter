@@ -8,7 +8,9 @@ import FlatterModal from "../components/flatterModal";
 import ToggleLandingForm from "../components/landingPage/toggleLandingForm";
 import SolidButton from "../sections/solidButton";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import usersAPI from "../api/usersAPI";
+import { useQuery } from "@apollo/client";
 
 const LandingPage = () => {
   const imageSet = [
@@ -21,6 +23,17 @@ const LandingPage = () => {
   ];
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [referralProgram, setReferralProgram] = useState(null);
+  const {data, loading} = useQuery(usersAPI.getReferralProgramController, {
+    variables: {
+    }
+  });
+
+  useEffect(() => {
+    if (!loading) {
+      setReferralProgram(data.getReferralProgramController);
+    }
+  }, [loading, data]);
 
   function toggleMenu() {
     setIsMenuOpen(!isMenuOpen);
@@ -83,6 +96,16 @@ const LandingPage = () => {
             disfrutar de la experiencia de alquilar una vivienda de forma más
             inteligente!
           </p>
+
+          { referralProgram && !referralProgram.isDisabled ?
+            <>
+              <h2 className="mt-5">Únete ahora y disfruta de nuestro programa de referidos</h2>
+              <p>Este programa te permite invitar hasta {referralProgram.maxUsers} amigos durante un máximo de {referralProgram.maxDays} días 
+                recibiendo por cada nuevo miembro {referralProgram.quantity} FlatterCoins. Además, tu amigo también 
+                recibira {referralProgram.quantityReferred} FlatterCoins por haberse unido. ¡Ganáis los dos!
+              </p>
+            </>:<></>
+          }
         </div>
       </section>
 

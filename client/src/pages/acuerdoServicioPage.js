@@ -58,10 +58,7 @@ const AcuerdoServicioPage = () => {
         <p>
           Cada contrato tendrá un número de versión diferente que será generado
           de forma aleatoria. Se utilizará este número para la identificación
-          del contrato. Todos los números de identificación seguirán el
-          siguiente patrón: X-00000-XXX siendo X cualquier letra del abecedario
-          español (a excepción de la Ñ) y 0 cualquier número entero contenido
-          entre 0 y 9 (ambos inclusive).
+          del contrato.
         </p>
       </div>
     </FlatterPage>

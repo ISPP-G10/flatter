@@ -57,11 +57,6 @@ const PrivacyPage = () => {
             cuenta y los servicios de Flatter.
           </li>
           <li>
-            <span className="strong-text">Teléfono de contacto:</span> se
-            recopila para poder contactar con los usuarios en caso de necesidad
-            relacionada con su reserva.
-          </li>
-          <li>
             <span className="strong-text">Nombre de usuario y contraseña:</span>{" "}
             se recopila para permitir el acceso seguro y personalizado a la
             plataforma.
@@ -141,7 +136,7 @@ const PrivacyPage = () => {
         <p>
           La información compartida incluirá los datos personales necesarios
           para la contratación de los servicios de seguros, como el nombre,
-          apellidos, dirección, teléfono de contacto, correo electrónico, fecha
+          apellidos, dirección, correo electrónico, fecha
           de nacimiento y número de identificación. También se compartirán datos
           relativos a la propiedad y/o alquiler de la vivienda, como la
           dirección y la duración del contrato.

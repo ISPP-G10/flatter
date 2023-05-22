@@ -7,4 +7,5 @@ class AuthenticationConfig(AppConfig):
     
     def ready(self):
         from .background_tasks import start
+        import authentication.signals
         start()

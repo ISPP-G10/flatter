@@ -1,13 +1,8 @@
 from datetime import datetime
 from django.db import models
-from django.db.models import signals
 from django.contrib.auth.models import AbstractUser
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
 from django.core.validators import MinLengthValidator
-from django.core.exceptions import ValidationError
-
 
 class RoleType(models.TextChoices):
     owner = 'OWNER'
@@ -119,52 +114,25 @@ class Promotion(models.Model):
     is_discount = models.BooleanField(default=False)
     users_used = models.ManyToManyField(FlatterUser, related_name=_('users_used'), blank=True)
     is_disabled = models.BooleanField(default=False)
+    can_be_used_always = models.BooleanField(default=False)
+    max_date = models.DateField(null=True)
+    times_to_be_used = models.PositiveIntegerField(null=True)
+    is_welcome_promotion = models.BooleanField(default=False)
 
-@receiver(signals.post_save, sender=Promotion) 
-def create_promotion(sender, instance, created,  **kwargs):
-    if instance.is_discount:
-        if instance.quantity > 1 or instance.quantity < 0:
-            raise ValidationError("The quantity must be between 0 and 1")
-    else:
-        if instance.quantity < 0:
-            raise ValidationError("The quantity must be greater than 0")
-        if int(instance.quantity) != instance.quantity:
-            raise ValidationError("The quantity must be an integer")
-    
-def add_roles(sender=None, **kwargs):
-    for role in RoleType:
-        Role.objects.get_or_create(role=role)
+class ReferralProgram(models.Model):
+    initial_date = models.DateField(default=datetime.now)
+    end_date = models.DateField()
+    user = models.OneToOneField(FlatterUser, on_delete=models.CASCADE)
+    code = models.CharField(max_length=64, unique=True)
+    users_referred = models.ManyToManyField(FlatterUser, related_name=_('users_referred'), blank=True)
+    user_quantity = models.PositiveIntegerField(default=0)
+    user_referred_quantity = models.PositiveIntegerField(default=0)
+    times_to_be_used = models.PositiveIntegerField()
+    is_disabled = models.BooleanField(default=False)
 
-signals.post_migrate.connect(add_roles)
-
-def create_plans(sender=None, **kwargs):
-    if Plan.objects.count() == 0:
-    
-        Plan.objects.get_or_create(flatter_coins=0, visits_number=10, 
-                            tags_number=6, advertisement=True, 
-                            chat_creation=False, standard_support=False, 
-                            premium_support=False, view_self_profile_opinions=False, 
-                            initial_date=timezone.now(), end_date=None, 
-                            plan_type='B')
-
-        Plan.objects.get_or_create(flatter_coins=30, visits_number=30, 
-                            tags_number=10, advertisement=False, 
-                            chat_creation=True, standard_support=True, 
-                            premium_support=False, view_self_profile_opinions=True, 
-                            initial_date=timezone.now(), end_date=None, 
-                            plan_type='A')
-
-        Plan.objects.get_or_create(flatter_coins=65, visits_number=10**10, 
-                            tags_number=10, advertisement=False, 
-                            chat_creation=True, standard_support=True, 
-                            premium_support=True, view_self_profile_opinions=True, 
-                            initial_date=timezone.now(), end_date=None, 
-                            plan_type='P')
-        
-signals.post_migrate.connect(create_plans)
-
-@receiver(signals.post_save, sender=FlatterUser)
-def create_user_preferences(sender, instance, created, **kwargs):
-    if created:
-        UserPreferences.objects.create(user=instance)
-
+class ReferralProgramController(models.Model):
+    max_days = models.PositiveIntegerField(default=0)
+    max_users = models.PositiveIntegerField(default=0)
+    quantity = models.PositiveIntegerField(default=0)
+    quantity_referred = models.PositiveIntegerField(default=0)
+    is_disabled = models.BooleanField(default=False)

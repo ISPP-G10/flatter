@@ -57,8 +57,11 @@ const PublicProfileCard = (props) => {
         
         if (!updatePublicProfileRef.current.validate()) return
 
-        let birthDateSplitted = values.birthDate.split("-");
-        let userBirthday = birthDateSplitted[2] + "/" + birthDateSplitted[1] + "/" + birthDateSplitted[0];
+        let userBirthday = null;
+        if(values.birthDate !== null && values.birthDate !== undefined && values.birthDate !== ""){
+            let birthDateSplitted = values.birthDate.split("-");
+            userBirthday = birthDateSplitted[2] + "/" + birthDateSplitted[1] + "/" + birthDateSplitted[0];
+        }
 
         client.mutate({
             mutation: usersAPI.updatePublicProfile,
