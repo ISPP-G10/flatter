@@ -10,9 +10,7 @@ import base64
 def create_referral_program_controller(sender=None, **kwargs):
     if ReferralProgramController.objects.count() == 0:
         ReferralProgramController.objects.create(max_days=30, max_users=10, quantity=100, quantity_referred=50)
-
-@receiver(signals.post_migrate, sender=None)
-def create_referral_program_controller(sender=None, **kwargs):
+    
     for user in FlatterUser.objects.filter(referralprogram__isnull=True):
         today = timezone.now()
         ReferralProgram.objects.create(initial_date=today, user=user, code=_create_code(), times_to_be_used=0, end_date=(today + timezone.timedelta(days=1)), user_quantity=0, user_referred_quantity=0, is_disabled=True)
