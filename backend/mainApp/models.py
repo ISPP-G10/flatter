@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.db import models
-from django.db.models import signals
 from django.utils.translation import gettext_lazy as _
 from authentication.models import FlatterUser, Tag
 # Create your models here.
@@ -82,9 +81,4 @@ class Petition(models.Model):
     )
     status = models.CharField(max_length=1,choices=status_choices)
     date_of_petition_acepted = models.DateTimeField(null=True, blank=True)
-    
-def add_default_img(sender=None, **kwargs):
-    Image.objects.get_or_create(image='properties/images/default.png')
 
-
-signals.post_migrate.connect(add_default_img)

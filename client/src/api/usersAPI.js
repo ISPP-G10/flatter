@@ -2,8 +2,8 @@ import {gql} from 'apollo-boost';
 
 const usersAPI = {
     createUser: gql`
-                mutation createUser ($username: String!, $password: String!, $firstName: String!, $lastName: String!, $email: String!, $roles: String!, $genre: String!){
-                    createUser (username: $username, password: $password, firstName: $firstName, lastName: $lastName, email: $email, roles: $roles, genre: $genre){
+                mutation createUser ($username: String!, $password: String!, $firstName: String!, $lastName: String!, $email: String!, $roles: String!, $genre: String!, $code: String){
+                    createUser (username: $username, password: $password, firstName: $firstName, lastName: $lastName, email: $email, roles: $roles, genre: $genre, code: $code){
                         user{
                             username
                         }
@@ -136,6 +136,14 @@ const usersAPI = {
                         role
                     }
                     email
+                    referralprogram{
+                        endDate
+                        code
+                        userQuantity
+                        userReferredQuantity
+                        timesToBeUsed
+                        isDisabled
+                    }
                 }
             }
     `,
@@ -325,6 +333,17 @@ const usersAPI = {
                     isDiscount
                     isDisabled
                 }
+            }
+        }
+    `,
+    getReferralProgramController: gql`
+        query getReferralProgramController{
+            getReferralProgramController{
+                maxDays
+                maxUsers
+                quantity
+                quantityReferred
+                isDisabled
             }
         }
     `,
