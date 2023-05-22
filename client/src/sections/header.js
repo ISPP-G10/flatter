@@ -123,7 +123,11 @@ const Header = ({scrollY, userLogged, docPage}) => {
                     navigator(0)
                 }
             }).catch((error) => {
-                customAlert(error.message.split("\n")[0], 'error');
+                if (error.message.split("\n")[0] === "El código de promoción no es válido") {
+                    customAlert('El código de promoción no es válido', 'warning');
+                } else{
+                    customAlert(error.message.split("\n")[0], 'error');
+                }
             });
         }
         
