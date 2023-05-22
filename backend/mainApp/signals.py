@@ -4,7 +4,7 @@ from os import path
 from django.db.models.signals import post_migrate
 from django.dispatch import receiver
 
-from mainApp.models import Municipality, Province
+from mainApp.models import Municipality, Province, Image
 
 # provinces.csv path
 PROVINCES_CSV = path.join(path.dirname(path.abspath(__file__)), 'data', 'provinces.csv')
@@ -35,3 +35,7 @@ def save_provinces_municipality(sender, **kwargs):
                 municipalities.append(
                     Municipality(code=f'{row[0]}{row[1]}', name=row[2], province=Province.objects.get(code=row[0])))
             Municipality.objects.bulk_create(municipalities)
+
+@receiver(post_migrate, sender=None)   
+def add_default_img(sender=None, **kwargs):
+    Image.objects.get_or_create(image='properties/images/default.png')

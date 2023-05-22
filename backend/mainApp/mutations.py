@@ -491,7 +491,7 @@ class MakePropertyOutstandingMutation(graphene.Mutation):
         outstanding_properties = Property.objects.filter(is_outstanding=True)
         
         if outstanding_properties.count() >= 5:
-            raise ValueError(_("Ya hay el máximo de inmuebles destacados, prueba otro día o contacta con nuestro equipo de marketing."))
+            raise ValueError(_("Actualmente no se encuentra disponible ningún hueco en la sección 'Destacados', pruebe otro día o contacte con nuestro equipo de marketing."))
 
         if selected_property.owner.flatter_coins < 1000:
             raise ValueError(_("No tienes suficientes flattercoins para destacar este inmueble"))
@@ -612,7 +612,7 @@ class AddUserToPropertyMutation(graphene.Mutation):
             property.flatmates.add(user)
             property.save()
         else:
-            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el numero máximo de inquilinos {property.max_capacity}"))
+            raise ValueError(_(f"La propiedad con id {property.id} ya tiene asociados el número máximo de inquilinos {property.max_capacity}"))
         return AddUserToPropertyMutation(user=user, property=property)
 class PropertyMutation(graphene.ObjectType):
     create_property = CreatePropertyMutation.Field()

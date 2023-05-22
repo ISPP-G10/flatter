@@ -16,7 +16,7 @@ import customAlert from "../libs/functions/customAlert";
 import customConfirm from "../libs/functions/customConfirm";
 
 
-const OwnerProperties = ({}) => {
+const OwnerProperties = () => {
 
   let [ property, setProperty ] = useState({});
   let userToken = localStorage.getItem("token", '');
@@ -54,7 +54,12 @@ const OwnerProperties = ({}) => {
       }).then((response) => {
           window.location.reload();
       }).catch((error) => {
-          customAlert(error.message, 'error', false);
+          let message = error.message.split("\n")[0].trim();
+          if (message === "Actualmente no se encuentra disponible ningún hueco en la sección 'Destacados', pruebe otro día o contacte con nuestro equipo de marketing.") {
+              customAlert(message, 'warning', false, 10000);
+          }else{
+            customAlert(message, 'error', false);
+          }
       });
   
     }

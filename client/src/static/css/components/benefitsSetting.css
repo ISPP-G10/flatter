@@ -1,0 +1,60 @@
+.share-code{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+#share-code-input{
+    height: 50px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    background-color: #f5f5f5;
+    border: 1px solid #ececec;
+    border-right: none;
+    border-radius: 10px 0px 0px 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.share-code-btn{
+    height: 50px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-image: url('../../files/icons/copyIcon.png');
+    background-size: 25px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 50px;
+    background-color: #f5f5f5;
+    border: 1px solid #ececec;
+    border-right: none;
+}
+
+.share-code-btn:hover{
+    outline: none;
+    background-color: #dedbdb;
+}
+
+.share-code-whatsapp{
+    height: 50px;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-image: url('../../files/icons/whatsappIcon.png');
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 50px;
+    background-color: #4ab503;
+    border-radius: 0px 10px 10px 0px;
+}
+
+.share-code-whatsapp:hover{
+    outline: none;
+    background-color: #2f980c;
+}

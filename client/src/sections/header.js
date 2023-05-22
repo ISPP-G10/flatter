@@ -87,6 +87,10 @@ const Header = ({scrollY, userLogged, docPage}) => {
             customAlert('Las contraseñas no coinciden', 'warning', true, 10000);
             approved = false;
         }
+        let code = null;
+        if(values.code!==null && values.code!==undefined){
+            code = values.code.trim();
+        }
 
         if(approved){
             client.mutate({
@@ -98,7 +102,8 @@ const Header = ({scrollY, userLogged, docPage}) => {
                     password: values.password,
                     email: values.email,
                     genre: values.genre,
-                    roles: values.role
+                    roles: values.role,
+                    code: code,
                 }
             }).then((response) => {
                 let token = response.data.tokenAuth.token;
