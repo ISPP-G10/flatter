@@ -1,6 +1,6 @@
 import graphene
-from .types import FlatterUserType, FlatterUserPageType, RoleType, PlanType, ContractType, get_user_rating
-from .models import Contract, FlatterUser, Plan, Role
+from .types import FlatterUserType, FlatterUserPageType, RoleType, PlanType, ContractType, ReferralProgramControllerType, get_user_rating
+from .models import Contract, FlatterUser, Plan, Role, ReferralProgramController
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -13,6 +13,7 @@ class AuthenticationQuery(object):
   get_plans = graphene.List(PlanType)
   get_contract_by_username = graphene.Field(ContractType, username=graphene.String(), user_token = graphene.String(required=True))
   get_all_contracts_by_username = graphene.List(ContractType, username=graphene.String(), user_token = graphene.String(required=True))
+  get_referral_program_controller = graphene.Field(ReferralProgramControllerType)
 
   def resolve_get_user_by_username(self, info, username):
     
@@ -114,3 +115,6 @@ class AuthenticationQuery(object):
     user = FlatterUser.objects.get(username=username)
     # Get all contracts in descending order by initial date and end date
     return Contract.objects.filter(user=user).order_by('-initial_date', '-end_date')
+  
+  def resolve_get_referral_program_controller(self, info):
+    return ReferralProgramController.objects.all().first()

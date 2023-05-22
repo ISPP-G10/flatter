@@ -1,6 +1,6 @@
 import datetime
 import graphene, graphql_jwt
-from .models import FlatterUser, Plan, Role, Contract, UserPreferences, Promotion
+from .models import FlatterUser, Plan, Role, Contract, UserPreferences, Promotion, ReferralProgram
 from social.models import Group
 from mainApp.models import Property, Application, Petition, Review
 from .types import ContractType, FlatterUserType, PlanType, PromotionType
@@ -178,6 +178,7 @@ class CreateUserMutation(graphene.Mutation):
     email = graphene.String(required=True)
     genre = graphene.String(required=True)
     roles = graphene.String(required=True)
+    code = graphene.String(required=False)
 
   user = graphene.Field(FlatterUserType)
   contract = graphene.Field(ContractType)
@@ -191,6 +192,10 @@ class CreateUserMutation(graphene.Mutation):
     email = kwargs.get("email", "").strip()
     genre = kwargs.get("genre", "").strip()
     roles = kwargs.get("roles", [])
+    code = kwargs.get("code", '').strip()
+      
+    if not code:
+      code = None
     
     if not username or len(username) < 6 or len(username) > 25:
       raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
@@ -221,16 +226,48 @@ class CreateUserMutation(graphene.Mutation):
 
     genre = parse_genre(genre)
     roles = parse_roles(roles)
-
+    
+    coins = 0
+    
     obj = FlatterUser.objects.create_user(username=username, 
                                           password=password, 
                                           first_name=first_name, 
                                           last_name=last_name, 
                                           email=email, 
                                           profile_picture="users/images/default.jpg",
-                                          flatter_coins=0,
+                                          flatter_coins=coins,
                                           genre=genre,
                                           )
+    
+    if code:
+      today = timezone.now()
+      if not ReferralProgram.objects.filter(code=code, is_disabled=False, end_date__gte=today, times_to_be_used__gte=1).exists():
+        try:
+          promotion = Promotion.objects.get(code=code, is_welcome_promotion=True, is_disabled=False, max_date__gte=today)
+          if not promotion.can_be_used_always and promotion.times_to_be_used <= 0:
+            raise ValueError(_("El código de promoción no es válido"))
+          coins = promotion.quantity
+          if promotion.times_to_be_used is not None:
+            promotion.times_to_be_used -= 1
+            if promotion.times_to_be_used == 0:
+              promotion.is_disabled = True
+            promotion.save()
+        except Promotion.DoesNotExist:
+          raise ValueError(_("El código de promoción no es válido"))
+      else:
+        promotion = ReferralProgram.objects.get(code=code, is_disabled=False, end_date__gte=today, times_to_be_used__gte=1)
+        coins = promotion.user_referred_quantity
+        user_referral = FlatterUser.objects.get(pk=promotion.user.pk)
+        user_referral.flatter_coins += promotion.user_quantity
+        user_referral.save()
+        promotion.users_referred.add(obj)
+        promotion.times_to_be_used -= 1
+        if promotion.times_to_be_used == 0:
+          promotion.is_disabled = True
+        promotion.save()
+      
+      obj.flatter_coins += coins
+      obj.save()
         
     obj.roles.add(*roles)
     
@@ -351,107 +388,35 @@ class RedeemPromotion(graphene.Mutation):
     check_token(token, user)
     
     try:
-      promotion = Promotion.objects.get(code=code)
+      promotion = Promotion.objects.get(code=code, is_welcome_promotion=False)
     except Promotion.DoesNotExist:
       raise ValueError(_("El código introducido no existe"))
     
     if promotion.is_disabled:
       raise ValueError(_("El código ya no está activo"))
     
+    if promotion.max_date < datetime.now():
+      raise ValueError(_("El código ya no está activo"))
+    
     if promotion.users_used.filter(username=username).exists():
       raise ValueError(_("Ya has canjeado el código"))
+    
+    if not promotion.times_to_be_used:
+      raise ValueError(_("El código ya no está activo"))
     
     if not promotion.is_discount:
       user.flatter_coins += promotion.quantity
       user.save()
     
-    promotion.users_used.add(user)
-    promotion.save()
+    if not promotion.can_be_used_always and promotion.times_to_be_used is None:
+      promotion.users_used.add(user)
+      if promotion.times_to_be_used:
+        promotion.times_to_be_used -= 1
+        if promotion.times_to_be_used == 0:
+          promotion.is_disabled = True
+      promotion.save()
     
     return RedeemPromotion(promotion=promotion) 
-
-class WelcomeUserMutation(graphene.Mutation):
-
-  class Input:
-    username = graphene.String(required=True)
-    password = graphene.String(required=True)
-    first_name = graphene.String(required=True)
-    last_name = graphene.String(required=True)
-    email = graphene.String(required=True)
-    genre = graphene.String(required=True)
-    roles = graphene.String(required=True)
-
-  user = graphene.Field(FlatterUserType)
-  contract = graphene.Field(ContractType)
-
-  @staticmethod
-  def mutate(root, info, **kwargs):
-    username = kwargs.get('username', '').strip()
-    password = kwargs.get("password", '').strip()
-    first_name = kwargs.get("first_name", "").strip()
-    last_name = kwargs.get("last_name", "").strip()
-    email = kwargs.get("email", "").strip()
-    genre = kwargs.get("genre", "").strip()
-    roles = kwargs.get("roles", [])
-    flatter_coins = 0
-    now = datetime.now()
-    
-    if (now.month == 5 or now.month == 6) and now.year == 2023:
-      flatter_coins = 500
-    
-    if not username or len(username) < 6 or len(username) > 25:
-      raise ValueError(_("El usuario debe tener entre 6 y 24 caracteres"))
-    
-    if not username or len(password) < 6:
-      raise ValueError(_("La contraseña debe tener al menos 6 caracteres"))
-    
-    if not first_name or len(first_name) < 3 or len(first_name) >= 50:
-      raise ValueError(_("El nombre debe tener entre 3 y 50 caracteres"))
-    
-    if not last_name or len(last_name) < 3 or len(last_name) >= 50:
-      raise ValueError(_("Los apellidos deben tener entre 3 y 50 caracteres"))
-    
-    if not email or ("@" not in email) or ("." not in email):
-      raise ValueError(_("El email no es válido"))
-    
-    if _exists_user(username):
-      raise ValueError(_("Este nombre de usuario ya está registrado. Por favor, elige otro."))
-    
-    if _exists_email(email):
-      raise ValueError(_("Este email ya está registrado. Por favor, elige otro."))
-    
-    if not valid_genre(genre):
-      raise ValueError(_("El género no es válido"))
-    
-    if not valid_roles(roles):
-      raise ValueError(_("Los roles no son válidos"))
-
-    genre = parse_genre(genre)
-    roles = parse_roles(roles)
-
-    obj = FlatterUser.objects.create_user(username=username, 
-                                          password=password, 
-                                          first_name=first_name, 
-                                          last_name=last_name, 
-                                          email=email, 
-                                          profile_picture="users/images/default.jpg",
-                                          flatter_coins=flatter_coins,
-                                          genre=genre,
-                                          )
-        
-    obj.roles.add(*roles)
-    
-    # Create user contract
-    
-    new_user_contract = Contract.objects.create(
-      initial_date=datetime.now(),
-      end_date = None,
-      choices = None,
-      plan=Plan.objects.get(plan_type=Plan.choices_type[0][0], end_date=None),
-      user=obj,
-    )
-        
-    return WelcomeUserMutation(user=obj, contract=new_user_contract)
 
 class AuthenticationMutation(graphene.ObjectType):
   token_auth = ObtainJSONWebToken.Field()
@@ -463,7 +428,6 @@ class AuthenticationMutation(graphene.ObjectType):
   edit_user_flatter_coins = EditUserFlatterCoins.Field()
   delete_user = DeleteUser.Field()
   redeem_promotion = RedeemPromotion.Field()
-  welcome_user = WelcomeUserMutation.Field()
 
 # ----------------------------------- PRIVATE FUNCTIONS ----------------------------------- #
 

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import PasswordSettingForm from "../components/userSettings/passwordSettingForm";
 import SolidButton from "../sections/solidButton";
 import { useApolloClient } from "@apollo/client";
+import BenefitsSetting from "../components/userSettings/benefitsSetting";
 
 const AccountSettings = () => {
   const client = useApolloClient();
@@ -32,6 +33,7 @@ const AccountSettings = () => {
   const eliminarModalRef = useRef(null);
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
+  const [benefitsData, setBenefitsData] = useState(undefined);
 
   const user = localStorage.getItem("user", "");
 
@@ -93,6 +95,10 @@ const AccountSettings = () => {
   }
 
   useEffect(() => {
+    if(!loading) {
+      console.log(data.getUserByUsername.referralprogram)
+      setBenefitsData(data.getUserByUsername.referralprogram)
+    }
     if (!loading && setting === "account") {
       //eslint-disable-next-line
       accountInputs.map((input) => {
@@ -125,7 +131,7 @@ const AccountSettings = () => {
         } else {
           input.defaultValue = data.getUserByUsername[input.name];
         }
-      });
+    });
     }
   }, [data, loading, setting]);
 
@@ -216,6 +222,22 @@ const AccountSettings = () => {
             >
               <h4>Historial de pagos</h4>
             </div>
+            {benefitsData && !benefitsData.isDisabled && new Date() <= Date.parse(benefitsData.endDate) && (
+                <div
+                className="settings-section"
+                onClick={() => setSetting("benefits")}
+                style={
+                  setting === "benefits"
+                    ? {
+                        backgroundColor: "rgba(0, 168, 255, 0.8)",
+                        color: "white",
+                      }
+                    : {}
+                }
+              >
+                <h4>Mis beneficios</h4>
+              </div>
+              )}
             <div className="settings-section" onClick={logout}>
               <h4>Cerrar sesión</h4>
             </div>
@@ -235,7 +257,10 @@ const AccountSettings = () => {
                 />
               ) : setting === "password" ? (
                 <PasswordSettingForm correctModalRef={correctModalRef} />
-              ) : (
+              ) : setting === "benefits" ? benefitsData ? (
+                <BenefitsSetting quantity={benefitsData.userQuantity} referralQuantity={benefitsData.userReferredQuantity} invitations={benefitsData.timesToBeUsed} code={benefitsData.code} endDate={benefitsData.endDate} />
+              ) : <h1>Loading...</h1> 
+              : (
                 <></>
               )}
             </div>
