@@ -244,7 +244,7 @@ class CreateUserMutation(graphene.Mutation):
       if not ReferralProgram.objects.filter(code=code, is_disabled=False, end_date__gte=today, times_to_be_used__gte=1).exists():
         try:
           promotion = Promotion.objects.get(code=code, is_welcome_promotion=True, is_disabled=False, max_date__gte=today)
-          if not promotion.can_be_used_always and promotion.times_to_be_used <= 0:
+          if not promotion.can_be_used_always and promotion.times_to_be_used and promotion.times_to_be_used <= 0:
             raise ValueError(_("El código de promoción no es válido"))
           coins = promotion.quantity
           if promotion.times_to_be_used is not None:
