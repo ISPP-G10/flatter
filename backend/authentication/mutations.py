@@ -247,8 +247,10 @@ class CreateUserMutation(graphene.Mutation):
           if not promotion.can_be_used_always and promotion.times_to_be_used <= 0:
             raise ValueError(_("El código de promoción no es válido"))
           coins = promotion.quantity
-          if not promotion.can_be_used_always:
+          if promotion.times_to_be_used is not None:
             promotion.times_to_be_used -= 1
+            if promotion.times_to_be_used == 0:
+              promotion.is_disabled = True
             promotion.save()
         except Promotion.DoesNotExist:
           raise ValueError(_("El código de promoción no es válido"))
@@ -260,6 +262,8 @@ class CreateUserMutation(graphene.Mutation):
         user_referral.save()
         promotion.users_referred.add(obj)
         promotion.times_to_be_used -= 1
+        if promotion.times_to_be_used == 0:
+          promotion.is_disabled = True
         promotion.save()
       
       obj.flatter_coins += coins

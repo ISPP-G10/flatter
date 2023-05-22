@@ -115,8 +115,8 @@ class Promotion(models.Model):
     users_used = models.ManyToManyField(FlatterUser, related_name=_('users_used'), blank=True)
     is_disabled = models.BooleanField(default=False)
     can_be_used_always = models.BooleanField(default=False)
-    max_date = models.DateField(null=True)
-    times_to_be_used = models.PositiveIntegerField(null=True)
+    max_date = models.DateField(null=True, blank=True)
+    times_to_be_used = models.PositiveIntegerField(null=True, blank=True)
     is_welcome_promotion = models.BooleanField(default=False)
 
 class ReferralProgram(models.Model):
