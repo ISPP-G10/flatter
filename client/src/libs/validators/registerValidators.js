@@ -46,8 +46,8 @@ export const registerValidators = {
     },
 
     codeLengthValidator: {
-        validate: (value) => value.trim().length > 64,
-        message: "El código debe tener al menos 64 caracteres"
+        validate: (value) => value.trim().length < 64,
+        message: "El código no debe tener más de 64 caracteres"
     },
 
 }

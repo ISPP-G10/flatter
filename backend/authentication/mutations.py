@@ -228,30 +228,7 @@ class CreateUserMutation(graphene.Mutation):
     roles = parse_roles(roles)
     
     coins = 0
-    if code:
-      today = timezone.now()
-      if not ReferralProgram.objects.filter(code=code, is_disabled=False, end_date_gte=today, times_to_be_used_gte=1).exists():
-        try:
-          promotion = Promotion.objects.get(code=code, is_welcome_promotion=True, is_disabled=False, max_date_gte=today)
-          if not promotion.can_be_used_always and promotion.times_to_be_used <= 0:
-            raise ValueError(_("El código de promoción no es válido"))
-          coins = promotion.quantity
-          if not promotion.can_be_used_always:
-            promotion.times_to_be_used -= 1
-            promotion.save()
-        except Promotion.DoesNotExist:
-          raise ValueError(_("El código de promoción no es válido"))
-      else:
-        promotion = ReferralProgram.objects.get(code=code, is_disabled=False, end_date_gte=today, times_to_be_used_gte=1)
-        coins = promotion.user_referred_quantity
-        user_referral = FlatterUser.objects.get(username=promotion.user)
-        user_referral.flatter_coins += promotion.user_quantity
-        user_referral.save()
-        promotion.times_to_be_used -= 1
-        promotion.save()
-        
-        
-
+    
     obj = FlatterUser.objects.create_user(username=username, 
                                           password=password, 
                                           first_name=first_name, 
@@ -261,6 +238,32 @@ class CreateUserMutation(graphene.Mutation):
                                           flatter_coins=coins,
                                           genre=genre,
                                           )
+    
+    if code:
+      today = timezone.now()
+      if not ReferralProgram.objects.filter(code=code, is_disabled=False, end_date__gte=today, times_to_be_used__gte=1).exists():
+        try:
+          promotion = Promotion.objects.get(code=code, is_welcome_promotion=True, is_disabled=False, max_date__gte=today)
+          if not promotion.can_be_used_always and promotion.times_to_be_used <= 0:
+            raise ValueError(_("El código de promoción no es válido"))
+          coins = promotion.quantity
+          if not promotion.can_be_used_always:
+            promotion.times_to_be_used -= 1
+            promotion.save()
+        except Promotion.DoesNotExist:
+          raise ValueError(_("El código de promoción no es válido"))
+      else:
+        promotion = ReferralProgram.objects.get(code=code, is_disabled=False, end_date__gte=today, times_to_be_used__gte=1)
+        coins = promotion.user_referred_quantity
+        user_referral = FlatterUser.objects.get(pk=promotion.user.pk)
+        user_referral.flatter_coins += promotion.user_quantity
+        user_referral.save()
+        promotion.users_referred.add(obj)
+        promotion.times_to_be_used -= 1
+        promotion.save()
+      
+      obj.flatter_coins += coins
+      obj.save()
         
     obj.roles.add(*roles)
     

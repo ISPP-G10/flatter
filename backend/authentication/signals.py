@@ -9,7 +9,7 @@ import base64
 @receiver(signals.post_migrate, sender=None)
 def create_referral_program_controller(sender=None, **kwargs):
     if ReferralProgramController.objects.count() == 0:
-        ReferralProgramController.objects.create(max_days=30, max_users=10, quantity=50, quantity_referred=10)
+        ReferralProgramController.objects.create(max_days=30, max_users=10, quantity=100, quantity_referred=50)
 
 @receiver(signals.post_migrate, sender=None)
 def create_referral_program_controller(sender=None, **kwargs):
